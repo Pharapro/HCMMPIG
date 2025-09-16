@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C6F05CFF-DEC9-428A-8B69-7B899C90D001}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Humica.Core</RootNamespace>
+    <AssemblyName>Humica.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.8.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.8.15\lib\net46\Hangfire.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.EF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Humica.EF.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.TelegramSharp">
+      <HintPath>..\Lib\Humica.TelegramSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BS\BSDocConfg.cs" />
+    <Compile Include="CF\CFNumberRankObject.cs" />
+    <Compile Include="CF\CFSystem.cs" />
+    <Compile Include="CF\FileReportListInfo.cs" />
+    <Compile Include="CF\CFNumberRank.cs" />
+    <Compile Include="ClsCopyFile.cs" />
+    <Compile Include="ClsDocApproval.cs" />
+    <Compile Include="ClsFilter.cs" />
+    <Compile Include="ClsFilterStaff.cs" />
+    <Compile Include="ClsReason.cs" />
+    <Compile Include="ClsStaff.cs" />
+    <Compile Include="DB\appraisal\HRAppGrade.cs" />
+    <Compile Include="DB\appraisal\HRAPPIncSalary.cs" />
+    <Compile Include="DB\appraisal\HRAPPIncSalaryItem.cs" />
+    <Compile Include="DB\appraisal\HRAPPMatrixIncreaseSalary.cs" />
+    <Compile Include="DB\appraisal\HRApprFactor.cs" />
+    <Compile Include="DB\appraisal\HRApprForm.cs" />
+    <Compile Include="DB\appraisal\HRApprRating.cs" />
+    <Compile Include="DB\appraisal\HRApprRegion.cs" />
+    <Compile Include="DB\appraisal\HRApprSelfAssessment.cs" />
+    <Compile Include="DB\appraisal\HRApprSelfAssQCM.cs" />
+    <Compile Include="DB\appraisal\HRApprType.cs" />
+    <Compile Include="DB\appraisal\HREmpAppProcess.cs" />
+    <Compile Include="DB\appraisal\HREmpAppProcessItem.cs" />
+    <Compile Include="DB\appraisal\HREmpAppraisal.cs" />
+    <Compile Include="DB\appraisal\HREmpAppraisalSummary.cs" />
+    <Compile Include="DB\appraisal\HREmpAppraisalItem.cs" />
+    <Compile Include="DB\Asset\HRAssetClass.cs" />
+    <Compile Include="DB\Asset\HRAssetNoneStaff.cs" />
+    <Compile Include="DB\Asset\HRAssetDepartment.cs" />
+    <Compile Include="DB\Asset\HRAssetLocation.cs" />
+    <Compile Include="DB\Att\ATEmpCountABS.cs" />
+    <Compile Include="DB\Asset\HRDriver.cs" />
+    <Compile Include="DB\Asset\HRCarType.cs" />
+    <Compile Include="DB\Asset\HRBookingCar.cs" />
+    <Compile Include="DB\Asset\HRBookingCarSchedule.cs" />
+    <Compile Include="DB\Asset\HRResgierVehicle.cs" />
+    <Compile Include="DB\Att\ATRequestOnSite.cs" />
+    <Compile Include="DB\Att\ATRequestOnSiteItem.cs" />
+    <Compile Include="DB\EForm\EFEmpPortal.cs" />
+    <Compile Include="DB\EForm\EFEmpPortalItem.cs" />
+    <Compile Include="DB\appraisal\HRKPITracking.cs" />
+    <Compile Include="DB\Asset\HRAssetClass.cs" />
+    <Compile Include="DB\Asset\HRAssetRegister.cs" />
+    <Compile Include="DB\Asset\HRAssetStaff.cs" />
+    <Compile Include="DB\Asset\HRAssetTransfer.cs" />
+    <Compile Include="DB\Asset\HRAssetLocation.cs" />
+    <Compile Include="DB\Asset\HRAssetType.cs" />
+    <Compile Include="DB\Asset\HRAssetNoneStaffRecord.cs" />
+    <Compile Include="DB\Att\ATBatch.cs" />
+    <Compile Include="DB\Att\ATBatchItem.cs" />
+    <Compile Include="DB\Att\ATDevSetting.cs" />
+    <Compile Include="DB\Att\ATEmpActivity.cs" />
+    <Compile Include="DB\Att\ATEmpMissscan.cs" />
+    <Compile Include="DB\Att\ATEmpRelWork.cs" />
+    <Compile Include="DB\Att\ATEmpSchedule.cs" />
+    <Compile Include="DB\Att\ATGenMeal.cs" />
+    <Compile Include="DB\Att\ATImpRoster.cs" />
+    <Compile Include="DB\Att\ATImpRosterHeader.cs" />
+    <Compile Include="DB\Att\ATInOut.cs" />
+    <Compile Include="DB\Att\ATLaEaPolicy.cs" />
+    <Compile Include="DB\Att\ATLateEarlyDeduct.cs" />
+    <Compile Include="DB\Att\ATMealSetup.cs" />
+    <Compile Include="DB\Att\ATMealSetupItem.cs" />
+    <Compile Include="DB\Att\ATOTPolicy.cs" />
+    <Compile Include="DB\Att\ATOTSetting.cs" />
+    <Compile Include="DB\Att\ATPayperiod.cs" />
+    <Compile Include="DB\Att\ATPolicy.cs" />
+    <Compile Include="DB\Att\ATPolicyLaEa.cs" />
+    <Compile Include="DB\Att\ATShift.cs" />
+    <Compile Include="DB\Contexts\HumicaDBContext.cs" />
+    <Compile Include="DB\EForm\EFPortalType.cs" />
+    <Compile Include="DB\EForm\HREFBenefit.cs" />
+    <Compile Include="DB\EForm\HREFEmpResign.cs" />
+    <Compile Include="DB\EForm\HREFLeave.cs" />
+    <Compile Include="DB\EForm\HREFProbationType.cs" />
+    <Compile Include="DB\EForm\HREFReqChangShift.cs" />
+    <Compile Include="DB\EForm\HREFReqProbation.cs" />
+    <Compile Include="DB\EForm\HREFRequestTransferStaff.cs" />
+    <Compile Include="DB\EForm\HREFTransferAndPromotionType.cs" />
+    <Compile Include="DB\EForm\Model1.cs" />
+    <Compile Include="DB\EOB\EOBConfirmAlert.cs" />
+    <Compile Include="DB\EOB\EOBEmpChkLst.cs" />
+    <Compile Include="DB\EOB\EOBEmpChkLstItem.cs" />
+    <Compile Include="DB\EOB\EOBEmpHealthCheckUp.cs" />
+    <Compile Include="DB\EOB\EOBEmpHealthCheckUpRecord.cs" />
+    <Compile Include="DB\EOB\EOBOrienDesc.cs" />
+    <Compile Include="DB\EOB\EOBOrienTypeDur.cs" />
+    <Compile Include="DB\EOB\EOBTypiDurType.cs" />
+    <Compile Include="DB\EOB\EOBPreBoItem.cs" />
+    <Compile Include="DB\EOB\EOBPreBoStage.cs" />
+    <Compile Include="DB\EOB\EOBPreBoStep.cs" />
+    <Compile Include="DB\EOB\EOBOrienChList.cs" />
+    <Compile Include="DB\EOB\EOBSChkLst.cs" />
+    <Compile Include="DB\EOB\EOBOrienChListItem.cs" />
+    <Compile Include="DB\EOB\EOBSChkLstItem.cs" />
+    <Compile Include="DB\EOB\EOBSocMedAcc.cs" />
+    <Compile Include="DB\Evaluate\HREmpEvalRating.cs" />
+    <Compile Include="DB\Evaluate\HREmpEvaluate.cs" />
+    <Compile Include="DB\Evaluate\HREmpEvaluateProcess.cs" />
+    <Compile Include="DB\Evaluate\HREmpEvaluateScore.cs" />
+    <Compile Include="DB\Evaluate\HREmpSelfEvaluation.cs" />
+    <Compile Include="DB\Evaluate\HREmpSelfEvaluationItem.cs" />
+    <Compile Include="DB\Evaluate\HREvalSelfEvaluate.cs" />
+    <Compile Include="DB\Evaluate\HREvaluateFactor.cs" />
+    <Compile Include="DB\Evaluate\HREvaluateRating.cs" />
+    <Compile Include="DB\Evaluate\HREvaluateRegion.cs" />
+    <Compile Include="DB\Evaluate\HREvaluateType.cs" />
+    <Compile Include="DB\Evaluate\HR_VIEW_EmpEvaluationForm.cs" />
+    <Compile Include="DB\GL\CFExVendor.cs" />
+    <Compile Include="DB\GL\HRJournalType.cs" />
+    <Compile Include="DB\GL\HRMaterialAccount.cs" />
+    <Compile Include="DB\GL\PRChartofAccount.cs" />
+    <Compile Include="DB\GL\PRGLmapping.cs" />
+    <Compile Include="DB\GL\PRInteAccount.cs" />
+    <Compile Include="DB\GL\PRInteAccountItem.cs" />
+    <Compile Include="DB\GL\PRIntegratePO.cs" />
+    <Compile Include="DB\GL\PRIntegratePOItem.cs" />
+    <Compile Include="DB\GL\SYSHRBuiltinAcc.cs" />
+    <Compile Include="DB\HisGen\HISApproveSalary.cs" />
+    <Compile Include="DB\HisGen\HISApproveSalaryFD.cs" />
+    <Compile Include="DB\HisGen\HisCostCharge.cs" />
+    <Compile Include="DB\HisGen\HisEmpRewardFP.cs" />
+    <Compile Include="DB\HisGen\HisEmpReward.cs" />
+    <Compile Include="DB\HisGen\HisEmpPayment.cs" />
+    <Compile Include="DB\HisGen\HisEmpSocialSecurity.cs" />
+    <Compile Include="DB\HisGen\HISGenAllowance.cs" />
+    <Compile Include="DB\HisGen\HISGenBonu.cs" />
+    <Compile Include="DB\HisGen\HISGenDeduction.cs" />
+    <Compile Include="DB\HisGen\HisGenFee.cs" />
+    <Compile Include="DB\HisGen\HISGenFirstPay.cs" />
+    <Compile Include="DB\HisGen\HISGenFirstPaySalaryD.cs" />
+    <Compile Include="DB\HisGen\HISGenLeaveDeduct.cs" />
+    <Compile Include="DB\HisGen\HisGenLeaveDFirstPay.cs" />
+    <Compile Include="DB\HisGen\HisGenMonthlySalaryRetro.cs" />
+    <Compile Include="DB\HisGen\HisGenOTFirstPay.cs" />
+    <Compile Include="DB\HisGen\HISGenOTHour.cs" />
+    <Compile Include="DB\HisGen\HISGenSalary.cs" />
+    <Compile Include="DB\HisGen\HISGenSalaryD.cs" />
+    <Compile Include="DB\HisGen\HISGLBenCharge.cs" />
+    <Compile Include="DB\HisGen\HisInsurance.cs" />
+    <Compile Include="DB\HisGen\HisPayHi.cs" />
+    <Compile Include="DB\HisGen\HISPaySlip.cs" />
+    <Compile Include="DB\HisGen\HISPaySlipFirstPay.cs" />
+    <Compile Include="DB\HisGen\HisPendingAppSalary.cs" />
+    <Compile Include="DB\HisGen\HisPendingAppSalaryFP.cs" />
+    <Compile Include="DB\HisGen\HisSalaryPay.cs" />
+    <Compile Include="DB\HisGen\HISSVCMonthly.cs" />
+    <Compile Include="DB\HisGen\HisTransferToMgr.cs" />
+    <Compile Include="DB\HR Master\HRAnnounceType.cs" />
+    <Compile Include="DB\HR Master\HRBank.cs" />
+    <Compile Include="DB\HR Master\HRBankAccount.cs" />
+    <Compile Include="DB\HR Master\HRBankBranch.cs" />
+    <Compile Include="DB\HR Master\HRBloodType.cs" />
+    <Compile Include="DB\HR Master\HRCategory.cs" />
+    <Compile Include="DB\HR Master\HRCertificationType.cs" />
+    <Compile Include="DB\HR Master\HRCompanyGroup.cs" />
+    <Compile Include="DB\HR Master\HRCompanyTree.cs" />
+    <Compile Include="DB\HR Master\HRContractType.cs" />
+    <Compile Include="DB\HR Master\HRCountry.cs" />
+    <Compile Include="DB\HR Master\HRCurrency.cs" />
+    <Compile Include="DB\HR Master\HRDepartment.cs" />
+    <Compile Include="DB\HR Master\HRDisciplinAction.cs" />
+    <Compile Include="DB\HR Master\HRDisciplinType.cs" />
+    <Compile Include="DB\HR Master\HRDivision.cs" />
+    <Compile Include="DB\HR Master\HREduType.cs" />
+    <Compile Include="DB\HR Master\HREmpBankAcc.cs" />
+    <Compile Include="DB\HR Master\HREmpType.cs" />
+    <Compile Include="DB\HR Master\HRFunction.cs" />
+    <Compile Include="DB\HR Master\HRGroup.cs" />
+    <Compile Include="DB\HR Master\HRGroupDepartment.cs" />
+    <Compile Include="DB\HR Master\HRHospital.cs" />
+    <Compile Include="DB\HR Master\HRIdentityType.cs" />
+    <Compile Include="DB\HR Master\HRInsuranceCompany.cs" />
+    <Compile Include="DB\HR Master\HRInsuranceType.cs" />
+    <Compile Include="DB\HR Master\HRJobGrade.cs" />
+    <Compile Include="DB\HR Master\HRLine.cs" />
+    <Compile Include="DB\HR Master\HRLocation.cs" />
+    <Compile Include="DB\HR Master\HRMedicalType.cs" />
+    <Compile Include="DB\HR Master\HRNation.cs" />
+    <Compile Include="DB\HR Master\HRNotification.cs" />
+    <Compile Include="DB\HR Master\HROffice.cs" />
+    <Compile Include="DB\HR Master\HRPHCKHResult.cs" />
+    <Compile Include="DB\HR Master\HRPosition.cs" />
+    <Compile Include="DB\HR Master\HRPositionStructure.cs" />
+    <Compile Include="DB\HR Master\HRPositionFamily.cs" />
+    <Compile Include="DB\HR Master\HRProbationType.cs" />
+    <Compile Include="DB\HR Master\HRProvice.cs" />
+    <Compile Include="DB\HR Master\HRRelationshipType.cs" />
+    <Compile Include="DB\HR Master\HRRoomType.cs" />
+    <Compile Include="DB\HR Master\HRSection.cs" />
+    <Compile Include="DB\HR Master\HRTerminType.cs" />
+    <Compile Include="DB\HR Master\HRWorkingType.cs" />
+    <Compile Include="DB\HRBookingRoom.cs" />
+    <Compile Include="DB\HRBookingSchedule.cs" />
+    <Compile Include="DB\HRDress\HRDressDeduct.cs" />
+    <Compile Include="DB\HRDress\HRDressDeductItem.cs" />
+    <Compile Include="DB\HRDress\HRDressReceive.cs" />
+    <Compile Include="DB\HRDress\HRDressReceiveItem.cs" />
+    <Compile Include="DB\HRDress\HRDressRequest.cs" />
+    <Compile Include="DB\HRDress\HRDressRequestItem.cs" />
+    <Compile Include="DB\HRDress\HRDressReturn.cs" />
+    <Compile Include="DB\HRDress\HRDressReturnItem.cs" />
+    <Compile Include="DB\HRDress\HRDressTransfer.cs" />
+    <Compile Include="DB\HRDress\HRDressTransferItem.cs" />
+    <Compile Include="DB\HRDress\HRUniform.cs" />
+    <Compile Include="DB\ATSwitchShift.cs" />
+    <Compile Include="DB\HRWorkFlowHeader.cs" />
+    <Compile Include="DB\HR\HRAnnouncement.cs" />
+    <Compile Include="DB\HR\HRCareerHistory.cs" />
+    <Compile Include="DB\HR\HRComplain.cs" />
+    <Compile Include="DB\HR\HRDelayProbation.cs" />
+    <Compile Include="DB\HR\HRDelegateRule.cs" />
+    <Compile Include="DB\HR\HREmpAchieve.cs" />
+    <Compile Include="DB\HR\HREmpCareerBankList.cs" />
+    <Compile Include="DB\HR\HREmpUnderManager.cs" />
+    <Compile Include="DB\HR\HREmpCareer.cs" />
+    <Compile Include="DB\HR\HREmpCertificate.cs" />
+    <Compile Include="DB\HR\HREmpMultiPosition.cs" />
+    <Compile Include="DB\HR\HREmpCode.cs" />
+    <Compile Include="DB\HR\HREmpContract.cs" />
+    <Compile Include="DB\HR\HREmpDeposit.cs" />
+    <Compile Include="DB\HR\HREmpDepositItem.cs" />
+    <Compile Include="DB\HR\HREmpDisciplinary.cs" />
+    <Compile Include="DB\HR\HREmpEduc.cs" />
+    <Compile Include="DB\HR\HREmpFamily.cs" />
+    <Compile Include="DB\HR\HREmpIdentity.cs" />
+    <Compile Include="DB\HR\HREmpInsurance.cs" />
+    <Compile Include="DB\HR\HREmpJobDescription.cs" />
+    <Compile Include="DB\HR\HREmpPhischk.cs" />
+    <Compile Include="DB\HR\HREmpResign.cs" />
+    <Compile Include="DB\HR\HREmpSupense.cs" />
+    <Compile Include="DB\HR\HRHeadCount.cs" />
+    <Compile Include="DB\HR\HRIncreaseSalary.cs" />
+    <Compile Include="DB\HR\HROrgChart.cs" />
+    <Compile Include="DB\HR\HRStaffProfile.cs" />
+    <Compile Include="DB\HumicaDBViewContext.cs" />
+    <Compile Include="DB\Job.cs" />
+    <Compile Include="DB\KPI\HRAppCompareRatio.cs" />
+    <Compile Include="DB\KPI\HRAppLevelMidPoint.cs" />
+    <Compile Include="DB\KPI\HRAppPerformanceRate.cs" />
+    <Compile Include="DB\KPI\HRAppSalaryBudget.cs" />
+    <Compile Include="DB\KPI\HRKPIAction.cs" />
+    <Compile Include="DB\KPI\HRKPIActivitiesHeader.cs" />
+    <Compile Include="DB\KPI\HRKPIActivitiesItem.cs" />
+    <Compile Include="DB\KPI\HRKPIActivityAttach.cs" />
+    <Compile Include="DB\KPI\HRKPIAssignHeader.cs" />
+    <Compile Include="DB\KPI\HRKPIAssignIndicator.cs" />
+    <Compile Include="DB\KPI\HRKPIAssignItem.cs" />
+    <Compile Include="DB\KPI\HRKPIAssignMember.cs" />
+    <Compile Include="DB\KPI\HRKPICategory.cs" />
+    <Compile Include="DB\KPI\HRKPIEmpConcern.cs" />
+    <Compile Include="DB\KPI\HRKPIEmployeeAction.cs" />
+    <Compile Include="DB\KPI\HRKPIEvaItem.cs" />
+    <Compile Include="DB\KPI\HRKPIEvalIndicator.cs" />
+    <Compile Include="DB\KPI\HRKPIEvaluation.cs" />
+    <Compile Include="DB\KPI\HRKPIGrade.cs" />
+    <Compile Include="DB\KPI\HRKPIIndicator.cs" />
+    <Compile Include="DB\KPI\HRKPIJobFolloUp.cs" />
+    <Compile Include="DB\KPI\HRKPIList.cs" />
+    <Compile Include="DB\KPI\HRKPIManagemGuideLine.cs" />
+    <Compile Include="DB\KPI\HRKPIMonthlyTracking.cs" />
+    <Compile Include="DB\KPI\HRKPINonFinance.cs" />
+    <Compile Include="DB\KPI\HRKPINorm.cs" />
+    <Compile Include="DB\KPI\HRKPIPlanHeader.cs" />
+    <Compile Include="DB\KPI\HRKPIPlanIndividual.cs" />
+    <Compile Include="DB\KPI\HRKPIPlanIndivItem.cs" />
+    <Compile Include="DB\KPI\HRKPIPlanItem.cs" />
+    <Compile Include="DB\KPI\HRKPIRating.cs" />
+    <Compile Include="DB\KPI\HRKPITimeSheet.cs" />
+    <Compile Include="DB\KPI\HRKPIType.cs" />
+    <Compile Include="DB\Att\ATRequestOnSite.cs" />
+    <Compile Include="DB\KPI\HRKPIYearlyTracking.cs" />
+    <Compile Include="DB\Leave\HRApproverLeave.cs" />
+    <Compile Include="DB\Leave\HRClaimLeave.cs" />
+    <Compile Include="DB\Leave\HREmpEditLeaveEntitle.cs" />
+    <Compile Include="DB\Leave\HREmpLeave.cs" />
+    <Compile Include="DB\Leave\HREmpLeaveB.cs" />
+    <Compile Include="DB\Leave\HREmpLeaveD.cs" />
+    <Compile Include="DB\Leave\HRLeaveDedPolicy.cs" />
+    <Compile Include="DB\Leave\HRLeaveHourPolicy.cs" />
+    <Compile Include="DB\Leave\HRLeaveImport.cs" />
+    <Compile Include="DB\Leave\HRLeaveProRate.cs" />
+    <Compile Include="DB\Leave\HRLeaveType.cs" />
+    <Compile Include="DB\Leave\HRPubHoliday.cs" />
+    <Compile Include="DB\Leave\HRReqLateEarly.cs" />
+    <Compile Include="DB\Leave\HRReqMaternity.cs" />
+    <Compile Include="DB\Leave\HRSetEntitleD.cs" />
+    <Compile Include="DB\Leave\HRSetEntitleH.cs" />
+    <Compile Include="DB\Leave\HRWorkFlow.cs" />
+    <Compile Include="DB\Leave\HRWorkFlowLeave.cs" />
+    <Compile Include="DB\Mission\HRMClaimType.cs" />
+    <Compile Include="DB\Mission\HRMissionClaim.cs" />
+    <Compile Include="DB\Mission\HRMissionClaimItem.cs" />
+    <Compile Include="DB\Mission\HRMissionPlan.cs" />
+    <Compile Include="DB\Mission\HRMissionPlanItem.cs" />
+    <Compile Include="DB\Mission\HRMissionPlanMem.cs" />
+    <Compile Include="DB\Mission\HRMissItem.cs" />
+    <Compile Include="DB\Mission\HRMissMemo.cs" />
+    <Compile Include="DB\Mission\HRMissOilRating.cs" />
+    <Compile Include="DB\Mission\HRMissProvince.cs" />
+    <Compile Include="DB\Mission\HRMissType.cs" />
+    <Compile Include="DB\Mission\HRMItem.cs" />
+    <Compile Include="DB\Mission\HRMTravelby.cs" />
+    <Compile Include="DB\Mission\HRMType.cs" />
+    <Compile Include="DB\OBDesc.cs" />
+    <Compile Include="DB\PR\BiMonthlySalarySetting.cs" />
+    <Compile Include="DB\PR\HREmpLoan.cs" />
+    <Compile Include="DB\PR\HREmpLoanH.cs" />
+    <Compile Include="DB\PR\HRRequestOT.cs" />
+    <Compile Include="DB\PR\PRADVPay.cs" />
+    <Compile Include="DB\PR\PRBankFee.cs" />
+    <Compile Include="DB\PR\PRBenefitType.cs" />
+    <Compile Include="DB\PR\PRBiExchangeRate.cs" />
+    <Compile Include="DB\PR\PRCostCenter.cs" />
+    <Compile Include="DB\PR\PRCostCenterGroup.cs" />
+    <Compile Include="DB\PR\PRCostCenterGroupItem.cs" />
+    <Compile Include="DB\PR\PREmpAllw.cs" />
+    <Compile Include="DB\PR\PREmpBonu.cs" />
+    <Compile Include="DB\PR\PREmpCCCharge.cs" />
+    <Compile Include="DB\PR\PREmpClaimBen.cs" />
+    <Compile Include="DB\PR\PREmpDeduc.cs" />
+    <Compile Include="DB\PR\PREmpHold.cs" />
+    <Compile Include="DB\PR\PREmpLateDeduct.cs" />
+    <Compile Include="DB\PR\PREmpOTCondition.cs" />
+    <Compile Include="DB\PR\PREmpOverTime.cs" />
+    <Compile Include="DB\PR\PREmpSVC.cs" />
+    <Compile Include="DB\PR\PREmpWorking.cs" />
+    <Compile Include="DB\PR\PRExceptType.cs" />
+    <Compile Include="DB\PR\PRExchRate.cs" />
+    <Compile Include="DB\PR\PRFeeSetting.cs" />
+    <Compile Include="DB\PR\PRFringeBenefitSetting.cs" />
+    <Compile Include="DB\PR\PRFiscalYear.cs" />
+    <Compile Include="DB\PR\PRIncomeType.cs" />
+    <Compile Include="DB\PR\PROTRate.cs" />
+    <Compile Include="DB\PR\PRParameter.cs" />
+    <Compile Include="DB\PR\PRPayPeriodItem.cs" />
+    <Compile Include="DB\PR\PRPayrollSetting.cs" />
+    <Compile Include="DB\PR\PRPensionFundSetting.cs" />
+    <Compile Include="DB\PR\PRProvidentFund.cs" />
+    <Compile Include="DB\PR\PRSeverancePay.cs" />
+    <Compile Include="DB\PR\PRSeveranceRate.cs" />
+    <Compile Include="DB\PR\PRSincerity.cs" />
+    <Compile Include="DB\PR\PRSocialSecurity.cs" />
+    <Compile Include="DB\PR\PRSocsec.cs" />
+    <Compile Include="DB\PR\PRSVCValue.cs" />
+    <Compile Include="DB\PR\PRTaxSetting.cs" />
+    <Compile Include="DB\PR\PRTransferToMgr.cs" />
+    <Compile Include="DB\PR\PRTransferToMgrItem.cs" />
+    <Compile Include="DB\PR\PR_RewardsType.cs" />
+    <Compile Include="DB\PR\SSBSetting.cs" />
+    <Compile Include="DB\PR\Temp_BonusAnnual.cs" />
+    <Compile Include="DB\RCM\RCMADependent.cs" />
+    <Compile Include="DB\RCM\RCMAdvertising.cs" />
+    <Compile Include="DB\RCM\RCMAdvType.cs" />
+    <Compile Include="DB\RCM\RCMAEdu.cs" />
+    <Compile Include="DB\RCM\RCMAIdentity.cs" />
+    <Compile Include="DB\RCM\RCMALanguage.cs" />
+    <Compile Include="DB\RCM\RCMApplicant.cs" />
+    <Compile Include="DB\RCM\RCMAReference.cs" />
+    <Compile Include="DB\RCM\RCMATraining.cs" />
+    <Compile Include="DB\RCM\RCMAWorkHistory.cs" />
+    <Compile Include="DB\RCM\RCMEmpEvaluateScore.cs" />
+    <Compile Include="DB\RCM\RCMERecruit.cs" />
+    <Compile Include="DB\RCM\RCMERecruitD.cs" />
+    <Compile Include="DB\RCM\RCMGuideRecruit.cs" />
+    <Compile Include="DB\RCM\RCMHire.cs" />
+    <Compile Include="DB\RCM\RCMInterveiwFactor.cs" />
+    <Compile Include="DB\RCM\RCMInterveiwRating.cs" />
+    <Compile Include="DB\RCM\RCMInterveiwRegion.cs" />
+    <Compile Include="DB\RCM\RCMIntVQuestionnaire.cs" />
+    <Compile Include="DB\RCM\RCMPInterview.cs" />
+    <Compile Include="DB\RCM\RCMRecruitRequest.cs" />
+    <Compile Include="DB\RCM\RCMRefCheckPerson.cs" />
+    <Compile Include="DB\RCM\RCMRefQuestionnaire.cs" />
+    <Compile Include="DB\RCM\RCMRSkillRequire.cs" />
+    <Compile Include="DB\RCM\RCMSAdvertise.cs" />
+    <Compile Include="DB\RCM\RCMSJobDesc.cs" />
+    <Compile Include="DB\RCM\RCMSLang.cs" />
+    <Compile Include="DB\RCM\RCMSourcingExpend.cs" />
+    <Compile Include="DB\RCM\RCMSQuestionnaire.cs" />
+    <Compile Include="DB\RCM\RCMSRefQuestion.cs" />
+    <Compile Include="DB\RCM\RCMVacancy.cs" />
+    <Compile Include="DB\RCM\RCMVInterviewer.cs" />
+    <Compile Include="DB\State.cs" />
+    <Compile Include="DB\Stationary\HRMaterial.cs" />
+    <Compile Include="DB\Stationary\HRPODetail.cs" />
+    <Compile Include="DB\Stationary\HRPOHeader.cs" />
+    <Compile Include="DB\Stationary\HRPOReceipt.cs" />
+    <Compile Include="DB\Stationary\HRPOReceiptItem.cs" />
+    <Compile Include="DB\Stationary\HRPORequest.cs" />
+    <Compile Include="DB\Stationary\HRPORequestItem.cs" />
+    <Compile Include="DB\Stationary\HRReqPayment.cs" />
+    <Compile Include="DB\Stationary\HRReqPaymentItem.cs" />
+    <Compile Include="DB\Stationary\HR_POReceipt_View.cs" />
+    <Compile Include="DB\SY\CFReasonCode.cs" />
+    <Compile Include="DB\SY\CFReportObject.cs" />
+    <Compile Include="DB\SY\CFUploadPath.cs" />
+    <Compile Include="DB\SY\ExCfFileTemplate.cs" />
+    <Compile Include="DB\SY\ExCFUploadMapping.cs" />
+    <Compile Include="DB\SY\ExCFWFDepartmentApprover.cs" />
+    <Compile Include="DB\SY\ExCfWFApprover.cs" />
+    <Compile Include="DB\SY\ExCfWFSalaryApprover.cs" />
+    <Compile Include="DB\SY\ExCfWorkFlowItem.cs" />
+    <Compile Include="DB\SY\ExDocApproval.cs" />
+    <Compile Include="DB\SY\HRSettingRound.cs" />
+    <Compile Include="DB\SY\HumanResourceSetting.cs" />
+    <Compile Include="DB\SY\MDUploadBatchNo.cs" />
+    <Compile Include="DB\SY\MDUploadImage.cs" />
+    <Compile Include="DB\SY\MDUploadTemplate.cs" />
+    <Compile Include="DB\SY\SYCurrency.cs" />
+    <Compile Include="DB\SY\SYAccessDepartment.cs" />
+    <Compile Include="DB\SY\SyBackgroundService.cs" />
+    <Compile Include="DB\SY\SYHisScript.cs" />
+    <Compile Include="DB\SY\SYHRAnnouncement.cs" />
+    <Compile Include="DB\SY\SYHRModifySalary.cs" />
+    <Compile Include="DB\SY\SYHRSetting.cs" />
+    <Compile Include="DB\SY\SYRoundingRule.cs" />
+    <Compile Include="DB\SY\SyServiceURL.cs" />
+    <Compile Include="DB\SY\SYSHRAlert.cs" />
+    <Compile Include="DB\SY\SYSocialMedia.cs" />
+    <Compile Include="DB\SY\TelegramBot.cs" />
+    <Compile Include="DB\SY\TokenResource.cs" />
+    <Compile Include="DB\ViewContext\AT_EmpSchedule.cs" />
+    <Compile Include="DB\ViewContext\EOB_EMP_ANNOUCEMENT.cs" />
+    <Compile Include="DB\ViewContext\HLCheckShiftImports.cs" />
+    <Compile Include="DB\ViewContext\HR_AssetDepartment_View.cs" />
+    <Compile Include="DB\ViewContext\HR_AssetNoneStaff_View.cs" />
+    <Compile Include="DB\ViewContext\HR_AssetRegisterVehicle_View.cs" />
+    <Compile Include="DB\ViewContext\HR_AssetStaff_View.cs" />
+    <Compile Include="DB\ViewContext\HR_BooingRoom_View.cs" />
+    <Compile Include="DB\ViewContext\HR_CompanyGroup_View.cs" />
+    <Compile Include="DB\ViewContext\HR_EmpCareer_View.cs" />
+    <Compile Include="DB\ViewContext\HR_EmpLateEarly_View.cs" />
+    <Compile Include="DB\ViewContext\HR_EMPSVC_VIEW.cs" />
+    <Compile Include="DB\ViewContext\HR_Family_View.cs" />
+    <Compile Include="DB\ViewContext\HR_LineMgr_View.cs" />
+    <Compile Include="DB\ViewContext\HR_ListEmployee.cs" />
+    <Compile Include="DB\ViewContext\HR_NSSF_Transfer.cs" />
+    <Compile Include="DB\ViewContext\HR_OrgChart_View.cs" />
+    <Compile Include="DB\ViewContext\HR_PayHisStory.cs" />
+    <Compile Include="DB\ViewContext\HR_PendingLeave.cs" />
+    <Compile Include="DB\ViewContext\HR_PO_VIEW.cs" />
+    <Compile Include="DB\ViewContext\HR_PR_EmpSalary.cs" />
+    <Compile Include="DB\ViewContext\HR_PR_VIEW.cs" />
+    <Compile Include="DB\ViewContext\HR_RP_View.cs" />
+    <Compile Include="DB\ViewContext\HR_STAFF_VIEW.cs" />
+    <Compile Include="DB\ViewContext\HR_View_EmpAllowance.cs" />
+    <Compile Include="DB\ViewContext\HR_View_EmpGenSalary.cs" />
+    <Compile Include="DB\ViewContext\HR_VIEW_EmpLeave.cs" />
+    <Compile Include="DB\ViewContext\HR_VIEW_EMPLOAN.cs" />
+    <Compile Include="DB\ViewContext\NSSF_Latter.cs" />
+    <Compile Include="DB\ViewContext\PR_EmpClaimBen_View.cs" />
+    <Compile Include="DB\ViewContext\PR_EMPSVC_VIEW.cs" />
+    <Compile Include="DB\ViewContext\PR_GLCharge_View.cs" />
+    <Compile Include="DB\ViewContext\PR_InetAccount_view.cs" />
+    <Compile Include="DB\ViewContext\PR_POPending_view.cs" />
+    <Compile Include="DB\ViewContext\PR_TEMP_SYGL_VIEW.cs" />
+    <Compile Include="DB\ViewContext\REF_VACANCY.cs" />
+    <Compile Include="DB\ViewContext\RPT_AttScheduleSummary.cs" />
+    <Compile Include="DB\ViewContext\VIEW_ATEmpSchedule.cs" />
+    <Compile Include="DB\ViewContext\VIEW_ATInOut.cs" />
+    <Compile Include="DB\ViewContext\VIEW_EmpOnsite.cs" />
+    <Compile Include="DB\ZEmailSentLog.cs" />
+    <Compile Include="FT\Filtering.cs" />
+    <Compile Include="Helper\ClsRounding.cs" />
+    <Compile Include="Helper\DateTimeHelper.cs" />
+    <Compile Include="Helper\EmploymentInfo.cs" />
+    <Compile Include="Helper\NumberExtension.cs" />
+    <Compile Include="Helper\StringHelper.cs" />
+    <Compile Include="DB\HR\HREmpCareerMovement.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SY\BSWorkAssign.cs" />
+    <Compile Include="SY\ClsEmail.cs" />
+    <Compile Include="SY\ClsEmailTemplate.cs" />
+    <Compile Include="SY\ClsEventLog.cs" />
+    <Compile Include="SY\SYSalaryType.cs" />
+    <Compile Include="SY\SYSendTelegramObject.cs" />
+    <Compile Include="SY\SYWorkFlowEmailObject.cs" />
+    <Compile Include="SY\SYWorkFlowObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+</Project>
