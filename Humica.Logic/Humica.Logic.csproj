@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3F73DA9D-FCAA-44DE-9A5E-2D5769F062C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Humica.Logic</RootNamespace>
+    <AssemblyName>Humica.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.8.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.8.15\lib\net46\Hangfire.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.EF">
+      <HintPath>..\Lib\Humica.EF.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.Integration.EF">
+      <HintPath>..\Lib\Humica.Integration.EF.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.Notification, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Humica.Notification.dll</HintPath>
+    </Reference>
+    <Reference Include="Humica.TelegramSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Humica.TelegramSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.12.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Asset\AssetDepartmentObject.cs" />
+    <Compile Include="Asset\AssetNoneStaffObject.cs" />
+    <Compile Include="Asset\AssetNoneStaffRecordObject.cs" />
+    <Compile Include="Asset\AssetRegisterObject.cs" />
+    <Compile Include="Asset\AssetStaffObject.cs" />
+    <Compile Include="Asset\AssetTransferObject.cs" />
+    <Compile Include="Asset\HRAssetObject.cs" />
+    <Compile Include="Asset\HRBookingCarObject.cs" />
+    <Compile Include="Asset\HRResgierVehicleObject.cs" />
+    <Compile Include="AttendanceRaw.cs" />
+    <Compile Include="Atts\ATBatchObject.cs" />
+    <Compile Include="Atts\ATOTPolicyObject.cs" />
+    <Compile Include="Atts\DevSettingObject.cs" />
+    <Compile Include="Atts\ATMealInOutSetupObject.cs" />
+    <Compile Include="Atts\EmployeeOnside.cs" />
+    <Compile Include="Atts\SetupShiftObject.cs" />
+    <Compile Include="Att\ATApprovalOnSiteObject.cs" />
+    <Compile Include="Att\ATDownloadObject.cs" />
+    <Compile Include="Att\ATEmpOnSiteObject.cs" />
+    <Compile Include="Att\ATEmpSchObject.cs" />
+    <Compile Include="Att\ATReplaceWorkObject.cs" />
+    <Compile Include="Att\ATApprovalOnSiteObject.cs" />
+    <Compile Include="CF\CFAnnouncementObject.cs" />
+    <Compile Include="CF\CFEmail.cs" />
+    <Compile Include="CF\CFHRWorkFlow.cs" />
+    <Compile Include="CF\CFNumberRank.cs" />
+    <Compile Include="CF\CFWorkFlowLeave.cs" />
+    <Compile Include="CF\SYCurrencyObject.cs" />
+    <Compile Include="CF\MDHRTelegram.cs" />
+    <Compile Include="CF\MDSYSocialMedia.cs" />
+    <Compile Include="ClsContent.cs" />
+    <Compile Include="ClsCopyFile.cs" />
+    <Compile Include="ClsFilter.cs" />
+    <Compile Include="DataAccess.cs" />
+    <Compile Include="DS\DressDeductObject.cs" />
+    <Compile Include="DS\DressReceiveObject.cs" />
+    <Compile Include="DS\DressRequestObject.cs" />
+    <Compile Include="DS\DressReturnObject.cs" />
+    <Compile Include="DS\DressTransferObject.cs" />
+    <Compile Include="EOB\ClsEOBConfirmAlert.cs" />
+    <Compile Include="EOB\ClsEOBHire.cs" />
+    <Compile Include="EOB\EOBAnnouncementObject.cs" />
+    <Compile Include="EOB\EOBHealthChkUpObject.cs" />
+    <Compile Include="EOB\IClsEOBConfirmAlert.cs" />
+    <Compile Include="EOB\IClsEOBHire.cs" />
+    <Compile Include="EOB\MDEOBCheckList.cs" />
+    <Compile Include="EOB\MDEOBOrientation.cs" />
+    <Compile Include="EOB\MDEOBPreboarding.cs" />
+    <Compile Include="EOB\OnBoardChkLstObject.cs" />
+    <Compile Include="FingerPrint\ClearFlag.cs" />
+    <Compile Include="FingerPrint\DeviceManipulator.cs" />
+    <Compile Include="FingerPrint\MachineInfo.cs" />
+    <Compile Include="FingerPrint\UniversalStatic.cs" />
+    <Compile Include="FingerPrint\UserIDInfo.cs" />
+    <Compile Include="FingerPrint\UserInfo.cs" />
+    <Compile Include="FingerPrint\ZkemClient.cs" />
+    <Compile Include="HRAppr\HRAppraisal.cs" />
+    <Compile Include="HRAppr\HRAppraiselObject.cs" />
+    <Compile Include="HRAppr\HREmpEvaluateObject.cs" />
+    <Compile Include="HRAppr\HRSelfEvaluationObject.cs" />
+    <Compile Include="HRS\MDAppraisal.cs" />
+    <Compile Include="HRS\MDBankInfor.cs" />
+    <Compile Include="HRS\MDEmpInfor.cs" />
+    <Compile Include="HRS\MDCompanyTree.cs" />
+    <Compile Include="HRS\MDInforSetup.cs" />
+    <Compile Include="HRS\MDMedicalType.cs" />
+    <Compile Include="HRS\MDMISSType.cs" />
+    <Compile Include="HRS\MDRecruitment.cs" />
+    <Compile Include="HR\BookingRoomObject.cs" />
+    <Compile Include="HR\ClsBookingRoom.cs" />
+    <Compile Include="HR\HRDelegate_RuleObject.cs" />
+    <Compile Include="HR\HREmpCertiObject.cs" />
+    <Compile Include="HR\HREmpContObject.cs" />
+    <Compile Include="HR\HREmpDepositObject.cs" />
+    <Compile Include="HR\HREmpDisciplinaryObject.cs" />
+    <Compile Include="HR\HREmpEduObject.cs" />
+    <Compile Include="HR\HREmpSupenseObject.cs" />
+    <Compile Include="HR\HRFamilyObject.cs" />
+    <Compile Include="HR\HRHeadCountObject.cs" />
+    <Compile Include="HR\HRInsuranceObject.cs" />
+    <Compile Include="HR\HRMedicalChkObject.cs" />
+    <Compile Include="HR\HRAchievmentObject.cs" />
+    <Compile Include="HR\HRStaffProfileObject.cs" />
+    <Compile Include="HR\ATSwitchShiftObject.cs" />
+    <Compile Include="HR\HREmpMultiPositionObject.cs" />
+    <Compile Include="HR\IClsBookingRoom.cs" />
+    <Compile Include="Inquiry\ClsInqAttendance.cs" />
+    <Compile Include="Inquiry\ClsInqLeave.cs" />
+    <Compile Include="Inquiry\ClsInqPayroll.cs" />
+    <Compile Include="LM\ATOnSiteRequestObject.cs" />
+    <Compile Include="LM\ClaimLeaveObject.cs" />
+    <Compile Include="LM\IClsReqLateEarly.cs" />
+    <Compile Include="LM\ClsValidateLeave.cs" />
+    <Compile Include="LM\EmpResignObject.cs" />
+    <Compile Include="LM\ESSComplainObject.cs" />
+    <Compile Include="LM\FormPOObject.cs" />
+    <Compile Include="LM\GenerateLeaveObject.cs" />
+    <Compile Include="LM\IClsPubHoliDay.cs" />
+    <Compile Include="LM\ImportLeaveRequestObject.cs" />
+    <Compile Include="LM\LeaveTypeObject.cs" />
+    <Compile Include="LM\MaternityObject.cs" />
+    <Compile Include="LM\ClsPubHoliDay.cs" />
+    <Compile Include="LM\ClsReqLateEarly.cs" />
+    <Compile Include="LM\SetLeaveEntitleHeader.cs" />
+    <Compile Include="MD\ClsAlertSetting.cs" />
+    <Compile Include="MD\IClsExWorkFlowPreference.cs" />
+    <Compile Include="MD\ClsExWorkFlowPreference.cs" />
+    <Compile Include="MD\ClsHRPurchaseReceipt.cs" />
+    <Compile Include="MD\ClsHRPurchaseRequest.cs" />
+    <Compile Include="MD\ClsHRResquestPayment.cs" />
+    <Compile Include="MD\ClsRunScript.cs" />
+    <Compile Include="MD\ExWorkFlowPreference.cs" />
+    <Compile Include="MD\MDChangeEmpCode.cs" />
+    <Compile Include="MD\MDChangeEmpInfor.cs" />
+    <Compile Include="MD\MDDashboard.cs" />
+    <Compile Include="MD\MDHRCurrency.cs" />
+    <Compile Include="MD\MDMaterialObject.cs" />
+    <Compile Include="MD\MDNotivication.cs" />
+    <Compile Include="MD\MDOrgChart.cs" />
+    <Compile Include="MD\MDRoomType.cs" />
+    <Compile Include="MD\MDSetting.cs" />
+    <Compile Include="MD\MDSSBSetting.cs" />
+    <Compile Include="MD\SYUserAceessObject.cs" />
+    <Compile Include="MD\SYUserTokenObject .cs" />
+    <Compile Include="Mission\ClsHRMissClaim.cs" />
+    <Compile Include="Mission\ClsHRMissMemo.cs" />
+    <Compile Include="Mission\ClsHRMissPlan.cs" />
+    <Compile Include="Mission\ClsMISSType.cs" />
+    <Compile Include="Mission\ClsMyteamPlan.cs" />
+    <Compile Include="Mission\IClsHRMissClaim.cs" />
+    <Compile Include="Mission\IClsHRMissMemo.cs" />
+    <Compile Include="Mission\IClsHRMissPlan.cs" />
+    <Compile Include="Mission\IClsMyteamPlan.cs" />
+    <Compile Include="POD\Increase_SalaryObject.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PR\GEN_Filter.cs" />
+    <Compile Include="PR\PRAllowance.cs" />
+    <Compile Include="PR\PRBonusObject.cs" />
+    <Compile Include="PR\PRClaimBenObject.cs" />
+    <Compile Include="PR\PRCOAObject.cs" />
+    <Compile Include="PR\PRCostCenterObject.cs" />
+    <Compile Include="PR\PRDeduction.cs" />
+    <Compile Include="PR\PREmpADVPay.cs" />
+    <Compile Include="PR\PREmpHoldObject.cs" />
+    <Compile Include="PR\PREmpLoan.cs" />
+    <Compile Include="PR\PREmpSVCObject.cs" />
+    <Compile Include="PR\PREmpWorkingObject.cs" />
+    <Compile Include="PR\PRFirstPaySalaryGeneration.cs" />
+    <Compile Include="PR\PRGenerateSeverance.cs" />
+    <Compile Include="PR\PRGenerate_Salary.cs" />
+    <Compile Include="PR\PRGLmappingObject.cs" />
+    <Compile Include="PR\PRMExchangeRate.cs" />
+    <Compile Include="PR\PROverTimeObject.cs" />
+    <Compile Include="PR\PRPayParameterObject.cs" />
+    <Compile Include="PR\PRSBenefitType.cs" />
+    <Compile Include="PR\PRSendTelegram.cs" />
+    <Compile Include="PR\PRSFeeSetting.cs" />
+    <Compile Include="PR\PRSNSSFSetting.cs" />
+    <Compile Include="PR\PRSOTRate.cs" />
+    <Compile Include="PR\PRSParameter.cs" />
+    <Compile Include="PR\PRSProvidentFund.cs" />
+    <Compile Include="PR\PRSRewardType.cs" />
+    <Compile Include="PR\PRSTaxSetting.cs" />
+    <Compile Include="PR\PRSVCValueObject.cs" />
+    <Compile Include="PR\PRTransferToMgrObject.cs" />
+    <Compile Include="RCM\ClsRCMApplicant.cs" />
+    <Compile Include="RCM\ClsRCMCheckList.cs" />
+    <Compile Include="RCM\ClsRCMERecruit.cs" />
+    <Compile Include="RCM\ClsRCMInterviewProc.cs" />
+    <Compile Include="RCM\ClsRCMPShortList.cs" />
+    <Compile Include="RCM\ClsRCMRefCheck.cs" />
+    <Compile Include="RCM\ClsRCMRequest.cs" />
+    <Compile Include="RCM\ClsRCMSetting.cs" />
+    <Compile Include="RCM\ClsRCMSourcingExpend.cs" />
+    <Compile Include="RCM\ClsRCMVacancy.cs" />
+    <Compile Include="RCM\IClsRCMApplicant.cs" />
+    <Compile Include="RCM\IClsRCMCheckList.cs" />
+    <Compile Include="RCM\IClsRCMERecruit.cs" />
+    <Compile Include="RCM\IClsRCMInterviewProc.cs" />
+    <Compile Include="RCM\IClsRCMPShortList.cs" />
+    <Compile Include="RCM\IClsRCMRefCheck.cs" />
+    <Compile Include="RCM\IClsRCMRequest.cs" />
+    <Compile Include="RCM\IClsRCMSetting.cs" />
+    <Compile Include="RCM\IClsRCMSourcingExpend.cs" />
+    <Compile Include="RCM\IClsRCMVacancy.cs" />
+    <Compile Include="RCM\RCMGuideRecruitObject.cs" />
+    <Compile Include="SY\ClsRollUser.cs" />
+    <Compile Include="SY\ClsAuditLog.cs" />
+    <Compile Include="SY\ClsMonthOfYear.cs" />
+    <Compile Include="SY\ClsService.cs" />
+    <Compile Include="SY\SYBackupRestore.cs" />
+    <Compile Include="Training\Setup\ClsTRTrainingProgramItems.cs" />
+    <Compile Include="UserRoleApp\SYPermissionAppObject.cs" />
+    <Compile Include="ZKFPManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Humica.Core\Humica.Core.csproj">
+      <Project>{c6f05cff-dec9-428a-8b69-7b899c90d001}</Project>
+      <Name>Humica.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Humica.ESS\Humica.ESS.csproj">
+      <Project>{c3873554-c91c-497a-8ce2-4d7304fd41dd}</Project>
+      <Name>Humica.ESS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Integration.API\Integration.API.csproj">
+      <Project>{dfcf1afd-7fa2-41b1-9763-c37c3efbb472}</Project>
+      <Name>Integration.API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="zkemkeeper">
+      <Guid>{FE9DED34-E159-408E-8490-B720A5E632C7}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+</Project>
