@@ -1,0 +1,21 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+        if (txtBaseOnScan.GetValue() == false) {
+            txtAfterScan.SetEnabled(false);
+        }
+    });
+    function OnClientValueChanged(s, e) {
+        var checked = s.GetChecked();
+        txtAfterScan.SetEnabled(checked);
+    }
+</script>
+
+@model Humica.Attendance.IClsATPolicyObject
+
+@Html.Partial("PolicySetting", Model)

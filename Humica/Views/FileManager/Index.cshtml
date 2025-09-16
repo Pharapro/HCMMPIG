@@ -1,0 +1,48 @@
+﻿@model string
+
+<script>
+    function OnCustomCommand(s, e) {
+        var args = e.commandName.split("-");
+        
+        switch (args[0]) {
+            case "ChangeView":
+                fileManager.PerformCallback({ viewType: args[1] });
+                break;
+            case "Properties":
+                var isFileSelected = fileManager.GetActiveAreaName() == "Files";
+                var relativePath = isFileSelected ? fileManager.GetSelectedFile().GetFullName() : fileManager.GetCurrentPath();
+                popupControl.PerformCallback({ relativePath: relativePath });
+                break;
+        }
+    }
+    function OnToolbarUpdating(s, e) {
+
+        var enabled = (e.activeAreaName == "Folders" || fileManager.GetSelectedItems().length > 0) && e.activeAreaName != "None";
+        fileManager.GetToolbarItemByCommandName("Properties").SetEnabled(enabled);
+        fileManager.GetContextMenuItemByCommandName("Properties").SetEnabled(enabled);
+    }
+    function OnPopupEndCallback(s, e) {
+        alert(fileManager.GetMainElement());
+        UpdatePopupHeaderText();
+        popupControl.ShowAtElement(fileManager.GetMainElement());
+    }
+    function UpdatePopupHeaderText() {
+        var headerText = Name.GetText() + " Properties";
+        popupControl.SetHeaderText(headerText);
+    }
+
+   
+
+</script>
+
+
+@Html.DevExpress().Label(s => {
+    s.Name = "RootPath";
+    s.Text = "Root Path: "+Model.ToString();
+}).GetHtml()
+<br/><br />
+@using (Html.BeginForm())
+{
+    @Html.Partial("CustomToolbarPartial", Model)
+    @Html.Action("CustomToolbarPopupPartial")
+}

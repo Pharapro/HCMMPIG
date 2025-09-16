@@ -1,0 +1,73 @@
+﻿@model Humica.Training.TrainingInvitationObject
+
+@{
+    var grid = Html.DevExpress().GridView(s =>
+    {
+        s.Name = "gvemployeeselector";
+        s.KeyFieldName = "EmpCode";
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+        s.SettingsSearchPanel.Visible = true;
+        s.SettingsBehavior.ConfirmDelete = true;
+        s.CommandColumn.Visible = true;
+        s.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        s.CallbackRouteValues = new { Action = "gvemployeeselector", Controller = "TRTrainingInvite" };
+        
+        s.Settings.ShowGroupPanel = false;
+        s.Settings.ShowFooter = true;
+        s.SettingsContextMenu.Enabled = false;
+        s.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        s.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        s.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        s.Settings.ShowHeaderFilterButton = true;
+        s.SettingsPopup.HeaderFilter.Height = 200;
+        s.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        s.CommandColumn.ShowSelectCheckbox = true;
+        s.CommandColumn.Width = 50;
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.Columns.Add(col =>
+        {
+            col.FieldName = "EmpCode";
+            col.Width = 100;
+            col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Width = 200;
+            col.FieldName = "AllName";
+            col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+        });
+
+        s.SettingsBehavior.EnableCustomizationWindow = false;
+
+        s.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        s.SettingsPager.Position = PagerPosition.Bottom;
+        s.SettingsPager.FirstPageButton.Visible = true;
+        s.SettingsPager.LastPageButton.Visible = true;
+        
+        //s.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+
+        s.SettingsBehavior.AllowEllipsisInText = true;
+
+        //s.SettingsPager.PageSizeItemSettings.Visible = true;
+        s.SettingsPager.PageSize = 5;
+    }).Bind(Model.ListStaff).GetHtml();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

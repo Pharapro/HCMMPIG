@@ -1,0 +1,59 @@
+﻿@model Humica.Logic.Inquiry.ClsInqLeave
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTDGeneralFilter";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 180;
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => Model.Filter.FromDate, s =>
+            {
+                s.Width = width;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.PickerType = DatePickerType.Months;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => Model.Filter.ToDate, s =>
+            {
+                s.Width = width;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.PickerType = DatePickerType.Months;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+
+            }).Render();
+        });
+    });
+
+}).Bind(Model).GetHtml()
+

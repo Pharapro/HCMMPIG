@@ -1,0 +1,119 @@
+﻿    @{
+        var grid = Html.DevExpress().GridView(settings =>
+        {
+            settings.Name = "GridItems";
+            settings.KeyFieldName = "ApplicantID";
+            settings.Width = Unit.Percentage(100);
+            settings.EnableRowsCache = true;
+            settings.EnableTheming = true;
+            settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+            settings.CallbackRouteValues = new { Action = "GridItems", Controller = "EOBConfirmAlert" };
+            settings.CommandColumn.Visible = false;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = false;
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "");
+                column.Width = 80;
+                column.SetDataItemTemplateContent(container =>
+                {
+                    var applicantID = Convert.ToString(DataBinder.Eval(container.DataItem, "ApplicantID"));
+                    var navigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() +
+                                      ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL] + "Create?ApplicantID=" + applicantID;
+                    Html.DevExpress().HyperLink(hyperlink =>
+                    {
+                        hyperlink.Name = "chklst" + container.VisibleIndex;
+                        hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(
+                            ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Create");
+                        hyperlink.ToolTip = applicantID;
+                        hyperlink.NavigateUrl = "javascript:void(0);";
+                        hyperlink.Properties.ClientSideEvents.Click = string.Format(
+                            "function(s, e) {{ " + "   PopTheLoading.Show(); " +
+                            "   setTimeout(function() {{ window.location = '{0}'; }}, 10); " + "}}", navigateUrl);
+                    }).Render();
+                });
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApplicantID");
+                column.Width = 120;
+                column.FieldName = "ApplicantID";
+                var textProperties = column.PropertiesEdit as TextBoxProperties;
+                textProperties.ValidationSettings.Display = Display.None;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CandidateName");
+                column.Width = 160;
+                column.FieldName = "AllName";
+                var textProperties = column.PropertiesEdit as TextBoxProperties;
+                textProperties.ValidationSettings.Display = Display.None;
+            });
+            //settings.Columns.Add(column =>
+            //{
+            //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PositionOffer");
+            //    column.Width = 200;
+            //    column.FieldName = "PositionOffer";
+            //    var textProperties = column.PropertiesEdit as TextBoxProperties;
+            //    textProperties.ValidationSettings.Display = Display.None;
+            //});
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "PostOffer";
+                column.Width = 250;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PositionOffer");
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                textProperties.ValidationSettings.Display = Display.None;
+                textProperties.DataSource = ViewData["POST_SELECT"];
+                textProperties.TextField = "Description";
+                textProperties.ValueField = "Code";
+                textProperties.ValueType = typeof(string);
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+                column.Width = 120;
+                column.FieldName = "Status";
+                var textProperties = column.PropertiesEdit as TextBoxProperties;
+                textProperties.ValidationSettings.Display = Display.None;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 100;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Resume File");
+                column.FieldName = "ResumeFile";
+                column.SetDataItemTemplateContent(container =>
+                {
+                    var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "ResumeFile"));
+                    if (!(attachment == null || attachment == ""))
+                    {
+                        Html.DevExpress().HyperLink(hyperlink =>
+                        {
+                            hyperlink.Name = "file_" + container.VisibleIndex;
+                            hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+                            hyperlink.Properties.Target = "_BLANK";
+                            hyperlink.NavigateUrl = attachment;
+                        }).Render();
+                    }
+                });
+            });
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+            settings.SettingsPager.PageSize = 150;
+            settings.CustomJSProperties = (sender, e) =>
+            {
+                e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+            };
+        });
+    }
+
+    @grid.Bind(Model).GetHtml()
+
+
+
+
+

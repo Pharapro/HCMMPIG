@@ -1,0 +1,149 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'DeviceID;', OnGetRowValues);
+        });
+
+        $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        })
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+        $('#_btnDownload').click(function () {
+            ss = 4;
+            //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Download?id=" + selectedIDs + "&FromDate=" + convert(txtFromDate.GetDate()) + "&ToDate=" + convert(txtToDate.GetDate());
+            var favDialog = document.getElementById('favDialog');
+            favDialog.showModal();
+            StartTimer();
+            $.ajax({
+                type: "post",
+                url: _baseUrl + '/Attendance/Attendance/DownLoadData/Download',
+                data: {'FromDate': convert(txtFromDate.GetDate()), 'ToDate': convert(txtToDate.GetDate()) },
+                success: function (data) {
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+    });
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("DeviceID", GetSelectedFieldValuesCallback);
+
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/DownLoadData/getEmpCode',
+            data: { 'EmpCode': selectedIDs},
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+    var interval = null;
+    function StartTimer() {
+        if (interval == null) {
+            var counter = 0;
+            interval = setInterval(function () {
+                counter += 1;
+                // Do your task.
+                $.ajax({
+                    type: "post",
+                    url: _baseUrl + '/Attendance/Attendance/DownLoadData/ShowProcess',
+                    data: {},
+                    success: function (data) {
+                        if (data.MS == "OK") {
+                            progressBar1.SetValue(data.Percen);
+                        }
+                        else {
+                            progressBar1.SetValue(data.Percen);
+                            favDialog.close();
+                            StopTimer();
+                        }
+                    },
+                    error: function () {
+                       // alert("error ....");
+                    }
+                });
+
+            }, 1000);
+        }
+    }
+
+    function StopTimer() {
+        clearInterval(interval);
+        interval = null;
+         window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()";
+    }
+</script>
+
+@model Humica.Logic.Atts.DevSettingObject
+<link rel="stylesheet" href="~/Content/styleLoanding.css">
+
+<dialog id="favDialog" style="border: none; background-color: transparent; height: 75px; ">
+    @*style="border: none; z-index: 1; width: 68%; background: black">*@
+
+    <div id="floatingBarsG">
+        <div class="blockG" id="rotateG_01"></div>
+        <div class="blockG" id="rotateG_02"></div>
+        <div class="blockG" id="rotateG_03"></div>
+        <div class="blockG" id="rotateG_04"></div>
+        <div class="blockG" id="rotateG_05"></div>
+        <div class="blockG" id="rotateG_06"></div>
+        <div class="blockG" id="rotateG_07"></div>
+        <div class="blockG" id="rotateG_08"></div>
+    </div>
+
+    @Html.DevExpress().ProgressBar(settings =>
+    {
+        settings.Name = "progressBar1";
+
+       // settings.Height = 20;
+
+        //settings.Properties.Caption.aho = "Caption";
+        settings.Properties.Minimum = 0;
+      // settings.Properties.Maximum = Model.Progress;
+        settings.Properties.ShowPosition = true;
+       // settings.Properties.DisplayFormatString = "{0} / 100";
+        // settings.Properties.ClientSideEvents.Init
+        settings.Width = 300;
+    }).GetHtml()
+</dialog>
+<div class="fitler-doc">
+    @Html.Partial("FTFilter", Model)
+</div>
+@Html.Partial("GridItems", Model.ListHeader)

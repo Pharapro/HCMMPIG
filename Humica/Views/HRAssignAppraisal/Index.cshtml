@@ -1,0 +1,78 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnAssignStaff').click(function () {
+            PopTheLoading.Show();
+            $.ajax({
+                type: 'post',
+                url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ReasonDoc",
+                data: {
+                    'Deadline': formatDate(dptDeadline.GetValue()),
+                    'Deadline2': formatDate(dptDeadline2.GetValue()),
+                    'KPIType': txtKPIType.GetValue(),
+                    'KPIExpectedDate': formatDate(dptKPIExpectedDate.GetValue()),
+                    'KPIDeadline': formatDate(dptKPIDeadline.GetValue()),
+                },
+                success: function (data) {
+                    if (data.MS == "@Humica.EF.SYSConstant.OK.ToString()") {
+                        window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()"
+                            + "AssignStaff?AppType=" + txtAppraiselType.GetValue() + "&AppraiserDate=" + convert(txtAppraiserDate.GetDate()) +"&EmpCode=" + selectedIDs + "&InYear=" + txtInYear.GetValue() + "&PeriodFrom=" + convert(txtPeriodFrom.GetDate()) + "&PeriodTo=" + convert(txtPeriodTo.GetDate());
+                    } else {
+                        AlertMessage(data.MS);
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.responseText);
+                }
+            });
+        });
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportListDetail(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+    });
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function SelectAppraiser2(s, e) {
+        txtAppraiserName2.SetValue(s.GetSelectedItem().GetColumnText(1));
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+    //function convert(str) {
+    //    var date = new Date(str),
+    //        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+    //        day = ("0" + date.getDate()).slice(-2),
+    //        Minutes = ("0" + date.getMinutes()).slice(-2);
+    //    return [date.getFullYear(), mnth, day].join("-");
+    //}
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-") + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+    //function SelectAppraiser(s, e) {
+    //    txtAppraiserName.SetValue(s.GetSelectedItem().GetColumnText(1));
+    //    //txtAppraiserPosition.SetValue(s.GetSelectedItem().GetColumnText(3));
+    //}
+</script>
+
+@model Humica.Performance.IClsAppraisel
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+@Html.Partial("GridItems", Model.ListEmpStaff)

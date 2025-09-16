@@ -1,0 +1,68 @@
+﻿@model Humica.Logic.PR.PRCostCenterObject
+
+@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "CCChargeGrid";
+             settings.KeyFieldName = "CostCenter";
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+             settings.CallbackRouteValues = new { Controller = "PREmpCostCenter", Action = "GridItems" };
+             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PREmpCostCenter", Action = "CreateItemEdit" };
+             settings.CommandColumn.Visible = true;
+             settings.CommandColumn.ShowEditButton = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+             settings.Columns.Add(column =>
+             {
+                 column.ReadOnly = true;
+                 column.FieldName = "CostCenter";
+                 column.Width = 110;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Code");
+                 column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.ReadOnly = true;
+                 column.FieldName = "Description";
+                 column.Width = 110;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Charge";
+                 column.Width = 150;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Charge %");
+                 column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+             });
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Remark";
+                 column.Width = 250;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Remark");
+                 column.ColumnType = MVCxGridViewColumnType.TextBox;
+             });
+
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+
+         });
+
+
+}
+
+@grid.Bind(Model.ListCCCharge).GetHtml()
+
+

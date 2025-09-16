@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().DocumentViewer(
+    settings =>
+    {
+        settings.Name = "DocumentViewer";
+        settings.Report = Model;
+        settings.SettingsSplitter.DocumentMapCollapsed = true;
+        settings.CallbackRouteValues = new { Controller = "HRKPIAssignByTeam", Action = "DocumentViewerPartial", id = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() };
+        settings.ExportRouteValues = new { Controller = "HRKPIAssignByTeam", Action = "DocumentViewerExportTo", id = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() };
+        settings.ToolbarMode = DevExpress.XtraReports.Web.DocumentViewer.DocumentViewerToolbarMode.StandardToolbar;
+    }).GetHtml()

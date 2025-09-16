@@ -1,0 +1,141 @@
+﻿@model Humica.Logic.EOB.EOBHealthChkUpObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Physicians";
+    settings.AlignItemCaptionsInAllGroups = true;
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = "Physicians";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dr.Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.DrName, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.Checked, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Text = "Checked";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Check Up Date");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.ChkUpDate, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dr. PhoneNo");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.PhoneNo, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            m.ColumnSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attachment Ref.");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().UploadControl(ss =>
+            {
+                ss.ShowProgressPanel = true;
+                ss.CallbackRouteValues = new { Controller = "EOBEmpHealthCheckUp", Action = "UploadControlCallbackActionImage" };
+                ss.Name = "UploadControl";
+                ss.UploadMode = UploadControlUploadMode.Auto;
+                ss.AutoStartUpload = true;
+                ss.Width = 120;
+                ss.DialogTriggerID = "externalDropZone";
+                ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                ss.AdvancedModeSettings.EnableMultiSelect = false;
+                ss.ShowTextBox = false;
+                ss.ShowUploadButton = false;
+                ss.ShowAddRemoveButtons = true;
+                ss.ShowProgressPanel = false;
+                ss.ShowClearFileSelectionButton = false;
+                ss.AdvancedModeSettings.EnableFileList = true;
+                ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                ss.AdvancedModeSettings.DropZoneText = "";
+                ss.ValidationSettings.MaxFileSize = 4194304;
+                ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                ss.UploadButton.Text = String.Empty;
+                ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".pdf", ".png", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
+                ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+            }).Render();
+            Html.DevExpress().HyperLinkFor(i => i.Header.AttachmentRef, s =>
+            {
+                s.Name = "file_uploaded";
+                s.ToolTip = "File";
+                s.Properties.Target = "_BLANK";
+                s.ClientVisible = true;
+                s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+            }).GetHtml();
+        });
+    });
+}).GetHtml()
+

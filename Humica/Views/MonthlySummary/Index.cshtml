@@ -1,0 +1,142 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        @*$('#_btnTransferOT').click(function () {
+            ss = 4;
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferOT?TranNo=" + selectedIDs;
+        });
+        $('#_btnTransferAtt').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs;
+        });
+        $('#_btnTransferLeave').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferLeave?TranNo=" + selectedIDs;
+        });
+        $('#_btnTransferWorkingDay').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferWorkingDay?TranNo=" + selectedIDs;
+        });*@
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_btnTransferAtt") {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs;
+        }
+        if (e.item.name == "_btnTransferLeave") {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferLeave?TranNo=" + selectedIDs;
+        }
+        if (e.item.name == "_btnTransferWorkingDay") {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferWorkingDay?TranNo=" + selectedIDs;
+        }
+    }
+
+    function SelectEmp(s,e)
+    {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowData();
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function DbRowClick(s, e) {
+        PDIWaitngGrid.GetRowValues(PDIWaitngGrid.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        selectedID1 = values[1];
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/MonthlySummary/ShowEmpDetail',
+            data: { 'EmpCode': selectedIDs, 'PayPeriodId': txtPayPeriodId.GetValue() },
+            success: function (data) {
+                if (data.MS == "@Humica.EF.SYSConstant.OK") {
+                    GridItemDetails.Refresh();
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+
+    }
+    function ShowData() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/MonthlySummary/ShowData',
+            data: { 'id': 'TOTAL', 'EmpCode': selectedIDs },
+            success: function (data) {
+                if (data.MS == "@Humica.EF.SYSConstant.OK") {
+                    var StartDate = data.StartDate;
+                    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    //txtAllName.SetValue(data.AllName);
+                    txtEmpType.SetValue(data.EmpType);
+                    txtDivision.SetValue(data.Division);
+                    txtDepartment.SetValue(data.DEPT);
+                    txtSection.SetValue(data.SECT);
+                    txtLevel.SetValue(data.LevelCode);
+                    txtPosition.SetValue(data.Position);
+                    txtStartDate.SetValue(nowDate);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+
+@model Humica.Logic.Att.ATEmpSchObject
+
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Summary")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems", Model.ListEmpSchdule);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Details")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemDetails", Model.ListEmpSchduleDetail);
+        });
+    }).GetHtml()

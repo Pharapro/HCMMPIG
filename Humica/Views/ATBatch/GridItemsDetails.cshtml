@@ -1,0 +1,103 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridItem";
+        settings.KeyFieldName = "ShiftCode";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "ATBatch", Action = "GridItemsDetails" };
+
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Shift");
+            column.Width = 200;
+            column.FieldName = "ShiftCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["SHIFT_LIST"];
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"),250);
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Monday");
+            column.FieldName = "Mon";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Tuesday");
+            column.FieldName = "Tue";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Wednesday");
+            column.FieldName = "Wed";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Thursday");
+            column.FieldName = "Thu";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Friday");
+            column.FieldName = "Fri";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Saturday");
+            column.FieldName = "Sat";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Sunday");
+            column.FieldName = "Sun";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

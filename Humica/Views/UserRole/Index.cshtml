@@ -1,0 +1,61 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+        $('#_bthEditAction').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'RoleID;Description', OnGetRowValues);
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'RoleID;Description', OnGetRowValues);
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");                        
+        });
+
+        
+
+        $('#_btnNewAction').click(function () {
+            window.location = "@Request.Url.AbsoluteUri" + "/Create";
+        });
+       
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'RoleID;Description', OnGetRowValues);
+    }
+
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        if (ss == 1) {
+            window.location = "@Request.Url.AbsoluteUri" + "/Edit?id=" + values[0];
+        }
+        if (ss == 2) {
+            selectedIDs = values[0];
+        }
+
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 2) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?id=" + selectedIDs;
+            }
+           
+        }
+
+    }
+
+
+</script>
+
+@model Humica.EF.Models.SY.SYPermissionObject
+
+
+@Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListHeaderRole)
+
+

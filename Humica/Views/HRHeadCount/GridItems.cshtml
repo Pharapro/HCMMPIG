@@ -1,0 +1,77 @@
+﻿@model Humica.Logic.HR.HRHeadCountObject
+
+@{
+     var grid = Html.DevExpress().GridView(
+     settings =>
+     {
+         settings.Name = "GridItems";
+         settings.KeyFieldName = "Code";
+         settings.Width = Unit.Percentage(100);
+         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+         settings.CallbackRouteValues = new { Controller = "HRHeadCount", Action = "GridItems" };
+         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRHeadCount", Action = "ItemEdit" };
+         settings.CommandColumn.Visible = true;
+         settings.CommandColumn.ShowEditButton = true;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.Columns.Add(column =>
+         {
+             column.ReadOnly = true;
+             column.FieldName = "Code";
+             column.Width = 120;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Code");
+             column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.ReadOnly = true;
+             column.FieldName = "Description";
+             column.Width = 200;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Descritpion");
+             column.ColumnType = MVCxGridViewColumnType.TextBox;
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.FieldName = "EmpNo";
+             column.Width = 120;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Emp No.");
+             column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+             var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+             spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.FieldName = "Amount";
+             column.Width = 120;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+             column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+             var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+             spinEditProperties.DisplayFormatString = "N2";
+             spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+         });
+
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+         settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+         settings.SettingsBehavior.ConfirmDelete = true;
+         settings.SettingsPager.PageSize = 520;
+         settings.CustomJSProperties = (sender, e) =>
+         {
+             e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+         };
+
+     });
+
+    }
+
+@grid.Bind(Model.ListHeadCount).GetHtml()
+
+
+
+
+
+

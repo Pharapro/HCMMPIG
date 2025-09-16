@@ -1,0 +1,127 @@
+﻿@{
+   var grid = Html.DevExpress().GridView(
+        settings =>
+        {
+
+            settings.Name = "gridViewItem3";
+            settings.KeyFieldName = "UserName";
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+            settings.CallbackRouteValues = new { Controller = "SYEmailTemplate", Action = "GridItems3" };
+
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "SYEmailTemplate", Action = "CreatePartial3" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SYEmailTemplate", Action = "EditPartial3" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SYEmailTemplate", Action = "DeletePartial3" };
+
+            settings.SettingsBehavior.AllowSort = false;
+            
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowCancelButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+            settings.Columns.Add(column =>
+            {
+                column.Width = 250;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("UserName");
+                column.FieldName = "UserName";
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+                column.ToolTip = "Key 1";
+                var listNumber = (List<Humica.EF.MD.SYUser>)ViewData["USER_LIST"];
+
+                var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                textProperties.DataSource = listNumber;
+
+                textProperties.ValueField = "UserName";
+                textProperties.TextField = "UserName";
+                textProperties.TextFormatString = "{0}:{1}";
+                textProperties.Columns.Add("UserName", Humica.EF.Models.SY.SYSettings.getLabel("UserName"));
+                textProperties.Columns.Add("LoginName", Humica.EF.Models.SY.SYSettings.getLabel("LoginName"));
+                textProperties.ValueType = typeof(string);
+                textProperties.Width = Unit.Percentage(100);
+
+            });
+
+
+            settings.Columns.Add(column =>
+            {
+                column.Width = 80;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Separtor");
+
+                column.FieldName = "Separtor";
+           
+            });
+
+            settings.Columns.Add(column =>
+            {
+                column.Width = 120;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("UserEndLastRank");
+
+                column.FieldName = "UserEndLastRank";
+
+            });
+            
+            
+
+            settings.SettingsSearchPanel.Visible = true;
+            settings.SettingsBehavior.ConfirmDelete = true;
+
+            settings.Settings.ShowGroupPanel = false;
+            settings.Settings.ShowFooter = true;
+            settings.SettingsContextMenu.Enabled = true;
+            settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.SettingsPopup.HeaderFilter.Height = 200;
+            
+
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+            settings.SettingsPager.PageSize = 20;
+
+            settings.SettingsBehavior.AllowEllipsisInText = true;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+            settings.PreRender = (sender, e) =>
+            {
+                //((MVCxGridView)sender).StartEdit(1);
+            };
+
+            settings.CellEditorInitialize = (s, e) =>
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.Dynamic;
+                if (e.KeyValue != null)
+                {
+                    if (e.Column.FieldName == "HolidayDate")
+                    {
+                        e.Editor.ReadOnly = true;
+                    }
+                }
+            };
+
+
+            settings.CustomJSProperties = (sender, e) =>
+            {
+                e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+            };
+
+        });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()

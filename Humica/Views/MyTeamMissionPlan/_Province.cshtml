@@ -1,0 +1,149 @@
+﻿@{var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "_Province";
+        settings.KeyFieldName = "LineItem";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "MyTeamMissionPlan", Action = "_Province" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "MyTeamMissionPlan", Action = "CreatePProvince" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MyTeamMissionPlan", Action = "EditPProvince" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MyTeamMissionPlan", Action = "DeletePProvince" };
+
+        //settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Location";
+            column.Width = 250;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+        });
+        settings.Columns.Add(column =>
+        {
+
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDay")+"*";
+            column.Width = 120;
+
+            column.FieldName = "FromDay";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ValidationSettings.RequiredField.IsRequired = true;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 110;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDay")+"*";
+            column.FieldName = "ToDay";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ValidationSettings.RequiredField.IsRequired = true;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Maps";
+            column.Width = 90;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Maps") + "*";
+
+            column.ColumnType = MVCxGridViewColumnType.HyperLink;
+
+            var linkProperties = column.PropertiesEdit as HyperLinkProperties;
+            if (linkProperties != null)
+            {
+                //linkProperties.TextField = "Maps";
+                linkProperties.Text = "Link";
+                linkProperties.NavigateUrlFormatString = "{0}";
+                linkProperties.Target = "_blank";
+            }
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Route";
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Route")+"*";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.DisplayFormatString = "N0";
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+
+        settings.ClientSideEvents.EndCallback = "EndCallBackProvince";
+        settings.SettingsSearchPanel.Visible = false;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.CellEditorInitialize = (sender, e) =>
+        {
+            MVCxGridView grid_ = sender as MVCxGridView;
+
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            editor.ReadOnly = false;
+            if (e.Column.FieldName == "LineItem")
+            {
+                if (e.KeyValue != null)
+                {
+                    editor.ReadOnly = true;
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string) ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

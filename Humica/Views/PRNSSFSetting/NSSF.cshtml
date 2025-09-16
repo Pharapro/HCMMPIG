@@ -1,0 +1,108 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "PurchaseRequisitionGrid";
+               settings.KeyFieldName = "ID";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+              // settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Controller = "PRNSSFSetting", Action = "NSSF" };
+               settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRNSSFSetting", Action = "CreateItem" };
+               settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRNSSFSetting", Action = "EditItem" };
+               settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRNSSFSetting", Action = "DeleteItem" };
+
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.ShowDeleteButton = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.ShowNewButtonInHeader = true;
+               settings.CommandColumn.ShowCancelButton = true;
+               settings.CommandColumn.ShowEditButton = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "Grwagef";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gross Wage From");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "GrwaGet";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gross Wage To");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "AvgGr";
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Average Wage");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "ContriBut";
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NSSF Contribution");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "HealthComp";
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Health Care By Company");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "HealthStaff";
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Health Care By Staff");
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 50;
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   if (e.Column.FieldName == "ID")
+                   {
+
+                       ASPxEdit editor = (ASPxEdit)e.Editor;
+                       editor.ValidationSettings.Display = Display.None;
+                       editor.ReadOnly = false;
+
+
+                   }
+
+               };
+           });
+
+    if (ViewData["EditError"] != null)
+    {
+        gridExtension.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@gridExtension.Bind(Model).GetHtml()
+
+

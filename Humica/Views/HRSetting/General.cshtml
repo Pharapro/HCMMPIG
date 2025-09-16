@@ -1,0 +1,149 @@
+﻿@model Humica.Logic.MD.MDSetting
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "General";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Telegram CC Req. Leave");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.TelegLeave, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "ChatID";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["TELEGRAM_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Telegram CC Req. OT");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.TelegOT, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "ChatID";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["TELEGRAM_SELECT"]).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Deduct Late Type");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().ComboBoxFor(i => i.Header.DeductLate, s =>
+           {
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.Properties.TextFormatString = "{0}";
+               s.Properties.ValueField = "Code";
+               s.Properties.TextField = "Description";
+               s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+               s.Properties.AllowNull = true;
+           }).BindList(ViewData["DED_SELECT"]).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Deduct Early Type");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().ComboBoxFor(i => i.Header.DeductEalary, s =>
+           {
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.Properties.TextFormatString = "{0}";
+               s.Properties.ValueField = "Code";
+               s.Properties.TextField = "Description";
+               s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+               s.Properties.AllowNull = true;
+           }).BindList(ViewData["DED_SELECT"]).Render();
+       });
+        g.Items.Add(mm =>
+        {
+            mm.Caption = "Stamp Reject Image";
+        })
+        .SetNestedContent(() =>
+        {
+
+            ViewContext.Writer.Write("<div id='externalDropZone1' class='dropZoneExternal1'><div id='dragZone1'><span class='dragZoneText1'>Drop Signature Image</span></div>");
+            ViewContext.Writer.Write("<img id='uploadedImage1' src='" + Model.Header.StampRejectImage + "' alt='' style='width: 100px;' onload='onImageLoad1()' />");
+            ViewContext.Writer.Write("<div id='dropZone1' style='display: none'>");
+            ViewContext.Writer.Write("<span class='dropZoneText1'>Drop Profile Image</span>");
+            ViewContext.Writer.Write("</div></div>");
+            ViewContext.Writer.Write("</div></div>");
+            Html.DevExpress().UploadControl(ss =>
+            {
+                ss.ShowProgressPanel = true;
+                ss.CallbackRouteValues = new { Controller = "HRSetting", Action = "UploadControlCallbackActionSignature" };
+                ss.Name = "uc_signature";
+                ss.UploadMode = UploadControlUploadMode.Auto;
+                ss.AutoStartUpload = true;
+                ss.Width = 170;
+                ss.DialogTriggerID = "externalDropZone1";
+                ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                ss.AdvancedModeSettings.EnableFileList = false;
+                ss.AdvancedModeSettings.EnableMultiSelect = false;
+                ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone1";
+                ss.AdvancedModeSettings.DropZoneText = "";
+                ss.ValidationSettings.MaxFileSize = 9194304;
+                ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png" };
+                ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage1";
+                ss.BrowseButton.Text = "Choose Image.";
+                ss.Styles.DropZone.CssClass = "uploadControlDropZone1";
+                ss.Styles.ProgressBar.CssClass = "uploadControlProgressBar1";
+                ss.ClientSideEvents.DropZoneEnter = "function(s, e) { if(e.dropZone1.id == 'externalDropZone1') setElementVisible('dropZone1', true); }";
+                ss.ClientSideEvents.DropZoneLeave = "function(s, e) { if(e.dropZone1.id == 'externalDropZone1') setElementVisible('dropZone1', false); }";
+                ss.ClientSideEvents.FileUploadComplete = "onUploadControlFileUploadCompleteSignature";
+            }).Render();
+            Html.DevExpress().TextBoxFor(i => i.Header.StampRejectImage, s =>
+            {
+                s.Properties.ClientInstanceName = "txtSignature";
+                //s.Properties.ClientSideEvents.GotFocus = "OnFocus";
+                s.Properties.EnableClientSideAPI = true;
+                s.ClientVisible = false;
+                s.Width = 100;
+            }).Render();
+
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "btRemoveRe";
+                s.Text = "Remove";
+                s.Width = 50;
+                s.ClientSideEvents.Click = "RemoveFile";
+            }).Render();
+        });
+    });
+
+}).GetHtml()
+

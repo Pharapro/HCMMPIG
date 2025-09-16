@@ -1,0 +1,70 @@
+﻿@model Humica.Logic.MD.MDSetting
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "GeneralA";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("MissedScan Deduct Type");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.MisScanAL, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["LEAVE_TYPE"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Deduct Salary");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.MisScanUP, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["LEAVE_TYPE"]).Render();
+        });
+        g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Count Missed Scan");
+            })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.CountMisscan, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+
+}).GetHtml()
+

@@ -1,0 +1,64 @@
+﻿@model Humica.Logic.EOB.EOBAnnouncementObject
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "TGGroup";
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(200);
+    settings.Width = Unit.Pixel(350);
+    settings.PopupElementID = "ShowButton1";
+    settings.HeaderText = "Telegram Group";
+    settings.Modal = true;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().PageControl(setting =>{
+        setting.Name = "pcScrollingAccount";
+        setting.Width = Unit.Percentage(100);
+
+        setting.EnableTabScrolling = true;
+        setting.TabAlign = TabAlign.Justify;
+        setting.Styles.Tab.CssClass = "scrolling_Tab";
+        setting.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Select Group")).SetContent(() =>
+        {
+            ViewContext.Writer.Write("<br/>");
+            Html.DevExpress().ComboBoxFor(i=>i.TeleGroup, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Width = 350;
+                s.Properties.ClientInstanceName = "cboTeleGroup";
+                s.Properties.ValueField = "ChatID";
+                s.Properties.TextField = "Description";
+            }).BindList(ViewData["SELECT_TGGROUP"]).Render();
+            
+            ViewContext.Writer.Write("<br/>");
+        });
+        
+        }).GetHtml();
+    });
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div class='question_btn'>");
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTOK_R9";
+            s.Text = "OK";
+            s.ClientSideEvents.Click = "_clickConfirm";
+        }).Render();
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTCANCEL_R9";
+            s.Text = "CANCEL";
+            s.ClientSideEvents.Click = "function(s, e){ TGGroup.Hide();  }";
+        }).Render();
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='clear'></div>");
+    });
+
+}).GetHtml()

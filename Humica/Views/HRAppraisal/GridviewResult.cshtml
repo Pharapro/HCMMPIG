@@ -1,0 +1,137 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "gridViewItem4";
+        settings.KeyFieldName = "TranNo";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "HRAppraisal", Action = "GridItemResult" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAppraisal", Action = "CreateResult" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAppraisal", Action = "EditResult" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAppraisal", Action = "DeleteResult" };
+
+        settings.SettingsBehavior.AllowSort = false;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromScore");
+            column.FieldName = "FromScore";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToScore");
+            column.FieldName = "ToScore";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Grade");
+            column.FieldName = "Grade";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 250;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.FieldName = "Description";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rating") + " (%)";
+            column.Width = 100;
+            column.FieldName = "Rating";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "P2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "FromScore" || e.Column.FieldName == "ToScore"
+                || e.Column.FieldName == "Rating")
+                {
+                    e.Editor.Value = 0;
+                }
+            }
+
+        };
+
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

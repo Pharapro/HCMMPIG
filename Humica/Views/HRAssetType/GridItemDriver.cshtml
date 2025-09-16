@@ -1,0 +1,116 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemDriver";
+           settings.KeyFieldName = "DriverCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRAssetType", Action = "GridItemDriver" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAssetType", Action = "CreateDriver" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAssetType", Action = "EditDriver" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAssetType", Action = "DeleteDriver" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+           //    column.Width = 60;
+           //    column.FieldName = "ID";
+           //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+           //});
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DriverCode");
+               column.Width = 300;
+               column.FieldName = "DriverCode";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["Driver_SELECT"];
+               textProperties.ValueField = "EmpCode";
+               textProperties.TextField = "OthAllName";
+               textProperties.TextFormatString = "{0}:{1}";
+               textProperties.DropDownStyle = DropDownStyle.DropDownList;
+               textProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"), 100);
+               textProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"), 120);
+               textProperties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"), 120);
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+               textProperties.ClientSideEvents.SelectedIndexChanged = "getDriver";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DriverName");
+               column.FieldName = "DriverName";
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtDriverName";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+               column.FieldName = "IsActive";
+               column.Width = 100;
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               //textProperties.ValidationSettings.Display = Display.None;
+           });
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "DriverCode")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

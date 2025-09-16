@@ -1,0 +1,36 @@
+﻿<script type="text/javascript">
+
+    var ss;
+    var selectedIDs = "";
+
+    $(document).ready(function () {
+
+        $('#_btnRunAction').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'ReportId;Url', OnGetRowValues);
+        });    
+
+        $('#_btnExportAction').click(function () {
+            window.location = "@Request.Url.AbsoluteUri" + "/ExportTo";
+        });
+
+        $('#_btnBackAction').hide();
+
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'ReportId;Url', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + values[1] + "/" + values[0] ;
+        }
+    }
+
+</script>
+
+@model Humica.EF.RPReportingObject
+
+@Html.Partial(Humica.Models.SY.SYListConfuration.ReportingList, Model.ListHeader)

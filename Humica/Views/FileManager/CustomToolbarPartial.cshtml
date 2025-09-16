@@ -1,0 +1,87 @@
+﻿@Html.DevExpress().FileManager(
+    settings =>
+    {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "CustomToolbarPartial" };
+        settings.CustomActionRouteValues = new { Controller = "FileManager", Action = "CustomToolbarAction" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "DownloadFiles" };
+        
+
+        //settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = Humica.Models.FL.FileManagerDemoHelper.AllowedFileExtensions;
+
+        settings.ClientSideEvents.CustomCommand = "OnCustomCommand";
+        settings.ClientSideEvents.ToolbarUpdating = "OnToolbarUpdating";
+
+        settings.SettingsFileList.View = Session["aspxCustomToolbarDemoView"] == null ? FileListView.Thumbnails : (FileListView)Session["aspxCustomToolbarDemoView"];      
+
+        settings.SettingsEditing.Assign(Humica.Models.FL.FileManagerDemoHelper.CreateFileManagerEditingSettings());
+
+        settings.SettingsEditing.AllowRename = true;
+        settings.SettingsEditing.AllowCreate = true;
+        settings.SettingsEditing.AllowMove = true;
+        settings.SettingsEditing.AllowCopy = true;
+        settings.SettingsEditing.AllowDelete = true;
+        settings.SettingsEditing.AllowDownload = true;
+        settings.SettingsUpload.Enabled = true;        
+
+        settings.SettingsContextMenu.Enabled = true;
+
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+        settings.SettingsUpload.AdvancedModeSettings.EnableMultiSelect = true;
+
+         settings.Settings.EnableMultiSelect = true;         
+
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarCreateButton());
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarMoveButton());
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarCopyButton());
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarDownloadButton());
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarUploadButton());
+        var renameButton = new FileManagerToolbarRenameButton();
+        renameButton.BeginGroup = true;
+        settings.SettingsContextMenu.Items.Add(renameButton);
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarDeleteButton());
+        settings.SettingsContextMenu.Items.Add(new FileManagerToolbarRefreshButton());
+        var propertiesButton = new FileManagerToolbarCustomButton();
+        propertiesButton.CommandName = "Properties";
+        propertiesButton.Text = "Properties";
+        propertiesButton.Image.IconID = IconID.SetupProperties16x16;
+        propertiesButton.BeginGroup = true;
+        settings.SettingsContextMenu.Items.Add(propertiesButton);
+
+        var isThumbnailsView = settings.SettingsFileList.View == FileListView.Thumbnails;
+        propertiesButton = new FileManagerToolbarCustomButton();
+        propertiesButton.CommandName = "Properties";
+        propertiesButton.Image.IconID = IconID.SetupProperties16x16;
+        settings.SettingsToolbar.Items.Add(propertiesButton);
+        var refreshButton = new FileManagerToolbarRefreshButton();
+        refreshButton.BeginGroup = false;
+        settings.SettingsToolbar.Items.Add(refreshButton);
+        var thumbnailsViewButton = new FileManagerToolbarCustomButton();
+        thumbnailsViewButton.CommandName = "ChangeView-Thumbnails";
+        thumbnailsViewButton.Text = "Thumbnails View";
+        thumbnailsViewButton.GroupName = "ViewMode";
+        thumbnailsViewButton.Image.IconID = IconID.GridCards16x16;
+        thumbnailsViewButton.Checked = isThumbnailsView;
+        settings.SettingsToolbar.Items.Add(thumbnailsViewButton);
+        var detailsViewButton = new FileManagerToolbarCustomButton();
+        detailsViewButton.CommandName = "ChangeView-Details";
+        detailsViewButton.Text = "Details View";
+        detailsViewButton.GroupName = "ViewMode";
+        detailsViewButton.Image.IconID = IconID.GridGrid16x16;
+        detailsViewButton.Checked = !isThumbnailsView;
+        settings.SettingsToolbar.Items.Add(detailsViewButton);
+
+        //settings.FileUploading = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        //settings.FolderCreating = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        //settings.ItemRenaming = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        //settings.ItemDeleting = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        //settings.ItemMoving = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        //settings.ItemCopying = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+
+        //settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+        //settings.ClientSideEvents.ItemDeleting = "ItemDeleting";
+        //settings.ClientSideEvents.EndCallback = "onEndCallback";
+        
+    }
+).BindToFolder(Model).GetHtml()

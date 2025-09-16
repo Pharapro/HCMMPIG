@@ -1,0 +1,70 @@
+﻿@model Humica.Logic.MD.SYUserAceessObject
+
+@{
+    var grid = Html.DevExpress().TreeList(
+      settings =>
+      {
+
+          settings.Name = "GridLevel";
+          settings.CallbackRouteValues = new { Controller = "SYModifySalary", Action = "TreeLevelStorage" };
+
+          settings.AutoGenerateColumns = false;
+          settings.Width = Unit.Percentage(50);
+
+          settings.KeyFieldName = "Code";
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Code";
+              column.PropertiesEdit.EncodeHtml = false;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Description";
+              column.PropertiesEdit.EncodeHtml = false;
+          });
+
+          settings.SettingsCookies.Enabled = true;
+          settings.SettingsCookies.StoreExpandedNodes = true;
+
+          settings.CommandColumn.Visible = false;
+
+          settings.SettingsEditing.ConfirmDelete = true;
+
+          settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+          settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+          settings.SettingsSelection.AllowSelectAll = false;
+          settings.SettingsSelection.Enabled = true;
+          settings.SettingsSelection.Recursive = false;
+
+          settings.ClientSideEvents.SelectionChanged = "OnSelectionLevelChanged";
+
+          foreach (var read in Model.ListUserLevel)
+          {
+              settings.Nodes.Add(node =>
+              {
+                  node.KeyObject = read.Code;
+                  node["Code"] = read.Code;
+                  node["Description"] = read.Description;
+                  node.Expanded = true;
+                  node.AllowSelect = true;
+                  if (Model.ListLevelAssigned != null)
+                  {
+                      if (Model.ListLevelAssigned.Where(w => w.Level == read.Code).ToList().Count > 0)
+                      {
+                          node.Selected = true;
+                      }
+                  }
+              });
+          }
+
+          settings.Settings.ShowColumnHeaders = true;
+      });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.GetHtml()

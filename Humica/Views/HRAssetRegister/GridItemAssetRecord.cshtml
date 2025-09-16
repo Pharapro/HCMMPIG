@@ -1,0 +1,127 @@
+﻿
+@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "GridItemAssetRecord";
+               settings.KeyFieldName = "ID";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Action = "GridItemAssetRecord", Controller = "HRAssetRegister" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.CommandColumn.Visible = false;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+               settings.CommandColumn.Width = 40;
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReferenceNum");
+                   column.Width = 150;
+                   column.FieldName = "ReferenceNum";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Type");
+                   column.Width = 150;
+                   column.FieldName = "Type";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Emp Code");
+                   column.Width = 100;
+                   column.FieldName = "EmpCode";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName");
+                   column.Width = 120;
+                   column.FieldName = "EmployeName";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Code");
+                   column.Width = 150;
+
+                   column.FieldName = "AssetCode";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Description");
+                   column.Width = 120;
+                   column.FieldName = "AssetDescription";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Assign Date");
+                   column.Width = 120;
+                   column.FieldName = "AssignDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Return Date");
+                   column.Width = 120;
+                   column.FieldName = "ReturnDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+                   column.Width = 120;
+                   column.FieldName = "Status";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+
+
+           });
+
+
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

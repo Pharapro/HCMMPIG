@@ -1,0 +1,113 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "GridItemsStudy";
+          settings.KeyFieldName = "LineItem";    //
+
+          settings.Width = Unit.Percentage(65);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "GridItemsStudy" };
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "CreatePItem" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "EditPItem" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "DeletePItem" };
+
+          settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+          settings.CommandColumn.Visible = false;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          var isReadOnly = false;
+          if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+          {
+              isReadOnly = true;
+              settings.SettingsBehavior.AllowSort = false;
+          }
+          if (isReadOnly == false)
+          {
+              settings.CommandColumn.Visible = true;
+
+          }
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "LineItem";
+              column.Visible = false;
+              column.Width = 50;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 200;
+              column.FieldName = "EduType";  //
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Degree Type");
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 200;
+              column.FieldName = "Major"; //
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Majors");
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 200;
+              column.FieldName = "EduCenter";  //
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Institution");
+          });
+
+          settings.SettingsPager.PageSize = 200;
+          settings.CommandColumn.Width = 80;
+
+          settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+          settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+          settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+          settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+
+          settings.CustomJSProperties = (sender, e) =>
+          {
+              e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+          };
+          settings.CellEditorInitialize = (sender, e) =>
+          {
+              MVCxGridView grid_ = sender as MVCxGridView;
+
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              editor.ReadOnly = false;
+              if (e.Column.FieldName == "LineItem")
+              {
+                  if (e.KeyValue == null)
+                  {
+                      editor.Value = -1;
+                  }
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+
+
+
+
+
+

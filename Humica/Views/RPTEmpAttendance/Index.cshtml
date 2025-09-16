@@ -1,0 +1,14 @@
+﻿@model Humica.Core.FT.FTFilterReport
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+
+</script>
+
+
+@Html.Partial("FREmpoyeeReport", Model)
+

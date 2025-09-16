@@ -1,0 +1,14 @@
+﻿
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+    });
+
+</script>
+
+        @{
+           @Html.Action("DocumentViewerPartial", "HRKPIEvaluation")
+        }

@@ -1,0 +1,127 @@
+﻿@{
+
+    var gridExtension = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "TranNo";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        //settings.SettingsSearchPanel.Visible = true;
+        settings.CallbackRouteValues = new {  Action = "GridItems", Controller = "HRFamily" };
+
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CommandColumn.Width = 50;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            column.Width = 150;
+            column.FieldName = "Name";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Relationship");
+            column.Width = 150;
+            column.FieldName = "RelationShip";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Sex");
+            column.Width = 80;
+            column.FieldName = "Sex";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DOB");
+            column.Width = 100;
+            column.FieldName = "DateOfBirth";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("National ID Card");
+            column.Width = 100;
+            column.FieldName = "IDCard";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone");
+            column.Width = 100;
+            column.FieldName = "PhoneNo";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Occupation");
+            column.Width = 100;
+            column.FieldName = "Occupation";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Tax Deduction Family");
+            column.Width = 100;
+            column.FieldName = "TaxDeduc";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("In School");
+            column.Width = 100;
+            column.FieldName = "InSchool";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.SettingsPager.PageSize = 122;
+
+    });
+}
+@gridExtension.Bind(Model.ListHeader).GetHtml()
+
+
+

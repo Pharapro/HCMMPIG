@@ -1,0 +1,215 @@
+﻿
+
+<script type="text/javascript">
+
+    var select = " ";
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+    });
+  
+    function changeProgram(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + '/Training/TRELearningModule/FitlerType',
+                data: { 'code': s.GetValue(),"addType":1 },
+                success: function (data) {
+                    cboCourse.PerformCallback();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+        }
+
+    }
+    function changeCourse(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + '/Training/TRELearningModule/FitlerType',
+                data: { 'code': s.GetValue(), "addType": 2 },
+                success: function (data) {
+                    cboModule.PerformCallback();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+        }
+
+    }
+    function changeModule(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + '/Training/TRELearningModule/FitlerType',
+                data: { 'code': s.GetValue(), "addType": 4 },
+                success: function (data) {
+                    if (data.MS == "OK") {
+                        //cboCourse.PerformCallback();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+        }
+
+    }
+    function changeType(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + '/Training/TRELearningModule/FitlerType',
+                data: { 'code': s.GetValue(), "addType": 3 },
+                success: function (data) {
+                    if (data.MS == "OK") {
+                        //cboCourse.PerformCallback();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+        }
+
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "SVServiceMaster";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+    settings.Items.AddGroupItem(g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Upload Information";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = "Type";
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBox(s =>
+        //    {
+        //        s.Name = "Type";
+        //        s.Properties.CallbackPageSize = 30;
+        //        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Type";
+        //        s.Properties.TextField = "Description";
+        //        //s.Properties.Columns.Add("ProgramCode", "Code", 80);
+        //        //s.Properties.Columns.Add("ProgramName", "Name", 120);
+        //        s.Properties.ClientSideEvents.SelectedIndexChanged = "changeType";
+        //    }).BindList(ViewData["UploadType_List"]).Render();
+        //});
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "Program";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBox(s =>
+            {
+                s.Name = "Program";
+                s.Properties.CallbackPageSize = 30;
+                s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                s.Properties.TextFormatString = "{0}:{1}";
+                s.Properties.ValueField = "ProgramCode";
+                s.Properties.ValueType = typeof(string);
+                s.Properties.Columns.Add("ProgramCode", "Code", 80);
+                s.Properties.Columns.Add("ProgramName", "Name", 120);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "changeProgram";
+            }).BindList(ViewData["Program_List"]).Render();
+        });
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.RenderPartial("District");
+        });
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Module");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.RenderPartial("Module");
+        });
+
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "Select file to upload";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.Name = "UploadControl";
+                    ss.UploadMode = UploadControlUploadMode.Advanced;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 350;
+                    ss.CallbackRouteValues = new { Controller = "TRELearningModule", Action = "Upload" };
+                    ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ValidationSettings.MaxFileSize = 1024000000;
+                    ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png", ".pdf", ".xls", ".xlsx", ".doc", ".docx", ".pptx", ".ppt", ".mp4" };
+                    ss.BrowseButton.Text = "Browse";
+                    //ss.ClientSideEvents.FileUploadComplete = "UploadControl_FileUploadComplete";
+                }).Render();
+            });
+    });
+
+}).GetHtml()
+
+
+        @*@model IEnumerable<SaleModule.MD.MDUploadTemplate>
+
+            @Html.Partial(Humica.EF.Models.SY.SYListConfuration.ListDefaultUpload, Model)*@
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,350 @@
+﻿
+
+<script type="text/javascript">
+
+    var ss;
+    var selectedIDs = "";
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        $('#Download_TP').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "DownloadTemplate";
+        });
+
+        $('#_btnGenerateAction').click(function () {
+            //ss = 1;
+            @*// ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GENERATE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");*@
+            GridViewListUpload.GetRowValues(GridViewListUpload.GetFocusedRowIndex(), 'ID;UploadName', OnGetRowValues)
+        });
+    });
+
+    function OnGetRowValues(values) {
+        if (values[0] == null)
+        {
+            AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        } else {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "GenerateUpload?id=" + values[0];
+        }
+    }
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function SelectChangeCbo(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/GenerateMealDed/getPeriod',
+            data: { 'Period': txtPeriod.GetValue(), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    function ChangeCboBranch(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/GenerateMealDed/getBranch',
+            data: { 'Branch': CboBranch.GetValue(), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    function ChangeCboLocation(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/GenerateMealDed/getLocation',
+            data: { 'Location': CboLocation.GetValue(), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    function ChangeCboDivision(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/GenerateMealDed/getDivision',
+            data: { 'Division': CboDivision.GetValue(), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    function ChangeCboDepartment(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/Attendance/GenerateMealDed/getDepartment',
+            data: { 'Department': CboDepartment.GetValue(), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    @*function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 1) {
+                GridViewListUpload.GetRowValues(GridViewListUpload.GetFocusedRowIndex(), 'ID;UploadName', OnGetRowValues)
+            }
+        }
+    }*@
+</script>
+
+<script src="~/Content/CustomJs.js"></script>
+
+@model Humica.Logic.Att.ATEmpSchObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "PeriodForm";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Period";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.Branch, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.AllowNull = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeCboBranch";
+                s.Properties.ClientInstanceName = "CboBranch";
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["BRANCHES_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.Locations, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.AllowNull = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeCboLocation";
+                s.Properties.ClientInstanceName = "CboLocation";
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["LOCATION_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Division");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.Division, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.AllowNull = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeCboDivision";
+                s.Properties.ClientInstanceName = "CboDivision";
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["DIVISION_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.Department, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.AllowNull = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeCboDepartment";
+                s.Properties.ClientInstanceName = "CboDepartment";
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["DEPARTMENT_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Period");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.PayPeriodId, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ClientInstanceName = "txtPeriod";
+                s.Properties.ClientSideEvents.ValueChanged = "SelectChangeCbo";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{1}";
+                s.Properties.ValueField = "PayPeriodID";
+                s.Properties.TextField = "PayPeriodID";
+                s.Properties.Columns.Add("PayPeriodID");
+                s.Properties.Columns.Add("AttendanceDesc");
+            }).BindList(ViewData["PERIOD_SELECT"]).Render();
+        });
+    });
+
+
+}).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+    settings.Name = "NMasterQuota";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Items.AddGroupItem(g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Template Information";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        g.Items.Add(m =>
+        {
+            m.Caption = "Upload Template";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().Button(ss =>
+            {
+                ss.Name = "Download_TP";
+                ss.RenderMode = ButtonRenderMode.Link;
+                ss.ToolTip = "Download";
+                ss.Text = "Download";
+
+                ss.Images.Image.IconID = IconID.SupportTemplate16x16;
+            }).GetHtml();
+        });
+        g.Items.AddEmptyItem();
+        g.Items.Add(m =>
+        {
+            m.Caption = "Select file to upload";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().UploadControl(ss =>
+            {
+                ss.ShowProgressPanel = true;
+                ss.Name = "FileUploadOPB";
+                ss.UploadMode = UploadControlUploadMode.Standard;
+                ss.AutoStartUpload = true;
+                ss.Width = 350;
+                ss.CallbackRouteValues = new { Controller = "GenerateMealDed", Action = "UploadControlCallbackAction" };
+                ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                ss.AdvancedModeSettings.EnableFileList = true;
+                ss.AdvancedModeSettings.EnableMultiSelect = false;
+                ss.ValidationSettings.MaxFileSize = 4194304;
+                ss.ValidationSettings.AllowedFileExtensions = new string[] { ".xlsx" };
+                ss.BrowseButton.Text = "Browse";
+                ss.ClientSideEvents.FileUploadComplete = "completedUploadFiles";
+
+            }).Render();
+        });
+    });
+
+
+   }).GetHtml()
+
+@Html.DevExpress().PageControl(settings =>
+   {
+       settings.Name = "pcScrollingMaterial1";
+       settings.Width = Unit.Percentage(100);
+       settings.EnableTabScrolling = true;
+       settings.TabAlign = TabAlign.Justify;
+       settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+       settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "General")).SetContent(() =>
+       {
+           Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultUpload, Model.ListTemplate);
+       });
+
+   }).GetHtml()
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,288 @@
+﻿@model Humica.Logic.MD.MDChangeEmpInfor
+@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "ChangeInfor";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Items.AddGroupItem(m => Model, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Branch, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.AllowNull = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["BRANCHES_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Division");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Division, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.AllowNull = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["DIVISION_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BusinessUnit");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.BusinessUnit, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.AllowNull = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["BusinessUnit_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Department, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.AllowNull = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["DEPARTMENT_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Office");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Office, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["OFFICE_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Section");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Section, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["SECTION_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Group");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Group, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["GROUP_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Position, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["POSITION_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Level");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Level, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["LEVEL_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Category");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => Model.Filter.Category, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.AllowNull = true;
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.TextField = "Description";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["Category_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = "";
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().Button(s =>
+                {
+                    s.Name = "_btnRunReport";
+                    s.ToolTip = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                    s.RenderMode = ButtonRenderMode.Button;
+                    s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                    s.UseSubmitBehavior = true;
+                    s.Images.Image.IconID = IconID.ActionsApply16x16;
+                }).GetHtml();
+            });
+        });
+        settings.Items.AddGroupItem(m => Model.Filter, g =>
+        {
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.Box;
+            g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Change Employee Head");
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Change Information Type*");
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.ChangeInforType, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ClientInstanceName = "txtChangeInforType";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ValueField = "SelectValue";
+                    s.Properties.TextField = "SelectText";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["INFORTYPE_SELECT"]).Render();
+            });
+            g.Items.AddEmptyItem();
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.FromCode, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ClientInstanceName = "txtFromCode";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0},{1}";
+                    s.Properties.ValueField = "EmpCode";
+                    s.Properties.TextField = "AllName";
+                    s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Employee Code"), 100);
+                    s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Employee Name"), 140);
+                    s.Properties.AllowNull = true;
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["STAFFFROM_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.ToCode, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ClientInstanceName = "txtToCode";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0},{1}";
+                    s.Properties.ValueField = "EmpCode";
+                    s.Properties.TextField = "AllName";
+                    s.Properties.AllowNull = true;
+                    s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Employee Code"), 100);
+                    s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Employee Name"), 140);
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["STAFFTO_SELECT"]).Render();
+            });
+        });
+    }).GetHtml();
+
+}

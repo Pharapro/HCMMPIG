@@ -1,0 +1,103 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItems";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "EOBEmpHealthCheckUp", Action = "GridItems" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "EOBEmpHealthCheckUp", Action = "CreateRecord" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "EOBEmpHealthCheckUp", Action = "EditRecord" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "EOBEmpHealthCheckUp", Action = "DeleteRecord" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.FieldName = "LineItem";
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "MedicalCheck";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Medical Check");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Result";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Result");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Remark";
+               column.Width = 300;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.None;
+               if (e.KeyValue == null)
+               {
+                   if (e.Column.FieldName == "LineItem")
+                   {
+                       editor.Value = -1;
+                   }
+               }
+           };
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

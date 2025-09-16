@@ -1,0 +1,95 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "gridViewItem2";
+             settings.KeyFieldName = "ID";
+
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "PRCostCenterType", Action = "GridItems" };
+
+             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRCostCenterType", Action = "Create" };
+             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRCostCenterType", Action = "Edit" };
+             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRCostCenterType", Action = "Delete" };
+
+             settings.SettingsBehavior.AllowSort = false;
+             settings.CommandColumn.Visible = true;
+             settings.CommandColumn.ShowDeleteButton = true;
+
+             settings.CommandColumn.ShowNewButtonInHeader = true;
+             settings.CommandColumn.ShowCancelButton = true;
+             settings.CommandColumn.ShowEditButton = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Branch";
+                 column.Width = 120;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Warehouse";
+                 column.Width = 120;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Warehouse");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Project";
+                 column.Width = 120;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Project");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Description";
+                 column.Width = 300;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+             });
+
+             settings.SettingsSearchPanel.Visible = true;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 20;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 if (e.KeyValue != null)
+                 {
+                     if (e.Column.FieldName == "Branch" || e.Column.FieldName == "Warehouse"
+                     || e.Column.FieldName== "Project")
+                     {
+                         e.Editor.ReadOnly = true;
+                     }
+                 }
+             };
+
+
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()

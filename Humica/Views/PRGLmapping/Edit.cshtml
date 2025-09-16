@@ -1,0 +1,72 @@
+﻿@model Humica.Logic.PR.PRGLmappingObject
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function SelectMaterialCode(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+            txtAccount.SetValue(s.GetSelectedItem().GetColumnText(2));
+        }
+    }
+
+</script>
+
+@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "LeaveRequest";
+        settings.AlignItemCaptionsInAllGroups = true;
+
+        settings.Items.AddGroupItem(m => Model.HeaderCost, g =>
+        {
+
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.HeaderCost.Branch, s =>
+                   {
+                       s.ReadOnly = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                m.ColSpan = 2;
+            })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().TextBoxFor(i => i.HeaderCost.Description, s =>
+                    {
+                        //s.Properties.ClientInstanceName = "txtAllName";
+                        //s.ReadOnly = true;
+                        s.Width = Unit.Percentage(200);
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                    }).Render();
+                });
+
+        });
+    }).GetHtml();
+    @Html.Partial("GridItemsEdit", Model)
+}

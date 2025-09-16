@@ -1,0 +1,156 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "_pivotGrid";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "InqAttendance",
+            Action = "PivotATINOUT"
+        };
+        settings.Height = Humica.EF.MD.SYSession.PageHieigh + 150;
+
+        settings.OptionsView.ShowColumnTotals = false;
+        settings.OptionsView.ShowRowTotals = false;
+
+        settings.OptionsView.VerticalScrollingMode = PivotScrollingMode.Standard;
+        settings.OptionsView.HorizontalScrollingMode = PivotScrollingMode.Standard;
+        settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+        settings.OptionsCustomization.AllowDrag = false;
+        settings.OptionsView.ShowColumnHeaders = false;
+        settings.OptionsView.ShowDataHeaders = false;
+
+        settings.OptionsView.DataHeadersDisplayMode = PivotDataHeadersDisplayMode.Popup;
+
+        settings.Width = Unit.Percentage(100);
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+        settings.OptionsView.ShowFilterHeaders = false;
+
+        settings.OptionsPager.Visible = false;
+        settings.OptionsFilter.NativeCheckBoxes = false;
+
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+
+            f.ID = "_EmpCode";
+
+            f.FieldName = "EmpCode";
+            f.Area = PivotArea.RowArea;
+        });
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Area");
+
+        //    f.ID = "_Area";
+        //    f.FieldName = "Area";
+
+        //    f.Area = PivotArea.RowArea;
+        //});
+
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DealerCode");
+
+        //    f.ID = "_DealerCode";
+        //    f.FieldName = "DealerCode";
+
+        //    f.Area = PivotArea.RowArea;
+        //});
+
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DealerName");
+
+        //    f.ID = "_DealerName";
+        //    f.FieldName = "DealerName";
+
+        //    f.Area = PivotArea.RowArea;
+        //});
+
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TranDate");
+
+
+            f.ID = "_TranDate";
+            f.FieldName = "TranDate";
+            f.ExportBestFit = true;
+            f.GroupInterval = PivotGroupInterval.DateMonth;
+            f.ValueFormat.FormatType = FormatType.Custom;
+            f.ValueFormat.FormatString = "MMMM";
+            f.Area = PivotArea.ColumnArea;
+            f.UnboundFieldName = "TranDate";
+            // f.ExportBestFit = true;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TranDate");
+            f.ID = "_TranDate1";
+            f.FieldName = "TranDate";
+            f.ExportBestFit = true;
+            f.UnboundFieldName = "TranDate";
+            f.ValueFormat.FormatType = FormatType.DateTime;
+            f.ValueFormat.FormatString = "dd";
+            f.Area = PivotArea.ColumnArea;
+            //f.ExportBestFit = true;
+        });
+
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Color");
+
+
+        //    f.ID = "_Color";
+        //    f.FieldName = "Color";
+
+        //    f.UnboundFieldName = "Color";
+        //    f.GroupInterval = PivotGroupInterval.DateYear;
+        //    f.Area = PivotArea.ColumnArea;
+        //});
+
+
+
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Shift");
+
+            f.ID = "_Shift";
+            f.FieldName = "SHIFT";
+            f.SummaryType = PivotSummaryType.Max;
+            f.Area = PivotArea.DataArea;
+        });
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WHour");
+
+        //    f.ID = "_WHOUR";
+        //    f.FieldName = "WHOUR";
+        //    f.TotalValueFormat.FormatType = FormatType.Custom;
+        //    f.TotalValueFormat.FormatString = "N2";
+        //    f.Area = PivotArea.DataArea;
+        //});
+        settings.OptionsView.ShowRowGrandTotalHeader = true;
+        settings.OptionsView.ShowRowGrandTotals = true;
+
+        settings.OptionsView.ShowColumnGrandTotalHeader = true;
+        settings.OptionsView.ShowColumnGrandTotals = true;
+
+        settings.OptionsView.ShowGrandTotalsForSingleValues = true;
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            var pivot = (MVCxPivotGrid)sender;
+
+        };
+        settings.CustomJsProperties = (sender, e) =>
+        {
+
+            var pivot = (MVCxPivotGrid)sender;
+            Session[Humica.EF.SYSConstant.PIVOT_VIEW_LAYOUT + ViewData[Humica.EF.SYSConstant.REPORT_SCREEN_ID].ToString()] = pivot;
+
+        };
+    }).Bind(Model).GetHtml()

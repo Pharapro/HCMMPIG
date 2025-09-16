@@ -1,0 +1,92 @@
+﻿@model Humica.Logic.RCM.IClsRCMRequest
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FromJD";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(90);
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JD ID") + "*";
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.JDCode, s =>
+            {
+                s.Properties.ClientInstanceName = "JBID";
+                s.CallbackRouteValues = new { Controller = "RCMRecruitRequest", Action = "GetJD" };
+                s.Enabled = !isReadOnly;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.AllowNull = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.TextFormatString = "{0} - {1}";
+                s.Properties.Columns.Add(col =>
+                {
+                    col.FieldName = "Code";
+                    col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+                    col.Width = Unit.Pixel(70);
+                });
+                s.Properties.Columns.Add(col =>
+                {
+                    col.FieldName = "Description";
+                    col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                    col.Width = Unit.Pixel(250);
+                });
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectJD";
+            }).Render();
+        });
+        g.Items.AddEmptyItem();
+        g.Items.AddEmptyItem();
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Responsibilities");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.JobResponsibility, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 300;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtJobRespon";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobRequirement");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.JobRequirement, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 300;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtJobRequire";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+
+}).GetHtml()

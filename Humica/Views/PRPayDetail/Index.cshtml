@@ -1,0 +1,175 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnGenerate').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Generate?EmpCode=" + cboEmployee.GetValue() + "&PayPeriodID=" + txtPeriodID.GetValue();
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?EmpCode=" + cboEmployee.GetValue() + "&Period=" + txtPeriod.GetValue();
+            }
+        }
+    }
+    function cboPeriodChange(s, e) {
+        ShowData();
+    }
+    function cboEmployeeChange(s, e) {
+        ShowData();
+    }
+   function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]"+ '/ShowData',
+            data: { 'EmpCode': cboEmployee.GetValue(), 'Period': txtPeriod.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    var StartDate = data.StartDate;
+                    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    txtAllName.SetValue(data.AllName);
+                    txtEmpType.SetValue(data.EmpType);
+                    txtDivision.SetValue(data.Division);
+                    txtDepartment.SetValue(data.DEPT);
+                    txtSection.SetValue(data.SECT);
+                    txtLevel.SetValue(data.LevelCode);
+                    txtPosition.SetValue(data.Position);
+                    txtStartDate.SetValue(nowDate);
+
+                    txtSalary.SetValue(data.Salary);
+                    txtChild.SetValue(data.Child);
+                    txtSpouse.SetValue(data.Spouse);
+                    txtTax.SetValue(data.Tax);
+                    txtAmToBeTax.SetValue(data.AmToBeTax);
+                    txtFTax.SetValue(data.FTax);
+                    txtAmToBeFTax.SetValue(data.AmToBeFTax);
+                    txtGrossPay.SetValue(data.GrossPay);
+                    txtNetPay.SetValue(data.NetPay);
+                    txtEmpPenRate.SetValue(data.EmpPensionFunRate);
+                    txtEmpPenAmount.SetValue(data.EmpPensionFunAmount);
+                    txtComPenRate.SetValue(data.ComPensionFunRate);
+                    txtComPenAmount.SetValue(data.ComPensionFunAmount);
+                    txtSeniorityTaxable.SetValue(data.SeniorityTaxable);
+                    txtFirstPaymentAmount.SetValue(data.FirstPaymentAmount);
+
+                    treeList.Refresh();
+                    _BasicSalary.Refresh();
+                    _Allowance.Refresh();
+                    _Bonus.Refresh();
+                    _OverTime.Refresh();
+                    _GVDeduction.Refresh();
+                    _LeaveDed.Refresh();
+                    GridSoSe.Refresh();
+                    //_PaySlip.Refresh();
+                    _GLCharge.Refresh();
+                    //_CostCharge.Refresh();
+                    
+                }
+                else {
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+
+@model Humica.Payroll.IClsPRPayroll
+
+<div class="fitler-doc">
+    @Html.Partial("Details", Model)
+</div>
+
+    @Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_SalaryDetail"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Detail")).SetContent(() =>
+            {
+                Html.RenderPartial("PartialTree", Model.ListEmpPayment);
+            });
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_BasicSalary"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("BasicSalary")).SetContent(() =>
+            {
+                @Html.RenderPartial("_BasicSalary", Model.ListBasicSalary);
+            });
+        }
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_OT"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT")).SetContent(() =>
+            {
+                @Html.RenderPartial("_OverTime", Model.ListOverTime);
+            });
+        }
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Allowance"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Allowance")).SetContent(() =>
+            {
+                @Html.RenderPartial("_Allowance", Model.ListAllowance);
+            });
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Bonus"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Bonus")).SetContent(() =>
+            {
+                Html.RenderPartial("_Bonus", Model.ListBonus);
+            });
+        }
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Deduction"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Deduction")).SetContent(() =>
+            {
+                Html.RenderPartial("_Deduction", Model.ListDeduction);
+            });
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_LeaveDeduction"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Deduction")).SetContent(() =>
+            {
+                Html.RenderPartial("_LeaveDed", Model.ListLeaveDed);
+            });
+        }
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("SocialSecurity")).SetContent(() =>
+        {
+            Html.RenderPartial("GridSoSe", Model.ListEmpSoSe);
+        });
+        //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Cost Center Charge")).SetContent(() =>
+        //{
+        //    Html.RenderPartial("_CostCharge", Model.ListCostCharge);
+        //});
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "GL_Charge"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("GL Charge")).SetContent(() =>
+            {
+                Html.RenderPartial("_GLCharge", Model.ListGLCharge);
+            });
+        }
+        //if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_SalaryDetail"))
+        //{
+        //    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Detail")).SetContent(() =>
+        //    {
+        //        Html.RenderPartial("_PaySlip", Model.ListPaySlip);
+        //    });
+        //}
+    }).GetHtml()

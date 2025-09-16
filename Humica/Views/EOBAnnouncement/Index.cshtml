@@ -1,0 +1,91 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnAnnounce').click(function () {
+            ss = 2;
+            TGGroup.Show();
+            GridItems.GetRowValues(GridItems.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+        });
+    });
+
+    function _clickConfirm(s, e) {
+
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+
+            if (ss == 2) {
+
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Announcement?EmpCode=" + selectedIDs + "&TeleGroup=" + cboTeleGroup.GetValue();
+                TGGroup.Hide();
+            }
+        }
+
+    }
+    //function OnGetRowValues(values) {
+
+    //    selectedIDs = values[0];
+
+    //}
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(',');
+    }
+    @*function _clickConfirm(s, e) {
+
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+
+            if (ss == 2) {
+                telegroup = cboTeleGroup.GetValue();
+                if (telegroup == null) {
+                    alert("Select Telegram Group !");
+                }
+                else {
+                    window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "/EOB/EOBAnnouncement/Announcement?EmpCode=" + selectedIDs + "&TeleGroup=" + telegroup;
+                }
+            }
+
+        }
+    }
+    function OnGetRowValues(values) {
+        if (ss == 2) {
+            selectedIDs = values[0];
+            $.ajax({
+
+                data: { 'EmpCode': selectedIDs },
+                success: function (data) {
+                    if (data.MS == "OK") {
+
+                        AlertMessage('Employee was announcement');
+                        GridItems.Refresh();
+                    }
+                    else if (data.MS == "NA") {
+                        AlertMessage('Document not found');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }*@
+</script>
+
+@model Humica.Logic.EOB.EOBAnnouncementObject
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterialCreate";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Announcement")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItems", Model.ListAnnounce);
+    });
+}).GetHtml()
+
+@Html.Partial("TGGroup", Model)

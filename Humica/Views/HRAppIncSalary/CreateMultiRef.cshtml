@@ -1,0 +1,255 @@
+﻿@model Humica.Performance.ClsAPPIncreaseSalary
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function ()
+        {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        //$('#lblCourseInfo_').click(function () {
+        //    PartialCourseSearch.Show();
+        //    GridItemCourse.UnselectAllRowsOnPage();
+        //});
+        //$('#btnClear').click(function () {
+        //    GridItemCourse.UnselectAllRowsOnPage();
+        //});
+    });
+    @*function TrainnerTypeSelectedChanged(s, e) {
+        cboTrainerID.SetValue("");
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectTrainnerType',
+            data: { 'Actionname': 'Create','TrainerType':s.GetValue()},
+            success: function (data) {
+                if (data.MS == "OK") {
+                    gvAgenda.Refresh();
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+    function cboTrainerID_SelectedIndexChanged(s, e) {
+        $.ajax({
+            type: 'POST',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/cboTrainerID_SelectedIndexChanged',
+            data: { 'TrainerID': s.GetValue() },
+            success: function (data) {
+
+            }
+        });
+    }*@
+    //function OnSelectionChangedBranch(s, e) {
+    //    s.GetSelectedFieldValues("TrainNo", GetSelectedFieldValuesCallbackBranch);
+    //}
+    //function GetSelectedFieldValuesCallbackBranch(values) {
+    //    _selectedIDsBranch = "";
+    //    for (var index = 0; index < values.length; index++) {
+    //        _selectedIDsBranch += values[index] + textSeparator;
+    //        test = _selectedIDsBranch;
+    //    }
+    //    if (_selectedIDsBranch.length > 0) {
+    //        _selectedIDsBranch = _selectedIDsBranch.substring(0, _selectedIDsBranch.length - 1);
+    //    }
+    //}
+    //function initData(s, e) {
+    //    $.ajax({
+    //        type: 'post',
+    //        url: _baseUrl + '/Training/Process/TRHeaderIncSalary/SelectYear',
+    //        data: { 'code': s.GetValue() },
+    //        success: function (data) {
+    //            cboCourse.PerformCallback();
+    //            cboCourse.SetValue(_L);
+    //        }
+    //    });
+    //}
+
+    //function selectYear(s, e) {
+    //    $.ajax({
+    //        type: 'post',
+    //        url: _baseUrl + '/Training/Process/TRHeaderIncSalary/SelectYear',
+    //        data: { 'code': s.GetValue() },
+    //        success: function (data) {
+    //            cboCourse.PerformCallback();
+    //        }
+    //    });
+    //}
+    //function selectCourse(s, e) {
+    //    txtCourseCode.SetValue(s.GetValue());
+    //}
+    //function OnGridFocusedRowChanged(s, e) {
+    //    s.GetRowValues(s.GetFocusedRowIndex(), 'TrainerType;TrainerID', OnGetRowValues);
+
+    //}
+    //function OnGetRowValues(values) {
+    //    trainerType = values[0];
+    //    trainerInfoID = values[1];
+    //    GridForcuseRowChanged();
+    //}
+    //function GridForcuseRowChanged() {
+    //    $.ajax({
+    //        type: 'post',
+    //        url: _baseUrl + '/Training/Process/TRHeaderIncSalary/OnGridFocusedRowChanged',
+    //        data: { 'TrainerType': trainerType, 'TrainerInfoID': trainerInfoID},
+    //        success: function (data) {
+
+    //        }
+    //    });
+    //}
+</script>
+@*<style>
+    .groupClass {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .scrolling_Tab span {
+        font-weight: bold;
+        font-size: 14px;
+    }
+</style>*@
+@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "IncSalary";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Items.AddGroupItem(m => Model.HeaderIncSalary, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocumentDate");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => i.HeaderIncSalary.DocumentDate, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Requestor");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.HeaderIncSalary.Requestor, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}:{1}";
+                    s.Properties.ValueField = "EmpCode";
+                    s.Properties.TextField = "AllName";
+                    s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"), 150);
+                    s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName"), 250);
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["STAFF_VIEW"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.HeaderIncSalary.Status, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EffectiveDate");
+            })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().DateEditFor(i => i.HeaderIncSalary.EffectiveDate, s =>
+               {
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                   s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               }).Render();
+           });
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Employee");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.HeaderIncSalary.TotalEmployee, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Increase");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.HeaderIncSalary.TotalIncrease, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().MemoFor(i => i.HeaderIncSalary.Remark, s =>
+                {
+                    s.Height = 100;
+                    s.Width = Unit.Percentage(100);
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+        });
+    }).GetHtml();
+}
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingsalaryItem";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Item")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItems", Model.ListIncSalaryItem);
+    });
+}).GetHtml()
+

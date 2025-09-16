@@ -1,0 +1,211 @@
+﻿@model Humica.Payroll.IClsPRRawardType
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+        if (txtIsBIMonthly.GetValue() == false) {
+            txtBIPercentageAm.SetEnabled(false);
+        }
+    });
+    function OnClientValueChangedReqDoc(s, e) {
+        var checked = s.GetChecked();
+        txtBIPercentageAm.SetEnabled(checked);
+        if (checked == false) {
+            txtBIPercentageAm.SetValue(0);
+        }
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Create";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.ColCount = 2;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReCode");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.ReCode, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["RAWARD_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Code, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            m.ColSpan = 2;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+            m.ColSpan = 2;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.OthDesc, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                //s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TaxType");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.TaxType, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["TAX_TYPE_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IncomeType") + "*";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.IncomeType, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "IncomeType";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["SELECT_INCOME_TYPE"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.Amount, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N";
+                s.Properties.NumberType = SpinEditNumberType.Float;
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                s.Properties.MinValue = 0;
+                s.Properties.MaxValue = 9999999999999;
+            }).Render();
+        });
+
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BIMonthly Sitting");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsBIMonthly");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.IsBIMonthly, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueUnchecked = 0;
+                s.Properties.ValueChecked = 1;
+                s.Properties.ClientInstanceName = "txtIsBIMonthly";
+                s.Properties.ClientSideEvents.CheckedChanged = "OnClientValueChangedReqDoc";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BIPercentage") + " (%)";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.BIPercentageAm, s =>
+            {
+                // s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N";
+                s.Properties.NumberType = SpinEditNumberType.Integer;
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                s.Properties.MinValue = 0;
+                s.Properties.MaxValue = 100;
+                s.Properties.ClientInstanceName = "txtBIPercentageAm";
+            }).Render();
+        });
+    });
+
+}).GetHtml()

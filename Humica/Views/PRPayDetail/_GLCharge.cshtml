@@ -1,0 +1,100 @@
+﻿@{     
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "_GLCharge";
+        settings.KeyFieldName = "TranNo";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "PRPayDetail", Action = "_GLCharge" };
+        //  settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Group Benefit");
+        //    column.Width = 200;
+        //    column.FieldName = "SOURCE";
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.Width = 120;
+            column.FieldName = "GLCode";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.Width = 250;
+            column.FieldName = "Description";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Debit");
+            column.Width = 120;
+            column.FieldName = "Debit";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Credit");
+            column.Width = 120;
+            column.FieldName = "Credit";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Settings.ShowFooter = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "DEBITAM").DisplayFormat = "N2";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "CREDITAM").DisplayFormat = "N2";
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

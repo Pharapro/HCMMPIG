@@ -1,0 +1,67 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_btnNewAction').click(function () {
+
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Import";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 2;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+           selectedIDs = values[0];
+         if (ss == 1) {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?TranNo=" + values[0] ;
+        }
+        if (ss == 2) {
+            //alert(values[0] + values[1]);
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Edit?TranNo=" + values[0] ;
+        }
+        //Delete
+        if (ss == 4) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+    }
+    if (ss == 4) {
+        selectedIDs = values[0];
+        selectedIDs1 = values[1];
+    }
+    function _clickConfirm(s, e) {
+
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?TranNo=" + selectedIDs;
+            }
+
+        }
+    }
+</script>
+
+
+@model Humica.Logic.Att.ATReplaceWorkObject
+@Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListRelWork)

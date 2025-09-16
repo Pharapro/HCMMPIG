@@ -1,0 +1,53 @@
+﻿@model Humica.Core.FT.FTFilterEmployee
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+    var textSeparator = ";";
+    function updateText() {
+        var listvalue = "";
+
+        var selectedItems = checkListBox.GetSelectedItems();
+        checkComboBox.SetText(getSelectedItemsText(selectedItems));
+        for (var i = 0; i < selectedItems.length; i++) {
+            listvalue += selectedItems[i].value + ";";
+        }
+        txtDivision.SetValue(listvalue);
+        //console.log(listvalue);
+    }
+    function synchronizeListBoxValues(dropDown, args) {
+        checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = getValuesByTexts(texts);
+        //txtDivistion.SetValue(actualValues);
+        checkListBox.SelectValues(values);
+        updateText(); // for remove non-existing texts
+    }
+    function getSelectedItemsText(items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        return texts.join(textSeparator);
+    }
+    function getValuesByTexts(texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListBox.FindItemByText(texts[i]);
+            if (item != null) {
+                actualValues.push(item.value);
+            }
+
+        }
+
+        return actualValues;
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+@Html.Partial("FREmpoyeeReport", Model)
+

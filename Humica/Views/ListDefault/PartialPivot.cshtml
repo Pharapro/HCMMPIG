@@ -1,0 +1,388 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "_pivotGrid";
+        settings.CallbackRouteValues = new
+        {
+            Controller = ViewData[Humica.EF.SYSConstant.LIST_CONF_CONTROLLER].ToString(),
+            Action = ViewData[Humica.EF.SYSConstant.LIST_CONF_ACTION_NAME].ToString()
+        };
+
+        settings.Width = Unit.Percentage(100);
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+
+        if (ViewData[Humica.EF.SYSConstant.LIST_CONF_PIVOT_SETTING] != null)
+        {
+            List<Humica.EF.MD.CFReportItem> ListReportItem = (List<Humica.EF.MD.CFReportItem>)ViewData[Humica.EF.SYSConstant.LIST_CONF_PIVOT_SETTING];
+
+            var ObjColor = new Humica.EF.Models.SY.SYDataList("COLOR_CODE").ListData;
+
+            var objTotal = ObjColor.Where(w => w.SelectValue == "TOTAL").First();
+
+            var objGrandTotal = ObjColor.Where(w => w.SelectValue == "GRAND_TOTAL").First();
+            if (objTotal == null)
+            {
+                objTotal = new Humica.EF.MD.SYData();
+                objTotal.SelectText = "#EEE";
+            }
+
+            if (objGrandTotal == null)
+            {
+                objGrandTotal = new Humica.EF.MD.SYData();
+                objGrandTotal.SelectText = "#E5E5E5";
+            }
+
+
+            settings.Height = Humica.EF.MD.SYSession.PageHieigh + 150;
+
+            settings.OptionsView.VerticalScrollingMode = PivotScrollingMode.Standard;
+            settings.OptionsView.HorizontalScrollingMode = PivotScrollingMode.Standard;
+            settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+            settings.OptionsCustomization.AllowDrag = true;
+            settings.OptionsView.ShowColumnHeaders = true;
+            settings.OptionsView.ShowDataHeaders = true;
+            settings.OptionsView.ShowColumnTotals = false;
+            settings.OptionsView.ShowRowTotals = false;
+
+
+
+
+            settings.OptionsView.DataHeadersDisplayMode = DevExpress.Web.ASPxPivotGrid.PivotDataHeadersDisplayMode.Popup;
+
+            settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+            settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+            settings.OptionsView.ShowFilterHeaders = true;
+
+            settings.SettingsExport.StylesPrint.FieldValueTotal.BackColor = System.Drawing.ColorTranslator.FromHtml(objTotal.SelectText);
+
+            settings.SettingsExport.StylesPrint.TotalCell.BackColor = System.Drawing.ColorTranslator.FromHtml(objTotal.SelectText);
+
+            settings.SettingsExport.StylesPrint.GrandTotalCell.BackColor = System.Drawing.ColorTranslator.FromHtml(objGrandTotal.SelectText);
+            settings.SettingsExport.StylesPrint.FieldValueGrandTotal.BackColor = System.Drawing.ColorTranslator.FromHtml(objGrandTotal.SelectText);
+
+            settings.OptionsPager.Visible = false;
+            settings.OptionsFilter.NativeCheckBoxes = false;
+
+            foreach (var read in ListReportItem.OrderBy(w => w.InOrder))
+            {
+                if (read.ItemType == PivotArea.RowArea.ToString())
+                {
+                    settings.Fields.Add(f =>
+                    {
+                        f.Width = read.ColWidth;
+                        f.Caption = read.Description;
+                        if (read.Description == null)
+                        {
+                            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel(read.FieldName);
+                        }
+
+                        f.ID = "_" + read.FieldName;
+
+                        f.FieldName = read.FieldName;
+                        f.Area = PivotArea.RowArea;
+                        f.ValueTotalStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(read.Color);
+                        f.CellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(read.Color);
+                        f.ExportBestFit = true;
+
+                        if (read.Format == Humica.EF.ViewDataAs.DATE.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.INTEGER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N0";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N0";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.NUMBER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N2";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N2";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.CURRENCY.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "C";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "C";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.MONTH.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = "MMM";
+                        }
+                    });
+                }
+
+                if (read.ItemType == PivotArea.FilterArea.ToString())
+                {
+                    settings.Fields.Add(f =>
+                    {
+                        f.Width = read.ColWidth;
+                        f.Caption = read.Description;
+                        if (read.Description == null)
+                        {
+                            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel(read.FieldName);
+                        }
+
+                        f.FieldName = read.FieldName;
+                        f.Area = PivotArea.FilterArea;
+                        f.ExportBestFit = true;
+
+
+                        if (read.Format == Humica.EF.ViewDataAs.DATE.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.INTEGER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N0";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N0";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.NUMBER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N2";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N2";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.CURRENCY.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "C";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "C";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.MONTH.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                        }
+
+                    });
+                }
+
+                if (read.ItemType == PivotArea.ColumnArea.ToString())
+                {
+                    settings.Fields.Add(f =>
+                    {
+                        f.Width = read.ColWidth;
+                        f.Caption = read.Description;
+                        if (read.Description == null)
+                        {
+                            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel(read.FieldName);
+                        }
+
+                        f.ID = "_" + read.FieldName;
+
+                        f.FieldName = read.FieldName;
+                        f.Area = PivotArea.ColumnArea;
+                        f.UnboundFieldName = read.FieldName;
+                        if (read.PivoteGroupInterval == PivotGroupInterval.DateYear.ToString())
+                        {
+                            f.GroupInterval = PivotGroupInterval.DateYear;
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.DATE.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        }
+                        f.ValueTotalStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(read.Color);
+                        f.ExportBestFit = true;
+
+
+                        if (read.Format == Humica.EF.ViewDataAs.DATE.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.INTEGER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N0";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N0";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.NUMBER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N2";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N2";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.CURRENCY.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "C";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "C";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.MONTH.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                        }
+
+                    });
+                }
+
+                if (read.ItemType == PivotArea.DataArea.ToString())
+                {
+                    settings.Fields.Add(f =>
+                    {
+                        f.Width = read.ColWidth;
+
+                        f.Caption = read.Description;
+                        if (read.Description == null)
+                        {
+                            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel(read.FieldName);
+                        }
+
+                        f.ID = "_" + read.FieldName;
+                        f.FieldName = read.FieldName;
+                        f.Area = PivotArea.DataArea;
+                        f.ValueTotalStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(read.Color);
+                        f.ExportBestFit = true;
+
+
+                        if (read.Format == Humica.EF.ViewDataAs.DATE.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.INTEGER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N0";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N0";
+
+                            f.GrandTotalCellFormat.FormatType = FormatType.Numeric;
+                            f.GrandTotalCellFormat.FormatString = "N0";
+
+                            f.GrandTotalCellFormat.FormatType = FormatType.Numeric;
+                            f.GrandTotalCellFormat.FormatString = "N0";
+
+                            f.TotalCellFormat.FormatType = FormatType.Numeric;
+                            f.TotalCellFormat.FormatString = "N0";
+                            f.TotalValueFormat.FormatType = FormatType.Numeric;
+                            f.TotalValueFormat.FormatString = "N0";
+
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.NUMBER.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "N2";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "N2";
+
+                            f.GrandTotalCellFormat.FormatType = FormatType.Numeric;
+                            f.GrandTotalCellFormat.FormatString = "N2";
+
+
+                            f.GrandTotalCellFormat.FormatType = FormatType.Numeric;
+                            f.GrandTotalCellFormat.FormatString = "N2";
+
+                            f.TotalCellFormat.FormatType = FormatType.Numeric;
+                            f.TotalCellFormat.FormatString = "N2";
+                            f.TotalValueFormat.FormatType = FormatType.Numeric;
+                            f.TotalValueFormat.FormatString = "N2";
+
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.CURRENCY.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.Numeric;
+                            f.ValueFormat.FormatString = "C";
+                            f.CellFormat.FormatType = FormatType.Numeric;
+                            f.CellFormat.FormatString = "C";
+
+                            f.GrandTotalCellFormat.FormatType = FormatType.Numeric;
+                            f.GrandTotalCellFormat.FormatString = "C";
+
+                            f.TotalCellFormat.FormatType = FormatType.Numeric;
+                            f.TotalCellFormat.FormatString = "C";
+                            f.TotalValueFormat.FormatType = FormatType.Numeric;
+                            f.TotalValueFormat.FormatString = "C";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.MONTH.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                            f.CellFormat.FormatType = FormatType.DateTime;
+                            f.ValueFormat.FormatString = "MMM";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.TIME.ToString())
+                        {
+                            f.ValueFormat.FormatType = FormatType.DateTime;
+                            f.CellFormat.FormatString = "h:mm tt";
+                        }
+                        if (read.Format == Humica.EF.ViewDataAs.TEXT.ToString())
+                        {
+                            f.SummaryType = PivotSummaryType.Max;
+                        }
+                    });
+
+
+
+                }
+
+                settings.Styles.FieldValueTotalStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(objTotal.SelectText);
+                settings.Styles.TotalCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(objTotal.SelectText);
+                settings.Styles.FieldValueGrandTotalStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(objGrandTotal.SelectText);
+                settings.Styles.GrandTotalCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml(objGrandTotal.SelectText);
+
+
+            }
+        }
+
+
+        settings.OptionsView.ShowRowGrandTotalHeader = true;
+        settings.OptionsView.ShowRowGrandTotals = true;
+
+        settings.OptionsView.ShowColumnGrandTotalHeader = true;
+        settings.OptionsView.ShowColumnGrandTotals = true;
+
+        settings.OptionsView.ShowGrandTotalsForSingleValues = true;
+
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            var pivot = (MVCxPivotGrid)sender;
+
+        };
+        settings.CustomJsProperties = (sender, e) =>
+        {
+
+            var pivot = (MVCxPivotGrid)sender;
+            Session[Humica.EF.SYSConstant.PIVOT_VIEW_LAYOUT + ViewData[Humica.EF.SYSConstant.REPORT_SCREEN_ID].ToString()] = pivot;
+
+        };
+    }).Bind(Model).GetHtml()

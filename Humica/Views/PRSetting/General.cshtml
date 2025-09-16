@@ -1,0 +1,91 @@
+﻿@model Humica.Logic.MD.MDSetting
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "General";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+
+    // Seniority
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Seniority Setting");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.ColumnCount = 3;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsTax");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.IsTax, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueUnchecked = 0;
+                s.Properties.ValueChecked = 1;
+                s.Properties.ClientInstanceName = "chkIsTax";
+                s.Properties.ClientSideEvents.CheckedChanged = "chkIsTax_CheckedChanged";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SeniorityException");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.SeniorityException, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N";
+                s.Properties.NumberType = SpinEditNumberType.Integer;
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                s.Properties.MinValue = 0;
+                s.Properties.MaxValue = 9999999999999;
+                s.Properties.ClientInstanceName = "txtSeniorityException";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpType");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.EmpType, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(Model.EmpTypes()).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SeniorityType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.SeniorityType, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["ALLW_SELECT"]).Render();
+        });
+    });
+}).GetHtml()
+

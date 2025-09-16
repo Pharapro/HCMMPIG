@@ -1,0 +1,32 @@
+﻿
+<script type="text/javascript">
+
+</script>
+
+
+@model   Humica.Logic.EOB.MDEOBCheckList
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("On Board Check List")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemChkLst", Model.ListOnBoardChkLst);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("On Board Check List Item")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemChkLstItem", Model.ListOnBoardChkLstItem);
+        });
+
+}).GetHtml()
+
+

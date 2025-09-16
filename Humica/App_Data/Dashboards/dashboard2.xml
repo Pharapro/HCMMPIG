@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Visible="false" Text="Employee Leave" />
+  <DataSources>
+    <ObjectDataSource Name="Leave" ComponentName="objectDataSource2" />
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="Z_EmployeeToken">
+        <Parameter Name="UserName" Type="DevExpress.DataAccess.Expression">(System.String)(?UserName)</Parameter>
+        <Tables>
+          <Table Name="Z_EmployeeToken" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmployeeToken" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="HR_PendingLeave">
+        <Tables>
+          <Table Name="HR_PendingLeave" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="HR_PendingLeave" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_Dashborad_Attendace_LEMA">
+        <Parameter Name="InDate" Type="DevExpress.DataAccess.Expression">(System.DateTime)(?InDate)</Parameter>
+        <Tables>
+          <Table Name="Z_Dashborad_Attendace_LEMA" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_Dashborad_Attendace_LEMA" />
+        </Columns>
+        <Filter>[Z_Dashborad_Attendace_LEMA.DocumentDate] Between(?InDate, ?InDate)</Filter>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="UserName" Description="UserName" Visible="false" />
+    <Parameter Name="InDate" Type="System.DateTime" Visible="false" />
+  </Parameters>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Employee Pending" DataSource="sqlDataSource1" DataMember="HR_PendingLeave">
+      <DataItems>
+        <Dimension DataMember="AllName" DefaultId="DataItem0" />
+        <Dimension DataMember="Position" DefaultId="DataItem1" />
+        <Dimension DataMember="RequestDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem2" />
+        <Dimension DataMember="Reason" DefaultId="DataItem3" />
+        <Dimension DataMember="LeaveCode" DefaultId="DataItem5" />
+        <Dimension DataMember="FromDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem6" />
+        <Dimension DataMember="ToDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem7" />
+        <Dimension DataMember="Sex" DefaultId="DataItem8" />
+        <Measure DataMember="NoDay" DefaultId="DataItem9" />
+        <Dimension DataMember="EmpCode" DefaultId="DataItem10" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="54.532377677842653">
+          <Dimension DefaultId="DataItem10" />
+        </GridDimensionColumn>
+        <GridHyperlinkColumn Name="Name" Weight="108.51943157890688">
+          <DisplayValue DefaultId="DataItem0" />
+        </GridHyperlinkColumn>
+        <GridDimensionColumn Weight="39.808635704825136">
+          <Dimension DefaultId="DataItem8" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="130.87770642682236">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Request Date" Weight="83.434537847099264">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Type" Weight="37.082016820933006">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="From Date" Weight="63.802881883075905">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="To Date" Weight="52.351082570728948">
+          <Dimension DefaultId="DataItem7" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Taken" Weight="44.171225919052553">
+          <Measure DefaultId="DataItem9" />
+        </GridMeasureColumn>
+        <GridDimensionColumn Name="Reason" Weight="158.14389526574371">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+    <Card ComponentName="cardDashboardItem3" Name="Cards 3" ShowCaption="false" DataSource="sqlDataSource1" DataMember="Z_Dashborad_Attendace_LEMA">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Measure DataMember="Amount" DefaultId="DataItem0">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+        <Dimension DataMember="DeductType" DefaultId="DataItem1" />
+      </DataItems>
+      <FormatRules>
+        <CardItemFormatRule Name="Format Rule 1" DataItem="DataItem1">
+          <FormatConditionExpression Expression="[DataItem1] = 'MissScan'">
+            <AppearanceSettings AppearanceType="Orange" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemFormatRule>
+        <CardItemFormatRule Name="Format Rule 2" DataItem="DataItem1">
+          <FormatConditionExpression Expression="[DataItem1] = 'LATE'">
+            <AppearanceSettings AppearanceType="PaleYellow" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemFormatRule>
+        <CardItemFormatRule Name="Format Rule 3" DataItem="DataItem1">
+          <FormatConditionExpression Expression="[DataItem1] = 'ABS'">
+            <AppearanceSettings AppearanceType="Red" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemFormatRule>
+        <CardItemFormatRule Name="Format Rule 4" DataItem="DataItem1">
+          <FormatConditionExpression Expression="[DataItem1] = 'EARLY'">
+            <AppearanceSettings AppearanceType="PaleBlue" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemFormatRule>
+      </FormatRules>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem1" />
+      </SeriesDimensions>
+      <Card>
+        <ActualValue DefaultId="DataItem0" />
+        <CardDeltaOptions ResultIndicationMode="LessIsGood" />
+        <AbsoluteVariationNumericFormat />
+        <PercentVariationNumericFormat />
+        <PercentOfTargetNumericFormat />
+        <LayoutTemplate MinWidth="125" MaxWidth="270" Type="Compact">
+          <MainValue Visible="true" ValueType="Title" DimensionIndex="0" />
+          <SubValue Visible="true" ValueType="Subtitle" DimensionIndex="0" />
+          <BottomValue Visible="true" ValueType="ActualValue" DimensionIndex="0" />
+          <BottomSubValue1 Visible="true" ValueType="AbsoluteVariation" DimensionIndex="0" />
+          <BottomSubValue2 Visible="true" ValueType="PercentVariation" DimensionIndex="0" />
+          <DeltaIndicator Visible="true" />
+          <Sparkline Visible="true" />
+        </LayoutTemplate>
+      </Card>
+    </Card>
+    <Grid ComponentName="gridDashboardItem2" Name="Employee  Take Leave" DataSource="sqlDataSource1" DataMember="Z_EmployeeToken">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="Department" DefaultId="DataItem1" />
+        <Dimension DataMember="Position" DefaultId="DataItem2" />
+        <Dimension DataMember="LeaveDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem3" />
+        <Dimension DataMember="Token" DefaultId="DataItem4">
+          <NumericFormat FormatType="Number" />
+        </Dimension>
+        <Dimension DataMember="Status" DefaultId="DataItem5" />
+        <Dimension DataMember="Reason" DefaultId="DataItem6" />
+        <Dimension DataMember="AllName" DefaultId="DataItem7" />
+        <Dimension DataMember="LeaveCode" DefaultId="DataItem8" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="48.457178841309805">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Employee Name" Weight="55.683249370277061">
+          <Dimension DefaultId="DataItem7" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="139.42065491183874">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="105.41561712846344">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Leave Type" Weight="58.6586901763224">
+          <Dimension DefaultId="DataItem8" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Leave Date" Weight="50.157430730478573">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="39.955919395465983">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="40.806045340050368">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="136.44521410579338">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical">
+        <LayoutItem DashboardItem="cardDashboardItem3" Weight="0.21344258106633982" />
+        <LayoutItem DashboardItem="gridDashboardItem1" Weight="0.857398778082997" />
+        <LayoutItem DashboardItem="gridDashboardItem2" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

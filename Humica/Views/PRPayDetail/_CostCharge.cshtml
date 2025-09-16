@@ -1,0 +1,84 @@
+﻿@{     
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "_CostCharge";
+           settings.KeyFieldName = "InYear;InMonth";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRPayDetail", Action = "_CostCharge" };
+           //  settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.Settings.ShowGroupPanel = false;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Group Description");
+               column.Width = 250;
+               column.FieldName = "GroupDescription";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Cost Center");
+               column.Width = 140;
+               column.FieldName = "CostCenter";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.Width = 200;
+               column.FieldName = "Description";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Charge");
+               column.FieldName = "Charge";
+           });
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+
+           settings.SettingsBehavior.AllowEllipsisInText = true;
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()
+
+

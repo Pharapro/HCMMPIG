@@ -1,0 +1,243 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewListProcess";
+               settings.KeyFieldName = ViewData[Humica.EF.SYSConstant.LIST_CONF_KEYNAME].ToString();
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Action = "PartialProcess", Controller = ViewData[Humica.EF.SYSConstant.LIST_CONF_CONTROLLER].ToString() };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.Width = 50;
+
+               settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+               int cc = 0;
+
+               if (ViewData[Humica.EF.SYSConstant.LIST_CONF_SETTING] != null)
+               {
+                   List<Humica.EF.MD.CFList> ls = (List<Humica.EF.MD.CFList>)ViewData[Humica.EF.SYSConstant.LIST_CONF_SETTING];
+                   int i = 0;
+                   foreach (Humica.EF.MD.CFList l in ls)
+                   {
+                       i++;
+                       var visible = true;
+                       var groupindex = -1;
+                       var sortindex = -1;
+
+                       if (l.IsInvisible==true)
+                       {
+                           visible = false;
+                       }
+                       if(l.SortIndex.HasValue)
+                       {
+                           sortindex = l.SortIndex.Value;
+                       }
+                       if(l.GroupIndex.HasValue)
+                       {
+                           groupindex = l.GroupIndex.Value;
+                       }
+
+                       settings.Columns.Add(column =>
+                       {
+                           if (l.Width.HasValue)
+                           {
+                               column.Width = l.Width.Value;
+                           }
+                           column.Visible = visible;
+                           column.Name = "GRID_" + l.FieldName;
+                           column.FieldName = l.FieldName;
+                           column.Caption = l.Description;
+
+                           if(groupindex!=-1)
+                           {
+                               column.GroupIndex = groupindex;
+                           }
+                           if(sortindex!=-1)
+                           {
+                               column.SortIndex = sortindex;
+                           }
+
+                           if (visible == true)
+                           {
+                               if(groupindex==-1)
+                               {
+                                   cc++;
+                                   if (cc == 1 || cc == 2)
+                                   {
+                                       column.FixedStyle = GridViewColumnFixedStyle.Left;
+                                   }
+                               }
+                           }
+
+                           if (l.ViewAs == Humica.EF.ViewDataAs.DATE.ToString())
+                           {
+                               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                           }
+                           else if (l.ViewAs == Humica.EF.ViewDataAs.TF.ToString())
+                           {
+                               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+                           }
+                           else if (l.ViewAs == Humica.EF.ViewDataAs.NUMBER.ToString())
+                           {
+                               column.PropertiesEdit.DisplayFormatString = "N";
+                           }
+                           else if (l.ViewAs == Humica.EF.ViewDataAs.INTEGER.ToString())
+                           {
+                               column.PropertiesEdit.DisplayFormatString = "N0";
+                           }
+                           else if (l.ViewAs == Humica.EF.ViewDataAs.CURRENCY.ToString())
+                           {
+                               column.PropertiesEdit.DisplayFormatString = "C";
+                           }
+                           else if(l.ViewAs==Humica.EF.ViewDataAs.LINK.ToString())
+                           {
+                               column.SetDataItemTemplateContent(container =>
+                               {
+                                   Html.DevExpress().HyperLink(hyperlink =>
+                                   {
+                                       hyperlink.Name = "hl" + container.VisibleIndex;
+                                       hyperlink.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, l.FieldName));
+                                       hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + l.NavigationUrl + "?id=" + container.KeyValue;
+                                   }).Render();
+                               });
+                           }
+                           else if (l.ViewAs == Humica.EF.ViewDataAs.STATUS.ToString())
+                           {
+                               settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.BoldText);
+                               settings.FormatConditions.AddHighlight("Status", "[Status] = 'COMPLETED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+                               settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.Custom);
+                               column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+                               column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+                               settings.FormatConditions.AddHighlight("Status", "[Status] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+                               settings.FormatConditions.AddHighlight("Status", "[Status] = 'CANCELLED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+                           }
+
+                       });
+
+
+                   }
+               }
+
+
+               string val = "0";
+               if (Model != null)
+               {
+                   val = Model.Count.ToString();
+
+               }
+               if (val == "0")
+               {
+                   settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "20", "50", "100" };
+               }
+               else
+               {
+                   int[] item = { 20, 50, 100 };
+                   foreach (var r in item)
+                   {
+                       if (val == r.ToString())
+                       {
+                           val = "1";
+                       }
+                   }
+                   settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "20", "50", "100", val };
+               }
+
+
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid = (ASPxGridView)s;
+                   var result = new System.Collections.Hashtable();
+                   foreach (var col in grid.AllColumns)
+                   {
+                       var dataCol = col as GridViewDataColumn;
+                       if (dataCol != null)
+                       {
+                           var visible = "T";
+                           if(dataCol.Visible==false)
+                           {
+                               visible = "F";
+                           }
+                           result[dataCol.FieldName] = new Dictionary<string, object>() {
+                                {"fieldName",dataCol.FieldName},
+                                {"caption",dataCol.Caption},
+                                { "sortIndex", dataCol.SortIndex },
+                                { "sortOrder", dataCol.SortOrder },
+                                { "groupIndex", dataCol.GroupIndex },
+                                { "width", dataCol.Width },
+                                { "visibleIndex", dataCol.VisibleIndex },
+                                { "visible", visible },
+                                { "fitler", dataCol.FilterExpression},
+                           };
+                       }
+                   }
+
+                   e.Properties["cpColumnsProp"] = result;
+               };
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+
+
+
+               settings.ClientSideEvents.RowDblClick = "DbRowClick";
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+
+
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = 350;
+
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               string valstr = "0";
+               if (Model != null)
+               {
+                   //val = Model.ToList().Count.ToString();
+
+               }
+               if (valstr == "0")
+               {
+                   settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "20", "50", "100" };
+               }
+               else
+               {
+                   settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "20", "50", "100", valstr };
+               }
+
+               settings.SettingsPager.PageSizeItemSettings.Visible = true;
+               settings.SettingsPager.PageSize =20;
+
+
+           });
+
+
+}
+
+
+
+@gridExtension.Bind(Model).GetHtml()
+

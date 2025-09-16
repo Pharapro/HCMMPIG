@@ -1,0 +1,52 @@
+﻿@model Humica.Logic.EOB.MDEOBOrientation
+
+<script type="text/javascript">
+    function Code(s, e) {
+        txtDes.SetValue(s.GetSelectedItem().GetColumnText(1));
+        txtDuration.SetValue(s.GetSelectedItem().GetColumnText(2))
+    }
+    function EmpCode(s, e) {
+        txtEmpName.SetValue(s.GetSelectedItem().GetColumnText(1));
+        txtPosition.SetValue(s.GetSelectedItem().GetColumnText(2))
+        txtDepartment.SetValue(s.GetSelectedItem().GetColumnText(3))
+    }
+    function TypicalCode(s, e) {
+        txtDuration.SetValue(s.GetSelectedItem().GetColumnText(2))
+    }
+</script>
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Orientation Check List")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemOrienChList", Model.ListEOBOrienChList);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Orientation Check List Item")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemOrienChListItem", Model.ListEOBOrienChListItem);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Typical Duration Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemTypiDurType", Model.ListEOBTypiDurType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Orientation Typical Duration")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemOrienTypeDur", Model.ListEOBOrienTypeDur);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Orientation Description")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemOrienDesc", Model.ListEOBOrienDesc);
+        });
+
+    }).GetHtml()
+
+

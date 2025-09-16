@@ -1,0 +1,114 @@
+﻿@model Humica.Payroll.IClsPRFirstPaySalary
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?EmpCode=" + cboEmployee.GetValue() + "&Period=" + txtPeriod.GetValue();
+            }
+        }
+    }
+    function cboPeriodChange(s, e) {
+        ShowData();
+    }
+    function cboEmployeeChange(s, e) {
+        ShowData();
+    }
+   function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]"+ '/ShowData',
+            data: { 'EmpCode': cboEmployee.GetValue(), 'Period': txtPeriod.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    var StartDate = data.StartDate;
+                    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    txtAllName.SetValue(data.AllName);
+                    txtEmpType.SetValue(data.EmpType);
+                    txtDivision.SetValue(data.Division);
+                    txtDepartment.SetValue(data.DEPT);
+                    txtSection.SetValue(data.SECT);
+                    txtLevel.SetValue(data.LevelCode);
+                    txtPosition.SetValue(data.Position);
+                    txtStartDate.SetValue(nowDate);
+
+                    txtSalary.SetValue(data.Salary);
+                    txtGrossPay.SetValue(data.GrossPay);
+                    txtNetPay.SetValue(data.NetPay);
+                    //txtFirstPay.SetValue(data.FirstPay);
+
+                    _BasicSalary.Refresh();
+                    _OverTime.Refresh();
+                    _Allowance.Refresh();
+                    _Bonus.Refresh();
+                    _Deduction.Refresh();
+                    _LeaveDed.Refresh();
+                    _PaySlip.Refresh();
+                }
+                else {
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+
+<div class="fitler-doc">
+    @Html.Partial("Details", Model)
+</div>
+
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("BasicSalary")).SetContent(() =>
+    {
+        @Html.RenderPartial("_BasicSalary", Model.ListBasicSalary);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT")).SetContent(() =>
+    {
+        @Html.RenderPartial("_OverTime", Model.ListEmpOTFP);
+    });
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Allowance")).SetContent(() =>
+    {
+        @Html.RenderPartial("_Allowance", Model.ListEmpAllowanceFP);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Bonus")).SetContent(() =>
+    {
+        Html.RenderPartial("_Bonus", Model.ListEmpBonusFP);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Deduction")).SetContent(() =>
+    {
+        Html.RenderPartial("_Deduction", Model.ListDeductionFP);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Deduction")).SetContent(() =>
+    {
+        Html.RenderPartial("_LeaveDed", Model.ListLeaveDed);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Detail")).SetContent(() =>
+    {
+        Html.RenderPartial("_PaySlip", Model.ListPaySlip);
+    });
+}).GetHtml()
+
+
+
+

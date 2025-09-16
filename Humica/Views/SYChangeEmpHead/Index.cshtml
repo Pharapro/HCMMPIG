@@ -1,0 +1,57 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnAssignStaff').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "AssignStaff?ChangeInforType=" + txtChangeInforType.GetValue() + "&FromCode=" + txtFromCode.GetValue() + "&ToCode=" + txtToCode.GetValue();
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'Code;', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+    }
+
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Config/Setup/SYChangeEmpHead/getEmpCode',
+            data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+</script>
+
+@model Humica.Logic.MD.MDChangeEmpInfor
+
+@Html.Partial("ChangeEmpHead", Model)
+
+@Html.Partial("GridItems", Model.ListEmp)
+

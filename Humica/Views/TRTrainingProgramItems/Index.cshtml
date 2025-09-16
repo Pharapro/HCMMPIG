@@ -1,0 +1,112 @@
+﻿<script type="text/javascript">
+    var ss;
+    var id = "";
+    var selectedIDs = "";
+
+    $(document).ready(function () {
+    });
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ProgramCode", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+
+    function tabClickCommand1(s, e) {
+        var index = s.GetActiveTab().index;
+        index0 = index;
+        if (index == 0 || index == 1) {
+            $("._homeCommand").show();
+            // $(".contentAction").hide();
+        } else if (index == 1) {
+            $(".contentAction").Hide();
+        }
+    }
+    function selectChange(s, e) {
+        Des.SetValue(s.GetSelectedItem().GetColumnText(1));
+        SecondDes.SetValue(s.GetSelectedItem().GetColumnText(2));
+
+    }
+    function coucatselectChange(s, e) {
+        Descr.SetValue(s.GetSelectedItem().GetColumnText(1));
+        SecondDes.SetValue(s.GetSelectedItem().GetColumnText(2));
+
+    }
+
+    //End----------------------------
+
+</script>
+
+@model Humica.Training.TrainningObject
+
+
+@*<div class="fitler-doc">
+        @Html.Partial("~/Views/FILTER/FTGeneraltClaimReportFromToDate.cshtml", Model)
+    </div>*@
+
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    //settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+    //settings.ClientSideEvents.Init = "tabClickCommand1";
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Program")).SetContent(() =>
+    //{
+    //    Html.RenderPartial("_GridItem", Model.ListHeader);
+
+    //});
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Training Type")).SetContent(() =>
+    {
+        Html.RenderPartial("gvTrainingType", Model.ListTrainingType);
+
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Training Catagory")).SetContent(() =>
+    {
+        Html.RenderPartial("gvTrainingCate", Model.ListTRTrainingCategory);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course Name")).SetContent(() =>
+   {
+       Html.RenderPartial("_CourseType", Model.ListCourseType);
+
+   });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course Category")).SetContent(() =>
+   {
+       Html.RenderPartial("_CourseCategory", Model.ListTRCourseCategory);
+
+   });    // settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Tranining Venue")).SetContent(() =>
+    //{
+    //    Html.RenderPartial("gvTrainingVenue", Model.ListTRTrainingVenues);
+    // });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Topic")).SetContent(() =>
+    {
+        Html.RenderPartial("gvTrainingTopic", Model.ListTRTopic);
+    });
+    
+}).GetHtml()
+
+
+@*@Html.Partial("~/Views/ACTION/PopTheReason.cshtml")*@
+
+
+
+
+

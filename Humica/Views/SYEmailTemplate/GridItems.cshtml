@@ -1,0 +1,145 @@
+﻿@*@model Humica.Logic.MD.MDBranch*@
+
+@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "gridViewItem";
+             settings.KeyFieldName = "ProjectID";
+
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "SYEmailTemplate", Action = "GridItems" };
+
+             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "SYEmailTemplate", Action = "Create" };
+             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SYEmailTemplate", Action = "Edit" };
+             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SYEmailTemplate", Action = "Delete" };
+
+             settings.CommandColumn.Visible = true;
+             settings.CommandColumn.ShowDeleteButton = false;
+
+             settings.CommandColumn.ShowNewButtonInHeader = false;
+             settings.CommandColumn.ShowCancelButton = true;
+             settings.CommandColumn.ShowEditButton = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsBehavior.ConfirmDelete = true;
+
+             settings.SettingsContextMenu.Enabled = true;
+             settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+             settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+             settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+             settings.Settings.ShowHeaderFilterButton = true;
+             settings.SettingsPopup.HeaderFilter.Height = 200;
+
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "ProjectID";
+                 column.Width = 100;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ProjectID");
+
+
+             });
+
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "EmailAddress";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "EmailAddress");
+
+
+             });
+
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "SmtpAddress";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "SmtpAddress");
+
+
+             });
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "SmtpUserName";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "SmtpUserName");
+
+
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "SmtpPassword";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "SmtpPassword");
+             });
+
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "SmtpPort";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "SmtpPort");
+
+
+             });
+
+             settings.Columns.Add(column =>
+             {
+
+                 column.FieldName = "IsActive";
+                 column.ColumnType = MVCxGridViewColumnType.CheckBox;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Status");
+
+
+             });
+
+
+             settings.SettingsSearchPanel.Visible = false;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 //e.Editor.ReadOnly = false;
+                 if (e.KeyValue != null)
+                 {
+                     if (e.Column.FieldName == "ProjectID")
+                     {
+                         e.Editor.ReadOnly = true;
+                     }
+                 }
+             };
+
+
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()

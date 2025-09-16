@@ -1,0 +1,78 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopSelectStaff";
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(100);
+    settings.Width = Unit.Pixel(350);
+    settings.PopupElementID = "ShowButton1";
+    settings.HeaderText = "Employee PayBack";
+    settings.Modal = true;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class=\"line\">");
+        Html.DevExpress().Label(
+                labelSettings =>
+                {
+                    labelSettings.ControlStyle.CssClass = "label";
+                    labelSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "PayBack Date:");
+                    labelSettings.AssociatedControlName = "ActionName";
+                }
+            )
+            .Render();
+        ViewContext.Writer.Write("<br/><br/>");
+        Html.DevExpress().DateEdit(s =>
+         {
+             s.Name = "cboDateSelected";
+             s.Properties.ClientInstanceName = "cboDateSelected";
+             s.Width = 200;
+             s.ShowModelErrors = true;
+             s.Date = DateTime.Now;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+             s.Properties.PickerType = DatePickerType.Months;
+             s.Properties.NullText = "MMMM yyyy";
+             s.Properties.EditFormatString = "MMMM yyyy";
+             s.Properties.DisplayFormatString = "MMMM yyyy";
+
+         }).GetHtml();
+        ViewContext.Writer.Write("<br/>");
+
+
+       ViewContext.Writer.Write("</div>");
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div class='question_btn'>");
+
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTOK_R";
+            s.Text = "OK";
+
+            s.ClientSideEvents.Click = "confirmDate";
+
+        }).Render();
+
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTCANCEL_R";
+            s.Text = "CANCEL";
+            s.ClientSideEvents.Click = "function(s, e){ PopSelectStaff.Hide();  }";
+
+        }).Render();
+
+
+
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='clear'></div>");
+    });
+}).GetHtml()

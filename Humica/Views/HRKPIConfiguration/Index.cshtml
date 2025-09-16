@@ -1,0 +1,114 @@
+﻿<script type="text/javascript">
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function EndCallBack(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/Appraisal/HRKPIConfiguration/CalculateDate',
+            data: { 'StartDate': convert(txtStartDate.GetDate()), 'EndDate': convert(txtEndDate.GetDate()), 'Actionname': 'Index' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtPeroid.SetValue(data.Period);
+                    //gridItemkpi.Refresh();
+                }
+            }
+        });
+    }
+    function SelectCategory(s, e) {
+        txtDescription.SetValue(s.GetSelectedItem().GetColumnText(1));
+    }
+    @*function Select_BU(s, e) {
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/Select_BU',
+            data: {  'Code': s.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    GridKPIListByBU_.Refresh();
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }*@
+</script>
+
+@model Humica.Performance.IClsKPIConfig
+
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingAssetClass";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("KPI Category")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemsCategory", Model.ListCategory);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Indicator By BU")).SetContent(() =>
+    {
+        Html.RenderPartial("GridIndicatorByBU", Model.ListIndicatorByBU);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Indicator")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemsSection", Model.ListIndicatorByDept);
+    });
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "KPI Type")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemsKPI", Model.ListKPIGroupHeader);
+    });
+
+    //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("KPI List By Group")).SetContent(() =>
+    //{
+    //    Html.RenderPartial("GridKPIList", Model.ListKPIList);
+
+    //});
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("KPI List By BU")).SetContent(() =>
+    {
+        Html.RenderPartial("GridKPIListByBU", Model.ListKPIListByBU);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("KPI List By Department")).SetContent(() =>
+    {
+        Html.RenderPartial("GridKPIListByDept", Model.ListKPIListByDept);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "KPI Grade")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemGrade", Model.ListKPIGrade);
+
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("KPI Norm")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemNorm", Model.ListKPINorm);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+   ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "KPI Action")).SetContent(() =>
+   {
+       Html.RenderPartial("GridKPIAction", Model.ListKPIAction);
+
+   });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+   ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Non Finance")).SetContent(() =>
+   {
+       Html.RenderPartial("GridNonFinance", Model.ListKPINonFinance);
+
+   });
+
+}).GetHtml()

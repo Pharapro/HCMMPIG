@@ -1,0 +1,241 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "Banklist";
+        settings.KeyFieldName = "ID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new
+        {
+            Controller = "HRCareerHistory",
+            Action = "Banklist"
+        };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRCareerHistory", Action = "CreateBank" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRCareerHistory", Action = "EditBank" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRCareerHistory", Action = "DeleteBank" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 50;
+            column.ReadOnly = true;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.FieldName = "ID";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+            column.Width = 120;
+            column.FieldName = "Company";
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ClientSideEvents.SelectedIndexChanged = "rowSelectedBank";
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["Company_SELECT"];
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "Company";
+            textProperties.Columns.Add("Company", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            textProperties.ValueType = typeof(string);
+            column.PropertiesEdit.ClientInstanceName = "txtCBranch";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "OldSalary";
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Old Salary");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+            column.SetDataItemTemplateContent(container =>
+            {
+                var isSalaryVisible = ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null
+                    && (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+
+                if (isSalaryVisible)
+                {
+                    column.PropertiesEdit.ClientInstanceName = "txtCSalary";
+                    var oldSalaryValue = DataBinder.Eval(container.DataItem, "OldSalary");
+                    Html.DevExpress().Label(l =>
+                    {
+                        l.Text = DataBinder.Eval(container.DataItem, "OldSalary").ToString();
+                    }).Render();
+                }
+                else
+                {
+                    Html.Raw("#####");
+                }
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Increase";
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Increase");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+            column.SetDataItemTemplateContent(container =>
+            {
+                var isSalaryVisible = ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null
+                    && (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+
+                if (isSalaryVisible)
+                {
+                    column.PropertiesEdit.ClientInstanceName = "txtIncrease";
+                    Html.DevExpress().Label(l =>
+                    {
+                        l.Text = DataBinder.Eval(container.DataItem, "Increase").ToString();
+                    }).Render();
+                }
+                else
+                {
+                    Html.Raw("#####");
+                }
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "NewSalary";
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Salary");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+            column.SetDataItemTemplateContent(container =>
+            {
+                var isSalaryVisible = ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null
+                    && (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+
+                if (isSalaryVisible)
+                {
+                    column.PropertiesEdit.ClientInstanceName = "txtNewSalary";
+                    Html.DevExpress().Label(l =>
+                    {
+                        l.Text = DataBinder.Eval(container.DataItem, "NewSalary").ToString();
+                    }).Render();
+                }
+                else
+                {
+                    Html.Raw("#####");
+                }
+            });
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "OldSalary";
+        //    column.Width = 120;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OldSalary");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    column.PropertiesEdit.ClientInstanceName = "txtCSalary";
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        //});
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "Increase";
+        //    column.Width = 120;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Increase");
+        //    column.PropertiesEdit.ClientInstanceName = "txtIncrease";
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        //});
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "NewSalary";
+        //    column.Width = 120;
+        //    column.ReadOnly = true;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NewSalary");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    column.PropertiesEdit.ClientInstanceName = "txtNewSalary";
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        //});
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            bool isSalaryVisible = ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null
+                        && (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Branch")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "ID")
+                {
+                    editor.Value = 1;
+                }
+            }
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "OldSalary" || e.Column.FieldName == "NewSalary" || e.Column.FieldName == "Increase")
+                {
+                    if (!isSalaryVisible)
+                    {
+                        editor.ReadOnly = true;
+                        editor.Value = "#####";
+                    }
+                }
+                if (e.Column.FieldName == "LineItem")
+                {
+                    editor.Value = 1;
+                }
+            }
+            else
+            {
+                if (e.Column.FieldName == "OldSalary" || e.Column.FieldName == "NewSalary" || e.Column.FieldName == "Increase")
+                {
+                    if (!isSalaryVisible)
+                    {
+                        editor.ReadOnly = true;
+                        editor.Value = "#####";
+                    }
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

@@ -1,0 +1,125 @@
+﻿@model dynamic
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+    var obj=Model;
+
+    settings.Name = "AdministratorOn";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)ViewData
+            [Humica.EF.SYSConstant.LIST_CONF_FORM], "HEADER");
+   
+
+        g.Items
+     .Add(m =>
+     {
+         m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+             ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "CreatedBy");
+
+     })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().TextBox(s =>
+         {
+             s.Name = "CreatedBy";
+             s.Text = obj.CreatedBy;
+             s.Width = Unit.Percentage(100);
+             s.ShowModelErrors = true;
+             s.Enabled = false;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+
+         }).Render();
+     });
+
+        g.Items
+   .Add(m =>
+   {
+       m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+           ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "CreatedDate");
+   })
+   .SetNestedContent(() =>
+   {
+       Html.DevExpress().DateEdit(s =>
+       {
+           s.Name = "CreatedOn";
+           s.Date = obj.CreatedDate;
+           s.ShowModelErrors = true;
+           s.Enabled = false;
+           s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+           s.Properties.ValidationSettings.SetFocusOnError = true;
+           s.Properties.ValidationSettings.ErrorText = "*";
+       }).Render();
+
+
+   });
+
+
+        g.Items
+     .Add(m =>
+     {
+         m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+             ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "LastChangedBy");
+
+     })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().TextBox(s =>
+         {
+             s.Name = "ChangedBy";
+             s.Text = obj.ChangedBy;
+             s.Width = Unit.Percentage(100);
+             s.ShowModelErrors = true;
+             s.Enabled = false;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+
+         }).Render();
+     });
+
+        g.Items
+   .Add(m =>
+   {
+       m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+           ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "LastChangedDate");
+   })
+   .SetNestedContent(() =>
+   {
+       Html.DevExpress().DateEdit(s =>
+       {
+           s.Name = "ChangedOn";
+           if (obj.ChangedOn!=null)
+           {
+               s.Date = obj.ChangedOn;   
+           }           
+           s.ShowModelErrors = true;
+           s.Enabled = false;           
+           s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+           s.Properties.ValidationSettings.SetFocusOnError = true;
+           s.Properties.ValidationSettings.ErrorText = "*";
+       }).Render();
+
+
+   });
+
+    });
+
+    
+
+}).GetHtml()

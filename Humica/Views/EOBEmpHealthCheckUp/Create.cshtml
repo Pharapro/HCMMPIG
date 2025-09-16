@@ -1,0 +1,310 @@
+﻿@model Humica.Logic.EOB.EOBHealthChkUpObject
+
+<script type="text/javascript">
+     $(document).ready(function () {
+         $('#_btnBackAction').click(function () {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+         });
+         $('#_btnSaveActionGrid').click(function () {
+             $("form").submit();
+         });
+     });
+
+    function Selected(s, e) {
+        txtName.SetValue(s.GetSelectedItem().GetColumnText(1));
+        txtDept.SetValue(s.GetSelectedItem().GetColumnText(2));
+        txtPost.SetValue(s.GetSelectedItem().GetColumnText(3));
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Create";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = "Health Check Up Form";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Code");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.staffProfile.EmpCode, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "Selected";
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.TextField = "EmpCode";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                s.Properties.Columns.Add("Department", Humica.EF.Models.SY.SYSettings.getLabel("Department"));
+                s.Properties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["EMP_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.staffProfile.AllName, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtName";
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.staffProfile.Department, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ClientInstanceName = "txtDept";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.staffProfile.Position, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ClientInstanceName = "txtPost";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hospital Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.HospitalName, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["HP_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Health Check Up Type");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.HealthCheckUpType, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["CHKUPTYPE_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hospital Address");
+            m.ColumnSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.HospitalAddr, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Checked By");
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.CheckedBy, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValidationSettings.Display = Display.None;
+                s.Properties.TextField = "AllName";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["EMP_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Acknowledge By");
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.AckBy, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValidationSettings.Display = Display.None;
+                s.Properties.TextField = "AllName";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["EMP_SELECT"]).Render();
+        });
+    });
+    //settings.Items.AddGroupItem(m => Model.Header, g =>
+    //{
+    //    g.ColCount = 2;
+    //    g.GroupBoxDecoration = GroupBoxDecoration.Box;
+    //    g.Caption = "Physicians";
+    //    g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dr.Name");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.HealthChkUpRecord.DrName, s =>
+    //        {
+    //            s.Width = Unit.Percentage(100);
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Check Up Date");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().DateEditFor(i => i.HealthChkUpRecord.ChkUpDate, s =>
+    //        {
+    //            s.Width = Unit.Percentage(100);
+    //            s.ShowModelErrors = true;
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+    //            s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+    //            s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dr. PhoneNo");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.HealthChkUpRecord.PhoneNo, s =>
+    //        {
+    //            s.Width = Unit.Percentage(100);
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attach File");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().UploadControl(ss =>
+    //        {
+    //            ss.ShowProgressPanel = true;
+    //            ss.CallbackRouteValues = new { Controller = "HRHealthCheckUpRecord", Action = "UploadControlCallbackActionImage" };
+    //            ss.Name = "UploadControl";
+    //            ss.UploadMode = UploadControlUploadMode.Auto;
+    //            ss.AutoStartUpload = true;
+    //            ss.Width = 120;
+    //            ss.DialogTriggerID = "externalDropZone";
+    //            ss.AdvancedModeSettings.EnableDragAndDrop = false;
+    //            ss.AdvancedModeSettings.EnableMultiSelect = false;
+    //            ss.ShowTextBox = false;
+    //            ss.ShowUploadButton = false;
+    //            ss.ShowAddRemoveButtons = true;
+    //            ss.ShowProgressPanel = true;
+    //            ss.ShowClearFileSelectionButton = true;
+    //            ss.AdvancedModeSettings.EnableFileList = true;
+    //            ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+    //            ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+    //            ss.AdvancedModeSettings.DropZoneText = "";
+    //            ss.ValidationSettings.MaxFileSize = 4194304;
+    //            ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+    //            ss.UploadButton.Text = String.Empty;
+    //            ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".pdf", ".png", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
+    //            ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+    //            ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+    //            ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+    //        }).Render();
+
+    //        Html.DevExpress().HyperLink(s =>
+    //        {
+    //            s.Name = "file_uploaded";
+    //            s.ToolTip = "File";
+    //            s.ClientVisible = false;
+    //            s.Properties.Target = "_BLANK";
+    //            s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+    //        }).GetHtml();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+    //        m.ColumnSpan = 2;
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.HealthChkUpRecord.Description, s =>
+    //        {
+    //            s.Width = Unit.Percentage(100);
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //});
+
+}).GetHtml()

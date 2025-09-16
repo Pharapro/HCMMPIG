@@ -1,0 +1,262 @@
+﻿@model Humica.Logic.HR.HRSelfEvaluationObject
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+
+    function SelectEmp(s, e) {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowDataEmp();
+    }
+
+    function ShowDataEmp() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/Appraisal/HREmpSelfEvaluation/ShowDataEmp',
+            data: { 'id': 'TOTAL', 'EmpCode': selectedIDs, 'Action': 'Create'},
+            success: function (data) {
+                if (data.MS == "OK") {
+                    //var StartDate = data.DATE;
+                    //if (StartDate != null ) {
+                    //    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    //    dtDate.SetValue(nowDate);
+                    //}
+                    txtEmpName.SetValue(data.NAME);
+                    txtDEPT.SetValue(data.DEPT);
+                    txtPosition.SetValue(data.POST);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function CommentValue(value, code) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/Appraisal/HREmpSelfEvaluation/CommentValue',
+            data: { 'Code': code, 'Value': value, 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+<style>
+    .table-section thead > tr > th {
+        background: #00a94f;
+        color: white;
+    }
+
+    .text-indent {
+        text-indent: 25px;
+    }
+
+    .text-body {
+        font-weight: normal;
+    }
+</style>
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EMPCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "EvaluationCode") + "*";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.EvaluationCode, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullDisplayText = Humica.EF.Models.SY.SYConstant.NEW_RECORD;
+                s.Properties.NullText = Humica.EF.Models.SY.SYConstant.NEW_RECORD;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EvaluationDate");
+            m.ColumnSpan = 1;
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().DateEditFor(i => i.Header.EvaluationDate, s =>
+              {
+                  s.ShowModelErrors = true;
+                  s.Properties.ClientInstanceName = "dtDate";
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.ValidationSettings.ErrorText = "*";
+              }).Render();
+          });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        })
+             .SetNestedContent(() =>
+             {
+                 Html.DevExpress().ComboBoxFor(i => i.Header.EmpCode, s =>
+                 {
+                     s.Properties.ClientInstanceName = "txtEmpID";
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Properties.ValidationSettings.SetFocusOnError = true;
+                     s.Properties.ValidationSettings.ErrorText = "*";
+                     s.Properties.TextField = "AllName";
+                     s.Properties.TextFormatString = "{0}";
+                     s.Properties.ValueField = "EmpCode";
+                     s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                     s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                     s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                     s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectEmp";
+                     s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                 }).BindList(ViewData["STAFF_SELECT"]).Render();
+             });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.EmpName, s =>
+            {
+                s.Properties.ClientInstanceName = "txtEmpName";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().TextBoxFor(i => i.Header.Department, s =>
+           {
+               s.Properties.ClientInstanceName = "txtDEPT";
+               s.ReadOnly = true;
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+           }).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().TextBoxFor(i => i.Header.Position, s =>
+              {
+                  s.Properties.ClientInstanceName = "txtPosition";
+                  s.ReadOnly = true;
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+              }).Render();
+          });
+        
+        //  g.Items.Add(m =>
+        //  {
+        //      m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ANNUAL");
+        //  })
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().CheckBoxFor(i => i.Header.Annual, s =>
+        //    {
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //    }).Render();
+        //});
+
+        //   g.Items.Add(m =>
+        //   {
+        //       m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ORIENTETION");
+        //   })
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().CheckBoxFor(i => i.Header.Orientetion, s =>
+        //    {
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //    }).Render();
+        //});
+        //     g.Items.Add(m =>
+        //     {
+        //         m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SPECIAL");
+        //     })
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().CheckBoxFor(i => i.Header.Special, s =>
+        //    {
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //    }).Render();
+        //});
+    });
+}).GetHtml()
+
+
+        @{
+            int line = 1;
+        }
+    @foreach (var q in Model.ListSelfAssItem.OrderBy(w => w.InOrder).ToList())
+    {
+        string name = "rate" + line;
+        <table class="table table-section table-striped">
+            <tbody>
+                <tr>
+                    <td>
+                        @q.QuestionCode/ @q.Description
+                        <textarea placeholder="Comment" class="form-control" onkeyup="CommentValue($(this).val(),'@q.QuestionCode')" id="contactChoice5"></textarea>
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+        line++;
+    }
+@*</div>*@
+@*}*@
+@*</div>*@

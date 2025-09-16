@@ -1,0 +1,104 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        })
+        $('#_btnNewAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_btnDownloadENG').click(function () {
+            ss = 6;
+            PopSelectStaff.Show();
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_btnDownloadKH').click(function () {
+            ss = 9;
+            PopSelectStaff.Show();
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details/" + values[0];
+        }
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit/" + values[0];
+        }
+        if(ss==3)
+        {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create/" + values[0];
+        }
+        //Delete
+        if (ss == 4) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?id=" + selectedIDs;
+            }
+            if (ss == 6) {
+                if (EmpCode.GetValue() != null) {
+
+                    window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "DownloadENG?id=" + selectedIDs + "&SignEmpCode=" + EmpCode.GetValue();
+                    PopSelectStaff.Hide();
+                }
+                else {
+                    alert("Employee Code is required!");
+                }
+            }
+            if (ss == 9) {
+                if (EmpCode.GetValue() != null) {
+
+                    window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "DownloadKH?id=" + selectedIDs + "&SignEmpCode=" + EmpCode.GetValue();
+                    PopSelectStaff.Hide();
+                }
+                else {
+                    alert("Employee Code is required!");
+                }
+            }
+
+        }
+
+    }
+    function ChangeEmp(s, e) {
+        Position.SetValue(s.GetSelectedItem().GetColumnText(2));
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS2.js"></script>
+<script type="text/javascript" src="~/Content/NUser.js"></script>
+@model Humica.Employee.IClsEmployee
+<div class="fitler-doc">
+    @Html.Partial("FTInYear", Model)
+</div>
+@Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListEmpCareer)
+@Html.Partial("PopSelectStaff")

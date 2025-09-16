@@ -1,0 +1,79 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupControlFile";
+    settings.CallbackRouteValues = new { Controller = "SystemActivity", Action = "PopTheFilePartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(530);
+    settings.Width = Unit.Pixel(620);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "Upload File";
+
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+    settings.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+    settings.AllowDragging = false;
+    settings.ShowFooter = true;
+    settings.Styles.Content.Paddings.Padding = 0;
+    settings.Styles.Content.Paddings.PaddingTop = 12;
+    settings.ClientSideEvents.Init = "function(s, e){ }";
+
+    settings.SetContent(() =>
+    {
+        using (Html.BeginForm("MultiFileSelection", "SystemActivity1", FormMethod.Post, new { @class = "multiSelection" }))
+        {
+            Html.DevExpress().UploadControl(
+                settings1 =>
+                {
+                    settings1.Name = "ucMultiSelection";
+                    settings1.CallbackRouteValues = new { Controller = "SystemActivity1", Action = "MultiSelectionImageUpload" };
+
+                    settings1.Width = Unit.Percentage(100);
+                    settings1.ShowProgressPanel = true;
+                    settings1.ShowUploadButton = true;
+
+                    settings1.ShowAddRemoveButtons = true;
+                    settings1.AdvancedModeSettings.EnableMultiSelect = false;
+                    settings1.AdvancedModeSettings.EnableFileList = true;
+                    settings1.AdvancedModeSettings.EnableDragAndDrop = true;
+                    settings1.NullText = "Select file...";
+
+                    //settings1.ValidationSettings.Assign(Humica.EF.Models.);
+
+                    settings1.ClientSideEvents.FilesUploadStart = "function(s,e) { DXUploadedFilesContainer.Clear(); }";
+                    settings1.ClientSideEvents.FileUploadComplete = "function(s,e) { onFileUploadComplete(e); }";
+                }).Render();
+        }
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        @Html.DevExpress().Button(s => {
+            s.Name = "BTNOTEF";
+            s.Text = "Upload";
+            s.ClientSideEvents.Click = "function(s, e){  }";
+
+        }).Render();
+
+
+    });
+}).GetHtml()
+
+
+<script type="text/javascript">
+    function onFileUploadComplete(e) {
+        if (e.callbackData) {
+            var fileData = e.callbackData.split('|');
+            var fileName = fileData[0],
+                fileUrl = fileData[1],
+                fileSize = fileData[2];
+            DXUploadedFilesContainer.AddFile(fileName, fileUrl, fileSize);
+        }
+    }
+</script>

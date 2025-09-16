@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="Attendance Dashboard" />
+  <DataSources>
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="Z_EmployeeAttendaceDash">
+        <Tables>
+          <Table Name="Z_EmployeeAttendaceDash" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmployeeAttendaceDash" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Attendance List" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendaceDash">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="AllName" DefaultId="DataItem1" />
+        <Dimension DataMember="Department" DefaultId="DataItem2" />
+        <Dimension DataMember="Position" DefaultId="DataItem3" />
+        <Dimension DataMember="InDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem4" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="47.346752058554436">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Name" Weight="63.815187557182071">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="108.41720036596523">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="119.73924977127173">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="InDate" Weight="35.681610247026534">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+    <ListBox ComponentName="listBoxDashboardItem1" Name="Filter" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendaceDash">
+      <DataItems>
+        <Dimension DataMember="Department" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ListBox>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutItem DashboardItem="listBoxDashboardItem1" Weight="0.31441717791411045" />
+      <LayoutItem DashboardItem="gridDashboardItem1" Weight="1.6855828220858897" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

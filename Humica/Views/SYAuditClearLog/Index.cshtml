@@ -1,0 +1,21 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+    });
+
+</script>
+
+
+
+@model Humica.Logic.SY.SYBackupRestore
+
+@Html.Partial("Filter")
+
+@{ 
+
+    Html.RenderPartial("GridItemsAuditLog", Model.ListAuditLog);
+}

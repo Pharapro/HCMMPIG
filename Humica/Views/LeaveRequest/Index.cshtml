@@ -1,0 +1,94 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var status = "";
+    var IsCancel = false;
+    $(document).ready(function () {
+
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode;TranNo;Status', OnGetRowValues);
+        });
+
+        $('#_btnNewAction').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+
+
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnCancel") {
+            ss = 3;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;IsReqCancel;Status', OnGetRowValues);
+        }
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[2];
+        IsCancel = values[1];
+        if (ss == 1) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details/" + values[0];
+        }
+        if (ss == 2) {
+            if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + values[0] + "&TranNo=" + values[1];
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("EDIT_CAN_N", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 3) {
+            if (status != "@Humica.EF.SYDocumentStatus.CANCELLED.ToString()" && status != "@Humica.EF.SYDocumentStatus.REJECTED.ToString()" && !IsCancel) {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANC_CAN_N", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?id=" + selectedIDs;
+            }
+        }
+        if (ss == 3) {
+            PopUpRemark.Show();
+        }
+    }
+    function _ConfirmRemark(s, e) {
+        PopTheLoading.Show();
+        window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "RequestforCancel?id=" + selectedIDs + "&Remark=" + txtRemark.GetValue();
+        PopUpRemark.Hide();
+    }
+
+</script>
+
+@model Humica.Logic.LM.GenerateLeaveObject
+
+<div class="fitler-doc">
+    @Html.Partial("~/Views/FILTER/FTInYear.cshtml", Model)
+</div>
+@Html.Partial("GridItems", Model.ListEmpLeave)
+@Html.Partial("PopUpRemark")

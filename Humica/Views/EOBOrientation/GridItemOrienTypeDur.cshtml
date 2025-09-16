@@ -1,0 +1,208 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemOrienTypeDur";
+           settings.KeyFieldName = "Code";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "EOBOrientation", Action = "GridItemOrienTypeDur" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "EOBOrientation", Action = "CreateOrienTypeDur" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "EOBOrientation", Action = "EditOrienTypeDur" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "EOBOrientation", Action = "DeleteOrienTypeDur" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+               column.FieldName = "Code";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ClientSideEvents.SelectedIndexChanged = "Code";
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["TYPIDURTYPE_SELECT"];
+               textProperties.TextField = "Code";
+               textProperties.ValueField = "Code";
+               textProperties.TextFormatString = "{0}";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 90);
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+               textProperties.Columns.Add("Duration", Humica.EF.Models.SY.SYSettings.getLabel("Duration"), 75);
+               textProperties.ValueType = typeof(string);
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Typical Duration Type");
+               column.FieldName = "Description";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtDes";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Orienteering Code");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               column.FieldName = "OrienteerCode";
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.ClientSideEvents.SelectedIndexChanged = "EmpCode";
+               textProperties.DataSource = ViewData["STAFF_SELECT"];
+               textProperties.TextField = "EmpCode";
+               textProperties.ValueField = "EmpCode";
+               textProperties.TextFormatString = "{0}";
+               textProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Employee Code"), 90);
+               textProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Employee Name"), 200);
+               textProperties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"), 200);
+               textProperties.Columns.Add("Department", Humica.EF.Models.SY.SYSettings.getLabel("Department"), 200);
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Orienteering Name");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.FieldName = "OrienteerName";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtEmpName";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+               column.FieldName = "Position";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtPosition";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+               column.FieldName = "Department";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtDepartment";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 75;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Duration");
+               column.FieldName = "Duration";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.ClientInstanceName = "txtDuration";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.FieldName = "Remark";
+           });
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 20;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.None;
+               if (e.Column.FieldName == "Code")
+               {
+                   if (e.KeyValue != null)
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+               if (e.Column.FieldName == "Description")
+               {
+                   if (e.KeyValue != null)
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+
+               if (e.Column.FieldName == "OrienteerCode")
+               {
+                   if (e.KeyValue != null)
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "OrienteerName")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+               if (e.Column.FieldName == "Position")
+               {
+                   if (e.KeyValue != null)
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Department")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Duration")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

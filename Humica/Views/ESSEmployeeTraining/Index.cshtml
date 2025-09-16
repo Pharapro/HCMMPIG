@@ -1,0 +1,149 @@
+﻿@model Humica.Training.ESSTrainingInvitationObject
+<script type="text/javascript">
+    var selectedIDs = "";
+    var selectedIDs_ = "";
+    var Empcode = "";
+    var ss;
+    var status = "";
+    var ReStatus = "";
+    $(document).ready(function (s, e) {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            if (ID == 0)
+                PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+            else
+                GridViewListPending.GetRowValues(GridViewListPending.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+            //GridViewListPending.GetRowValues(GridViewListPending.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+         })
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+        });
+    });
+    $("#_btnNewAction").hide();
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+    }
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnAccept") {
+            ss = 10;
+            GridViewListPending.GetRowValues(GridViewListPending.GetFocusedRowIndex(), 'TrainNo;Status', OnGetRowValues);
+        }
+        if (e.item.name == "_mnCancel") {
+            ss = 11;
+            GridViewListPending.GetRowValues(GridViewListPending.GetFocusedRowIndex(), 'TrainNo;Status', OnGetRowValues);
+        }
+    }
+    function OnGetRowValues(values) {
+         selectedIDs = values[0];
+         Empcode = values[1];
+         status = values[1];
+         if (ss == 1) {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + selectedIDs + "&EmpCode=" + Empcode;
+         }
+         if (ss == 2) {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + selectedIDs + "&EmpCode=" + Empcode;
+         }
+         if (ss == 4) {
+
+             ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+         }
+        if (ss == 10) {
+            if (status == "PENDING") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("ACCEPT_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+         }
+         if (ss == 11) {
+             if (Status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                 ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_RC", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+             }
+             else {
+                 AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+             }
+         }
+
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            //Accept
+            if (ss == 10) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Accept?id=" + selectedIDs;
+            }
+            //Cancel
+            if (ss == 11) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Cancel?id=" + selectedIDs;
+            }
+        }
+    }
+    function Tap_ActiveTabChanged(s, e) {
+        //var tab = s.GetActiveTab();
+        //var isChecked = false;
+        var tapName = e.tab.name;
+        $('.fitler-doc').show();
+        if (tapName == "Tap2") {
+            $('.fitler-doc').show();
+        }
+    }
+    // event grideview checkbox
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("TrainNo;EmpCode", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs_ = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs_ += values[index] + ";";
+            ssFrom = selectedIDs_;
+        }
+        if (selectedIDs_.length > 0) {
+            selectedIDs_ = selectedIDs_.substring(0, selectedIDs_.length - 1);
+        }
+    }
+    function tabClickCommand1(s, e) {
+        index = s.GetActiveTab().index;
+        if (index == 0) {
+            ID = 0;
+        }
+        else {
+            ID = 1;
+        }
+    }
+</script>
+<script src="~/Content/AdjustSizePage.js"></script>
+<div class="fitler-doc">
+    @Html.Partial("FTTraining", Model)
+</div>
+@{
+    @Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+    settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+    settings.ClientSideEvents.Init = "tabClickCommand1";
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+    {
+        Html.RenderPartial("PartialTrainee", Model.ListTrainee);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Waiting")).SetContent(() =>
+    {
+        Html.RenderPartial("PartialProcess", Model.ListPendingTrainee);
+
+    });
+
+}).GetHtml()
+}

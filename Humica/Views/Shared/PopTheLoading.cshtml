@@ -1,0 +1,8 @@
+﻿@Html.DevExpress().LoadingPanel(
+    settings =>
+    {
+        settings.Name = "PopTheLoading";
+        settings.Modal = true;
+        settings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Processing...");        
+    }
+).GetHtml()

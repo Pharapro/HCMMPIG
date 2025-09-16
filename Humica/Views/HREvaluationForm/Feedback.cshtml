@@ -1,0 +1,104 @@
+﻿@model Humica.Logic.HR.HREmpEvaluateObject
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+
+    s1.Name = "Feedback1";
+    s1.Width= Unit.Percentage(100);
+    s1.AlignItemCaptionsInAllGroups = true;
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Strengths");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.Strengths, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 100;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Weakness");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.Weakness, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 100;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainingProgram");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.TrainingProgram, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 100;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ActionPlan");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.ActionPlan, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 100;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Comments");
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.Comments, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Height = 100;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+}).GetHtml()

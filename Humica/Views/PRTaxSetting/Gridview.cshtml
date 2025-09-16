@@ -1,0 +1,144 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gridViewItem3";
+        settings.KeyFieldName = "TranNo";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "PRTaxSetting", Action = "GridItems" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRTaxSetting", Action = "Create" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRTaxSetting", Action = "Edit" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRTaxSetting", Action = "Delete" };
+
+        //settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TranNo");
+            column.FieldName = "TranNo";
+            column.Visible = false;
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TaxFrom");
+            column.FieldName = "TaxFrom";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TaxTo");
+            column.FieldName = "TaxTo";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TaxPercent");
+            column.FieldName = "TaxPercent";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amdeduct");
+        //    column.FieldName = "Amdeduct";
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.Width = Unit.Percentage(100);
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 99999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        //});
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SalaryBasic");
+        //    column.FieldName = "SalaryBasic";
+
+        //});
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Code")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+
+            if (e.KeyValue == null && e.Column.FieldName == "TaxPercent")
+            {
+                e.Editor.Value = 0;
+            }
+        };
+
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

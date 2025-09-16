@@ -1,0 +1,107 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "gridItemkpiRating";
+          settings.KeyFieldName = "ID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "HRKPIConfiguration", Action = "GridItemsKPIRating" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "CreateKPIRating" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "EditKPIRating" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "DeleteKPIRating" };
+
+          settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+          settings.CommandColumn.Visible = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Rating");
+              column.FieldName = "Rating";
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+              var textProperties = column.PropertiesEdit as SpinEditProperties;
+              textProperties.MinValue = 0;
+              textProperties.MaxLength = 99;
+
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+              column.Width = 180;
+              column.FieldName = "Description";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Percentage(%)");
+              column.Width = 150;
+              column.FieldName = "Percentage";
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+              var textProperties = column.PropertiesEdit as SpinEditProperties;
+              textProperties.MinValue = 0;
+              textProperties.MaxLength = 100;
+              textProperties.DisplayFormatString = "P";
+          });
+
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = 450;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsPager.PageSize = 450;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue != null)
+              {
+                  if (e.Column.FieldName == "Rating")
+                  {
+                      editor.ReadOnly = true;
+                  }
+              }
+          };
+
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+          settings.CustomJSProperties = (s, e) =>
+          {
+              ASPxGridView grid1 = (ASPxGridView)s;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+              e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

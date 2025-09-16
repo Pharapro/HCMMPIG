@@ -1,0 +1,68 @@
+﻿@model Humica.EF.Models.SY.SYUserObject
+
+@{
+    var treeList = Html.DevExpress().TreeList(
+      settings =>
+      {
+
+          settings.Name = "treeListAPP";
+          settings.CallbackRouteValues = new { Controller = "User", Action = "TreeRoleAPP" };
+
+          settings.AutoGenerateColumns = false;
+          settings.Width = Unit.Percentage(50);
+
+          settings.KeyFieldName = "RoleID";
+          //settings.ParentFieldName = "Segment";
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Description";
+              column.PropertiesEdit.EncodeHtml = false;
+          });
+
+          settings.SettingsCookies.Enabled = true;
+          settings.SettingsCookies.StoreExpandedNodes = true;
+
+          settings.CommandColumn.Visible = false;
+
+          settings.SettingsEditing.ConfirmDelete = true;
+
+          settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+          settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+          settings.SettingsSelection.AllowSelectAll = false;
+          settings.SettingsSelection.Enabled = true;
+          settings.SettingsSelection.Recursive = false;
+
+
+          settings.ClientSideEvents.SelectionChanged = "OnSelectionRoleChangedAPP";
+          settings.ClientSideEvents.BeginCallback = "OnBeginRoleCallbackAPP";
+
+          //Module
+          foreach (var read in Model.ListHeaderRoleAPP)
+          {
+              settings.Nodes.Add(node =>
+              {
+                  node.KeyObject = read.RoleID;
+                  node["Description"] = read.Description;
+                  node.Expanded = true;
+                  node.AllowSelect = true;
+                  if (Model.ListRoleAPPAssigned != null)
+                  {
+                      if (Model.ListRoleAPPAssigned.Where(w => w.RoleId == read.RoleID).ToList().Count > 0)
+                      {
+                          node.Selected = true;
+                      }
+                  }
+              });
+          }
+
+          settings.Settings.ShowColumnHeaders = true;
+      }
+    );
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.GetHtml()

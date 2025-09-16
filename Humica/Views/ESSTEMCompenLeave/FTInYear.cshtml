@@ -1,0 +1,78 @@
+﻿@model Humica.Logic.LM.ClaimLeaveObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "INYear";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 150;
+
+    settings.Items.AddGroupItem(m => Model.FInYear, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InYear");
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().SpinEditFor(i => i.FInYear.INYear, s =>
+                {
+                    s.Width = 90;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.DisplayFormatString = "#";
+                    s.Properties.NumberType = SpinEditNumberType.Integer;
+                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                    s.Properties.MinValue = -1;
+                    s.Properties.MaxValue = 9999999999999;
+                }).Render();
+            });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.FInYear.Status, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "SelectValue";
+                s.Properties.TextField = "SelectText";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["STATUS_APPROVAL"]).Render();
+
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().Button(
+                  s =>
+                  {
+                      s.Name = "_btnRunReport";
+                      s.ToolTip = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                      s.RenderMode = ButtonRenderMode.Button;
+                      s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                      s.UseSubmitBehavior = true;
+                      s.Images.Image.IconID = IconID.ActionsApply16x16;
+                  }).GetHtml();
+          });
+
+    });
+
+}).Bind(Model).GetHtml()

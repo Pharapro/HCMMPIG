@@ -1,0 +1,782 @@
+﻿@model Humica.Performance.IClsAppraisel
+<script type="text/javascript">
+    status = "@Model.Header.Status";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString() ";
+        });
+        $('#_btnPrintction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Print?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnApprove") {
+            ss = 6;
+            if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("APPROVE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (e.item.name == "_mnRequest") {
+            ss = 7;
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REQUEST_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (e.item.name == "_mnCancel") {
+            ss = 8;
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()" || status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()"){
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (e.item.name == "_btnClose") {
+            ss = 12;
+            if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CLOSED_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            //Request
+            if (ss == 7) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "RequestForApproval?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            //Approve
+            if (ss == 6) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Approve?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            //Cancel
+            if (ss == 8) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Cancel?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            //Close
+            if (ss == 12) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Closed?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+</script>
+
+<style>
+    .table-section thead > tr > th {
+        background-color: #00a94f;
+        color:white;
+    }
+   /* table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }*/
+
+    .header-section {
+        background-color: #f2f2f2;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container-fluid">
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EMPCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.Default;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Information");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.EmpCode, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtEmpID";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextField = "AllName";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["STAFF_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.EmpName, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAllName";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().TextBoxFor(i => i.Header.Department, s =>
+             {
+                 s.Width = Unit.Percentage(100);
+                 s.Properties.ClientInstanceName = "txtDepartment";
+                 s.ReadOnly = true;
+                 s.ShowModelErrors = true;
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+             }).Render();
+         });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Position, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtPosition";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DateJoin");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.DateJoin, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtStartDate";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.Width = Unit.Percentage(100);
+        g.GroupBoxDecoration = GroupBoxDecoration.Default;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Appraiser Information");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraisalType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.AppraisalType, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAppraiselType";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["APPRTYPE_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Document Date");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.AppraiserDate, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Status, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Head Of Department");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.DirectedByCode, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtDirectedByCode";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextField = "AllName";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                s.Properties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectDirected";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["STAFF_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HOD Name");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.DirectedByName, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtDirectedByName";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserStart");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.AppraiserStart, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserCode");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.AppraiserCode, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAppraiserCode";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextField = "AllName";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                s.Properties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["STAFF_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserName");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.AppraiserName, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAppraiserName";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserDeadline");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.AppraiserDeadline, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserCode2");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.AppraiserCode2, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAppraiserCode2";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextField = "AllName";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "EmpCode";
+                s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                s.Properties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectAppraiser2";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["STAFF_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserName2");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.AppraiserName2, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtAppraiserName2";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AppraiserDeadline2");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.AppraiserDeadline2, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InYear");
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().SpinEditFor(i => i.Header.InYear, s =>
+              {
+                  s.ReadOnly = true;
+                  s.Width = Unit.Percentage(100);
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+                  s.Properties.DisplayFormatString = "#";
+                  s.Properties.NumberType = SpinEditNumberType.Integer;
+                  s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                  s.Properties.MinValue = 0;
+                  s.Properties.MaxValue = 9999999999999;
+              }).Render();
+          });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PeriodFrom");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().DateEditFor(i => i.Header.PeriodFrom, s =>
+           {
+               s.ReadOnly = true;
+               s.Width = Unit.Percentage(100);
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.ValidationSettings.ErrorText = "*";
+           }).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PeriodTo");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.PeriodTo, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPIType");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().ComboBoxFor(i => i.Header.KPIType, s =>
+           {
+               s.ReadOnly = true;
+               s.Properties.ClientInstanceName = "txtKPIType";
+               s.Width = Unit.Percentage(100);
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.Properties.TextFormatString = "{0}";
+               s.Properties.ValueField = "Code";
+               s.Properties.TextField = "Description";
+               s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 100);
+               s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+               s.Properties.Columns.Add("KPIAverage", Humica.EF.Models.SY.SYSettings.getLabel("KPIAverage"), 120);
+
+           }).BindList(ViewData["LIST_GROUPKPI"]).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPIExpectedDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.KPIExpectedDate, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "dptKPIExpectedDate";
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPIDeadline");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().DateEditFor(i => i.Header.KPIDeadline, s =>
+           {
+               s.ReadOnly = true;
+               s.Properties.ClientInstanceName = "dptKPIDeadline";
+               s.Width = Unit.Percentage(100);
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.ValidationSettings.ErrorText = "*";
+           }).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPICategory");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().ComboBoxFor(i => i.Header.KPICategory, s =>
+           {
+               s.ReadOnly = true;
+               s.Width = Unit.Percentage(100);
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.Properties.TextFormatString = "{1}";
+               s.Properties.ValueField = "CategoryCode";
+               s.Properties.TextField = "CatgoryDescription";
+               s.Properties.Columns.Add("CategoryCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 100);
+               s.Properties.Columns.Add("CatgoryDescription", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+           }).BindList(ViewData["Category_SELECT"]).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Actual Rating");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.TotalScore, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N2";
+                s.Properties.NumberType = SpinEditNumberType.Float;
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+    });
+}).GetHtml()
+
+    @if (Model.ListApprRating.Count > 0)
+    {
+    <table class="table mt-3">
+        <tr>
+            <td style="width: 50%; background-color: #ffc1072b;" rowspan="6">
+                <h5>Note<span class="text-danger">*</span></h5>
+                @foreach (var rate in Model.ListApprRating.OrderBy(w => w.Rating).ToList())
+                {
+                    <span style="font-family:'Khmer OS Battambang';font-size:14px"> Rate @rate.Rating: @rate.Description</span> <br />
+                }
+            </td>
+        </tr>
+        <tr>
+    </table>
+    }
+        @if (Model.ListApprResult.Count > 0)
+    {
+    <table class="table table-section" style="background-color: #ffc1072b;">
+        <thead>
+            <tr>
+                <th style="width:10%">Grade</th>
+                <th style="width:15%">Score</th>
+                <th style="width:75%">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rate in Model.ListApprResult.OrderBy(w => w.Grade).ToList())
+            {
+                <tr>
+                    <td style="font-family:'Khmer OS Battambang';font-size:14px">@rate.Grade</td>
+                    <td style="font-family:'Khmer OS Battambang';font-size:14px">@rate.FromScore - @rate.ToScore </td>
+                    <td style="font-family:'Khmer OS Battambang';font-size:14px">@rate.Description </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+    @{
+        int line = 1;
+    }
+    @foreach (var q in Model.ListRegion.OrderBy(w => w.InOrder).ToList())
+    {
+        if (q.IsKPI == true)
+        {
+            <h5 class="text-Dark text-decoration-underline" style="font-family:'Khmer OS Battambang';">@q.Code @q.Description</h5>
+              <table class="table table-section table-bordered">
+                  <thead>
+                      <tr>
+                          <th rowspan="2" style="width:120px" class="header-section">Code</th>
+                          <th rowspan="2" class="header-section" style="font-family:'Khmer OS Battambang';font-size:14px;">សូចនាករការងារ (KPI)</th>
+                          <th rowspan="2" class="header-section">Weight %</th>
+                          <th rowspan="2" class="header-section">Achievement %</th>
+                          <th rowspan="2" class="header-section">Score</th>
+                          <th rowspan="2" class="header-section">Final Score</th>
+                      </tr>
+                      @*<tr>
+                          <th class="header-section">Agreed KPI</th>
+                          <th class="header-section">Details</th>
+                      </tr>*@
+                  </thead>
+                  <tbody>
+                      @foreach (var i in Model.ListHRKPIndicator)
+                      {
+                          <tr>
+                              <td style="font-family:'Khmer OS Battambang';font-size:14px;">@i.Indicator</td>
+                              <td style="font-family:'Khmer OS Battambang';font-size:14px;">@i.IndicatorType</td>
+                              <td style="font-family:'Khmer OS Battambang';font-size:14px;">@i.Weight.ToString("P2")</td>
+                              <td style="font-family:'Khmer OS Battambang';font-size:14px;">@i.Acheivement.Value.ToString("P2") </td>
+                              <td style="font-family:'Khmer OS Battambang';font-size:14px;">@i.Score</td>
+                              @if (Model.ListHRKPIndicator.IndexOf(i) == 0)
+                              {
+                                  <td style="font-family: 'Khmer OS Battambang'; align-content: center; font-size: 14px;" rowspan="@Model.ListHRKPIndicator.Count">
+                                      <center>@Model.Header.KPIScore</center>
+                                  </td>
+                              }
+                          </tr>
+                      }
+                  </tbody>
+              </table>
+        }
+        else
+        {
+            string name = "rate" + line;
+            <h5 class="text-Dark text-decoration-underline" style="font-family:'Khmer OS Battambang';">@q.Code @q.Description</h5>
+            <table class="table table-section table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:20%">Objectives </th>
+                        <th>Performance Progress / Results</th>
+                        @*<th style="width:5%">Weighting(%)</th>*@
+                    <th style="width:5%">Appraiser 1 (@Model.Rating)</th>
+                    <th style="width:5%">Appraiser 2 (@Model.Rating)</th>
+                        @*<th style="width:4%">Scoring</th>*@
+                        <th style="width:24%">Comment</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @{
+                        int line2 = 1;
+                    }
+                    @foreach (var z in Model.ListFactor.Where(w => w.Region == q.Code).ToList())
+                    {
+                        decimal Rating = 0;
+                        decimal Rating1 = 0;
+                        decimal? Score = 0;
+                        string _Comment = "";
+                        var _Listcheck = Model.ListScore.FirstOrDefault(w => w.Code == z.Code);
+                        if (_Listcheck != null)
+                        {
+                            if (_Listcheck.ScoreAppraiser.HasValue)
+                            {
+                                Rating = (decimal)_Listcheck.ScoreAppraiser;
+                            }
+                            if (_Listcheck.ScoreAppraiser2.HasValue)
+                            {
+                                Rating1 = (decimal)_Listcheck.ScoreAppraiser2;
+                            }
+                            _Comment = _Listcheck.Comment;
+                            Score = _Listcheck.Score;
+                        }
+                        string _fName = q.Code + z.Code + line2;
+                        string _NumName = "Num" + q.Code + z.Code + line2;
+                        <tr>
+                            <td style="font-family:'Khmer OS Battambang';font-size:14px">@z.Code @z.Description</td>
+                            <td style="font-family:'Khmer OS Battambang';font-size:14px">
+                                @z.Remark
+                            </td>
+                            <td>
+                                <input type="number" id="@_NumName" class="form-control form-control-sm" value="@Rating" readonly />
+                            </td>
+                            <td>
+                                <input type="number" id="@_NumName" class="form-control form-control-sm" value="@Rating1" readonly />
+                            </td>
+                            <td>
+                                <textarea rows="1" class="form-control form-control-sm" id="contactChoice5" readonly>@_Comment</textarea>
+                            </td>
+                        </tr>
+                        line2++;
+                    }
+                </tbody>
+            </table>
+                                line++;
+                            }
+                        }
+</div>

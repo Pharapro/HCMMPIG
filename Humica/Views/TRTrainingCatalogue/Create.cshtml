@@ -1,0 +1,150 @@
+﻿@model Humica.Training.TrainingProcessObject
+<script type="text/javascript">
+    var _selectedIDsBranch = "";
+    var textSeparator = ",";
+    //fire event action
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function ()
+        {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#lblCourseInfo_').click(function () {
+            PartialCourseSearch.Show();
+            GridItemCourse.UnselectAllRowsOnPage();
+        });
+        $('#btnClear').click(function () {
+            GridItemCourse.UnselectAllRowsOnPage();
+        });
+        $('#btnSelect').click(function () {
+            $.ajax({
+                type: "POST",
+                url: _baseUrl + '/Training/Process/TRTrainingCatalogue/SelectedCourse',
+                dataType: 'json',
+                data: { 'TrainingCourseID': _selectedIDsBranch },
+                success: function (data) {
+                    if (data.MS == "OK") {
+                        PartialCourseSearch.Hide();
+                        GridItems.Refresh();
+                    }
+                    else {
+                        // AlertMessage(data.MS);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+        });
+    });
+
+    function OnSelectionChangedBranch(s, e) {
+        s.GetSelectedFieldValues("TrainNo", GetSelectedFieldValuesCallbackBranch);
+    }
+    function GetSelectedFieldValuesCallbackBranch(values) {
+        _selectedIDsBranch = "";
+        for (var index = 0; index < values.length; index++) {
+            _selectedIDsBranch += values[index] + textSeparator;
+            test = _selectedIDsBranch;
+        }
+        if (_selectedIDsBranch.length > 0) {
+            _selectedIDsBranch = _selectedIDsBranch.substring(0, _selectedIDsBranch.length - 1);
+        }
+    }
+    //function clearSelectedPosition(s, e) {
+    //    $(document).ready(function ()
+    //    {
+    //        GridItemCourse.UnselectAllRowsOnPage();
+    //    });
+    //}
+</script>
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "trainingCourse";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Width = Unit.Pixel(1000);
+        settings.Items.AddGroupItem(m => Model.TRTrainingCatalogue, g =>
+        {
+            g.ColumnCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("In Year");
+                m.ColSpan = 1;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().SpinEditFor(i => i.TRTrainingCatalogue.InYear, s =>
+                   {
+                       s.Width = Unit.Percentage(20);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.Properties.NumberType = SpinEditNumberType.Integer;
+                       s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                       s.Properties.MinValue = 0;
+                       s.Properties.MaxValue = 9999999999999;
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                m.ColSpan = 2;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.TRTrainingCatalogue.Description, s =>
+                   {
+                       s.Width = Unit.Percentage(100);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.Properties.ClientInstanceName = "test";
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                m.ColSpan = 2;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.TRTrainingCatalogue.Remark, s =>
+                   {
+                       s.Width = Unit.Percentage(100);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+        });
+    }).GetHtml();
+    Html.DevExpress().Label(s =>
+    {
+        s.Name = "lblCourseInfo";
+        s.Width = Unit.Percentage(100);
+        s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Training course(s)");
+    }).Render();
+    Html.DevExpress().Button(s =>
+    {
+        s.Name = "lblCourseInfo_";
+        s.Width = Unit.Percentage(10);
+        s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Add");
+
+    }).Render();
+}
+
+@Html.Partial("GridItems", Model)
+
+@Html.Partial("PartialCourseSearch", Model)
+
+<div hidden="hidden">
+    @Html.Partial("GridItemCourse", Model)
+</div>

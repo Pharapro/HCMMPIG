@@ -1,0 +1,130 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "GridItemLog";
+          settings.KeyFieldName = "ID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "PRGenerateFirstPay", Action = "GridItemLog" };
+
+          settings.CommandColumn.Visible = false;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsSearchPanel.Visible = true;
+          settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "ID";
+              column.Width = 60;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("#");
+              column.Visible = false;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "LogDate";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LogDate");
+              column.ColumnType = MVCxGridViewColumnType.DateEdit;
+              column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+              var textProperties = column.PropertiesEdit as DateEditProperties;
+              textProperties.EditFormat = EditFormat.Custom;
+              textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 150;
+              column.FieldName = "UserId";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("UserName");
+              var cboProperties = column.PropertiesEdit as TextBoxProperties;
+              cboProperties.ClientInstanceName = "UserId";
+              cboProperties.MaxLength = 50;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 150;
+              column.FieldName = "Action";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Action");
+              var cboProperties = column.PropertiesEdit as TextBoxProperties;
+              cboProperties.ClientInstanceName = "Action";
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 150;
+              column.FieldName = "DocurmentAction";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocurmentAction");
+              var cboProperties = column.PropertiesEdit as TextBoxProperties;
+              cboProperties.ClientInstanceName = "DocurmentAction";
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 550;
+              column.FieldName = "LogErrorMessage";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LogMessage");
+              var cboProperties = column.PropertiesEdit as TextBoxProperties;
+              cboProperties.ClientInstanceName = "LogErrorMessage";
+
+          });
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 200;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsPager.PageSize = 200;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.Settings.ShowFooter = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue == null)
+              {
+                  if (e.Column.FieldName == "NetAmount")
+                  {
+                      e.Editor.ReadOnly = true;
+                      e.Editor.Value = 0;
+                  }
+                  if (e.Column.FieldName == "Discount")
+                  {
+                      e.Editor.Value = 0;
+                  }
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

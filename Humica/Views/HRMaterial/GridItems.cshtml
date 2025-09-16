@@ -1,0 +1,104 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItem3";
+           settings.KeyFieldName = "ItemCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRMaterial", Action = "GridItems" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRMaterial", Action = "Create" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRMaterial", Action = "Edit" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRMaterial", Action = "Delete" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowDeleteButton = false;
+
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+           //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Item Code");
+               column.FieldName = "ItemCode";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.FieldName = "ItemDescription";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description 2");
+               column.FieldName = "ItemDescription2";
+
+           });
+
+          
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "ItemCode")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+              
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

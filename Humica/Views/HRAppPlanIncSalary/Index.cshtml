@@ -1,0 +1,57 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var isvisible = true;
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Save";
+        });
+    });
+    function EndCallBack() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]"+ '/Refreshvalue',
+            data: { },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtTotalSalary.SetValue(data.TotalSalary);
+                    txtSalaryInBgP.SetValue(data.SalaryInBgP);
+                    txtSalaryIncBgUSD.SetValue(data.SalaryIncBgUSD);
+                    txtSalaryIncBgUtilised.SetValue(data.SalaryIncBgUtilised);
+                    txtSalaryIncBgBalance.SetValue(data.SalaryIncBgBalance);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+
+@model Humica.Performance.ClsAPPIncreaseSalary
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "GCreate";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Matrix")).SetContent(() =>
+        {
+            @Html.RenderPartial("GidMatixIncrease", Model.ListMatrixIncrease);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Increase Budget")).SetContent(() =>
+        {
+            @Html.RenderPartial("TapSalaryBudget", Model);
+        });
+    }).GetHtml()

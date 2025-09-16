@@ -1,0 +1,53 @@
+﻿<script type="text/javascript">
+    var ss;
+    var ID = "";
+    var selectedIDs = "";
+    var Status = "";
+
+    $(document).ready(function () {
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            PartialList1.GetRowValues(PartialList1.GetFocusedRowIndex(), 'ID;', OnGetRowValues);
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'ID;', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Details?ID=" + values[0];
+        }
+    }
+
+</script>
+
+@model Humica.Training.TrainningObject
+
+<div class="fitler-doc">
+
+</div>
+
+@{
+    @Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+    {
+        Html.RenderPartial("PartialList1", Model.ListRequestHeader);
+    });
+
+}).GetHtml()
+}

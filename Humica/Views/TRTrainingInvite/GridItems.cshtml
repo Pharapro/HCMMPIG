@@ -1,0 +1,97 @@
+﻿@model Humica.Training.TrainingInvitationObject
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        var isReadOnly = true;
+        if (ViewData[Humica.EF.SYSConstant.PARAM_ID1] != null)
+        {
+            isReadOnly = !(bool)ViewData[Humica.EF.SYSConstant.PARAM_ID1];
+        }
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "LineItem";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "TRTrainingInvite" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingInvite", Action= "DeleteTrainee" };
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = isReadOnly;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Columns.Add(column =>
+        {
+            column.Name = "EmpCode";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.Width = Unit.Percentage(100);
+            column.FieldName = "EmpCode";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "EmpName";
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Date");
+        //    column.Width = Unit.Percentage(100);
+        //    column.FieldName = "Staff.StartDate";
+        //    column.PropertiesEdit.DisplayFormatString = "dd-MMM-yyyy";
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "Department";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "Position";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScoreTheory");
+            column.Width = Unit.Percentage(70);
+            column.FieldName = "ScoreTheory";
+            column.PropertiesEdit.DisplayFormatString = "{0:N2}";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScorePractice");
+            column.Width = Unit.Percentage(70);
+            column.FieldName = "ScorePractice";
+            column.PropertiesEdit.DisplayFormatString = "{0:N2}";
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            ASPxGridView gridView = (ASPxGridView)sender;
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.ClientSideEvents.RowDblClick = "";
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    grid.Bind(Model.ListTrainee).GetHtml();
+}

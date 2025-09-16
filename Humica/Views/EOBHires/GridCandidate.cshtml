@@ -1,0 +1,101 @@
+﻿
+@{var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridCandidate";
+        settings.KeyFieldName = "ApplicantID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "EOBHires", Action = "GridCandidate" };
+        settings.CommandColumn.Visible = false;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "");
+            column.Width = 80;
+            column.SetDataItemTemplateContent(container =>
+            {
+                var applicantID = Convert.ToString(DataBinder.Eval(container.DataItem, "ApplicantID"));
+                var navigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() +
+                                  ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL] + "Hire?ApplicantID=" + applicantID;
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "chklst" + container.VisibleIndex;
+                    hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(
+                        ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Create");
+                    hyperlink.ToolTip = applicantID;
+                    hyperlink.NavigateUrl = "javascript:void(0);";
+                    hyperlink.Properties.ClientSideEvents.Click = string.Format(
+                        "function(s, e) {{ " + "   PopTheLoading.Show(); " +
+                        "   setTimeout(function() {{ window.location = '{0}'; }}, 10); " + "}}", navigateUrl);
+                }).Render();
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Applicant ID");
+            column.Width = 125;
+            column.FieldName = "ApplicantID";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Vacancy");
+            column.Width = 110;
+            column.FieldName = "VacNo";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            column.Width = 175;
+            column.FieldName = "AllName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Apply Date");
+            column.Width = 120;
+            column.FieldName = "ApplyDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PostOffer";
+            column.Width = 210;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["POSITION_SELECT"];
+            textProperties.TextField = "Description";
+            textProperties.ValueField = "Code";
+            textProperties.ValueType = typeof(string);
+        });
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+    });
+
+    if (ViewData["EditError"] != null) { grid.SetEditErrorText((string)ViewData["EditError"]); }}
+
+
+@grid.Bind(Model).GetHtml()
+
+

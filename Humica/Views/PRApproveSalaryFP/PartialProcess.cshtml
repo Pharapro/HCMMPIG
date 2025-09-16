@@ -1,0 +1,116 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "PartialProcess";
+               settings.KeyFieldName = "PayPeriodID";
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Controller = "PRApproveSalaryFP", Action = "PartialProcess" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "...");
+                   column.Width = 80;
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "_hl" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Create");
+                           hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                           hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl()
+                               + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]
+                               + "Create?PeriodID=" + Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                       }).Render();
+                   });
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "...");
+                   column.Width = 80;
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "hl" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "View");
+                           hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                           hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl()
+                               + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]
+                               + "Download?PeriodID=" + Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                           //hyperlink.Properties.ClientSideEvents.Click = "ShowSlip";
+                       }).Render();
+                   });
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Period");
+                   column.Width = 150;
+                   column.FieldName = "PeriodID";
+                   column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   textProperties.ValidationSettings.Display = Display.None;
+                   textProperties.DataSource = ViewData["PEROID_SELECT"];
+                   textProperties.TextFormatString = "{0}";
+                   textProperties.ValueField = "PeriodID";
+                   textProperties.Columns.Add("PeriodString", Humica.EF.Models.SY.SYSettings.getLabel("PeriodString"), 250);
+                   textProperties.ValueType = typeof(string);
+
+               });
+               //settings.Columns.Add(column =>
+               //{
+               //    column.FieldName = "FromDate";
+               //    column.Width = 110;
+               //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Date");
+               //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               //    (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+               //    (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+               //    (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+
+               //});
+               //settings.Columns.Add(column =>
+               //{
+               //    column.FieldName = "ToDate";
+               //    column.Width = 110;
+               //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Date");
+               //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               //    (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+               //    (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+               //    (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+
+               //});
+
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+           });
+}
+
+@gridExtension.Bind(Model.ListAppSalaryPending).GetHtml()
+
+

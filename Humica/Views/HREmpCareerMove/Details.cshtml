@@ -1,0 +1,334 @@
+﻿@model Humica.Employee.IClsEmpCareerMovement
+<script type="text/javascript">
+    var status = "@Model.Header.Status";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_bthEditAction').click(function () {
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        });
+       $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+        cboResignType.SetEnabled(false);
+        if (txtEvalPA.GetValue() == false) {
+            txtPAStartDate.SetEnabled(false);
+        }
+        if (txtIsEvalKPI.GetValue() == false) {
+            txtKPIStartDate.SetEnabled(false);
+        }
+    });
+    function OnClientValuePA(s, e) {
+    }
+    function OnClientValueKPI(s, e) {
+    }
+    function OnClientClosedPA(s, e) {
+    }
+    function selectCareerCode(s, e) {
+    }
+    function valueChange(s, e) {
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+    function OnChanged_Transfer(s, e) {
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "MaterialCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+    var IsSalary = false;
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null)
+    {
+        IsSalary = (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+    }
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.EmpCode, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.EmployeeName, s =>
+            {
+                s.Properties.ClientInstanceName = "txtEmployeeName";
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Status, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary Information");
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CareerCode") + "*";
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.CareerCode, s =>
+            {
+                s.ReadOnly = IsSalary;
+                s.Properties.ClientInstanceName = "cboCareerCode";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{1}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+                s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+                s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+                s.Properties.Columns.Add("NotCalSalary", Humica.EF.Models.SY.SYSettings.getLabel("Not Cal. Salary"));
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "selectCareerCode";
+            }).BindList(ViewData["CareerHistories_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EffectDate");
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().DateEditFor(i => i.Header.EffectDate, s =>
+           {
+               s.ReadOnly = IsSalary;
+               s.Properties.ClientInstanceName = "txtCEff";
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               s.Properties.ValidationSettings.ErrorText = "*";
+
+           }).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Separate Type");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().ComboBoxFor(i => i.Header.Resigntype, s =>
+           {
+               s.Properties.ClientInstanceName = "cboResignType";
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.AllowNull = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.Properties.TextFormatString = "{1}";
+               s.Properties.ValueField = "Code";
+               s.Properties.TextField = "Description";
+               s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+           }).BindList(ViewData["SEPARATE_SELECT"]).Render();
+       });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OldSalary");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.OldSalary, s =>
+            {
+                s.Properties.ClientInstanceName = "txtCSalary";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N2";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Increase");
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Increase, s =>
+            {
+                s.ReadOnly = IsSalary;
+                s.Properties.ClientInstanceName = "txtIncrease";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N2";
+                s.Properties.ClientSideEvents.NumberChanged = "valueChange";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NewSalary");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.NewSalary, s =>
+            {
+                s.Properties.ClientInstanceName = "txtNewSalary";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.DisplayFormatString = "N2";
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NewEmpCode");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.NewEmpCode, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Telegram Group");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.TeleGroup, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "ChatID";
+                s.Properties.TextField = "Description";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["TELEGRAM_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocReference");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().HyperLink(hyperlink =>
+            {
+
+                hyperlink.Name = "hl12113";
+                hyperlink.Properties.Text = Model.Header.DocReference;
+                hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + "/HRM/EmployeeInfo/HRCareerHistory/Details?id=" + Model.Header.DocReference;
+                hyperlink.Properties.Target = "_BLANK";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Reason") + "*";
+            m.ColSpan = 3;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.Header.Reason, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+}).GetHtml()
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Job Details")).SetContent(() =>
+    {
+        Html.RenderPartial("TabJob", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Subordinate")).SetContent(() =>
+    {
+        Html.RenderPartial("TabSubordinate", Model);
+        Html.RenderPartial("GridUnderManager", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Supervisor")).SetContent(() =>
+    {
+        Html.RenderPartial("TapManApprover", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Performance")).SetContent(() =>
+    {
+        Html.RenderPartial("TabPerformance", Model);
+    });
+}).GetHtml()

@@ -1,0 +1,65 @@
+﻿@model Humica.Core.FT.FTFilterEmployee
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style>
+    .battambang-font {
+        font-family: 'Battambang', sans-serif;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+    //function rowSelected(s, e) {
+    //    EmployeeGridListSelector.GetRowValues(EmployeeGridListSelector.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+    //    cboEmployee.HideDropDown();
+    //}
+    function PreventSelectDate() {
+        var fromDate = txtFromDate.GetDate();
+        var toDate = txtToDate.GetDate();
+        var toDateYear = toDate.getFullYear(); // Get the year of toDate
+        var fromDateYear = fromDate.getFullYear();
+        var currentDate = new Date(); 
+        if (toDateYear != fromDateYear) {
+            Swal.fire({
+                title: "សូមជ្រើសរើសកាលបរិច្ឆេទនៅក្នុងឆ្នាំតែមួយ",
+                icon: "warning",
+                draggable: false,
+                customClass: {
+                    title: 'battambang-font'
+                },
+                showClass: {
+                    popup: `
+  animate__animated
+  animate__fadeInUp
+  animate__faster
+`
+                },
+                hideClass: {
+                    popup: `
+  animate__animated
+  animate__fadeOutDown
+  animate__faster
+`
+                }
+            });
+            txtFromDate.SetValue(currentDate);
+            txtToDate.SetValue(currentDate);
+        }
+    }
+
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+@Html.Partial("EmpoyeeReport", Model)

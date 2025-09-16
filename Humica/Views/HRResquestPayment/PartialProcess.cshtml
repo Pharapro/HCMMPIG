@@ -1,0 +1,162 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "PurchaseRequisitionGrid";
+               settings.KeyFieldName = "PONumber";
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Controller = "HRResquestPayment", Action = "PartialProcess" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "...");
+                   column.Width = 80;
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "hl" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Create");
+                           hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "PONumber"));
+                           hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl()
+                               + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]
+                               + "CreateMultiRef?id=" + Convert.ToString(DataBinder.Eval(container.DataItem, "PONumber"));
+
+
+                           //hyperlink.Properties.ClientSideEvents.Click = "ShowSlip";
+                       }).Render();
+                   });
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PONumber");
+                   column.Width = 130;
+
+                   column.FieldName = "PONumber";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+
+                   column.Width = 200;
+                   column.FieldName = "Branch";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("RequestedBy");
+
+                   column.Width = 150;
+                   column.FieldName = "Requestor";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                   column.FieldName = "Description";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   column.Width = 150;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 120;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PromisedDate");
+                   column.FieldName = "PromisedDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 120;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("RequestDate");
+                   column.FieldName = "DocumentDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Amount");
+
+                   column.FieldName = "Total";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                   column.Width = 90;
+               });
+
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.BoldText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+
+
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+
+
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               //settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid = (ASPxGridView)s;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.AllColumns;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+
+                   e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+               };
+           });
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

@@ -1,0 +1,93 @@
+﻿@{
+
+    var gridExtension = Html.DevExpress().GridView(
+        settings =>
+        {
+
+            settings.Name = "GridItemV";
+            settings.KeyFieldName = "ItemName";
+            settings.Width = Unit.Percentage(100);
+            //settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRDressRequest" };
+
+            // settings.SettingsSearchPanel.Visible = true;
+            settings.CommandColumn.Visible = false;
+            settings.CommandColumn.ShowDeleteButton = false;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.None;
+            settings.CommandColumn.ShowNewButtonInHeader = false;
+            settings.CommandColumn.ShowCancelButton = false;
+            settings.CommandColumn.ShowEditButton = false;
+            settings.SettingsBehavior.AllowFocusedRow = false;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "ItemName";
+                column.Width = 110;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ItemName");
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "Qty";
+                column.Width = 50;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Qty");
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                column.Width = 300;
+                column.FieldName = "Description";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+            });
+            //settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            //settings.SettingsEditing.EditFormColumnCount = 2;
+
+            //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+            //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            // settings.Settings.ShowHeaderFilterButton = true;
+
+            //settings.SettingsPager.PageSize = 50;
+            //settings.SettingsPager.EnableAdaptivity = true;
+            //settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+            //settings.SettingsExport.EnableClientSideExportAPI = true;
+            //settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 600;
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+
+            //settings.SettingsBehavior.AllowFocusedRow = true;
+
+            //settings.CustomJSProperties = (s, e) =>
+            //{
+            //    ASPxGridView grid = (ASPxGridView)s;
+            //    Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.AllColumns;
+            //    Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+
+            //    e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+            //};
+            settings.CellEditorInitialize = (s, e) =>
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.Dynamic;
+
+                if (e.KeyValue != null)
+                {
+                    if (e.Column.FieldName == "ItemName")
+                    {
+                        e.Editor.ReadOnly = true;
+                    }
+                }
+
+            };
+        });
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

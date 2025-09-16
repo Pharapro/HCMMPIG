@@ -1,0 +1,165 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+        settings =>
+        {
+            settings.Name = "Gridview";
+            settings.KeyFieldName = "EmpCode";
+            settings.EnableTheming = true;
+            settings.EnableRowsCache = true;
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsSearchPanel.Visible = true;
+            settings.CallbackRouteValues = new { Action = "GridItems", Controller = "ATGenerateMeal" };
+
+            settings.SettingsBehavior.ConfirmDelete = false;
+            settings.CommandColumn.Visible = true;
+
+            settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+            settings.Settings.ShowGroupPanel = false;
+            settings.Settings.ShowFooter = true;
+            settings.SettingsContextMenu.Enabled = true;
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.SettingsPopup.HeaderFilter.Height = 200;
+            settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+            settings.CommandColumn.Width = 50;
+
+            settings.Columns.Add(column =>
+            {
+                column.Visible = false;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PayPeriodId");
+                column.Width = 150;
+                column.FieldName = "PayPeriodId";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsTransfer");
+                column.Width = 100;
+                column.FieldName = "IsTransfer";
+                column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                column.Width = 130;
+                column.FieldName = "EmpCode";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+                column.PropertiesEdit.ClientInstanceName = "txtEmpCode";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+                column.Width = 170;
+                column.FieldName = "EmpName";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BreakFast");
+                column.Width = 100;
+                column.FieldName = "BreakFast";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BreakFastRate");
+                column.Width = 100;
+                column.FieldName = "BreakFastRate";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Lunch");
+                column.Width = 85;
+                column.FieldName = "Lunch";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LunchRate");
+                column.Width = 100;
+                column.FieldName = "LunchRate";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dinner");
+                column.Width = 85;
+                column.FieldName = "Dinner";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DinnerRate");
+                column.Width = 100;
+                column.FieldName = "DinnerRate";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTFood");
+                column.Width = 85;
+                column.FieldName = "OTFood";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTFoodRate");
+                column.Width = 100;
+                column.FieldName = "OTFoodRate";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.ReadOnly = true;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TotalAmount");
+                column.Width = 120;
+                column.FieldName = "Amount";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+            settings.SettingsExport.EnableClientSideExportAPI = true;
+            settings.SettingsExport.FileName = "Meal Report Before Transfer";
+            settings.Toolbars.Add(t =>
+            {
+                t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+            });
+
+            settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+            settings.PreRender = (s, e) =>
+            {
+
+            };
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.SettingsBehavior.AllowEllipsisInText = true;
+            settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+            settings.SettingsPager.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = false;
+            settings.SettingsPager.PageSize = 50;
+            //settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+            //settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 750;
+            //settings.SettingsText.PopupEditFormCaption = "Adjustment";
+        });
+    }
+@gridExtension.Bind(Model).GetHtml()

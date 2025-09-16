@@ -1,0 +1,156 @@
+﻿@model Humica.Training.TrainningObject
+
+@{
+
+    var gridBinding = Html.DevExpress().GridView(
+        settings =>
+        {
+            settings.Name = "GridExamItems";
+            settings.KeyFieldName = "ID";
+            settings.EnableTheming = true;
+            settings.EnableRowsCache = true;
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+            settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+            settings.SettingsEditing.BatchEditSettings.StartEditAction = DMSPRO.Models.DMSGridViewEditingHelper.BatchStartEditAction;
+            settings.CallbackRouteValues = new { Controller = "DDoExam", Action = "GridExamItems" };
+            //settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "PDI", Action = "BatchEditingUpdateModelEdit", id = ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID] };
+            settings.SettingsBehavior.AllowSort = false;
+
+            //settings.CallbackRouteValues = new { Controller = "Editing", Action = "BatchEditingPartial" };
+
+            settings.CommandColumn.Visible = false;
+
+            settings.CommandColumn.ShowDeleteButton = false;
+
+            settings.CommandColumn.ShowNewButtonInHeader = false;
+            settings.CommandColumn.ShowCancelButton = false;
+            settings.CommandColumn.ShowEditButton = false;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+            settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+
+            settings.Columns.Add(column =>
+            {
+
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+              ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "QuestionCode");
+                column.FieldName = "QuestionCode";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+                //column.CellStyle.BackColor = System.Drawing.Color.White;
+                column.GroupIndex = 0;
+                var textProperties = column.PropertiesEdit as TextEditProperties;
+                textProperties.Width = Unit.Percentage(100);
+            });
+
+
+
+
+            settings.Columns.Add(column =>
+            {
+
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+              ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Answer Code");
+                column.FieldName = "AnswerCode";
+                column.Width = 150;
+            });
+
+            settings.Columns.Add(column =>
+            {
+
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+              ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Answer");
+                column.Width = 450;
+                column.FieldName = "Description";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+                //column.CellStyle.BackColor = System.Drawing.Color.White;
+                var textProperties = column.PropertiesEdit as TextEditProperties;
+                textProperties.Width = Unit.Percentage(100);
+            });
+
+            settings.Columns.Add(column =>
+            {
+
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+              ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "CheckValue");
+                column.FieldName = "CheckValue";
+                column.PropertiesEdit.Style.HorizontalAlign = HorizontalAlign.Center;
+                column.ColumnType = MVCxGridViewColumnType.CheckBox;
+                var textProperties = column.PropertiesEdit as CheckBoxProperties;
+                textProperties.DisplayImageChecked.Url = Humica.Models.SY.SYIcon.CheckBoxChecked;
+                textProperties.DisplayImageChecked.Width = 32;
+                textProperties.DisplayImageChecked.Height = 32;
+
+                column.CellStyle.BackColor = System.Drawing.Color.White;
+
+
+                textProperties.DisplayImageUnchecked.Url = Humica.Models.SY.SYIcon.CheckBoxUnchecked;
+                textProperties.DisplayImageUnchecked.Width = 32;
+                textProperties.DisplayImageUnchecked.Height = 32;
+                //textProperties.ClientSideEvents.CheckedChanged = "checkChangeFail";
+                textProperties.CheckBoxFocusedStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+
+
+            });
+
+
+
+
+
+            //settings.ClientSideEvents.Init = "function(s, e){ SetButtonsVisibility(s); }";
+            //settings.ClientSideEvents.BatchEditStartEditing = "gridView_BatchEditStartEditing";
+            //settings.ClientSideEvents.BatchEditEndEditing = "gridView_BatchEditEndEditing";
+
+            settings.CellEditorInitialize = (s, e) =>
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.None;
+
+            };
+
+            //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            //settings.Settings.VerticalScrollableHeight = 530;
+            settings.SettingsPager.PageSize = 500;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.DataBinding = (sender, e) =>
+            {
+
+                MVCxGridView grid = (MVCxGridView)sender;
+
+                grid.ExpandAll();
+
+
+            };
+            settings.CellEditorInitialize = (sender, e) =>
+            {
+                if (
+                    e.Column.FieldName == "PDICode" ||
+                    e.Column.FieldName == "PDIDescription1" ||
+                    e.Column.FieldName == "IsRequired"
+                    )
+                {
+                    ASPxEdit editor = (ASPxEdit)e.Editor;
+                    editor.ValidationSettings.Display = Display.None;
+                    editor.ReadOnly = true;
+                }
+            };
+
+            settings.CustomJSProperties = (sender, e) =>
+            {
+                e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+            };
+
+        });
+
+    if (ViewData["EditError"] != null)
+    {
+        gridBinding.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+    }
+
+@gridBinding.Bind(Model.ListAnswer).GetHtml()

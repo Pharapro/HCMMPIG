@@ -1,0 +1,38 @@
+﻿
+@model Humica.Logic.LM.ESSComplainObject
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "EmpComplain";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            })
+             .SetNestedContent(() =>
+             {
+                 Html.DevExpress().MemoFor(i => i.Header.Description, s =>
+                 {
+                     s.Properties.ClientInstanceName = "txtDescription";
+                     s.ShowModelErrors = true;
+                     s.Height = 250;
+                     s.Width = Unit.Percentage(300);
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Properties.ValidationSettings.SetFocusOnError = true;
+                 }).Render();
+             });
+
+        });
+    }).GetHtml();
+
+}
+
+
+

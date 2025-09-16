@@ -1,0 +1,93 @@
+﻿@model Humica.Payroll.ClsPRPayroll
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnGenerate').click(function () {
+            if (selectedIDs.length > 0) {
+                ss = 4;
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Generate";
+            }
+            else {
+                alert("No data selected");
+            }
+        });
+         $('#_btnImport').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+     function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?Period=" + txtPeriod.GetValue();
+            }
+        }
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" +'/getEmpCode',
+            data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+
+    }
+</script>
+
+@Html.Partial("FTFilterEmployeeGen", Model)
+@{
+    if (Model.ListLog!=null)
+    {
+        Html.DevExpress().PageControl(settings =>
+        {
+            settings.Name = "pcScrollingMaterial1";
+            settings.Width = Unit.Percentage(100);
+
+            settings.EnableTabScrolling = true;
+            settings.TabAlign = TabAlign.Justify;
+            settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("List")).SetContent(() =>
+            {
+                Html.RenderPartial("GridItems", Model.ListEmployeeGen);
+            });
+
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Log")).SetContent(() =>
+            {
+                Html.RenderPartial("GridItemLog", Model.ListLog);
+            });
+        }).Render();
+    }
+    else
+    {
+        Html.RenderPartial("GridItems", Model.ListEmployeeGen);
+    }
+}

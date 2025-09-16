@@ -1,0 +1,149 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+        settings =>
+        {
+            settings.Name = "PDIWaitngGrid";
+            settings.KeyFieldName = "LineItem";
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRBookingCar" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRBookingCar", Action = "CreateItem" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRBookingCar", Action = "EditItem" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRBookingCar", Action = "DeleteItem" };
+            settings.SettingsBehavior.AllowSort = false;
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+
+            settings.SettingsContextMenu.Enabled = true;
+            settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.SettingsPopup.HeaderFilter.Height = 200;
+
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowCancelButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+                column.Width = 60;
+                column.FieldName = "LineItem";
+                column.ColumnType = MVCxGridViewColumnType.TextBox;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CarID");
+                column.Width = 170;
+                column.FieldName = "CarID";
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                textProperties.DataSource = ViewData["CARTypes_SELECT"];
+                textProperties.ValueField = "ID";
+                textProperties.TextField = "Description";
+                textProperties.TextFormatString = "{0}:{2}";
+                textProperties.DropDownStyle = DropDownStyle.DropDownList;
+                textProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 80);
+                textProperties.Columns.Add("AssetCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetCode"), 150);
+                textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+                textProperties.Columns.Add("PlateNumber", Humica.EF.Models.SY.SYSettings.getLabel("PlateNumber"), 100);
+                textProperties.Columns.Add("Horsepower", Humica.EF.Models.SY.SYSettings.getLabel("Horsepower"), 130);
+                textProperties.Columns.Add("Rate", Humica.EF.Models.SY.SYSettings.getLabel("Rate"), 80);
+                textProperties.ValueType = typeof(string);
+                textProperties.Width = Unit.Percentage(100);
+                textProperties.ClientSideEvents.SelectedIndexChanged = "FromAssetStaff";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HaveDriver");
+                column.FieldName = "HaveDriver";
+                column.Width = 100;
+                column.ColumnType = MVCxGridViewColumnType.CheckBox;
+                var checkBoxProperties = column.PropertiesEdit as CheckBoxProperties;
+                checkBoxProperties.ClientInstanceName = "txtHaveDriver";
+                checkBoxProperties.ClientSideEvents.ValueChanged = "function(s, e) { ToggleDriverCombo(s, e); }";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 130;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BookingDate");
+                column.FieldName = "BookingDate";
+                column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                var textProperties = column.PropertiesEdit as DateEditProperties;
+                textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                textProperties.EditFormat = EditFormat.Date;
+                textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartTime");
+                column.FieldName = "StartTime";
+                column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndTime");
+                column.FieldName = "EndTime";
+                column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Driver");
+                column.Width = 200;
+                column.FieldName = "DriverCode";
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                textProperties.DataSource = ViewData["Driver_SELECT"];
+                textProperties.ValueField = "DriverCode";
+                textProperties.TextField = "DriverName";
+                textProperties.TextFormatString = "{0}:{1}";
+                textProperties.DropDownStyle = DropDownStyle.DropDownList;
+                textProperties.Columns.Add("DriverCode", Humica.EF.Models.SY.SYSettings.getLabel("DriverCode"), 120);
+                textProperties.Columns.Add("DriverName", Humica.EF.Models.SY.SYSettings.getLabel("DriverName"), 200);
+                textProperties.ValueType = typeof(string);
+                textProperties.Width = Unit.Percentage(100);
+                textProperties.ClientInstanceName = "txtDriver";
+                textProperties.ClientSideEvents.Init = "function(s, e) { ToggleDriverComboOnInit(s, e); }";
+            });
+            settings.SettingsSearchPanel.Visible = false;
+            settings.ClientSideEvents.EndCallback = "EndCallBack";
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.SettingsPager.PageSize = 50;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+
+            settings.CustomJSProperties = (sender, e) =>
+            {
+                e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+            };
+
+            settings.CellEditorInitialize = (s, e) =>
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.Dynamic;
+
+                if (e.Column.FieldName == "LineItem")
+                {
+                    editor.ValidationSettings.Display = Display.None;
+                    editor.ReadOnly = true;
+                    editor.Value = -1;
+                }
+            };
+        });
+
+    if (ViewData["EditError"] != null)
+    {
+        gridExtension.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@gridExtension.Bind(Model).GetHtml()

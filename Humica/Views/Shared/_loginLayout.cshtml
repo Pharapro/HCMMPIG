@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Sites.css")" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content("~/Content/query-screen.css")" rel="stylesheet" type="text/css" />*@
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootstrap.min.css")" />
+
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+    <script>
+        var __nav = window.navigator;
+        var __screen = window.screen;
+        var __guid = __nav.mimeTypes.length;
+        __guid += __nav.userAgent.replace(/\D+/g, '');
+        __guid += __nav.plugins.length;
+        __guid += __screen.height || '';
+        __guid += __screen.width || '';
+        __guid += __screen.pixelDepth || '';
+        $(document).ready(function () {
+            //  txtUnique.SetValue(__guid);
+        });
+    </script>
+</head>
+<body>
+
+    <div class="login_bg" style="background-image: url('@Humica.EF.Models.SY.SYConstant.GetFlashRandomFile()'); ">
+        <img id="login_bg_image" src="" />
+
+    </div>
+    <div class="login_panel">
+        @Html.DevExpress().Panel(settings => { settings.Name = "MainPane"; settings.ControlStyle.CssClass = "mainContentPane"; settings.SetContent(RenderBody().ToHtmlString()); }).GetHtml()
+    </div>
+</body>
+</html>

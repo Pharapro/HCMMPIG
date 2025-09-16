@@ -1,0 +1,134 @@
+﻿@model Humica.Logic.CF.CFAnnouncementObject
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridViewList";
+        settings.KeyFieldName = "ID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Percentage(100);
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.CallbackRouteValues = new { Controller = "HRAnnouncement", Action = "GridItem" };
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Description";
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            column.FixedStyle = GridViewColumnFixedStyle.Left;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Message";
+            column.Width = 300;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Message");
+        });
+
+        settings.Columns.Add(column =>
+        {
+
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Document");
+
+            column.Width = 300;
+            column.FieldName = "AttachFile";
+
+            column.SetDataItemTemplateContent(container =>
+            {
+
+                var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "AttachFile"));
+                var document = Convert.ToString(DataBinder.Eval(container.DataItem, "Document"));
+
+                if (!(attachment == null || attachment == ""))
+                {
+                    string[] doc = attachment.Split(';');
+                    string[] docum = document.Split(';');
+
+                    {
+                        int i = 1;
+                        foreach (var r in docum)
+                        {
+                            if (r != "")
+                            {
+                                int j = 1;
+                                foreach (var r1 in doc)
+                                {
+                                    if (r1 != "" && i == j)
+                                    {
+                                        Html.DevExpress().HyperLink(hyperlink =>
+                                        {
+                                            hyperlink.Name = "file_" + i + container.VisibleIndex;
+                                            hyperlink.Properties.Text = r + " | ";
+                                            hyperlink.Properties.Target = "_BLANK";
+                                            hyperlink.NavigateUrl = r1;
+                                        }).Render();
+                                    }
+                                    j++;
+                                }
+                            }
+                            i++;
+                        }
+                    }
+
+                }
+            });
+
+        });
+
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh - 150;
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSize = 20;
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+
+            }
+        };
+        settings.ClientSideEvents.RowDblClick = "DbRowClick";
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListHeader).GetHtml()

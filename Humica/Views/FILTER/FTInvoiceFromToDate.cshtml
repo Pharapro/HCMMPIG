@@ -1,0 +1,89 @@
+﻿@model Humica.Logic.OP.OPInvoiceObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 150;
+
+    settings.Items.AddGroupItem(m => Model.Filter, g =>
+    {
+        g.ColCount = 4;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "FromDate");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => Model.Filter.FromDate, s =>
+                {
+                    s.Width = width;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                }).Render();
+            });
+
+        g.Items
+      .Add(m =>
+      {
+          m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+  )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ToDate");
+
+      })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().DateEditFor(i => Model.Filter.ToDate, s =>
+              {
+                  s.Width = width;
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+                  s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              }).Render();
+          });
+
+       
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "";
+
+})
+  .SetNestedContent(() =>
+  {
+
+      Html.DevExpress().Button(
+          s =>
+          {
+              s.Name = "_btnRunReport";
+              s.ToolTip = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+              s.RenderMode = ButtonRenderMode.Button;
+              s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+              s.UseSubmitBehavior = true;
+              s.Images.Image.IconID = IconID.ActionsApply16x16;
+          }).GetHtml();
+  });
+
+    });
+
+}).Bind(Model).GetHtml()

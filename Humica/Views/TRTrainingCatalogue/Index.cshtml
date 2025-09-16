@@ -1,0 +1,206 @@
+﻿@model Humica.Training.TrainingProcessObject
+@using Humica.EF
+<script type="text/javascript">
+     $(document).ready(function () {
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;', OnGetRowValues);
+        });
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;', OnGetRowValues);
+        });
+        $('#_btnNewAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Import";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;', OnGetRowValues);
+        });
+    });
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TrainNo;', OnGetRowValues);
+
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details/" + values[0];
+        }
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit/" + values[0];
+        }
+        if (ss == 4) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+    }
+    function _clickConfirm(s, e)
+    {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK")
+        {
+            if (ss == 4)
+            {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?TrainNo=" + selectedIDs;
+            }
+        }
+    }
+</script>
+@Html.Partial("PartialList", Model.ListModelTRTrainingCatalogue)
+@*@{
+        var gridExtension = Html.DevExpress().GridView(
+               settings =>
+               {
+                   settings.Name = "GridViewList";
+                   settings.KeyFieldName = "TrainNo";
+
+                   settings.Width = Unit.Percentage(100);
+
+                   settings.CallbackRouteValues = new { Action = "PartialList", Controller = "TRTrainingCatalogue" };
+                   settings.SettingsSearchPanel.Visible = true;
+                   settings.SettingsBehavior.ConfirmDelete = true;
+                   settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+                   settings.Settings.ShowGroupPanel = false;
+                   settings.Settings.ShowFooter = true;
+                   settings.SettingsSearchPanel.Visible = true;
+                   settings.SettingsContextMenu.Enabled = true;
+                   settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+                   settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+                   settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+                   settings.Settings.ShowHeaderFilterButton = true;
+                   settings.SettingsPopup.HeaderFilter.Height = 200;
+                   settings.Columns.Add(column =>
+                   {
+                       column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainNo");
+                       column.Width = 200;
+                       column.FieldName = "TrainNo";
+                       column.Visible = false;
+                   });
+                   settings.Columns.Add(column =>
+                   {
+                       column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("In Year");
+                       column.Width = 200;
+                       column.FieldName = "InYear";
+                   });
+                   settings.Columns.Add(column =>
+                   {
+                       column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                       column.Width = 200;
+                       column.FieldName = "Description";
+                   });
+                   settings.Columns.Add(column =>
+                   {
+                       column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Course");
+                       column.Width = 200;
+                       column.FieldName = "TotalCourse";
+                   });
+
+
+                   settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+                   settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+                   settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+                   settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+                   settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+                   //settings.CustomJSProperties = (s, e) =>
+                   //{
+                   //    ASPxGridView grid = (ASPxGridView)s;
+                   //    var result = new System.Collections.Hashtable();
+                   //    foreach (var col in grid.AllColumns)
+                   //    {
+                   //        var dataCol = col as GridViewDataColumn;
+                   //        if (dataCol != null)
+                   //        {
+                   //            var visible = "T";
+                   //            if (dataCol.Visible == false)
+                   //            {
+                   //                visible = "F";
+                   //            }
+                   //            result[dataCol.FieldName] = new Dictionary<string, object>() {
+                   //                 {"fieldName",dataCol.FieldName},
+                   //                 {"caption",dataCol.Caption},
+                   //                 { "sortIndex", dataCol.SortIndex },
+                   //                 { "sortOrder", dataCol.SortOrder },
+                   //                 { "groupIndex", dataCol.GroupIndex },
+                   //                 { "width", dataCol.Width },
+                   //                 { "visibleIndex", dataCol.VisibleIndex },
+                   //                 { "visible", visible },
+                   //                 {"filter", dataCol.FilterExpression},
+                   //                    };
+                   //        }
+                   //    }
+
+                   //    e.Properties["cpColumnsProp"] = result;
+
+                   //    if (ViewData[Humica.EF.SYSConstant.SCREEN_ID] != null)
+                   //    {
+                   //        Session[Humica.EF.SYSConstant.GRID_SEARCH_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.SearchPanelFilter;
+                   //        Session[Humica.EF.SYSConstant.SESSION_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.FilterExpression;
+
+                   //        Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = result;
+                   //        Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+                   //    }
+
+
+
+                   //};
+
+                   //settings.PreRender = (sender, e) =>
+                   //{
+                   //    if (Session[Humica.EF.SYSConstant.GRID_SEARCH_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] != null)
+                   //    {
+                   //        ASPxGridView grid = (ASPxGridView)sender;
+                   //        grid.SearchPanelFilter = Session[Humica.EF.SYSConstant.GRID_SEARCH_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()].ToString();
+                   //    }
+                   //    if (Session[Humica.EF.SYSConstant.SESSION_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] != null)
+                   //    {
+                   //        ASPxGridView grid = (ASPxGridView)sender;
+                   //        grid.FilterExpression = Session[Humica.EF.SYSConstant.SESSION_FILTER + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()].ToString();
+                   //    }
+                   //};
+
+
+                   settings.ClientSideEvents.RowDblClick = "DbRowClick";
+
+                   settings.SettingsPager.Position = PagerPosition.Bottom;
+                   settings.SettingsPager.FirstPageButton.Visible = true;
+                   settings.SettingsPager.LastPageButton.Visible = true;
+
+
+
+                   settings.SettingsBehavior.AllowFocusedRow = true;
+                   settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+                   settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+                   settings.Settings.ShowHeaderFilterButton = true;
+                   settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh - 150;
+                   settings.SettingsPager.PageSize = 200;
+                   settings.SettingsPager.EnableAdaptivity = true;
+                   settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+                   settings.SettingsExport.EnableClientSideExportAPI = true;
+                   settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+
+
+                   settings.SettingsBehavior.AllowEllipsisInText = true;
+                   settings.SettingsPager.PageSizeItemSettings.Visible = true;
+                   settings.SettingsPager.PageSize = 10;
+
+
+                   settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+               });
+
+
+    }
+    @gridExtension.Bind(Model.ListModelTRTrainingCatalogue).GetHtml()*@
+

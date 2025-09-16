@@ -1,0 +1,108 @@
+﻿@model Humica.EForm.IClsEFEmpPortal
+<style>
+    .table-section thead > tr > th {
+        background: #00a94f;
+        color: white;
+    }
+
+    .text-indent {
+        text-indent: 25px;
+    }
+
+    .text-body {
+        font-weight: normal;
+    }
+
+    h6, p, label {
+        font-family: 'Kh Battambang';
+        color: darkslategray;
+        font-size: 14px;
+    }
+</style>
+<div class="container-fluid" style="margin-top:20px">
+    @{
+        bool isReadOnly = false;
+        if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+        {
+            isReadOnly = true;
+        }
+    }
+    @{
+        int line = 1;
+    }
+    @foreach (var q in Model.ListSelfAssItem.OrderBy(w => w.InOrder).ToList())
+    {
+        string Question = q.QuestionCode + ". " + q.Description1;
+        string name = "rate" + line;
+        string _Comment = "";
+        var _Listcheck = Model.ListItem.FirstOrDefault(w => w.QuestionCode == q.QuestionCode);
+        if (_Listcheck != null)
+        {
+            _Comment = _Listcheck.Comment;
+        }
+
+        <table class="table table-section table-striped">
+            <tr>
+                <th style="width: 40%;">
+                    @if (q.IsRequired == true)
+                    {
+                        <p>@Question <span class="text-danger">*</span></p>
+                    }
+                    else
+                    {
+                        <p> @Question </p>
+                    }
+                    @if (q.IsQCM == true)
+                    {
+                        <p>@q.Description2</p>
+                        foreach (var QCM in Model.ListSelfAssQCM.Where(w => w.QuestionCode == q.QuestionCode).OrderBy(w => w.InOrder).ToList())
+                        {
+                            string strCheck = "";
+                            string value = q.QuestionCode + "_" + QCM.LineItem.ToString();
+                            var _check = Model.ListItem.Where(w => w.QuestionCode == q.QuestionCode && w.CorrectValue == QCM.LineItem.ToString()).ToList();
+                            if (_check.Count() > 0)
+                            {
+                                strCheck = "checked";
+                            }
+                            if (isReadOnly)
+                            {
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="form-check-input" type="radio" name="@name" @strCheck onclick="return false" id="@value" value="@value">
+                                    <label style="font-weight:400" class="custom-control-label" for="@value" onclick="return false">@QCM.Description</label>
+                                </div>
+                                if (QCM.IsRequiredComment == true)
+                                {
+                                    <textarea class="form-control" placeholder="@_Comment" id="contactChoice5" readonly></textarea>
+                                }
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="form-check-input" type="radio" name="@name" @strCheck onclick="CheckValue($(this).val(),'@q.QuestionCode')" id="@value" value="@value">
+                                    <label style="font-weight:400" class="custom-control-label" for="@value" onclick="CheckValue($(this).val(),'@q.QuestionCode')">@QCM.Description</label>
+                                </div>
+                                if (QCM.IsRequiredComment == true)
+                                {
+                                    <textarea placeholder="Comment" class="form-control" onkeyup="CommentValue($(this).val(),'@q.QuestionCode')" id="contactChoice5">@_Comment</textarea>
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        if (isReadOnly)
+                        {
+                            <textarea class="form-control" placeholder="@_Comment" id="contactChoice5" readonly></textarea>
+                        }
+                        else
+                        {
+                            <textarea placeholder="Comment" class="form-control" onkeyup="CommentValue($(this).val(),'@q.QuestionCode')" id="contactChoice5">@_Comment</textarea>
+                        }
+                    }
+                </th>
+            </tr>
+        </table>
+        line++;
+    }
+</div>

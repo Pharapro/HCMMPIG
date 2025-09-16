@@ -1,0 +1,334 @@
+﻿@model Humica.Logic.LM.ClaimLeaveObject
+
+<script type="text/javascript">
+    var status = "@Model.Header.Status";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+        $('#_bthEditAction').click(function () {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+         });
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnApprove") {
+            ss = 6;
+            if (!(status == "@Humica.EF.SYDocumentStatus.CANCELLED.ToString()" || status == "@Humica.EF.SYDocumentStatus.REJECTED.ToString()" ||
+                status == "@Humica.EF.SYDocumentStatus.APPROVED.ToString()")) {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("APPROVE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (e.item.name == "_mnReject") {
+            ss = 7;
+            if (status != "@Humica.EF.SYDocumentStatus.APPROVED.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REJECT_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                 }
+                else {
+                    AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                }
+        }
+        if (e.item.name == "_mnCancel") {
+            ss = 8;
+            if (!(status == "@Humica.EF.SYDocumentStatus.CANCELLED.ToString()" || status == "@Humica.EF.SYDocumentStatus.REJECTED.ToString()")) {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+               window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "RequestForApproval?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            if (ss == 6) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Approve?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            if (ss == 7) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Reject?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+             if (ss == 8) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Cancel?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "MaterialCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.EmpCode, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtAllName";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.AllName, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtAllName";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmployeeType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.EmployeeType, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtEmpType";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Division");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.Division, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtDivision";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.Department, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtDepartment";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Section");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.Section, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtSection";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Level");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.Level, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtLevel";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.HeaderStaff.Position, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtPosition";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.HeaderStaff.StartDate, s =>
+            {
+                s.Properties.ClientInstanceName = "txtStartDate";
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+}).GetHtml()
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "DetailsClaimInfor";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Claim Information")).SetContent(() =>
+    {
+        Html.DevExpress().FormLayout(s1 =>
+        {
+            s1.Name = "ClaimLeaveInforDetails";
+            s1.AlignItemCaptionsInAllGroups = true;
+
+            s1.Items.AddGroupItem(m => Model.Header, g =>
+            {
+                g.ColCount = 2;
+                g.GroupBoxDecoration = GroupBoxDecoration.None;
+                g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Date");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().DateEditFor(i => i.Header.WorkingDate, s =>
+                    {
+                        s.ReadOnly = true;
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                    }).Render();
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Type");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.WorkingType, s =>
+                    {
+                        s.ReadOnly = true;
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextField = "SelectText";
+                        s.Properties.ValueField = "SelectValue";
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    }).BindList(ViewData["WORKINGTYPE_SELECT"]).Render();
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Claim to Leave Type");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.ClaimLeave, s =>
+                    {
+                        s.ReadOnly = true;
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.TextField = "Description";
+                        s.Properties.ValueField = "Code";
+                        s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+                        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    }).BindList(ViewData["LEAVETYPE_SELECT"]).Render();
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Hour");
+                })
+                    .SetNestedContent(() =>
+                    {
+                        Html.DevExpress().SpinEditFor(i => i.Header.WorkingHour, s =>
+                        {
+                            s.ReadOnly = true;
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.Properties.ValidationSettings.SetFocusOnError = true;
+                            s.Properties.ValidationSettings.ErrorText = "*";
+                            s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                        }).Render();
+                    });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                    m.ColumnSpan = 2;
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().TextBoxFor(i => i.Header.Remark, s =>
+                    {
+                        s.ReadOnly = true;
+                        s.Width = Unit.Percentage(100);
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                    }).Render();
+                });
+            });
+        }).GetHtml();
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("ApprovalDetail")).SetContent(() =>
+    {
+        Html.RenderPartial("GridApprovalDetail", Model.ListApproval);
+    });
+}).GetHtml()

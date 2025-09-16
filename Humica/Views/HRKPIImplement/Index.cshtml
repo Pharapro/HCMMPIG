@@ -1,0 +1,367 @@
+﻿<script type="text/javascript">
+    var index;
+    var ID = "";
+    var ss;
+    var selectedIDs = "";
+    var Status = "";
+    var KPI = "";
+    $(document).ready(function () {
+
+        //$("#_btnImplement").hide();
+        $("#_btnNewAction").hide();
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewItem.GetRowValues(GridViewItem.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'AssignCode;Status', OnGetRowValues);
+        });
+
+        $('#_btnNewAction').click(function () {
+            //ss = 5;
+            //GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+        $('#_btnImportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        })
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'AssignCode;Status', OnGetRowValues);
+        });
+        @*$('#_btnKPIRecord').click(function () {
+            ss = 5;
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "?id=" + selectedIDs;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'AssignCode;ID', OnGetRowValues);
+
+        })*@
+        $('#_btnGenerate').click(function () {
+            ss = 6;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'AssignCode;Status', OnGetRowValues);
+            //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        });
+        $('#_btnImplement').click(function () {
+            ss = 7;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewItem.GetRowValues(GridViewItem.GetFocusedRowIndex(), 'AssignCode;Status', OnGetRowValues);
+        });
+
+        $('#_btnKPIRecord').click(function () {
+            ss = 8;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'AssignCode;Status', OnGetRowValues);
+        });
+        $('#_mnClose').click(function () {
+            ss = 9;
+            if (ID == 0)
+                GridViewCompeled.GetRowValues(GridViewCompeled.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+            else
+                GridViewItem.GetRowValues(GridViewItem.GetFocusedRowIndex(), 'AssignCode;TotalAchievement;TotalScore;Status', OnGetRowValues);
+        });
+
+         @{
+//if (Model.ListWorkProcess == null)
+//{
+//    if (Model.ListWorkProcess.Count == 0)
+//    {
+//        //if (Model.Filter.DocType != null)
+//        //{
+//        ViewContext.Writer.Write("pcScrollingAssetClass.SetActiveTab(pcScrollingAssetClass.GetTab(0));");
+//        //}
+//    }
+
+//}
+         }
+
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'AssignCode;ItemCode;Status', OnGetRowValues);
+    }
+    function DbRowClick_(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'AssignCode;', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+
+        selectedID1 = values[0];
+        KPI = values[1];
+        Status = values[1];
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + values[0] + "&KPI=" + KPI;
+        }
+        if (ss == 2) {
+            if (Status != "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                  AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                  return;
+            }
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + values[0];
+        }
+        if (ss == 4) {
+             if (Status != "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                  AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                  return;
+            }
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 5) {
+            if (selectedIDs == null) {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Calculate?id=" + selectedID1;
+        }
+        if (ss == 6) {
+            if (selectedIDs == null || values[1]!="@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("KPI_ERR_", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Generate?id=" + selectedID1;
+        }
+        if (ss == 7) {
+            if (selectedIDs == null || values[1] == "@Humica.EF.SYDocumentStatus.CLOSED.ToString()") {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("KPI_ERR_", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Implement?id="+selectedID1;
+        }
+        if(ss==8){
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "KPIRecord?id=" + selectedIDs;
+        }
+        if (ss == 9) {
+            if (selectedIDs == null && values[3] != "@Humica.EF.SYDocumentStatus.RELEASED.ToString()") {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("KPI_ERR_", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            } else if (values[1] <= 0 || values[2] <= 0) {
+                 AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("PMT_NE", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            selectedIDs = values[0];
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("WI_ERR", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?id=" + selectedID1;
+            }
+            if (ss == 9) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "CloseTheDoc?id=" + selectedIDs + "&&index=" + index;
+            }
+
+        }
+    }
+    function tabClickCommand1(s, e) {
+        index = s.GetActiveTab().index;
+        if (index == 0) {
+            ID = 0;
+        }
+        else {
+            ID = 1;
+        }
+        //if (index == 1) {
+
+        //    type = "List";
+        //    GridViewItem.Refresh();
+        //    $("#_bthEditAction").hide();
+        //    $("#_btnDeleteAction").hide();
+        //    $('#_btnImageView').hide();
+        //    $('#_btnCalculate').hide();
+        //    $('#_btnGenerate').hide();
+        //    $('#_btnKPIRecord').hide();
+        //    $('#_btnImplement').show();
+        //    $('#_mnClose').show();
+        //}
+        //else  {
+        //    GridViewList.Refresh();
+        //    $("#_bthEditAction").show();
+        //    $("#_btnDeleteAction").show();
+           
+        //    $('#_btnImageView').show();
+        //    $('#_btnCalculate').show();
+        //    $('#_btnGenerate').show();
+        //    $('#_btnKPIRecord').show();
+        //    $('#_btnImplement').hide();
+        //    type = "Pending";
+        //}
+    }
+
+</script>
+@model Humica.Performance.CLsKPIAssign
+
+<div class="fitler-doc">
+
+    @*@Html.Partial("~/Views/FILTER/FTGenernalSparepartarget.cshtml", Model)*@
+
+    @*@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+    int width = 110;
+    settings.Items.AddGroupItem(m => Model.Filter, g =>
+    {
+        g.ColCount = 6;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "FromDate");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => Model.Filter.FromDate, s =>
+                {
+                    s.Width = width;
+                    s.Properties.ClientInstanceName = "cboYear";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    //s.Properties.TextField = "SelectText";
+                    //s.Properties.ValueField = "SelectValue";
+                    //s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    //      ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "_SELECT"); ;
+                }).Render();
+            });
+
+        g.Items
+      .Add(m =>
+      {
+          m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+  )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "FromMonth");
+
+      })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().DateEditFor(i => Model.Filter.ToDate, s =>
+              {
+                  s.Width = width;
+                  s.Properties.ClientInstanceName = "cboFromMonth";
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+                  s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                  s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+              }).Render();
+          });
+
+
+        g.Items
+    .Add(m =>
+    {
+        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Status");
+
+    })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.Status, s =>
+            {
+                s.Width = width;
+                s.Properties.ClientInstanceName = "cboStatus";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "SelectValue";
+                s.Properties.TextField = "SelectText";
+                //s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                //s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+            }).BindList(ViewData["STATUS_APPROVAL"]).Render();
+        });
+
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "";
+
+})
+  .SetNestedContent(() =>
+  {
+
+      Html.DevExpress().Button(
+          s =>
+          {
+              s.Name = "_btnRunReport";
+              s.ToolTip = "Go";
+              s.RenderMode = ButtonRenderMode.Button;
+              s.Text = "Go";
+              s.UseSubmitBehavior = true;
+              s.Images.Image.IconID = IconID.ActionsApply16x16;
+          }).GetHtml();
+  });
+
+    });
+
+}).Bind(Model).GetHtml()*@
+
+
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingAssetClass";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+    settings.ClientSideEvents.Init = "tabClickCommand1";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+     )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Task Completed")).SetContent(() =>
+     {
+         Html.RenderPartial("PartialListCompeled", Model.ListTaskCompleted);
+     });
+    //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    //    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+    //    {
+    //        //        Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListWorkProcess);
+    //    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Responsible List")).SetContent(() =>
+   {
+       Html.RenderPartial("PartialListProcess", Model.ListTaskPending);
+
+   });
+}).GetHtml()
+    
+    @*else
+    {
+        Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListWorkProcess);
+    }*@
+</div>

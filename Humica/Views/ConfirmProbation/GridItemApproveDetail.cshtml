@@ -1,0 +1,126 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItem13";
+           settings.KeyFieldName = "ID";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "ConfirmProbation", Action = "GridItemApproveD" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ConfirmProbation", Action = "CreateApprover" };
+           //settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ConfirmProbation", Action = "EditTrainingRating" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ConfirmProbation", Action = "DeleteApprover" };
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.CommandColumn.ButtonType = GridCommandButtonRenderMode.Image;
+           settings.SettingsCommandButton.NewButton.Image.Url = Humica.Models.SY.SYIcon.GridNew;
+           settings.SettingsCommandButton.EditButton.Image.Url = Humica.Models.SY.SYIcon.GridEdit;
+           settings.SettingsCommandButton.DeleteButton.Image.Url = Humica.Models.SY.SYIcon.GridDelete;
+           settings.SettingsCommandButton.UpdateButton.Image.Url = Humica.Models.SY.SYIcon.GridUpdate;
+           settings.SettingsCommandButton.CancelButton.Image.Url = Humica.Models.SY.SYIcon.GridCancel;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Approver");
+               column.FieldName = "Approver";
+           });
+
+           
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproverName");
+               column.FieldName = "ApproverName";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproveLevel");
+               column.FieldName = "ApproveLevel";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+               column.FieldName = "Status";
+
+           });
+
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Approver")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+<style>
+    #gridViewItem1_DXCBtn0{
+        opacity:0;
+    }
+</style>
+
+<script>
+   
+</script>

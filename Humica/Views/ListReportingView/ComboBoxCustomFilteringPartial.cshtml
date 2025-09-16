@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().ComboBox(settings =>
+{
+    settings.Name = "cmbWithServerFiltering";
+    settings.Width = Unit.Percentage(100);
+    settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    settings.Properties.ValueField = "EmpCode";
+    settings.Properties.TextFormatString = "{0}";
+    settings.CallbackRouteValues = new { Controller = "LoadingList", Action = "ComboBoxCustomFilteringPartial" };
+    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    settings.Properties.Columns.Add(column =>
+    {
+        column.FieldName = "EmpCode";
+        column.Width = Unit.Pixel(250);
+    });
+    settings.Properties.Columns.Add(column =>
+    {
+        column.FieldName = "AllName";
+        column.Width = Unit.Pixel(100);
+    });
+    settings.CustomFiltering += (s, e) =>
+    {
+        string[] words = e.Filter.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] columns = new string[] { "AllName", "EmpCode" };
+        e.FilterExpression = DevExpress.Data.Filtering.GroupOperator.And(words.Select(w =>
+            DevExpress.Data.Filtering.GroupOperator.Or(
+                columns.Select(c =>
+                    new DevExpress.Data.Filtering.FunctionOperator(DevExpress.Data.Filtering.FunctionOperatorType.Contains, new DevExpress.Data.Filtering.OperandProperty(c), w)
+                )
+            )
+        )).ToString();
+        e.CustomHighlighting = columns.ToDictionary(c => c, c => words);
+    };
+}).BindList(Model).GetHtml()

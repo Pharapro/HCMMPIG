@@ -1,0 +1,42 @@
+﻿@model Humica.Logic.RCM.IClsRCMApplicant
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function SelectVac(s, e) {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowData();
+    }
+    function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/RCM/RCMApplicant/ShowData',
+            data: { 'Code': selectedIDs, 'Action': 'Edit' },
+            success: function (data) {
+                if (data.MS == "@Humica.EF.SYSConstant.OK") {
+
+                    txtBranch.SetValue(data.Branch);
+                    txtPosition.SetValue(data.Post);
+                    txtDept.SetValue(data.Dept);
+                    txtWorkingType.SetValue(data.WorkType);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+</script>
+
+@Html.Partial("ApplicantInfor", Model)
+

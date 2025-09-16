@@ -1,0 +1,117 @@
+<div class="row" id="_messageAlert">
+
+    <div class="col-md-12" style="padding-left:15px">
+        @{
+
+
+            Humica.EF.Models.SY.SYMessages obj = (Humica.EF.Models.SY.SYMessages)ViewData[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT];
+
+            if (obj == null)
+            {
+                obj = (Humica.EF.Models.SY.SYMessages)Session[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT];
+
+                if (obj == null)
+                {
+
+                    if (Session[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT] != null)
+                    {
+                        Html.DevExpress().TextBox(settings =>
+                        {
+
+                            settings.Height = 10;
+                            settings.EncodeHtml = false;
+                            settings.Text = Session[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT].ToString();
+                        }).GetHtml();
+                    }
+                    if (ViewData[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT] != null)
+                    {
+                        Html.DevExpress().TextBox(settings =>
+                        {
+
+                            settings.Height = 10;
+                            settings.EncodeHtml = false;
+                            settings.Text = ViewData[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT].ToString();
+                        }).GetHtml();
+                    }
+
+
+                }
+
+            }
+
+
+
+
+            if (obj != null)
+            {
+
+
+
+                ViewContext.Writer.Write("<div class='" + obj.MessageClass + "'>");
+
+                Html.DevExpress().Label(settings =>
+                {
+                    settings.Height = 10;
+                    settings.EncodeHtml = false;
+                    settings.Text = "";
+                    settings.Text = obj.Description + " ";
+                    settings.ControlStyle.ForeColor = obj.Color;
+                }).GetHtml();
+
+                if (!(obj.DocumentNumber == "" || obj.DocumentNumber == null))
+                {
+
+                    if (obj.NavigationUrl == "" || obj.NavigationUrl == null)
+                    {
+                        Html.DevExpress().Label(settings =>
+                        {
+                            settings.Height = 10;
+                            settings.EncodeHtml = false;
+                            settings.ControlStyle.ForeColor = obj.Color;
+                            settings.Text = ":" + obj.DocumentNumber;
+                            settings.ControlStyle.ForeColor = obj.Color;
+                        }).GetHtml();
+                    }
+                    else
+                    {
+                        Html.DevExpress().HyperLink(settings =>
+                        {
+                            settings.Height = 10;
+                            settings.EncodeHtml = false;
+                            settings.NavigateUrl = obj.NavigationUrl;
+                            settings.ControlStyle.ForeColor = obj.Color;
+                            settings.Properties.Text = ":" + obj.DocumentNumber + "";
+                            settings.ControlStyle.ForeColor = obj.Color;
+                        }).GetHtml();
+                    }
+
+                }
+                Session[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT] = null;
+
+                ViewContext.Writer.Write("<div style='float:right;margin-top:-5px;'> ");
+                Html.DevExpress().Button(
+                                        settings =>
+                                        {
+                                            settings.Name = "_CloseMSg";
+                                            settings.Text = "";
+                                            settings.ClientSideEvents.Click = "_btnHideMsg";
+                                            settings.ControlStyle.Font.Size = 12;
+                                            settings.ControlStyle.Font.Bold = true;
+                                            settings.Images.Image.Url = Humica.EF.Models.SY.SYUrl.getBaseUrl() + "/Content/Images/close.svg";
+                                            settings.Images.Image.Width = Unit.Pixel(16);
+                                            settings.Images.Image.Height = Unit.Pixel(16);
+                                            settings.ControlStyle.BackColor = System.Drawing.Color.Transparent;
+                                            settings.ControlStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml("#494949");
+                                            settings.UseSubmitBehavior = false;
+                                        }).Render();
+                ViewContext.Writer.Write("</div>");
+            }
+
+        }
+    </div>
+    </div>
+    
+
+    
+
+</div>

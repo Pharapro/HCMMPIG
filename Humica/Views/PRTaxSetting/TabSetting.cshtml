@@ -1,0 +1,121 @@
+﻿@model Humica.Payroll.IClsPRTaxSetting
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "General";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(80);
+    // Tax Deduction
+    settings.Items.AddGroupItem(m => Model.PayrollSetting, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Tax Deduction");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.ColumnCount = 3;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BaseCurrency");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.PayrollSetting.BaseCurrency, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValidationSettings.Display = Display.None;
+                s.Properties.ClientInstanceName = "CurrencyCode";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.TextField = "CurrencyCode";
+                s.Properties.ValueField = "CurrencyCode";
+                s.Properties.Columns.Add("CurrencyCode", Humica.EF.Models.SY.SYSettings.getLabel("CurrencyCode"));
+            }).BindList(ViewData["SELECT_CURRENCY"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Spouse");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.PayrollSetting.Spouse, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N2";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Child");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.PayrollSetting.Child, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "N2";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TaxBase");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.PayrollSetting.TaxBase, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValidationSettings.Display = Display.None;
+                s.Properties.ClientInstanceName = "Code";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.TextField = "Code";
+                s.Properties.ValueField = "Code";
+                s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            }).BindList(ViewData["SELECT_TAXBASE"]).Render();
+        });
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("parent");
+        //})
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().SpinEditFor(i => i.PayrollSetting.parent, s =>
+        //    {
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.DisplayFormatString = "N2";
+        //        s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        //    }).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Personal Income Tax");
+        //})
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().SpinEditFor(i => i.PayrollSetting.PersonalIncomeTax, s =>
+        //    {
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.DisplayFormatString = "N2";
+        //        s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        //    }).Render();
+        //});
+
+    });
+}).GetHtml()
+

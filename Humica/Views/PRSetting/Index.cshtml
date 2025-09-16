@@ -1,0 +1,42 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var isvisible = true;
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+    function chkIsTax_CheckedChanged(s, e) {
+        var _bool = false;
+        _bool = s.GetChecked();
+        txtSeniorityException.SetEnabled(_bool);
+    }
+    function Init()
+    {
+        txtSeniorityException.SetEnabled(chkIsTax.GetChecked());
+    }
+</script>
+
+@model Humica.Logic.MD.MDSetting
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "GCreate";
+        settings.Width = Unit.Percentage(90);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.ClientSideEvents.Init = "Init";
+        //General
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "SETTING")).SetContent(() =>
+        {
+            @Html.RenderPartial("General", Model.ListHRSetting);
+        });
+    }).GetHtml()
+
+
+
+

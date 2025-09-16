@@ -1,0 +1,27 @@
+﻿@Html.DevExpress().ComboBox(s =>
+{
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    s.Name = "JobGrade";
+    s.Properties.ClientInstanceName = "cboJobGrade";
+    s.ShowModelErrors = true;
+    s.CallbackRouteValues = new { Controller = "EOBHires", Action = "JobGrade" };
+
+    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    s.Properties.ValidationSettings.SetFocusOnError = true;
+    s.Properties.ValidationSettings.ErrorText = "*";
+    s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    s.Properties.TextFormatString = "{0}:{1}";
+    s.Properties.ValueField = "Code";
+    s.Properties.TextField = "Description";
+    s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+    s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 120);
+    s.ReadOnly = isReadOnly;
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "selectJobGrade";
+}).BindList(ViewData["JOBGRADE_SELECT"]).GetHtml()

@@ -1,0 +1,85 @@
+﻿
+@{var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridQuestionnaire";
+        settings.KeyFieldName = "Question";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "RCMRefCheck", Action = "GridQuestionnaire" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "RCMRefCheck", Action = "CreateRefQuest" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "RCMRefCheck", Action = "EdiRefQuest" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "RCMRefCheck", Action = "DeleteRefQuest" };
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Question");
+            column.Width = 325;
+            column.FieldName = "Question";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["QUESTION_SELECT"];
+            textProperties.TextField = "step";
+            textProperties.ValueField = "Description";
+            textProperties.Columns.Add("step", Humica.EF.Models.SY.SYSettings.getLabel("Step"),40);
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 300);
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Answer");
+            column.Width = 375;
+            column.FieldName = "Answer";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.SettingsSearchPanel.Visible = false;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Question")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+            //if (e.KeyValue == null)
+            //{
+            //    if (e.Column.FieldName == "DeviceType")
+            //    {
+            //        editor.Value = ;
+            //    }
+            //}
+        };
+    });
+
+    if (ViewData["EditError"] != null) { grid.SetEditErrorText((string)ViewData["EditError"]); }}
+
+
+@grid.Bind(Model).GetHtml()
+
+

@@ -1,0 +1,121 @@
+﻿@{     
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "_GLCharge";
+           settings.KeyFieldName = "MaterialCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRIntegratePO", Action = "_GLCharge" };
+
+           settings.Settings.ShowGroupPanel = false;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("MaterialCode");
+               column.Width = 150;
+               column.FieldName = "MaterialCode";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.Width = 300;
+               column.FieldName = "Description";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Unit";
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Unit");
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Quantity";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Quantity");
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinProperties = column.PropertiesEdit as SpinEditProperties;
+               spinProperties.MinValue = 0;
+               spinProperties.MaxValue = 99999999999;
+               spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+               spinProperties.DisplayFormatString = "N2";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+               column.Width = 135;
+               column.FieldName = "Amount";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CostCenter");
+               column.Width = 120;
+               column.FieldName = "CostCenter";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Warehouse");
+               column.Width = 120;
+               column.FieldName = "Warehouse";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AccountCode");
+               column.Width = 120;
+               column.FieldName = "AccountCode";
+           });
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+           settings.SettingsPager.PageSize = 25;
+           settings.SettingsBehavior.AllowEllipsisInText = true;
+           settings.ClientSideEvents.EndCallback = "EndCallBack";
+           settings.CustomJSProperties = (s, e) =>
+           {
+               ASPxGridView grid1 = (ASPxGridView)s;
+               Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+               Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+               e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

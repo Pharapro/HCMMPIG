@@ -1,0 +1,20 @@
+﻿@Html.DevExpress().ComboBox(s =>
+{
+    s.Name = "LeaveType";
+    s.Properties.ClientInstanceName = "cboLeaveType";
+    s.ShowModelErrors = true;
+    s.CallbackRouteValues = new { Controller = "MyTeamLeaveRequest", Action = "LeaveType" };
+    s.Width = Unit.Percentage(100);
+    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    s.Properties.ValidationSettings.SetFocusOnError = true;
+    s.Properties.ValidationSettings.ErrorText = "*";
+    s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    s.Properties.TextFormatString = "{0}:{1}";
+    s.Properties.ValueField = "Code";
+    s.Properties.TextField = "Description";
+    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+    s.Width = Unit.Percentage(100);
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "cboLeaveType_SelectChange";
+}).BindList(ViewData["LeaveTypes_SELECT"]).GetHtml()

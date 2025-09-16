@@ -1,0 +1,38 @@
+﻿@model Humica.Logic.Att.ATEmpSchObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTFilter";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 150;
+
+    settings.Items.AddGroupItem(m => Model.FMonthly, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => Model.FMonthly.InMonth, s =>
+                {
+                    //s.Width = width;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.NullText = "MMMM yyyy";
+                    s.Properties.EditFormatString = "MMMM yyyy";
+                    s.Properties.DisplayFormatString = "MMMM yyyy";
+                }).Render();
+            });
+    });
+
+}).Bind(Model).GetHtml()

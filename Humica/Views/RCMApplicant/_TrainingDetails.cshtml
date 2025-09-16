@@ -1,0 +1,117 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+           settings.Name = "_TrainingDetails";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "RCMApplicant", Action = "_TrainingDetails" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.ConfirmDelete = false;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+           settings.Columns.Add(column =>
+           {
+               column.Visible = false;
+               column.FieldName = "LineItem";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "TrainingTopic";
+               column.Width = 160;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Training Topic");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "TrainingProvider";
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Training Provider");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "FromDate";
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Date");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "ToDate";
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Date");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "TrainingPlace";
+               column.Width = 180;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Training Place");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Remark";
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 10;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "TrainingTopic" || e.Column.FieldName == "TrainingProvider")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListTraining).GetHtml()
+
+

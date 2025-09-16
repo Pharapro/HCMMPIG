@@ -1,0 +1,175 @@
+﻿@model Humica.Logic.RCM.IClsRCMERecruit
+
+<script type="text/javascript">
+     $(document).ready(function () {
+         $('#_btnBackAction').click(function () {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+         });
+         $('#_btnSaveActionGrid').click(function () {
+             $("form").submit();
+         });
+     });
+    function SelectPosition(s, e) {
+        txtNoOfRecruit.SetValue(s.GetSelectedItem().GetColumnText(2));
+        txtRequestNo.SetValue(s.GetSelectedItem().GetColumnText(3));
+    }
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Create";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(50);
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.Caption = "Job Ads Design";
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Status, s =>
+            {
+                s.ReadOnly = true;
+                s.Properties.ClientInstanceName = "txtStatus";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+       
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Location, s =>
+            {
+                s.Properties.ClientInstanceName = "txtLocation";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Facekbook page");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.MediaType, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValidationSettings.Display = Display.None;
+                s.Properties.TextFormatString = "{1}";
+                s.Properties.ClientInstanceName = "MediaType";
+                s.Properties.ValueField = "ID";
+                s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                s.Properties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"));
+                s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            }).BindList(ViewData["TOKEN_SELECT"]).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Date");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.EndDate, s =>
+            {
+                s.Properties.ClientInstanceName = "dtDateLine";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Contact Information");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+
+            Html.DevExpress().MemoFor(i => i.Header.ContactInfo, s =>
+            {
+                s.Height = 75;
+                s.Width = Unit.Percentage(80);
+                s.Properties.ClientInstanceName = "txtContactInfo";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AttachFile");
+        })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().UploadControl(ss =>
+         {
+             ss.ShowProgressPanel = true;
+             ss.CallbackRouteValues = new { Controller = "RCMERecruitment", Action = "UploadControlCallbackActionImage" };
+             ss.Name = "UploadControl";
+             ss.UploadMode = UploadControlUploadMode.Auto;
+             ss.AutoStartUpload = true;
+             ss.Width = 120;
+             ss.DialogTriggerID = "externalDropZone";
+             ss.AdvancedModeSettings.EnableDragAndDrop = false;
+             ss.AdvancedModeSettings.EnableMultiSelect = false;
+             ss.ShowTextBox = false;
+             ss.ShowUploadButton = false;
+             ss.ShowAddRemoveButtons = true;
+             ss.ShowProgressPanel = true;
+             ss.ShowClearFileSelectionButton = true;
+             ss.AdvancedModeSettings.EnableFileList = true;
+             ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+             ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+             ss.AdvancedModeSettings.DropZoneText = "";
+             ss.ValidationSettings.MaxFileSize = 4194304;
+             ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+             ss.UploadButton.Text = String.Empty;
+             ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".png" };
+             ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+             ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+             ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+         }).Render();
+         Html.DevExpress().HyperLink(s =>
+         {
+             s.Name = "file_uploaded";
+             s.ToolTip = "File";
+             s.ClientVisible = false;
+             s.Properties.Target = "_BLANK";
+             s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+         }).GetHtml();
+     });
+
+
+    });
+}).GetHtml()
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterialCreate";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Details")).SetContent(() =>
+    {
+        @Html.RenderPartial("_List", Model.ListDetails);
+    });
+}).GetHtml()

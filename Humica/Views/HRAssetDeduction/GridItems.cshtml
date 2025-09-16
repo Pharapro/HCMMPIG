@@ -1,0 +1,74 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+
+    settings =>
+    {
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "ID";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRAssetStaff" };
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = false;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+            column.Width = 50;
+            column.FieldName = "ID";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "AssetCode";
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset");
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["ASSET"];
+            textProperties.ValueField = "AssetCode";
+            textProperties.TextField = "Description";
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.Width = 150;
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.SettingsPager.PageSize = 122;
+
+    });
+}
+@gridExtension.Bind(Model.ListHeader).GetHtml()
+
+
+

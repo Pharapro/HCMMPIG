@@ -1,0 +1,118 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewList";
+               settings.KeyFieldName = "PayPeriodID";
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Controller = "PRApproveSalary", Action = "PartialList" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "...");
+                   column.Width = 80;
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "hlL" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "View");
+                           hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                           hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl()
+                               + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]
+                               + "Download?PeriodID=" + Convert.ToString(DataBinder.Eval(container.DataItem, "PeriodID"));
+                           hyperlink.Properties.ClientSideEvents.Click = "function() { PopTheLoading.Show() }";
+                       }).Render();
+                   });
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "ASNumber";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AS Number");
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "Requestor";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Requestor");
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Period ID");
+                   column.Width = 150;
+                   column.FieldName = "PeriodID";
+                   column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   textProperties.ValidationSettings.Display = Display.None;
+                   textProperties.DataSource = ViewData["PERIODID_SELECT"];
+                   textProperties.TextFormatString = "{1}";
+                   textProperties.ValueField = "PeriodID";
+                   textProperties.Columns.Add("PeriodID", Humica.EF.Models.SY.SYSettings.getLabel("PeriodID"), 250);
+                   textProperties.Columns.Add("PeriodString", Humica.EF.Models.SY.SYSettings.getLabel("PeriodString"), 250);
+                   textProperties.ValueType = typeof(string);
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "DocumentDate";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Document Date");
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+                   (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+                   (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "Description";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "Status";
+                   column.Width = 110;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+               });
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.BoldText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'APPROVED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText); // Adjust if needed
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'REJECTED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+           });
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

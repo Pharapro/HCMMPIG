@@ -1,0 +1,190 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var status = "";
+    $(document).ready(function () {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        })
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+    });
+    $("#_btnNewAction").hide();
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+        if (ss == 1) {
+           if (selectedIDs!=null)
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + values[0];
+           else
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_NE", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 2) {
+            if (status != "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + values[0];
+            }
+        }
+        //Delete
+        if (ss == 4) {
+            if (selectedIDs != null)
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            else
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_NE", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 10) {
+            if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("APPROVE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 9) {
+            if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REJECT_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?id=" + selectedIDs;
+            }
+            if (ss == 10) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Approve?id=" + Course;
+            }
+            if (ss == 9) {
+                PopTheComment.Show();
+                //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Reject?id=" + selectedIDs;
+            }
+        }
+    }
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("TranNo", GetSelectedFieldValuesCallback);
+    }
+    function OnGetRowValuesEmp(values) {
+        cboEmployee.SetValue(values[0]);
+        selectedIDs = values[0];
+        ShowDataEmp();
+    }
+    function rowSelected(s, e) {
+        EmployeeGridListSelector.GetRowValues(EmployeeGridListSelector.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnReject") {
+            ss = 9;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;Status;', OnGetRowValues);
+        }
+        if (e.item.name == "_mnApprove") {
+            ss = 10;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TranNo;Status;', OnGetRowValues);
+        }
+    }
+    function confirmCancel(s, e) {
+     if (ss == 9) {
+             $.ajax({
+                 type: 'post',
+                 url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ReasonDoc?id=" + Course,
+                 data: { 'Comment': TXTCOMMENT.GetValue() },
+                 success: function (data) {
+                     if (data.MS == "@Humica.EF.SYSConstant.OK.ToString()") {
+                         window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Reject?id=" + Course;
+                     } else {
+                         AlertMessage(data.MS);
+                     }
+                 },
+                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                     alert(XMLHttpRequest.responseText);
+                 }
+
+             });
+         }
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        Course = "";
+        const limit = 1500;
+        const count = values.length > limit ? limit : values.length;
+
+        // Alert if the limit is exceeded
+        if (values.length > limit) {
+            alert("You can request only 1500 documents at a time!");
+        }
+
+        for (let index = 0; index < count; index++) {
+            Course += values[index] + ";";
+        }
+
+        // Remove the trailing semicolon if Course is not empty
+        if (Course.length > 0) {
+            Course = Course.slice(0, -1);
+        }
+    }
+</script>
+<script type="text/javascript" src="~/Content/CustomJs.js"></script>
+@model Humica.Performance.ClsKPITracking
+<div class="fitler-doc">
+    @Html.Partial("FTInYear", Model)
+</div>
+@if (Model.ListKPIEmpPending.Count != 0)
+{
+    @Html.DevExpress().PageControl(
+        settings =>
+        {
+            settings.Name = "pcScrollingAssetClass";
+            settings.Width = Unit.Percentage(100);
+
+            settings.EnableTabScrolling = true;
+            settings.TabAlign = TabAlign.Justify;
+
+            settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+            //settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+            //settings.ClientSideEvents.Init = "tabClickCommand1";
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("List")).SetContent(() =>
+            {
+                Html.RenderPartial("PartialList", Model.listKPITracking);
+            });
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("WaitingList")).SetContent(() =>
+            {
+                Html.RenderPartial("PartialListPending", Model.ListKPIEmpPending);
+
+            });
+
+        }).GetHtml()
+}
+else
+{
+    @Html.Partial("PartialList", Model.listKPITracking)
+}
+@Html.Partial("~/Views/ACTION/PopTheComment.cshtml")

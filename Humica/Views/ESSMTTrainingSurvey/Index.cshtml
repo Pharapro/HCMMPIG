@@ -1,0 +1,38 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var status = "";
+    $(document).ready(function () {
+
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'SurveyID', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'SurveyID', OnGetRowValues);
+        });
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'SurveyID', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values;
+
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + values;
+        }
+        //Edit
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?ID=" + selectedIDs;
+
+        }
+</script>
+@model Humica.Models.Training.TrainingSurveyObject
+
+@Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListHeader)

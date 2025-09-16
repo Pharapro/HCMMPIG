@@ -1,0 +1,89 @@
+﻿[data-spanrules]:hover,
+[data-spanrules]:active {
+    background-color: bisque;
+}
+
+.control-area {
+    overflow-x: unset !important;
+}
+
+@media (max-width: 565px) {
+    .ResizingDivHorizontal {
+        visibility: hidden;
+    }
+}
+
+.ResizableContainerBase {
+    position: relative;
+}
+
+.ResizableContainerBoth {
+    padding-right: 8px;
+    padding-bottom: 8px;
+}
+
+.ResizableContainerHorizontal {
+    padding-right: 15px;
+}
+
+.ResizableContainerVertical {
+    padding-bottom: 15px;
+}
+
+.ResizingDivBase {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.ResizingDivBoth {
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    background-image: url(../Content/DragableBox.png);
+}
+
+    .ResizingDivBoth::after {
+        pointer-events: all;
+        content: url(../Content/PseudoImg.jpg);
+        opacity: 0;
+        position: absolute;
+        left: -9px;
+        top: -9px;
+    }
+
+.ResizingDivHorizontal {
+    width: 15px;
+    height: 100%;
+    cursor: ew-resize;
+    background-image: url(../Content/DragableLineHorizontal.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: #eee;
+}
+
+    .ResizingDivHorizontal::after {
+        pointer-events: all;
+        content: url(../Content/PseudoImg.jpg);
+        opacity: 0;
+        position: absolute;
+        left: -9px;
+    }
+
+.ResizingDivVertical {
+    width: 100%;
+    height: 15px;
+    cursor: ns-resize;
+    background-image: url(../Content/DragableLineVertical.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: #eee;
+}
+
+    .ResizingDivVertical::after {
+        pointer-events: all;
+        content: url(../Content/PseudoImg.jpg);
+        opacity: 0;
+        position: absolute;
+        top: -9px;
+    }

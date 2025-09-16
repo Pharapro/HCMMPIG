@@ -1,0 +1,60 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+  
+</script>
+
+
+@model   Humica.Core.CF.CFSystem
+
+
+@*@Html.Partial("GridItems", Model)*@
+
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_EmailAccount"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "EmailAccount")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridItems1", Model.ListEmailAccount);
+
+            });
+
+        }
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_EmailTemplate"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+             ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "EmailTemplate")).SetContent(() =>
+             {
+                 @Html.RenderPartial("GridItems2", Model.ListEmailTemplate);
+
+             });
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_EmailParam"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "EmailParam")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridItems3", Model.ListEmailParameter);
+
+            });
+
+        }
+
+
+    }).GetHtml()
+
+

@@ -1,0 +1,50 @@
+﻿<script type="text/javascript">
+    var selectedIDs = "";
+    var ssFrom = "";
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+        $('#_btnPrint').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Print";//?id";// ?=" + selectedIDs;
+        });
+        $('#_btnPrintBack').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "PrintBack";//?id=" + selectedIDs;
+        });
+    });
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ",";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Reporting/RPTNameCard/getEmpCode',
+            data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+</script>
+@model Humica.Logic.HR.HRStaffProfileObject
+
+@Html.Partial("GridItems", Model.ListStaffView)

@@ -1,0 +1,163 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+</script>
+
+
+@model   Humica.Core.CF.CFSystem
+
+
+
+<div class="fitler-doc">
+
+    @Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model.ScreenID, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ScreenID");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => Model.ScreenID, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+
+
+
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "";
+
+})
+  .SetNestedContent(() =>
+  {
+
+      Html.DevExpress().Button(
+          s =>
+          {
+              s.Name = "_btnRunReport";
+              s.ToolTip = "Go";
+              s.RenderMode = ButtonRenderMode.Button;
+              s.Text = "Go";
+              s.UseSubmitBehavior = true;
+              s.Images.Image.IconID = IconID.ActionsApply16x16;
+          }).GetHtml();
+  });
+
+        g.Items
+  .Add(m =>
+  {
+      m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ReferenceScreenID");
+
+  })
+      .SetNestedContent(() =>
+      {
+          Html.DevExpress().TextBoxFor(i => Model.ScreenIDReference, s =>
+          {
+              s.ShowModelErrors = true;
+              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+              s.Properties.ValidationSettings.SetFocusOnError = true;
+              s.Properties.ValidationSettings.ErrorText = "*";
+          }).Render();
+      });
+
+
+
+    });
+
+}).Bind(Model).GetHtml()
+
+
+
+
+
+</div>
+
+
+
+@*@Html.Partial("GridItems", Model)*@
+
+
+@{
+
+    if (Model.ScreenID != null)
+    {
+        Html.DevExpress().PageControl(
+       settings =>
+       {
+           settings.Name = "pcScrollingMaterial1";
+           settings.Width = Unit.Percentage(100);
+
+           settings.EnableTabScrolling = true;
+           settings.TabAlign = TabAlign.Justify;
+
+           settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Report"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                   ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Report")).SetContent(() =>
+                   {
+                       @Html.RenderPartial("GridItems1", Model.ListReport);
+
+                   });
+           }
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_ReportItem"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ReportItem")).SetContent(() =>
+                {
+                    @Html.RenderPartial("GridItems2", Model.ListReportItem);
+
+                });
+
+           }
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_ReportForm"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ReportForm")).SetContent(() =>
+                {
+                    @Html.RenderPartial("GridItems3", Model.ListReportObject);
+
+                });
+           }
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_ReportFile"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ReportFile")).SetContent(() =>
+                {
+                    @Html.RenderPartial("GridReportFile", Model.GetFilesReport());
+
+                });
+           }
+       }).GetHtml();
+    }
+
+
+}

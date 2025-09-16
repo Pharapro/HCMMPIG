@@ -1,0 +1,99 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItemRate";
+           settings.KeyFieldName = "ID";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HREvalSetup", Action = "GridItemEvalRating" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HREvalSetup", Action = "CreateEvalRating" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HREvalSetup", Action = "EditEvalRating" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HREvalSetup", Action = "DeleteEvalRating" };
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Evaluation Region");
+               column.Width = 250;
+               column.FieldName = "Region";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.AllowNull = true;
+               textProperties.DataSource = ViewData["REGION_SELECT"];
+               textProperties.TextFormatString = "{0}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 300;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.FieldName = "Description";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rating");
+               column.FieldName = "Rating";
+
+           });
+
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Code")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

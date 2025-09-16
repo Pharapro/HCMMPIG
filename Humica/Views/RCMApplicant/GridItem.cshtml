@@ -1,0 +1,238 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+          settings.Name = "GridViewList";
+          settings.KeyFieldName = "ApplicantID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "RCMApplicant", Action = "GridItem" };
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.AllowSort = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsBehavior.EnableCustomizationWindow = true;
+          settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+          settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+          settings.CommandColumn.ShowSelectCheckbox = true;
+          settings.CommandColumn.Visible = true;
+          var isReadOnly = false;
+          if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+          {
+              isReadOnly = true;
+              settings.SettingsBehavior.AllowSort = false;
+          }
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "VacNo";
+              column.Width = 110;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Vacancy");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "ApplicantID";
+              column.Width = 110;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApplicantID");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CV");
+              column.FieldName = "ResumeFile";
+              settings.KeyFieldName = "ResumeFile";
+
+              column.SetDataItemTemplateContent(c =>
+              {
+                  string filePath = (string)DataBinder.Eval(c.DataItem, "ResumeFile");
+
+                  // Check if filePath is not null or empty
+                  if (!string.IsNullOrEmpty(filePath))
+                  {
+                      // Create the hyperlink
+                      var hyperlink = Html.DevExpress().HyperLink(s =>
+                      {
+                          s.ToolTip = "Map URL";
+                          s.NavigateUrl = filePath; // Set the URL
+                          s.Properties.Target = "_blank"; // Open in a new tab
+                          s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View CV"); // Link text
+                      });
+
+                      // Render the hyperlink
+                      @Html.Raw(hyperlink.GetHtml());
+                  }
+                  else
+                  {
+                      // Render a blank space or placeholder
+                      @Html.Raw("&nbsp;"); // Non-breaking space
+                  }
+              });
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "ApplyPosition";
+              column.Width = 200;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Apply Position");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["POSITION_SELECT"];
+              textProperties.TextFormatString = "{1}";
+              textProperties.ValueField = "Code";
+              textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 250);
+              textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+              textProperties.ValueType = typeof(string);
+          });
+          settings.Columns.Add(col =>
+          {
+              col.FieldName = "ApplyDate";
+              col.Width = 110;
+              col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Applied Date");
+              col.ColumnType = MVCxGridViewColumnType.DateEdit;
+              (col.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (col.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (col.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "AllName";
+              column.Width = 140;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Candidate Name");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Gender";
+              column.Width = 70;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gender");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["GENDER_SELECT"];
+              textProperties.TextField = "SelectText";
+              textProperties.ValueField = "SelectValue";
+              textProperties.ValueType = typeof(string);
+          });
+          settings.Columns.Add(col =>
+          {
+              col.FieldName = "DOB";
+              col.Width = 110;
+              col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Date Of Birth");
+              col.ColumnType = MVCxGridViewColumnType.DateEdit;
+              (col.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (col.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (col.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "WorkingType";
+              column.Width = 90;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkingType");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["WORKTYPE_SELECT"];
+              textProperties.TextField = "Description";
+              textProperties.ValueField = "Code";
+              textProperties.ValueType = typeof(string);
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Phone1";
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Email";
+              column.Width = 140;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "ExpectSalary";
+              column.Width = 80;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ExpectSalary");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Source";
+              column.Width = 120;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Source");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["RECEIVED_SELECT"];
+              textProperties.TextField = "Company";
+              textProperties.ValueField = "Code";
+              textProperties.ValueType = typeof(string);
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "CurAddr";
+              column.Width = 150;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Current Address");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "ShortList";
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "CurStage";
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Current Stage");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.ColumnType = MVCxGridViewColumnType.CheckBox;
+              column.FieldName = "IsHired";
+              column.Width = 80;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hired");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TestStatus";
+              column.Width = 150;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status(Send CV)");
+          });
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh - 150;
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPager.Position = PagerPosition.Bottom;
+          settings.SettingsPager.FirstPageButton.Visible = true;
+          settings.SettingsPager.LastPageButton.Visible = true;
+          settings.SettingsPager.PageSize = 10;
+          settings.SettingsPager.EnableAdaptivity = true;
+          settings.SettingsPager.PageSizeItemSettings.Visible = true;
+          settings.SettingsExport.EnableClientSideExportAPI = true;
+          settings.SettingsExport.ExportSelectedRowsOnly = true;
+          settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = 250;
+
+          settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+          settings.PreRender = (sender, e) =>
+          {
+
+          };
+
+      });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

@@ -1,0 +1,113 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "PendingList";
+        settings.KeyFieldName = "PortalNo";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CallbackRouteValues = new { Controller = "ESSSelfAssessment", Action = "PendingList" };
+
+        settings.CommandColumn.Visible = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "");
+            column.Width = 80;
+            column.SetDataItemTemplateContent(container =>
+            {
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "l1" + container.VisibleIndex;
+                    hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Create");
+                    hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "PortalNo"));
+                    hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL] + "Edit?id=" + Convert.ToString(DataBinder.Eval(container.DataItem, "PortalNo"));
+                }).Render();
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PortalName");
+            column.Width = 250;
+            column.FieldName = "PortalName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Empoyee Code");
+            column.Width = 130;
+            column.FieldName = "EmpCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+            column.Width = 150;
+            column.FieldName = "EmployeeName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocumentDate");
+        //    column.FieldName = "DocumentDate";
+        //    column.Width = 150;
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    var textProperties = column.PropertiesEdit as DateEditProperties;
+        //    textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Deadline");
+            column.FieldName = "Deadline";
+            column.Width = 150;
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 450;
+        settings.SettingsPager.PageSize = 450;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

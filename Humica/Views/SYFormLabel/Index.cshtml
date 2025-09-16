@@ -1,0 +1,99 @@
+﻿<script type="text/javascript">
+
+    $(document).ready(function () {
+
+     
+    });
+</script>
+
+<script type="text/javascript" src="~/Content/GridJs.js">
+
+</script>
+
+
+
+@model Humica.EF.Models.SY.SYLangObject
+
+
+@*Item Grid View*@
+
+<div class="fitler-doc">
+
+    @Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model.ScreenID, g =>
+    {
+        g.ColCount = 4;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ScreenID");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => Model.ScreenID, s =>
+                {                   
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";                  
+                }).Render();
+            });
+
+
+
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "";
+
+})
+  .SetNestedContent(() =>
+  {
+
+      Html.DevExpress().Button(
+          s =>
+          {
+              s.Name = "_btnRunReport";
+              s.ToolTip = "Go";
+              s.RenderMode = ButtonRenderMode.Button;
+              s.Text = "Go";
+              s.UseSubmitBehavior = true;
+              s.Images.Image.IconID = IconID.ActionsApply16x16;
+          }).GetHtml();
+  });
+
+    });
+
+}).Bind(Model).GetHtml()
+
+
+
+
+
+</div>
+
+
+
+
+@{
+    if(Model.ScreenID!=null)
+    {
+        Html.RenderPartial("GridItems1", Model.ListForm);           
+    }
+
+}

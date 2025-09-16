@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="xrLabel95.Text" xml:space="preserve">
+    <value>លក់ និង រៀបចំថ្នាំទៅតាម វេជ្ជបញ្ជ​
+រៀបចំទុកដាក់ ថ្នាំ និង ផលិតផលទាំងអស់អោយមានរបៀបជានិច្ច
+លក់ ឬ ប្រឹក្សាយោបល់ និង ណែនាំអោយអ្នកជំងឺប្រើប្រាស់ថ្នាំអោយបានត្រឹមត្រូវ
+រាប់ស្តុកថ្នាំ
+រៀបចំសំអាត និង រក្សាអនាម័យក្នុងឱសថស្ថាន ជារៀងរាល់ថ្ងៃ ដូចជា ធ្នើរថ្នាំ កញ្ចក់ ឥដ្ឋ ការ៉ូ ឬ ទីធ្លាក្នុង មុខ​ និងក្រោយ
+គិតលុយ និង គ្រប់គ្រងលើប្រាក់ចំណូលក្នុង មួយថ្ងៃៗ
+ចំពោះការងារ ផេ្សងៗទៀតនឹងម្ចាស់ឱសថស្ថានកំណត់អោយ។</value>
+  </data>
+  <metadata name="sqlDataSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="customSqlQuery1.Sql" xml:space="preserve">
+    <value>SELECT    HREmpContract.TranNo,HrStaffProfile.EmpCode, HrStaffProfile.FirstName, HrStaffProfile.LastName, HrStaffProfile.AllName, HrStaffProfile.OthFirstName, 
+        HrStaffProfile.OthLastName,HrStaffProfile.OthAllName,HrStaffProfile.EmpType, HrStaffProfile.Title, HrStaffProfile.Sex, 
+		(CASE WHEN HRStaffProfile.Sex ='Female' THEN N'ស្រី' ELSE N'ប្រុស' END) SexKH,
+        HREmpContract.ConType, HREmpContract.Description,HREmpContract.FromDate, HREmpContract.ToDate, HREmpContract.Contract, HREmpContract.ContractPath,
+        HREmpContract.ContactText,HRContractType.Description AS COnTractDesc,HRDepartment.Description AS Department,
+        HRPosition.Description AS Position, HrStaffProfile.TerminateStatus, HREmpContract.PHoneAlw,
+         HrStaffProfile.ConAddress, HrStaffProfile.Peraddress, HrStaffProfile.ConPhone, HrStaffProfile.PerPhone,
+         HRNation.Description AS NATIONDESC, HrStaffProfile.PassportNo, HRDepartment.SecDescription AS DEPT_OTHDESC, 
+         HRNation.SecDescription AS NATION_OTHDESC, HRPosition.SecDescription AS POST_OTHDESC, HrStaffProfile.ConAddressOth,
+		HrStaffProfile.PeraddressOth,HRStaffProfile.DOB,
+		(Select  HREmpIdentity.IDCardNo from HREmpIdentity WHERE HREmpIdentity.EmpCode=HRStaffProfile.EmpCode AND HREmpIdentity.IdentityTye='IDCard' ) IDCard,
+		(Select  TOP 1 HREmpEduc.EdcCenter from HREmpEduc WHERE HREmpEduc.EmpCode=HRStaffProfile.EmpCode Order BY HREmpEduc.StartDate DESC  ) EdcCenter,
+		HrStaffProfile.SALARY, HREmpContract.Conterm,HRStaffProfile.StartDate,HRStaffProfile.PassportIssue,PassportExp,
+		HrStaffProfile.CardNo,num,DATEDIFF(YEAR,HRStaffProfile.DOB,GETDATE()) Age,HRStaffProfile.Probation,HRProvice.Description as Provice,HRProvice.SecDescription as ProviceSec
+FROM HREmpContract INNER JOIN
+    HrStaffProfile ON HREmpContract.EMPCODE = HrStaffProfile.EMPCODE INNER JOIN
+    HRCONTRACTTYPE ON HREmpContract.CONTYPE = HRCONTRACTTYPE.CODE INNER JOIN
+    HRDEPARTMENT ON HrStaffProfile.DEPT = HRDEPARTMENT.CODE LEFT OUTER JOIN
+    HRNation ON HrStaffProfile.NATION = HRNation.CODE LEFT OUTER JOIN
+    HRPosition ON HrStaffProfile.JOBCODE = HRPosition.CODE  LEFT OUTER JOIN
+	HRProvice ON HRProvice.Code=HRStaffProfile.State
+WHERE  HREmpContract.TranNo=@TranNo
+	</value>
+  </data>
+  <data name="sqlDataSource1.ResultSchemaSerializable" xml:space="preserve">
+    <value>PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxWaWV3IE5hbWU9IlF1ZXJ5Ij48RmllbGQgTmFtZT0iVHJhbk5vIiBUeXBlPSJJbnQ2NCIgLz48RmllbGQgTmFtZT0iRW1wQ29kZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJGaXJzdE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iTGFzdE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQWxsTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJPdGhGaXJzdE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iT3RoTGFzdE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iT3RoQWxsTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJFbXBUeXBlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlRpdGxlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlNleCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTZXhLSCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJDb25UeXBlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkRlc2NyaXB0aW9uIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkZyb21EYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iVG9EYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iQ29udHJhY3QiIFR5cGU9IkJ5dGVBcnJheSIgLz48RmllbGQgTmFtZT0iQ29udHJhY3RQYXRoIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbnRhY3RUZXh0IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNPblRyYWN0RGVzYyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEZXBhcnRtZW50IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBvc2l0aW9uIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlRlcm1pbmF0ZVN0YXR1cyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQSG9uZUFsdyIgVHlwZT0iRG91YmxlIiAvPjxGaWVsZCBOYW1lPSJDb25BZGRyZXNzIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBlcmFkZHJlc3MiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29uUGhvbmUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iUGVyUGhvbmUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iTkFUSU9OREVTQyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQYXNzcG9ydE5vIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkRFUFRfT1RIREVTQyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJOQVRJT05fT1RIREVTQyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQT1NUX09USERFU0MiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29uQWRkcmVzc090aCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQZXJhZGRyZXNzT3RoIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkRPQiIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9IklEQ2FyZCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJFZGNDZW50ZXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU0FMQVJZIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJDb250ZXJtIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN0YXJ0RGF0ZSIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9IlBhc3Nwb3J0SXNzdWUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJQYXNzcG9ydEV4cCIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9IkNhcmRObyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJudW0iIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJBZ2UiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJQcm9iYXRpb24iIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJQcm92aWNlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlByb3ZpY2VTZWMiIFR5cGU9IlN0cmluZyIgLz48L1ZpZXc+PC9EYXRhU2V0Pg==</value>
+  </data>
+</root>

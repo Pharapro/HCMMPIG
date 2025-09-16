@@ -1,0 +1,142 @@
+﻿@model Humica.Logic.PR.PROverTimeObject
+
+@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "OverTimeGrid";
+           settings.KeyFieldName = "OTType";
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+           settings.CallbackRouteValues = new { Action = "GridItemsDetails", Controller = "PROverTime" };
+
+           settings.Settings.ShowFooter = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+           settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTType");
+               column.Width = 200;
+               column.FieldName = "OTType";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["OTType_SELECT"];
+               textProperties.ValueField = "OTCode";
+               textProperties.TextField = "Description";
+               textProperties.TextFormatString = "{1}";
+               textProperties.DropDownStyle = DropDownStyle.DropDownList;
+               textProperties.Columns.Add("OTCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+               textProperties.Columns.Add("OTType", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "OTDate";
+               column.Width = 120;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTDate");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "OTFromTime";
+               column.Width = 120;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Time");
+               column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+               var controlls = column.PropertiesEdit as TimeEditProperties;
+               controlls.ClientSideEvents.ValueChanged = "selectValueChanged";
+               controlls.ClientInstanceName = "txtFromTime";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "OTToTime";
+               column.Width = 120;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Time");
+               column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+               //var spinEditProperties = column.PropertiesEdit as DateEditClientSideEvents;
+               var controlls = column.PropertiesEdit as TimeEditProperties;
+               controlls.ClientSideEvents.ValueChanged = "selectValueChanged";
+               controlls.ClientInstanceName = "txtToTime";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "BreakTime";
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Break Time(mn)");
+               //column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               (column.PropertiesEdit as TextEditProperties).ClientInstanceName = "txtBreakTime";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "OTHour";
+               column.Width = 90;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTHour");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "PayMonth";
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PayMonth");
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Reason";
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Reason");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+           settings.InitNewRow = (s, e) =>
+           {
+               e.NewValues["BreakTime"] = 0;
+           };
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               editor.ReadOnly = true;
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListHeader).GetHtml()
+

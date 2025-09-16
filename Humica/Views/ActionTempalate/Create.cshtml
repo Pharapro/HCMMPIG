@@ -1,0 +1,100 @@
+﻿@model Humica.EF.Models.SY.SYPermissionObject
+
+
+
+<script type="text/javascript">
+
+   
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+
+        $('#_btnSaveActionGrid').click(function () {
+
+            $.ajax({
+                type: 'post',
+                url: '@Request.Url.ToString()',
+                data: $('form').serialize(),
+                success: function (data) {
+                    if (data == "@Humica.EF.SYSConstant.OK.ToString()") {
+                        gridViewItem.UpdateEdit();
+                    } else {
+                        AlertMessage(data);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+                }
+            });
+
+
+        });
+
+
+
+    });
+
+
+
+</script>
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            @*<i style="margin-right: 5px;" class="fa fa-dashboard"></i>*@
+            @Session["Screen"]
+        </h3>
+    </div>
+    <div class="box-body">
+
+        @Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "ImportBank";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "Tempalte ID";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.TemplateID, s =>
+                {
+                    if (ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID] != null)
+                    {
+                        s.ReadOnly = true;
+                    }
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+
+                }).Render();
+            });
+
+
+    });
+
+
+
+}).GetHtml()
+
+        @Html.Partial("GridItems", Model)
+    </div>
+    <!-- /.box-body -->
+</div>

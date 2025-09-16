@@ -1,0 +1,164 @@
+﻿
+
+<script type="text/javascript">
+
+    var id;
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        $('#Download_TP').click(function () {
+            if (txtDepartment.GetValue() == null) {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            id = txtDepartment.GetValue();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "DownloadTemplate?id="+id;
+        });
+
+        $('#_btnGenerateAction').click(function () {
+            GridViewListUpload.GetRowValues(GridViewListUpload.GetFocusedRowIndex(), 'ID;UploadName', OnGetRowValues);
+        });
+    });
+
+    function OnGetRowValues(values) {
+        if (values[0] == null)
+        {
+            AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        } else {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "GenerateUpload?id=" + values[0];
+        }
+    }
+</script>
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">@Session["Screen"]</h3>
+    </div>
+    <div class="box-body">
+
+        @Html.DevExpress().FormLayout(settings =>
+   {
+       settings.Name = "KPIUpload";
+       settings.AlignItemCaptionsInAllGroups = true;
+       settings.Items.AddGroupItem(g =>
+       {
+           g.ColCount = 2;
+           g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+           g.Caption = "Template Information";
+           g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+           g.Items
+                  .Add(m =>
+                  {
+                      m.Caption = "Upload Template";
+
+                  })
+                  .SetNestedContent(() =>
+                  {
+                      Html.DevExpress().Button(
+                          ss =>
+                          {
+                              ss.Name = "Download_TP";
+                              ss.RenderMode = ButtonRenderMode.Link;
+                              ss.ToolTip = "Download";
+                              ss.Text = "Download";
+
+                              ss.Images.Image.IconID = IconID.SupportTemplate16x16;
+                          }).GetHtml();
+                  });
+           g.Items.Add(m =>
+           {
+               m.Caption = "Choose KPI Type";
+           }).NestedExtension().ComboBox(s =>
+           {
+               s.Name = "Deparment";
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.Display = Display.Dynamic;
+               s.Properties.DataSource = ViewData["LIST_KPICATEGORY"];
+               s.Properties.ValueField = "CategoryCode";
+               s.Properties.TextField = "CatgoryDescription";
+               s.Properties.DisplayFormatString = "{0}:{1}";
+               s.Properties.Columns.Add("CategoryCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+               s.Properties.Columns.Add("CatgoryDescription", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+               s.Properties.ClientInstanceName = "txtDepartment";
+           });
+       });
+
+
+       settings.Items.AddGroupItem(g =>
+       {
+           g.ColCount = 2;
+           g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+           g.Caption = "Upload Information";
+           g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+           g.Items.Add(m =>
+           {
+               m.Caption = "Select file to upload";
+
+           })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().UploadControl(ss =>
+                   {
+                       ss.ShowProgressPanel = true;
+                       ss.Name = "FileUploadOPB";
+                       ss.UploadMode = UploadControlUploadMode.Standard;
+                       ss.AutoStartUpload = true;
+                       ss.Width = 350;
+                       ss.CallbackRouteValues = new { Controller = "HRKPIAssign", Action = "UploadControlCallbackAction" };
+                       ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                       ss.AdvancedModeSettings.EnableFileList = true;
+                       ss.AdvancedModeSettings.EnableMultiSelect = false;
+                       ss.ValidationSettings.MaxFileSize = 4194304;
+                       ss.ValidationSettings.AllowedFileExtensions = new string[] { ".xlsx" };
+                       ss.BrowseButton.Text = "Browse";
+                       ss.ClientSideEvents.FileUploadComplete = "completedUploadFile_";
+
+                   }).Render();
+               });
+       });
+
+   }).GetHtml()
+
+  @model Humica.Logic.HR.HRKPISetupObject
+
+        @Html.DevExpress().PageControl(settings =>
+   {
+       settings.Name = "pcScrollingMaterial1";
+       settings.Width = Unit.Percentage(100);
+
+       settings.EnableTabScrolling = true;
+       settings.TabAlign = TabAlign.Justify;
+
+       settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+       settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("General")).SetContent(() =>
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultUpload , Model.ListTemplate);
+
+        });
+       //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.CF.CFForm>
+       //)
+       //ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Employee Infor")).SetContent(() =>
+       //{
+       //    Html.RenderPartial("GridItems", Model);
+
+       //});
+
+   }).GetHtml()
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

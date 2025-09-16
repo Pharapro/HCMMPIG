@@ -1,0 +1,452 @@
+﻿@{
+
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "Gridview";
+               settings.KeyFieldName = "EmpCode";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Action = "GridItems", Controller = "GenerateSeverancePay" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+               //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.CommandColumn.Width = 50;
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                   column.Width = 120;
+                   column.FieldName = "EmpCode";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+                   column.Width = 150;
+
+                   column.FieldName = "AllName";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+               });
+               //settings.Columns.Add(column =>
+               //{
+               //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gender");
+               //    column.Width = 80;
+               //    column.FieldName = "Sex";
+               //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+               //});
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 200;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+                   column.FieldName = "Department";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 200;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+                   column.FieldName = "Position";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartDate");
+                   column.FieldName = "StartDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndContract");
+                   column.FieldName = "EndContract";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               });
+               foreach (var Item in Model.ListYear)
+               {
+                   settings.Columns.AddBand(Col =>
+                   {
+                       Col.FixedStyle = GridViewColumnFixedStyle.None;
+                       Col.Caption = Item.InYear.ToString();
+                       Col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                       if (Item.FType != "N")
+                       {
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jan");
+                               column.FieldName = "Jan";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Feb");
+                               column.FieldName = "Feb";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Mar");
+                               column.FieldName = "Mar";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Apr");
+                               column.FieldName = "Apr";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("May");
+                               column.FieldName = "May";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jun");
+                               column.FieldName = "Jun";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jul");
+                               column.FieldName = "Jul";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Aug");
+                               column.FieldName = "Aug";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Sep");
+                               column.FieldName = "Sep";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Oct");
+                               column.FieldName = "Oct";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Nov");
+                               column.FieldName = "Nov";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dec");
+                               column.FieldName = "Dec";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                       }
+                       else
+                       {
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jan");
+                               column.FieldName = "NJan";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Feb");
+                               column.FieldName = "NFeb";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Mar");
+                               column.FieldName = "NMar";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Apr");
+                               column.FieldName = "NApr";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("May");
+                               column.FieldName = "NMay";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jun");
+                               column.FieldName = "NJun";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Jul");
+                               column.FieldName = "NJul";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Aug");
+                               column.FieldName = "NAug";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Sep");
+                               column.FieldName = "NSep";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Oct");
+                               column.FieldName = "NOct";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Nov");
+                               column.FieldName = "NNov";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                           Col.Columns.Add(column =>
+                           {
+                               column.Width = 90;
+                               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dec");
+                               column.FieldName = "NDec";
+                               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                               column.PropertiesEdit.DisplayFormatString = "N2";
+                               column.Visible = false;
+                           });
+                       }
+                   });
+               }
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 90;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary");
+                   column.FieldName = "TotalSalary";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                   column.PropertiesEdit.DisplayFormatString = "N2";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 80;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rate");
+                   column.FieldName = "Rate";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                   column.PropertiesEdit.DisplayFormatString = "N2";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 90;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+                   column.FieldName = "Balance";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                   column.PropertiesEdit.DisplayFormatString = "N2";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 200;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                   column.FieldName = "Remark";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid = (ASPxGridView)s;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.AllColumns;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+
+                   e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+               };
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+
+               settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+               settings.SettingsExport.EnableClientSideExportAPI = true;
+               settings.SettingsExport.FileName = "Severance Payment";
+               settings.Toolbars.Add(t =>
+               {
+                   t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+               });
+               settings.DataBinding = (send, evargs) =>
+               {
+                   MVCxGridView gv = send as MVCxGridView;
+                   foreach (var _file in Model.ListDataYear)
+                   {
+                       if (_file.FType + gv.Columns["Jan"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Jan"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Feb"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Feb"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Mar"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Mar"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Apr"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Apr"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["May"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "May"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Jun"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Jun"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Jul"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Jul"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Aug"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Aug"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Sep"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Sep"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Oct"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Oct"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Nov"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Nov"].Visible = true;
+                       }
+                       if (_file.FType + gv.Columns["Dec"].ToString() == _file.FieldName)
+                       {
+                           gv.Columns[_file.FType + "Dec"].Visible = true;
+                       }
+                   }
+               };
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+
+
+           });
+
+
+}
+
+@gridExtension.Bind(Model.ListEmpSeverance).GetHtml()

@@ -1,0 +1,196 @@
+﻿<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+    });
+</script>
+
+<script type="text/javascript" src="~/Content/GridJs.js">
+
+</script>
+
+
+
+@model Humica.EF.Models.SY.SYLangObject
+
+@*@model    Humica.Logic.MD.MDSection
+
+@{
+
+    string screenid = "";
+    if (ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID] != null)
+    {
+        screenid = ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString();
+
+    }
+    if (screenid == "HOME")
+    {
+        screenid = "DSB0000001";
+    }
+    Humica.EF.Models.SY.SYMenuObject mo = new Humica.EF.Models.SY.SYMenuObject();
+    Humica.EF.MD.SYMenuItem MI = mo.GetcurrentmenuItem(screenid);
+    Session["Screen"] = MI.Text;
+}*@
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">@Session["Screen"]</h3>
+    </div>
+    <div class="box-body">
+        @*Item Grid View*@
+
+        <div class="fitler-doc">
+
+            @Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model.ScreenID, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ScreenID");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => Model.ScreenID, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+
+
+
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "";
+
+})
+  .SetNestedContent(() =>
+  {
+
+      Html.DevExpress().Button(
+          s =>
+          {
+              s.Name = "_btnRunReport";
+              s.ToolTip = "Go";
+              s.RenderMode = ButtonRenderMode.Button;
+              s.Text = "Go";
+              s.UseSubmitBehavior = true;
+              s.Images.Image.IconID = IconID.ActionsApply16x16;
+          }).GetHtml();
+  });
+
+        g.Items
+    .Add(m =>
+    {
+        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ReferenceScreenID");
+
+    })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => Model.FromScreenID, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+    });
+
+}).Bind(Model).GetHtml()
+
+
+
+
+
+        </div>
+
+        @*Item Grid View*@
+
+
+        @{
+            if (Model.ScreenID != null)
+            {
+
+                @Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Screen"))
+        {
+
+            settings.TabPages.Add("Screen").SetContent(() =>
+            {
+                @Html.RenderPartial("GridItems3", Model.ListSyLang);
+
+            });
+
+        }
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_List"))
+        {
+
+            settings.TabPages.Add("List").SetContent(() =>
+             {
+                 @Html.RenderPartial("GridItems1", Model.ListTable);
+
+
+             });
+
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Form"))
+        {
+            settings.TabPages.Add("Form").SetContent(() =>
+            {
+                @Html.RenderPartial("GridItems2", Model.ListForm);
+
+            });
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Action"))
+        {
+            settings.TabPages.Add("Action").SetContent(() =>
+            {
+                @Html.RenderPartial("GridItems4", Model.ListSyAction);
+
+            });
+        }
+
+
+    }).GetHtml();
+
+
+            }
+
+        }
+    </div>
+</div>

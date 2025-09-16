@@ -1,0 +1,57 @@
+﻿@model DBSystems.Models.SY.SYDashboradObject
+
+<style>
+    .contentActionTitle{
+        border:none;
+    }
+</style>
+<div class="dash-board">
+    @{
+        if(Model.ListDashboard.Count>0)
+        {
+            //Html.RenderPartial("FTRP_Filter",Model);
+        }
+
+
+        foreach (var read in Model.ListDashboard)
+        {
+
+            if(Model.Module==null)
+            {
+                var objCheck = CLOUDVIEW.Models.DH.ClsDHRetangle.getDashBoardMaster(read.DashboardName);
+                if(objCheck!=null)
+                {
+                    if (objCheck.GraphType == CLOUDVIEW.Models.DH.DashboardType.Box.ToString())
+                    {
+                        Html.RenderPartial("~/Views/GRAPH/" + objCheck.DashboardMaster + ".cshtml", objCheck);
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<div class='dash_b'>");
+                        Html.RenderPartial("~/Views/GRAPH/" + objCheck.DashboardMaster + ".cshtml");
+                        ViewContext.Writer.Write("</div>");
+                    }
+                }
+            }
+            else
+            {
+                if(read.Module==Model.Module)
+                {
+                    ViewContext.Writer.Write("<div class='dash_b'>");
+                    Html.RenderPartial("~/Views/GRAPH/" + read.DashboardName + ".cshtml");
+                    ViewContext.Writer.Write("</div>");
+                }
+            }
+
+        }
+
+
+
+
+
+    }
+</div>
+<div class="clear"></div>
+
+
+

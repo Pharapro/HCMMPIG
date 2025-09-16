@@ -1,0 +1,34 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+        $('#_btnDownload').click(function () {
+            $.ajax({
+                type: "post",
+                url: _baseUrl + '/Attendance/Attendance/ATDownloadAtt/Download',
+                data: {'FromDate': convert(txtFromDate.GetDate()), 'ToDate': convert(txtToDate.GetDate()) },
+                success: function (data) {
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+    });
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-") + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+   
+</script>
+
+@model Humica.Logic.Att.ATDownloadObject
+
+@Html.Partial("FTFilter", Model)

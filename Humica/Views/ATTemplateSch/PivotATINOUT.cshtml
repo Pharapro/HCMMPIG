@@ -1,0 +1,250 @@
+﻿@Html.DevExpress().PivotGrid(settings =>
+{
+    // Basic Configuration
+    settings.Name = "pivotShiftSchedule";
+    settings.CallbackRouteValues = new { Controller = "ATTemplateSch", Action = "PivotATINOUT" };
+    settings.Height = Humica.EF.MD.SYSession.PageHieigh + 150;
+    settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.OptionsCustomization.AllowDrag = false;
+    settings.OptionsView.ShowColumnHeaders = false;
+    settings.OptionsView.ShowDataHeaders = false;
+    settings.Width = Unit.Percentage(100);
+    settings.OptionsView.ShowFilterHeaders = false;
+    settings.OptionsPager.Position = PagerPosition.Bottom;
+    settings.OptionsPager.PageSizeItemSettings.Visible = true;
+
+    settings.OptionsView.ShowColumnGrandTotals = false;
+    settings.OptionsView.ShowRowGrandTotals = false;
+    settings.OptionsView.ShowGrandTotalsForSingleValues = false;
+    settings.OptionsView.ShowRowGrandTotalHeader = false;
+    settings.OptionsView.ShowColumnGrandTotalHeader = false;
+    settings.OptionsView.ShowColumnTotals = false;
+
+    // Date Grouping Fields (Columns)
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldMonth";
+        f.FieldName = "InDate";
+        f.Caption = "Month";
+        f.Area = PivotArea.ColumnArea;
+        f.AreaIndex = 0;
+        f.GroupInterval = PivotGroupInterval.DateMonth;
+        f.CellFormat.FormatType = FormatType.DateTime;
+        f.CellFormat.FormatString = "MMMM, yyyy";
+    });
+
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldDay";
+        f.FieldName = "InDate";
+        f.Caption = "Day";
+        f.Area = PivotArea.ColumnArea;
+        f.AreaIndex = 1;
+        f.GroupInterval = PivotGroupInterval.DateDay;
+        f.CellFormat.FormatType = FormatType.DateTime;
+        f.CellFormat.FormatString = "dd";
+    });
+
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldWeekday";
+        f.FieldName = "InDate";
+        f.Caption = "";
+        f.Area = PivotArea.ColumnArea;
+        f.AreaIndex = 2;
+        f.GroupInterval = PivotGroupInterval.DateDayOfWeek;
+        f.CellFormat.FormatType = FormatType.DateTime;
+        f.CellFormat.FormatString = "ddd";
+    });
+
+    // Summary Field (Unbound)
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldTransDateStr";
+        f.FieldName = "TransDateStr";
+        f.Caption = "Summary";
+        f.Area = PivotArea.ColumnArea;
+        f.AreaIndex = 3;
+        f.Visible = true;
+        f.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        f.UnboundFieldName = "TransDateStr";
+    });
+
+    // Employee Information Fields (Rows)
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldEmpCode";
+        f.FieldName = "EmpCode";
+        f.Caption = "ID";
+        f.Area = PivotArea.RowArea;
+        f.AreaIndex = 0;
+    });
+
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldEmpName";
+        f.FieldName = "AllName";
+        f.Caption = "Name";
+        f.Area = PivotArea.RowArea;
+        f.AreaIndex = 1;
+    });
+
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldPosition";
+        f.FieldName = "Position";
+        f.Caption = "Position";
+        f.Area = PivotArea.RowArea;
+        f.AreaIndex = 2;
+    });
+
+    // Group No Field to control ordering
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldGroupNo";
+        f.FieldName = "GroupNo";
+        f.Caption = "Group";
+        f.Area = PivotArea.RowArea;
+        f.AreaIndex = 3;
+        f.Visible = false;
+    });
+
+    // Shift Data Field
+    settings.Fields.Add(f =>
+    {
+        f.ID = "fieldShift";
+        f.FieldName = "Shift";
+        f.Caption = "Shift";
+        f.Area = PivotArea.DataArea;
+        f.SummaryType = PivotSummaryType.Max;
+        f.CellFormat.FormatString = "0;;#"; // Hide zeros
+    });
+
+    // Handle unbound field data using lambda expression
+    settings.CustomUnboundFieldData = (sender, e) =>
+    {
+        if (e.Field.ID == "fieldTransDateStr")
+        {
+            var rowValues = e.GetListSourceColumnValue("TransDateStr");
+            if (rowValues != null)
+            {
+                string value = rowValues.ToString();
+                if (value == "Working Days" || value == "OFF Days" || value == "PH Days")
+                {
+                    e.Value = value;
+                }
+            }
+        }
+    };
+
+
+    // Cell Styling
+    settings.CustomCellStyle = (sender, e) =>
+    {
+        var pivot = (MVCxPivotGrid)sender;
+
+        // Style Month Headers
+        if (e.DataField == pivot.Fields["fieldMonth"])
+        {
+            e.CellStyle.Font.Bold = true;
+            e.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        }
+
+        // Style Weekday Headers
+        if (e.DataField == pivot.Fields["fieldWeekday"])
+        {
+            e.CellStyle.Font.Size = FontUnit.Smaller;
+            e.CellStyle.ForeColor = System.Drawing.Color.DarkSlateGray;
+        }
+
+        // Style Summary Column Headers
+        if (e.DataField == pivot.Fields["fieldTransDateStr"])
+        {
+            string summaryType = e.Value.ToString();
+            if (summaryType != null)
+            {
+                switch (summaryType)
+                {
+                    case "Working Days":
+                        e.CellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#E2EFDA");
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                    case "OFF Days":
+                        e.CellStyle.BackColor = System.Drawing.Color.Red;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                    case "PH Days":
+                        e.CellStyle.BackColor = System.Drawing.Color.Green;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                }
+            }
+        }
+
+        // Style Data Cells in Summary Columns
+        if (e.DataField == pivot.Fields["fieldShift"] && e.Value != null)
+        {
+            var fieldTransDateStr = pivot.Fields["fieldTransDateStr"];
+            var columnFieldValue = pivot.GetFieldValue(fieldTransDateStr, e.ColumnIndex);
+            if (columnFieldValue != null)
+            {
+                string summaryType = columnFieldValue.ToString();
+
+                switch (summaryType)
+                {
+                    case "Working Days":
+                        e.CellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#E2EFDA");
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                    case "OFF Days":
+                        e.CellStyle.BackColor = System.Drawing.Color.Red;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                    case "PH Days":
+                        e.CellStyle.BackColor = System.Drawing.Color.Green;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        e.CellStyle.Font.Bold = true;
+                        e.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        break;
+                }
+            }
+            else
+            {
+                // Style Regular Shift Cells
+                string shiftValue = e.Value.ToString();
+
+                switch (shiftValue)
+                {
+                    case "OFF":
+                        e.CellStyle.BackColor = System.Drawing.Color.Red;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        break;
+                    case "PH":
+                        e.CellStyle.BackColor = System.Drawing.Color.Green;
+                        e.CellStyle.ForeColor = System.Drawing.Color.White;
+                        break;
+                    case "WU":
+                        e.CellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFC000");
+                        break;
+                    default:
+                        if (shiftValue != "0" && !string.IsNullOrEmpty(shiftValue))
+                        {
+                            e.CellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#E2EFDA");
+                        }
+                        break;
+                }
+            }
+        }
+    };
+
+}).Bind(Model).GetHtml()

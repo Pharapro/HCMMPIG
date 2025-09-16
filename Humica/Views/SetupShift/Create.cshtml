@@ -1,0 +1,476 @@
+﻿@model Humica.Logic.Atts.SetupShiftObject
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function convert(str) {
+        var date = new Date(str),
+            month = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        Hour = ("0" + date.getHours()).slice(-2);
+        return ([date.getFullYear(), month, day].join("-") + " " +[Hour + ":" + Minutes + ":" + date.getSeconds()]);
+        //return [date.getFullYear(), month, day].join("-");
+    }
+    function initDataEdit(s, e) {
+        Get_CheckInOut1();
+        Get_CheckInOut2();
+    }
+    function OnClientValueChanged(s, e) {
+        Get_CheckInOut1();
+    }
+    function OnClientValueChanged2(s, e) {
+        Get_CheckInOut2();
+    }
+    function Get_CheckInOut1() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/AttSetup/SetupShift/Get_CheckInOut1',
+            data: { 'FromDate': convert(txtCheckIn.GetDate()), 'ToDate': convert(txtCheckOut.GetDate()), 'OverNight': txtOver1.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtTotalHour.SetValue(data.totalHour1);
+                }
+                else {
+                 //   AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function Get_CheckInOut2() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Attendance/AttSetup/SetupShift/Get_CheckInOut2',
+            data: { 'FromDate': convert(txtCheckIn2.GetDate()), 'ToDate': convert(txtCheckOut2.GetDate()), 'OverNight': txtOver2.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtTotalHour2.SetValue(data.totalHour2);
+                }
+                else {
+                    //   AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function OnCheckedChanged(s, e) {
+        var isChecked = false;
+        isChecked = s.GetChecked();
+        txtCheckIn2.SetEnabled(isChecked);
+        txtCheckOut2.SetEnabled(isChecked);
+        txtCheckInBefore2.SetEnabled(isChecked);
+        txtCheckInAfter2.SetEnabled(isChecked);
+        txtCheckOutBefore2.SetEnabled(isChecked);
+        txtCheckOutAfter2.SetEnabled(isChecked);
+    }
+    function PageLoad() {
+        var isChecked = false;
+        isChecked = chkSplitShift.GetChecked();
+        txtCheckIn2.SetEnabled(isChecked);
+        txtCheckOut2.SetEnabled(isChecked);
+        txtCheckInBefore2.SetEnabled(isChecked);
+        txtCheckInAfter2.SetEnabled(isChecked);
+        txtCheckOutBefore2.SetEnabled(isChecked);
+        txtCheckOutAfter2.SetEnabled(isChecked);
+    }
+</script>
+
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "AtShift";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.ClientSideEvents.Init = "PageLoad";
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.Code, s =>
+                   {
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            })
+                 .SetNestedContent(() =>
+                 {
+                     Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+                     {
+                         s.ShowModelErrors = true;
+                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                         s.Properties.ValidationSettings.SetFocusOnError = true;
+                         s.Properties.ValidationSettings.ErrorText = "*";
+                     }).Render();
+                 });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                m.ColSpan = 2;
+            })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().TextBoxFor(i => i.Header.Remark, s =>
+               {
+                   s.Width = Unit.Percentage(100);
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BreakStart");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.BreakStart, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BreakEnd");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.BreakEnd, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckInBefore1");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckInBefore1, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckInAfter1");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckInAfter1, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOutBefore1");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOutBefore1, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOutAfter1");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOutAfter1, s =>
+                {
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckIn1");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckIn1, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckIn";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                    s.Properties.ClientSideEvents.Init = "initDataEdit";
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOut1");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOut1, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckOut";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged";
+                }).Render();
+            });
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OverNight1");
+                //m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.OverNight1, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtOver1";
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Hour");
+            })
+              .SetNestedContent(() =>
+              {
+                  Html.DevExpress().TextBoxFor(i => i.TotalHour, s =>
+                  {
+                      s.ReadOnly = true;
+                      s.Properties.ClientInstanceName = "txtTotalHour";
+                      s.ShowModelErrors = true;
+                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                      s.Properties.ValidationSettings.ErrorText = "*";
+                  }).Render();
+              });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Split Shift");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.SplitShift, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.CheckedChanged = "OnCheckedChanged";
+                    s.Properties.ClientInstanceName = "chkSplitShift";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.IsActive, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*"; 
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckInBefore2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckInBefore2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckInBefore2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckInAfter2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckInAfter2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckInAfter2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOutBefore2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOutBefore2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckOutBefore2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOutAfter2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOutAfter2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckOutAfter2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckIn2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckIn2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckIn2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged2";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CheckOut2");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TimeEditFor(i => i.Header.CheckOut2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtCheckOut2";
+                    s.Properties.DisplayFormatString = "h:mm tt";
+                    s.Properties.EditFormat = EditFormat.Time;
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged2";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OverNight2");
+                // m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.OverNight2, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtOver2";
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged2";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Hour");
+            })
+              .SetNestedContent(() =>
+              {
+                  Html.DevExpress().TextBoxFor(i => i.TotalHour2, s =>
+                  {
+                      s.ReadOnly = true;
+                      s.Properties.ClientInstanceName = "txtTotalHour2";
+                      s.ShowModelErrors = true;
+                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                      s.Properties.ValidationSettings.ErrorText = "*";
+                  }).Render();
+              });
+        });
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.Box;
+            g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Meals");
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Breakfast");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.BreakFast, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Lunch");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.Lunch, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Dinner");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.Dinner, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Night Meal");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.NightMeal, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+        });
+    }).GetHtml();
+}

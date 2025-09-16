@@ -1,0 +1,150 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItem10";
+           settings.KeyFieldName = "Branch;Code";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "InforSetup", Action = "GridItemPositionFamilys" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "InforSetup", Action = "CreatePositionFamily" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "InforSetup", Action = "EditPositionFamily" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "InforSetup", Action = "DeletePositionFamily" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Branch");
+               column.FieldName = "Branch";
+               column.Width = 250;
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["BRANCHES_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+               textProperties.ValueType = typeof(string);
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Code");
+               column.FieldName = "Code";
+               column.Width = 250;
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["POSITION_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+               textProperties.ValueType = typeof(string);
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ReportingManager");
+               column.FieldName = "ReportingManager";
+               column.Width = 250;
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["POSITION_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+               textProperties.ValueType = typeof(string);
+
+           });
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Width = 200;
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+           //    column.FieldName = "Description";
+
+           //});
+
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Width = 150;
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+           //    column.FieldName = "SecDescription";
+
+           //});
+
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Width = 150;
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+           //    column.FieldName = "Remark";
+
+           //});
+           //settings.Columns.Add(column =>
+           //{
+           //    column.FieldName = "IsActive";
+           //    column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "IsActive");
+           //});
+
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Code")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+               if (e.Column.FieldName == "Status")
+               {
+                   //e.Editor.ReadOnly = true;
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

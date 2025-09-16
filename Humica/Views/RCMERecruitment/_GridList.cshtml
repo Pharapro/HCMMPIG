@@ -1,0 +1,162 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridList";
+        settings.KeyFieldName = "RequestNo";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsBehavior.AllowSort = false;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CallbackRouteValues = new { Controller = "RCMERecruitment", Action = "GridIndex" };
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsContextMenu.Enabled = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobID");
+            column.Width = 110;
+            column.FieldName = "JobID";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No of Recruit");
+            column.Width = 110;
+            column.FieldName = "PosterNo";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 300;
+            column.FieldName = "MediaType";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("MediaType");
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["TOKEN_SELECT"];
+            textProperties.ValueField = "ID";
+            textProperties.TextField = "Description";
+
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.DropDownStyle = DropDownStyle.DropDownList;
+            textProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+            column.Width = 150;
+            column.FieldName = "Location";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Contact in Formation");
+            column.Width = 250;
+            column.FieldName = "ContactInfo";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndDate");
+            column.Width = 150;
+            column.FieldName = "EndDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Posted Date");
+            column.Width = 150;
+            column.FieldName = "PostedDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Person in Charge");
+            column.Width = 150;
+            column.FieldName = "PersonInCharge";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.Width = 150;
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'POSTED'", GridConditionHighlightFormat.Custom);
+            column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+            column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CreatedBy");
+            column.Width = 150;
+            column.FieldName = "CreatedBy";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CreatedOn");
+            column.Width = 150;
+            column.FieldName = "CreatedOn";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ChangedBy");
+            column.Width = 150;
+            column.FieldName = "ChangedBy";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ChangedOn");
+            column.Width = 150;
+            column.FieldName = "ChangedOn";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        //settings.ClientSideEvents.EndCallback = "EndCallBackM";
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

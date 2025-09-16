@@ -1,0 +1,716 @@
+﻿@model Humica.Training.TrainningObject
+
+<script type="text/javascript">
+    var ss = "";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+          $('#_btnSaveActionGrid').click(function () {
+              ss = 1;
+              ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("SURE_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+
+          });
+    });
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+
+            if (ss == 1) {
+                $('form').submit();
+            }
+        }
+
+    }
+
+    function Selectstaff(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/Selectstaff',
+            data: { "Actionname": "Create", "StaffID": cboStaff.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+
+                    txtStaffName.SetValue(data.NameEN);
+                    txtGender.SetValue(data.Gender);
+                    txtPosition.SetValue(data.Position);
+                    txtPhoneNo.SetValue(data.Phone);
+                    txtNatID.SetValue(data.NatID);
+                    //txtHireDate.SetValue(data.HireDate);
+                    txtWorkExperience.SetValue(data.WorkExperience);
+
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+
+    var str = "";
+    function notify() {
+        str = "";
+        var els = document.querySelectorAll('input:checked');
+        for (var i = 0; i < els.length; i++) {
+            //console.log(els[i].value)
+            str += els[i].value + ";";
+        }
+        //alert(str)
+        txtSelectedAnswer.SetValue(str);
+    }
+
+    //function doSomething() {
+    //    alert("Doing something here");
+    //}
+    //window.onload = function () {
+    //    doSomething(); //Make sure the function fires as soon as the page is loaded
+    //    setTimeout(doSomething, 60); //Then set it to run again after ten minutes
+    //}
+    
+
+
+
+</script>
+
+<style>
+    input.larger {
+        transform: scale(2);
+        margin: 30px;
+        margin: 10px;
+        float: left;
+    }
+
+    /* The container */
+.con {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  /*font-size: 22px;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.con input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: white;
+  border-radius: 15%;
+  border: solid 1px;
+}
+
+/* On mouse-over, add a grey background color */
+.con:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.con input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.con input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.con .checkmark:after {
+ 	left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+.timer-time {
+    line-height:1em;
+    font-size: 6em;
+}
+
+.timer-container {
+  height: 1em;
+  overflow: hidden;
+  position: relative;
+}
+
+.timer-box {
+  height: 1em;
+  margin: auto;
+  position: relative;
+}
+
+.timer-box > span {
+  position: relative;
+}
+@@media (min-width: 1200px)
+{
+    .container {
+        width: 1460px;
+    }
+}
+
+</style>
+
+
+<script>
+    var gHours = 0;
+    var gMinutes = 0;
+    var gSeconds = 0;
+
+    var remainingTime;
+
+    var countdownHandle;
+
+    //var audio = new Audio('./sounds/beep.mp3');
+
+    $(document).ready(function () {
+        onPomodoroTimer();
+        onStartTimer();
+    });
+
+    function onPomodoroTimer() {
+
+        //stopTimer();
+
+        gHours = 0;
+        gMinutes = @Model.Timer;
+        gSeconds = 0;
+
+        resetTimer();
+
+        $('#shortButton').removeClass('btn-success');
+        $('#longButton').removeClass('btn-success');
+        $('#pomodoroButton').addClass('btn-success');
+    }
+
+    function onShortTimer() {
+
+        stopTimer();
+
+        gHours = 0;
+        gMinutes = 5;
+        gSeconds = 0;
+
+        resetTimer();
+
+        $('#pomodoroButton').removeClass('btn-success');
+        $('#longButton').removeClass('btn-success');
+        $('#shortButton').addClass('btn-success');
+    }
+
+    function onLongTimer() {
+
+        //stopTimer();
+
+        gHours = 0;
+        gMinutes = 15;
+        gSeconds = 0;
+
+        resetTimer();
+
+        $('#pomodoroButton').removeClass('btn-success');
+        $('#shortButton').removeClass('btn-success');
+        $('#longButton').addClass('btn-success');
+    }
+
+    function onStartTimer() {
+        //stopTimer();
+        startTimer();
+    };
+
+    function onStopTimer() {
+        stopTimer();
+
+    };
+
+    function onResetTimer() {
+        stopTimer();
+        resetTimer();
+    }
+
+    function startAlarm() {
+        if (remainingTime < (1000*60)) {
+            //alert(remainingTime);
+        }
+    }
+
+    function startTimer() {
+        countdownHandle = setInterval(function () {
+            decrementTimer();
+        }, 1000);
+    }
+
+    function stopTimer() {
+        $('form').submit();
+        clearInterval(countdownHandle);
+        startAlarm();
+        //$('form').submit();
+    }
+
+    function resetTimer() {
+
+        remainingTime = (gMinutes * 60 * 1000) +
+        (gSeconds * 1000);
+        renderTimer();
+    }
+
+    function renderTimer() {
+
+
+        var deltaTime = remainingTime;
+
+        //var hoursValue = Math.floor(deltaTime / (1000 * 60 * 60));
+        //deltaTime = deltaTime % (1000 * 60 * 60);
+
+        var minutesValue = Math.floor(deltaTime / (1000 * 60));
+        deltaTime = deltaTime % (1000 * 60);
+
+        var secondsValue = Math.floor(deltaTime / (1000));
+
+        animateTime(minutesValue, secondsValue);
+    };
+
+
+    function animateTime(remainingMinutes, remainingSeconds) {
+
+        // position
+        //$('#hoursValue').css('top', '0em');
+        $('#minutesValue').css('top', '0em');
+        $('#secondsValue').css('top', '0em');
+
+        //$('#hoursNext').css('top', '0em');
+        $('#minutesNext').css('top', '0em');
+        $('#secondsNext').css('top', '0em');
+
+        var oldHoursString = $('#hoursNext').text();
+        var oldMinutesString = $('#minutesNext').text();
+        var oldSecondsString = $('#secondsNext').text();
+
+        //var hoursString = formatTime(remainingHours);
+        var minutesString = formatTime(remainingMinutes);
+        var secondsString = formatTime(remainingSeconds);
+
+        //$('#hoursValue').text(oldHoursString);
+        $('#minutesValue').text(oldMinutesString);
+        $('#secondsValue').text(oldSecondsString);
+
+        //$('#hoursNext').text(hoursString);
+        $('#minutesNext').text(minutesString);
+        $('#secondsNext').text(secondsString);
+
+        //// set and animate
+        //if (oldHoursString !== hoursString) {
+        //    $('#hoursValue').animate({ top: '-=1em' });
+        //    $('#hoursNext').animate({ top: '-=1em' });
+        //}
+
+        if (oldMinutesString !== minutesString) {
+            $('#minutesValue').animate({ top: '-=1em' });
+            $('#minutesNext').animate({ top: '-=1em' });
+        }
+
+        if (oldSecondsString !== secondsString) {
+            $('#secondsValue').animate({ top: '-=1em' });
+            $('#secondsNext').animate({ top: '-=1em' });
+        }
+    }
+
+
+    function formatTime(intergerValue) {
+
+        return intergerValue > 9 ? intergerValue.toString() : '0' + intergerValue.toString();
+
+    }
+
+    function decrementTimer() {
+
+        remainingTime -= (1 * 1000);
+
+        if (remainingTime < 1000) {
+            onStopTimer();
+        }
+
+        renderTimer();
+    }
+
+</script>
+
+<div class="container">
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "CreateCourse";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Items.AddGroupItem(m => Model.ExamHeader, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.Caption = "RequestHeader Informaion";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.AnswerSelected, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtSelectedAnswer";
+                    s.ClientVisible = false;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+                Html.DevExpress().ComboBoxFor(i => i.ExamHeader.Course, s =>
+                {
+                    s.Properties.CallbackPageSize = 30;
+                    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    s.Properties.TextFormatString = "{0}:{1}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.ValueType = typeof(string);
+                    s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 120);
+                }).BindList(ViewData["Course_List"]).Render();
+            });
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+               )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "TraningType");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.ExamHeader.TrainingType, s =>
+                {
+                    s.Properties.CallbackPageSize = 30;
+                    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    s.Properties.TextFormatString = "{0}:{1}";
+                    s.Properties.ValueField = "Code";
+                    s.Properties.ValueType = typeof(string);
+                    s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description Name"), 120);
+                }).BindList(ViewData["Training_List"]).Render();
+            });
+
+        g.Items
+           .Add(m =>
+           {
+               m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+              )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Total Score");
+               //m.ColumnSpan = 2;
+           })
+           .SetNestedContent(() =>
+
+           {
+               Html.DevExpress().TextBoxFor(i => i.ExamHeader.TotalScore, s =>
+               {
+                   s.ReadOnly = true;
+                   s.ShowModelErrors = true;
+                   s.Width = Unit.Percentage(100);
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+
+        g.Items
+         .Add(m =>
+         {
+             m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Date");
+
+         })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().DateEditFor(i => i.ExamHeader.ExamDate, s =>
+             {
+                 s.ShowModelErrors = true;
+                 //  s.ReadOnly = true;
+                 s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                 s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+                 s.Date = DateTime.Now;
+             }).Render();
+         });
+
+        g.Items
+           .Add(m =>
+           {
+               m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+              )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Status");
+               //m.ColumnSpan = 2;
+           })
+           .SetNestedContent(() =>
+
+           {
+               Html.DevExpress().TextBoxFor(i => i.ExamHeader.Result, s =>
+               {
+                   s.ReadOnly = true;
+                   s.ShowModelErrors = true;
+                   s.Width = Unit.Percentage(100);
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+
+        g.Items
+           .Add(m =>
+           {
+               m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+              )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Correct Answer");
+               //m.ColumnSpan = 2;
+           })
+           .SetNestedContent(() =>
+
+           {
+               Html.DevExpress().TextBoxFor(i => i.ExamHeader.CorrectAnswer, s =>
+               {
+                   s.ReadOnly = true;
+                   s.ShowModelErrors = true;
+                   s.Width = Unit.Percentage(100);
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+               )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Module");
+                m.ColumnSpan = 2;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.ExamHeader.Topic, s =>
+                {
+                    s.Properties.CallbackPageSize = 30;
+                    s.ReadOnly = true;
+                    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                    s.Properties.TextFormatString = "{0}:{1}";
+                    s.Properties.ValueField = "Topic";
+                    s.Properties.ValueType = typeof(string);
+                    s.Properties.Columns.Add("Topic", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Name"), 120);
+                    s.Width = Unit.Percentage(100);
+                }).BindList(ViewData["Module_List"]).Render();
+            });
+
+        g.Items
+           .Add(m =>
+           {
+               m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+              )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Incorrect Answer");
+               //m.ColumnSpan = 2;
+           })
+           .SetNestedContent(() =>
+
+           {
+               Html.DevExpress().TextBoxFor(i => i.ExamHeader.InCorrectAnswer, s =>
+               {
+                   s.ReadOnly = true;
+                   s.ShowModelErrors = true;
+                   s.Width = Unit.Percentage(100);
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+
+        //g.Items
+        //   .Add(m =>
+        //   {
+        //       m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        //      )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Descripiton");
+        //       m.ColumnSpan = 2;
+        //   })
+        //   .SetNestedContent(() =>
+
+        //   {
+        //       Html.DevExpress().TextBoxFor(i => i.ExamHeader.ModuleDescription, s =>
+        //       {
+        //           s.ShowModelErrors = true;
+        //           s.Width = Unit.Percentage(100);
+        //           s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //           s.Properties.ValidationSettings.SetFocusOnError = true;
+        //           s.Properties.ValidationSettings.ErrorText = "*";
+        //       }).Render();
+        //   });
+
+
+    });
+}).GetHtml()
+
+</div>
+
+<div class="container">
+
+    @foreach (var q in Model.ListQuestion.OrderBy(w => w.ID).ToList())
+    {
+        int number = 1;
+        <div style="margin-bottom:15px;">
+
+            <h2 for="@q.QuestionCode" style="padding: 10px 5px;line-height: 45px;"><span>@q.QuestionCode.</span>@q.Description</h2>
+
+            @foreach (var an in Model.ListAnswer.Where(w=>w.TrainingType== @q.TrainingType && w.CourseCode == @q.CourseCode && w.Topic== @q.Topic && w.QuestionCode == @q.QuestionCode).OrderBy(w=>w.ID).ToList())
+            {
+                if (@q.QuestionCode == @an.QuestionCode && @q.TrainingType == @an.TrainingType && @q.CourseCode == @an.CourseCode && @q.Topic == @an.Topic)
+                {
+                    <div style="overflow: hidden;width: 100%;padding-left: 25px;">
+
+                        @for (int i = 1; i <= an.ColumnCheck; i++)
+                        {
+                            int ln = an.CorrectValue;
+                            string value = "";
+                            string inname = an.AnswerCode;
+                            if (an.ColumnCheck > 1)
+                            {
+                                ln = i;
+                                inname = an.QuestionCode + an.AnswerCode;
+                            }
+                            value = an.QuestionCode + "," + an.AnswerCode + "," + ln;
+                            if (an.ColumnCheck > 1)
+                            {
+                                <label class="con" style="float: left;padding: 7px;">
+                                    <span style="padding: 7px;padding-left: 22px;width: 60%;font-size: 18px;">(@ln)</span>
+                                    <input type="radio" name="@inname" onclick="notify()" value="@value" />
+                                    <span class="checkmark"></span>
+                                </label>
+
+                            }
+                            else
+                            {
+                                <label class="con" style="float: left;padding: 7px;">
+                                    <input type="checkbox" onclick="notify()" value="@value" />
+                                    <span style="padding: 7px;padding-left: 22px;">(@an.AnswerCode)</span>
+                                    <span class="checkmark"></span>
+                                </label>
+
+                            }
+
+                            number++;
+                        }
+                        @if (an.ColumnCheck > 1)
+                        {
+                            <label style="float: left;padding: 7px; width: 60%;font-size: 21px;line-height: 27px;">@an.Description</label>
+                        }
+                        else
+                        {
+                            <label style="float: left;padding: 7px; width: 85%;font-size: 21px;line-height: 27px;">@an.Description</label>
+                        }
+
+                    </div>
+
+                }
+
+            }
+            <p>
+                @if (!(q.Attachement == null || q.Attachement == ""))
+                {
+                    <img src="@q.Attachement" class="img-thumbnail" alt="Cinque Terre" style="width: 750px;">
+                }
+                
+            </p>
+        </div>
+
+        
+    }
+
+
+    
+
+</div>
+
+<div class="container" style="margin-top:150px;">
+
+    <div class="panel panel-default" style="position: fixed;bottom: 27px;right: 0;">
+        <div class="panel-body text-center">
+            <div class="timer-time timer-container">
+                <div class="timer-time-set timer-box" id="currentTime">
+                    <span id="minutesValue">00</span><span>:</span>
+                    <span id="secondsValue">00</span>
+                </div>
+                <div class="timer-time-set timer-box" id="nextTime">
+                    <span id="minutesNext">00</span><span>:</span>
+                    <span id="secondsNext">00</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@*@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Staff")).SetContent(() =>
+        {
+            //@Html.RenderPartial("GridItems", Model);
+
+        });
+
+        //    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "SerialItemDetail")).SetContent(() =>
+        //{
+        //    @Html.RenderPartial("GridItemsSerialEdit", Model);
+
+        //});
+
+    }).GetHtml()*@
+
+
+
+
+
+
+
+

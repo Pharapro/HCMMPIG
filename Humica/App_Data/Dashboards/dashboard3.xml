@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="Booking Room" />
+  <DataSources>
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="HR_BooingRoom_View">
+        <Tables>
+          <Table Name="HR_BooingRoom_View" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="HR_BooingRoom_View" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="List Booking" DataSource="sqlDataSource1" DataMember="HR_BooingRoom_View">
+      <DataItems>
+        <Dimension DataMember="BookingDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem0" />
+        <Dimension DataMember="StartTime" DateTimeGroupInterval="DateHourMinute" DefaultId="DataItem2">
+          <DateTimeFormat DateHourMinuteFormat="TimeOnly" />
+        </Dimension>
+        <Dimension DataMember="EndTime" DateTimeGroupInterval="DateHourMinute" DefaultId="DataItem3">
+          <DateTimeFormat DateHourMinuteFormat="TimeOnly" />
+        </Dimension>
+        <Dimension DataMember="RoomType" DefaultId="DataItem1" />
+        <Dimension DataMember="Reason" DefaultId="DataItem4" />
+        <Dimension DataMember="EmpName" DefaultId="DataItem6" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="Name" Weight="75.062709030100365">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Room Type" Weight="77.69648829431442">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Booking Date" Weight="51.797658862876276">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Start Time" Weight="46.091137123745838">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="End Time" Weight="43.01839464882945">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Remark" Weight="156.27090301003352">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+    <TreeView ComponentName="treeViewDashboardItem1" Name="Filter Date" DataSource="sqlDataSource1" DataMember="HR_BooingRoom_View">
+      <DataItems>
+        <Dimension DataMember="BookingDate" DefaultId="DataItem0" />
+        <Dimension DataMember="BookingDate" DateTimeGroupInterval="Month" DefaultId="DataItem1" />
+        <Dimension DataMember="BookingDate" DateTimeGroupInterval="Day" DefaultId="DataItem2" />
+        <Dimension DataMember="RoomType" DefaultId="DataItem3" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem3" />
+        <Dimension DefaultId="DataItem0" />
+        <Dimension DefaultId="DataItem1" />
+        <Dimension DefaultId="DataItem2" />
+      </FilterDimensions>
+    </TreeView>
+    <DateFilter ComponentName="dateFilterDashboardItem1" Name="Date" DataSource="sqlDataSource1" DataMember="HR_BooingRoom_View">
+      <DataItems>
+        <Dimension DataMember="BookingDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem0" />
+      </DataItems>
+      <Dimension DefaultId="DataItem0" />
+    </DateFilter>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutItem DashboardItem="treeViewDashboardItem1" Weight="0.87974025878926" />
+      <LayoutGroup Orientation="Vertical" Weight="4.6469602644486585">
+        <LayoutItem DashboardItem="dateFilterDashboardItem1" Weight="4.6702632884398252" />
+        <LayoutItem DashboardItem="gridDashboardItem1" Weight="4.3867431632139855" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

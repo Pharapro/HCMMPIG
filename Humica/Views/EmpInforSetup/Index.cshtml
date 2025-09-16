@@ -1,0 +1,95 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model  Humica.Logic.HRS.MDEmpInfor
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Country")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemCountrys", Model.ListCountry);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Nation")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemNations", Model.ListNation);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Province")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemProvines", Model.ListProvine);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Education Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewEduType", Model.ListEduType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Certification Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewCertificationType", Model.ListCertificationType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Career History")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewCareerHistorys", Model.ListCareerHistory);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Separate Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewSeparateType", Model.ListSeparateType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Identity Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemIdentityType", Model.ListIdentityType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Contract Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewContractType", Model.ListContractType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Relationship Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewRelationshipType", Model.ListRelationshipType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Working Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewWorkingType", Model.ListWorkingType);
+
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Disciplinary Action")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewDisciplinAction", Model.ListDisciplinAction);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Disciplinary Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewDisciplinType", Model.ListDisciplinType);
+        });
+
+
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Insurance Company")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewInsuranceCompany", Model.ListInsuranceCompany);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Announcement Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridAnnouncement", Model.ListAnnounementType);
+        });
+    }).GetHtml()
+
+

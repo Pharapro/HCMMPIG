@@ -1,0 +1,41 @@
+﻿<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+</script>
+
+@model Humica.Payroll.IClsPRConfig
+
+
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "GCreate";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "IncomeType")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItems", Model.ListIncomeType);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("SocialSecurity")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItemSoSe", Model.ListSocialSecurity);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Fringe Benefit")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItemFringeBenefit", Model.ListFringeBenefit);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Rounding")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItemRounding", Model.ListRoundingRule);
+    });
+}).GetHtml()

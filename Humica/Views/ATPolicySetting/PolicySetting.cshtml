@@ -1,0 +1,260 @@
+﻿@model Humica.Attendance.IClsATPolicyObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Create";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Hour(Night Bonus)");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.NWFROM, s =>
+            {
+                s.Properties.ClientInstanceName = "stNWFROM";
+                s.Properties.EditFormat = EditFormat.Time;
+                s.Properties.EditFormatString = "hh:mm tt";
+                s.Properties.TimeSectionProperties.Visible = true;
+                s.Properties.TimeSectionProperties.Adaptive = true;
+                s.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Time;
+                s.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+                s.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Hour(Night Bonus)");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.NWTO, s =>
+            {
+                s.Properties.ClientInstanceName = "spNWFROM";
+                //s.ShowModelErrors = true;
+                //s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                //s.Properties.ValidationSettings.SetFocusOnError = true;
+                //s.Properties.NullText = "h:mm tt";
+                //s.Properties.EditFormatString = "h:mm tt";
+                //s.Properties.DisplayFormatString = "h:mm tt";
+                //s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.EditFormat = EditFormat.Time;
+                s.Properties.EditFormatString = "hh:mm tt";
+                s.Properties.TimeSectionProperties.Visible = true;
+                s.Properties.TimeSectionProperties.Adaptive = true;
+                s.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Time;
+                s.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+                s.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Extra Night Shift");
+            m.ColumnSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.ExtraNS, s =>
+            {
+                s.Width = Unit.Percentage(98);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{0}";
+                s.Properties.ValueField = "OTCode";
+                s.Properties.TextField = "OTType";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.AllowNull = true;
+            }).BindList(ViewData["OT_RATE_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Leave Hour By Rate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.LHourByRate, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Get OT if Check Out");
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().SpinEditFor(i => i.Header.OTMN, s =>
+           {
+               s.Properties.ClientInstanceName = "spOTMN";
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+               s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+           }).Render();
+       });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BaseOnScan");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.BaseOnScan, s =>
+            {
+                s.Properties.ClientInstanceName = "txtBaseOnScan";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ClientSideEvents.CheckedChanged = "OnClientValueChanged";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AfterScan") + "(min)";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.AfterScan, s =>
+            {
+                s.Properties.ClientInstanceName = "txtAfterScan";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Late/Early/Missscan");
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Count Late/Early");
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.IsLate_Early, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Count Miss Scan");
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().SpinEditFor(i => i.Header.MissScan, s =>
+             {
+                 s.Properties.ClientInstanceName = "spMissScan";
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+                 s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+             }).Render();
+         });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("maximum Late") + "(min)";
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.MaxLate, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                s.Properties.DisplayFormatString = "N0";
+                s.Properties.NumberType = SpinEditNumberType.Float;
+                s.Properties.MinValue = 0;
+                s.Properties.MaxValue = 99999;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("maximum Early") + "(min)";
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().SpinEditFor(i => i.Header.MaxEarly, s =>
+             {
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+                 s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                 s.Properties.DisplayFormatString = "N0";
+                 s.Properties.NumberType = SpinEditNumberType.Float;
+                 s.Properties.MinValue = 0;
+                 s.Properties.MaxValue = 99999;
+             }).Render();
+         });
+
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Leave Entitle");
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Date");
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => i.Header.LFromDate, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtFromDate";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.AllowNull = false;
+                    s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Date");
+            m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.LToDate, s =>
+            {
+                s.Properties.ClientInstanceName = "txtToDate";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.AllowNull = false;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+
+}).GetHtml()

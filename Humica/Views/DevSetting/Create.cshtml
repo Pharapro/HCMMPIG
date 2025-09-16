@@ -1,0 +1,109 @@
+﻿@model Humica.Logic.Atts.DevSettingObject
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+
+ </script>
+<style>
+    /*#LeaveType_1{
+        display:none;
+    }*/
+</style>
+
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "DevSetting";
+        settings.AlignItemCaptionsInAllGroups = true;
+
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DeviceID") + "*";
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.DeviceID, s =>
+                   {
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+           
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                m.ColSpan = 2;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+                   {
+                       s.Width = Unit.Percentage(100);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IPAddress") + "*";
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.IPAddress, s =>
+                   {
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Port");
+            })
+              .SetNestedContent(() =>
+              {
+                  Html.DevExpress().TextBoxFor(i => i.Header.Port, s =>
+                  {
+                      s.ShowModelErrors = true;
+                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                      s.Properties.ValidationSettings.ErrorText = "*";
+                  }).Render();
+              });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Confirm Password");
+            })
+              .SetNestedContent(() =>
+              {
+                  Html.DevExpress().TextBoxFor(i => i.Header.CPassword, s =>
+                  {
+                      s.ShowModelErrors = true;
+                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                      s.Properties.ValidationSettings.ErrorText = "*";
+                  }).Render();
+              });
+        });
+    }).GetHtml();
+}

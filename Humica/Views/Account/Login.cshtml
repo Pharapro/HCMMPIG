@@ -1,0 +1,212 @@
+@{
+    ViewBag.Title = "Humica-Login";
+}
+
+@{ Layout = "~/Views/Shared/_loginLayout.cshtml"; }
+
+<div class="login_logo" >
+    <img src="~/Content/Images/logo.svg" />
+</div>
+<style>
+    .login_logo {
+        padding: 0px;
+    }
+
+    .login_logo img {
+        height: 270px;
+        object-fit: Contain;
+    }
+    .dxflItem_Office365 {
+        padding: 0px;
+    }
+    #ImageButton {
+        border-style: solid;
+        /* border-width: 2px; */
+        border-color: #ddd3d3;
+        border-radius: 8px;
+        background-color: white !important;
+        border-block-width: 1px;
+        /* border: none; */
+        padding: 0;
+        width: 230px !important;
+        /* height: 32px !important; */
+        display: flex;
+        justify-content: center;
+        margin-top: 8px;
+        margin-left: 56px;
+        color: black;
+        flex-direction: row-reverse;
+    }
+    #label1 {
+        background-color: transparent !important; /* Remove background color */
+        border: none; /* Remove border */
+        padding: 0; /* Remove padding */
+        color: black;
+        width: 32px !important;
+        height: 32px !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 44px; /* Adjust as needed for spacing */
+        margin-left: 159px;
+    }
+</style>
+<script>
+    function signInAzure(s, e) {
+        // Make an AJAX request to the sign-in action
+
+        window.location.href = '@Url.Action("SignIn", "AccountX")';
+    }
+</script>
+@model Humica.EF.Models.SY.LoginModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "registrationForm";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        if (ViewData[Humica.EF.Models.SY.SYConstant.AUTHENTICATION_FAIL] != null)
+        {
+            g.Items.Add(m =>
+            {
+                m.Caption = "";
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().Label(s =>
+                {
+                    Humica.EF.MD.SYMessage obj = (Humica.EF.MD.SYMessage)ViewData[Humica.EF.Models.SY.SYConstant.AUTHENTICATION_FAIL];
+                    s.Text = obj.Description;
+                    s.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                }).Render();
+
+            });
+        }
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.UserName, s =>
+            {
+                s.ShowModelErrors = true;
+                //s.Width = 350;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                s.Properties.ValidationSettings.Display = Display.Static;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullText = "User Name";
+                s.ControlStyle.Font.Size = 12;
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Password, s =>
+            {
+
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                //s.Width = 350;
+                s.Properties.Password = s.Name.Contains("Password");
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                s.Properties.ValidationSettings.Display = Display.Static;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullText = "Password";
+                s.ControlStyle.Font.Size = 12;
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Language, s =>
+            {
+
+                s.Width = Unit.Percentage(102.5);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                s.Properties.ValidationSettings.Display = Display.Static;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                // s.SelectedIndex = 1;
+                //s.Height = 35;
+                s.Properties.NullText = "Language";
+                s.Properties.ValueField = "Lang";
+                s.Properties.TextField = "Description";
+                s.ControlStyle.Font.Size = 12;
+            }).BindList(ViewData["LANG_BIND"]).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+            m.CaptionSettings.AssociatedNestedExtensionName = "RegistrationData.FirstName";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().Button(s =>
+            {
+                s.Width = Unit.Percentage(35.2);
+                s.Name = "BtnLogin";
+                s.Text = "Sign In";
+                s.UseSubmitBehavior = true;
+            }).Render();
+
+            @Html.DevExpress().Label(x =>
+            {
+                x.Name = "label1";
+                x.Text = "Or";
+            }).GetHtml();
+
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "ImageButton";
+                s.Text = "Sign In With Azure";
+                // You can set the image URL for the button if it's supposed to be an image button.
+                // For example:
+                s.Images.Image.Url = "~/Content/Images/azure.svg";
+                //s.Styles.Style.CssClass = "azure-button"; // Assign a CSS class to the button
+                s.ClientSideEvents.Click = "signInAzure";
+                s.Styles.Style.ImageSpacing = Unit.Pixel(30);
+            }).Render();
+        });
+    });
+}).GetHtml()
+}
+
+
+    <!-- Add a button for AD login -->
+    @*@using (Html.BeginForm("SignIn", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Login with AD" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }*@
+<div class="login_copyright">
+    <div class="login_links">
+
+    </div>
+    @Html.DevExpress().Label(s =>
+{
+    s.Name = "CopyRight";
+    s.Text = "Copyright © 2019 Sunfix Group. All Rights Reserved.\nVersion 24.Q1.158";
+}).GetHtml()
+</div>

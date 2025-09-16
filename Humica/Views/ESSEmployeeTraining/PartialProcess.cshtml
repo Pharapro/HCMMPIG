@@ -1,0 +1,122 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewListPending";
+               settings.KeyFieldName = "TrainNo;EmpCode";
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.CallbackRouteValues = new { Controller = "ESSEmployeeTraining", Action = "PartialProcess" };
+               //settings.CommandColumn.ShowSelectCheckbox = true;
+               //settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.CommandColumn.Width = 50;
+               settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+               settings.Columns.Add(column =>
+               {
+                   column.Name = "EmpCode";
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                   column.Width = 130;
+                   column.FieldName = "EmpCode";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpName");
+                   column.Width = 200;
+                   column.FieldName = "EmpName";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+                   column.FieldName = "Position";
+                   column.Width = 200;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Year");
+                   column.Width = 90;
+                   column.FieldName = "InYear";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CourseName");
+                   column.Width = 150;
+                   column.FieldName = "CourseName";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GroupDescription");
+                   column.Width = 150;
+                   column.FieldName = "GroupDescription";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CourseCategory");
+                   column.Width = 150;
+                   column.FieldName = "CourseCategory";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+                   column.Width = 100;
+                   column.FieldName = "Status";
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'OPEN'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'ACCEPTED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'CLOSED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'RELEASED'", GridConditionHighlightFormat.Custom);
+                   column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+                   column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'CANCELLED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+                   settings.FormatConditions.AddHighlight("ReStatus", "[ReStatus] = 'APPROVED'", GridConditionHighlightFormat.Custom);
+               });
+
+
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'ACCEPTED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid = (ASPxGridView)s;
+                   //Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.AllColumns;
+                   //Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+
+                   e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+               };
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 122;
+           });
+}
+
+@gridExtension.Bind(Model).GetHtml()

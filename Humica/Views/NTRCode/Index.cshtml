@@ -1,0 +1,27 @@
+﻿<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#_btnImportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        });
+
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportListDetail(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+
+    });
+</script>
+
+@*<script type="text/javascript" src="~/Content/GridJs.js">
+
+</script>*@
+
+
+
+@model Humica.EF.Models.CF.CFAddressObject
+
+
+@*Item Grid View*@
+
+@Html.Partial("PartialList", Model)

@@ -1,0 +1,165 @@
+﻿@{
+    DateTime d = new DateTime();
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "GridTrinaingAttendee";
+          settings.KeyFieldName = "TrainNo";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new
+          {
+              Controller = "TrainingAttendance",
+              Action = "GridTrinaingAttendee"
+          };
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TrainingAttendance", Action = "GridTrinaingCreate" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TrainingAttendance", Action = "GridTrinaingEdit" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TrainingAttendance", Action = "GridTrinaingDelete" };
+          settings.CommandColumn.Visible = false;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+          settings.CommandColumn.Visible = true;
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainNo");
+              column.FieldName = "TrainNo";
+              column.Width = 200;
+              var textProperties = column.PropertiesEdit as TextBoxProperties;
+              textProperties.ClientInstanceName = "txtTrainNo";
+              column.Visible = false;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "HRStaffProfile.EmpCode";
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["EMPCODE_SELECT"];
+              textProperties.ClientSideEvents.SelectedIndexChanged = "Employee_SelectedIndexChanged";
+              textProperties.TextFormatString = "{0}";
+              textProperties.ValueField = "EmpCode";
+              textProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+              textProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+              textProperties.ValueType = typeof(string);
+              textProperties.ClientInstanceName = "txtEmpCode";
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+              column.FieldName = "HRStaffProfile.AllName";
+              column.Width = 200;
+              var textProperties = column.PropertiesEdit as TextBoxProperties;
+              textProperties.ClientInstanceName = "txtAllName";
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TrainingAttendance.InDate";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InDate");
+              //column.ColumnType = MVCxGridViewColumnType.TextBox;
+              //(column.PropertiesEdit as TextBoxProperties).DisplayFormatString = "{0:dd-MMM-yyyy}";
+
+              column.ColumnType = MVCxGridViewColumnType.DateEdit;
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "{0:dd-MMM-yyyy}";
+              (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd-MMM-yyyy";
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = false;
+              column.ReadOnly = true;
+              column.Width = 120;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TrainingAttendance.FromTime";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromTime");
+              column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+              column.Width = 100;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TrainingAttendance.ToTime";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToTime");
+              column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+              column.Width = 100;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TrainingAttendance.IsAttend";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsAttend");
+              column.EditorProperties().ComboBox(cb =>
+              {
+                  cb.DataSource = ViewData["IS_ATTEND"];
+                  cb.TextField = "SelectText";
+                  cb.ValueField = "SelectValue";
+                  cb.DropDownStyle = DropDownStyle.DropDownList;
+              });
+              column.Width = 100;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "TrainingAttendance.Remark";
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+          });
+
+          settings.SettingsPager.PageSize = 200;
+          settings.CommandColumn.Width = 100;
+
+          settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+          settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+          settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+          settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue != null)
+              {
+                  if (e.Column.FieldName == "HRStaffProfile.EmpCode")
+                  {
+                      e.Editor.ReadOnly = true;
+                  }
+              }
+              if (e.KeyValue != null)
+              {
+                  if (e.Column.FieldName == "HRStaffProfile.AllName")
+                  {
+                      e.Editor.ReadOnly = true;
+                  }
+              }
+          };
+          settings.InitNewRow = (s, e) =>
+          {
+              e.NewValues["TrainingAttendance.InDate"] = ViewData["Indate"].ToString();
+          };
+      });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+
+
+
+
+
+

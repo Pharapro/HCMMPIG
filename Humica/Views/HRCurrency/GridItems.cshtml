@@ -1,0 +1,120 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItem3";
+           settings.KeyFieldName = "CurrencyCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRCurrency", Action = "GridItems" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRCurrency", Action = "Create" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRCurrency", Action = "Edit" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRCurrency", Action = "Delete" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+           //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CurrencyCode");
+               column.FieldName = "CurrencyCode";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.FieldName = "Description";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CurrencySymbol");
+               column.FieldName = "CurrencySymbol";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DecimalPrecision");
+               column.FieldName = "DecimalPrecision";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 60;
+               column.FieldName = "Active";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Active");
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           });
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Code")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+               if (e.Column.FieldName == "Status")
+               {
+                   //e.Editor.ReadOnly = true;
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

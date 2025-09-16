@@ -1,0 +1,189 @@
+﻿<script type="text/javascript">
+    @*var status = "@Model.Header.ReStatus";
+    var ss = 0;*@
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        @*$('#_bthEditAction').click(function () {
+            if ("@Model.Header.ReStatus" == "@Humica.EF.SYDocumentStatus.OPEN.ToString()" || "@Model.Header.ReStatus" == "@Humica.EF.SYDocumentStatus.PENDING.ToString()" || "@Model.Header.ReStatus" == "@Humica.EF.SYDocumentStatus.APPROVED.ToString()") {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+            }
+        });
+
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 41;
+            if ("@Model.Header.ReStatus" == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C")");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+            }
+        });
+
+        $('#_btnPrintction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Print?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+
+        $('#_btnCreateCopy').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Create?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+
+        //Navigation Page
+        $('#_btnActionFirst').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + "@Model.NavigationPage.FirstNo";
+        });
+        $('#_btnActionPrevious').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + "@Model.NavigationPage.PreviouseNo";
+        });
+        $('#_btnActionNext').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + "@Model.NavigationPage.NextNo";
+        });
+        $('#_btnActionLast').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + "@Model.NavigationPage.LastNo";
+        });*@
+
+    });
+
+    @*function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnRequest") {
+            ss = 5;
+            //request
+            if (ss == 5) {
+                if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                    ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REQUEST_C", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+                else {
+                    AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+            }
+
+        }
+        if (e.item.name == "_mnApproveDoc") {
+            ss = 6;
+            //approve
+            if (ss == 6) {
+                if (status == "@Humica.EF.SYDocumentStatus.PENDING.ToString()") {
+                    ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("APPROVE_C", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+                else {
+                    AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+            }
+        }
+
+        if (e.item.name == "_mnCancelDoc") {
+            ss = 4;
+            //cancel
+            if (ss == 4) {
+                if (!(status == "@Humica.EF.SYDocumentStatus.CANCELLED.ToString()" || status == "@Humica.EF.SYDocumentStatus.COMPLETED.ToString()" || status == "@Humica.EF.SYDocumentStatus.CLOSED.ToString()")) {
+                    ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_C", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+                else {
+                    AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+            }
+        }
+        if (e.item.name == "_mnCloseDoc") {
+            ss = 9;
+            //close
+            if (ss == 9) {
+                if (!(status == "@Humica.EF.SYDocumentStatus.CANCELLED.ToString()" || status == "@Humica.EF.SYDocumentStatus.COMPLETED.ToString()" || status == "@Humica.EF.SYDocumentStatus.CLOSED.ToString()")) {
+                    ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CLOSED_C", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+                else {
+                    AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.Models.SY.SYSession.getSessionUser().Lang)");
+                }
+            }
+
+        }
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 41) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            if (ss == 5) {
+                PopTheQuestion.Hide();
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "RequestForApproval?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            if (ss == 6) {
+                PopTheQuestion.Hide();
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "ApproveDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+            if (ss == 4) {
+                //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "CancelDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+                PopTheReason.Show();
+            }
+            if (ss == 9) {
+                //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "CloseDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+                PopTheReason.Show();
+            }
+        }
+    }
+
+    function confirmCancel(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                $.ajax({
+                    type: 'post',
+                    url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ReasonDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()",
+                    data: { 'Reason': cboReasonCancel.GetValue(), 'Comment': TXTCOMMENT.GetValue() },
+                    success: function (data) {
+                        if (data.MS == "@Humica.EF.SYSConstant.OK.ToString()") {
+                            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "CancelDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+                        } else {
+                            AlertMessage(data.MS);
+                        }
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.responseText);
+                    }
+
+                });
+            }
+            if (ss == 9) {
+                $.ajax({
+                    type: 'post',
+                    url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ReasonDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()",
+                    data: { 'Reason': cboReasonCancel.GetValue(), 'Comment': TXTCOMMENT.GetValue() },
+                    success: function (data) {
+                        if (data.MS == "@Humica.EF.SYSConstant.OK.ToString()") {
+                            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "CloseDoc?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+                        } else {
+                            AlertMessage(data.MS);
+                        }
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.responseText);
+                    }
+
+                });
+            }
+
+        }
+    }*@
+
+</script>
+
+@*<script type="text/javascript" src="~/Content/PurchaseRequest3A.js">
+
+    </script>*@
+
+@model CLoudViewLogistic.Models.SY.ClsEmail
+
+
+@Html.Partial("ViewDetails", Model)
+
+@*@Html.Partial("~/Views/ACTION/PopTheReason.cshtml")*@

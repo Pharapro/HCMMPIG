@@ -1,0 +1,109 @@
+﻿
+<script type="text/javascript">
+    var isResetRequired = false;
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+
+    function SelectTypeInput(s, e) {
+      $.ajax({
+          type: 'post',
+          url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectTypeInput',
+          data: { 'ActionName': 'Create','Code':s.GetValue()},
+            success: function (data) {
+                if (data.MS == "OK") {
+                    GridItems.Refresh();
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+    function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Training/Setup/TRTrainerType/ShowData',
+            data: { 'Code': selectedIDs, 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    var StartDate = data.StartDate;
+                    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    dtStart.SetValue(nowDate);
+                    txtPosition.SetValue(data.Post);
+                    txtDEPT.SetValue(data.Dept);
+                    txtEmail.SetValue(data.Email);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+    function SelectTrainer(s, e) {
+        txtTrainerName.SetValue(s.GetSelectedItem().GetColumnText(1));
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowData();
+    }
+
+</script>
+
+@model Humica.Training.TRTrainerTypeObject
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "MaterialCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainerType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.Code, s =>
+            {
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "SelectValue";
+                s.Properties.TextField = "SelectText";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectTypeInput";
+            }).BindList(ViewData["LIST_TRAINERTYPE"]).Render();
+        });
+
+    });
+
+}).GetHtml()
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterialCreate";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Trainer Information")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItems", Model);
+    });
+}).GetHtml()

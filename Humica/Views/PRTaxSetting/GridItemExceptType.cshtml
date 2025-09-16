@@ -1,0 +1,121 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gridViewExceptType";
+        settings.KeyFieldName = "Code";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "PRTaxSetting", Action = "GridItemExceptType" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRTaxSetting", Action = "CreateExceptType" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRTaxSetting", Action = "EditExceptType" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRTaxSetting", Action = "DeleteExceptType" };
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.FieldName = "Code";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ExceptType");
+            column.FieldName = "ExceptType";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+            column.FieldName = "Amount";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ValueBased");
+            column.FieldName = "ValueBased";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["SELECT_VALUES"];
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+            column.FieldName = "IsActive";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Code")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "ValueBased")
+                {
+                    e.Editor.Value = "AMOUNT";
+                }
+                if (e.Column.FieldName == "IsActive")
+                {
+                    e.Editor.Value = true;
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

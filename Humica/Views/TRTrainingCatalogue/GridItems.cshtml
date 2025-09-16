@@ -1,0 +1,103 @@
+﻿@model Humica.Training.TrainingProcessObject
+@using Humica.EF;
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        bool isReadOnly = (bool)ViewData[SYSConstant.PARAM_ID1];
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "TrainingCourseID";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "CourseItemGrid", Controller = "TRTrainingCatalogue" };
+        //settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TRTrainingCatalogue", Action = "CreateCourseItem" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingCatalogue", Action = "DeleteCourseItem" };
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = isReadOnly;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        #region old
+        //settings.Columns.Add(c =>
+        //{
+        //    c.Caption= Humica.EF.Models.SY.SYSettings.getLabel("Course Code");
+        //    c.Width = Unit.Percentage(100);
+        //    c.SetEditItemTemplateContent(content => {
+        //        Html.DevExpress().DropDownEditFor(i => Model.ListCourseType, ddeSettings => {
+        //            ddeSettings.Name = "templateCheckComboBox";
+        //            ddeSettings.Properties.ClientInstanceName = "checkComboBoxBranch";
+        //            ddeSettings.Width = Unit.Percentage(100);
+        //            //ddeSettings.SkinID = "CheckComboBox";
+        //            ddeSettings.SetDropDownWindowTemplateContent(d =>
+        //            {
+        //                //Html.RenderPartial("PartialCourseSearch");
+
+        //                ViewContext.Writer.Write("<div style=\"padding: 6px; height: 24px;\">");
+        //                @Html.DevExpress().Button(buttonSettings =>
+        //                {
+        //                    buttonSettings.Name = "buttonCloseBranch";
+        //                    buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Ok");
+        //                    buttonSettings.Style.Add("float", "right");
+        //                    buttonSettings.Style.Add("padding", "0px 2px");
+        //                    buttonSettings.ClientSideEvents.Click = "function(s, e){ checkComboBoxBranch.HideDropDown(); }";
+        //                    buttonSettings.Height = 26;
+        //                }).Render();
+
+        //                @Html.DevExpress().Button(buttonSettings =>
+        //                {
+        //                    buttonSettings.Name = "buttonClearBranch";
+        //                    buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Clear");
+        //                    buttonSettings.Style.Add("float", "right");
+        //                    buttonSettings.Style.Add("margin", "0px 3px");
+        //                    //buttonSettings.ClientSideEvents.Click = "clearSelectedBranch";
+        //                    buttonSettings.Height = 26;
+        //                }).Render();
+        //                ViewContext.Writer.Write("</div>");
+
+        //            });
+        //            ddeSettings.Properties.AnimationType = AnimationType.None;
+        //        }).Render();
+        //    });
+        //});
+        #endregion
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Course Code");
+            column.Width = Unit.Percentage(30);
+            column.FieldName = "Description";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Course Description");
+            column.Width = Unit.Percentage(100);
+            column.FieldName = "Remark";
+        });
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListTRTrainingCatalogueCourse).GetHtml()
+

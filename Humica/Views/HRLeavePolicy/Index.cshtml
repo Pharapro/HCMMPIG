@@ -1,0 +1,39 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+    function ContextMenuItemClick(s, e) {
+        alert('Hi! Piseth, why do you take leave yester?');
+    }
+</script>
+
+
+@model Humica.Attendance.IClsLeaveType
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Deduct Condition")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemLeave", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Pro-rate ")).SetContent(() =>
+    {
+        Html.RenderPartial("GridviewProrate", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Hours Policy")).SetContent(() =>
+{
+    Html.RenderPartial("GridItemLHour", Model);
+});
+}).GetHtml()

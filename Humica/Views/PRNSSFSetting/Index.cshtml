@@ -1,0 +1,18 @@
+﻿@model Humica.Logic.PR.PRSNSSFSetting
+@{
+    Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "NSSF")).SetContent(() =>
+        {
+            Html.RenderPartial("NSSF", Model.ListHeader);
+        });
+    }).Render();
+}

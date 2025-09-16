@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().DocumentViewer(
+settings =>
+{
+    settings.Name = "DocumentViewer";
+    settings.Report = Model;
+    settings.SettingsSplitter.DocumentMapCollapsed = true;
+    settings.CallbackRouteValues = new { Controller = "RPTListingEmp", Action = "DocumentViewerPartial" };
+    settings.ExportRouteValues = new { Controller = "RPTListingEmp", Action = "DocumentViewerExportTo" };
+    settings.ToolbarMode = DevExpress.XtraReports.Web.DocumentViewer.DocumentViewerToolbarMode.StandardToolbar;
+}).GetHtml()

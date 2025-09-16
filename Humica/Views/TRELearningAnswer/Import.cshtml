@@ -1,0 +1,128 @@
+﻿
+
+<script type="text/javascript">
+
+    var select = " ";
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        $('#Download_TP').click(function () {
+            window.location = "@Request.UrlReferrer" + "/DownloadTemplate/" + select;
+        });
+
+        $('#_btnGenerateAction').click(function () {
+            GridViewListUpload.GetRowValues(GridViewListUpload.GetFocusedRowIndex(), 'ID;UploadName', OnGetRowValues);
+        });
+    });
+  
+    function OnGetRowValues(values) {
+        if (values[0] == null)
+        {
+            AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        } else {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "GenerateUpload?id=" + values[0] + "&type=" + select;
+        }
+
+    }
+    function completedUploadFile(s, e) {
+        GridViewListUpload.Refresh();
+    }
+    //function completedUploadFileItem(s, e) {
+    //    if (e.isValid) {
+    //        $("#file_uploaded").attr("href", e.callbackData);
+    //        file_uploaded.SetVisible(true);
+    //    }
+    //}
+   
+    function SelectChangeCbo(s, e) {
+        if (s.GetSelectedItem() != null) {
+            select = s.GetSelectedItem().GetColumnText(0);
+            //alert(select);
+        }
+    }
+
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "SVServiceMaster";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Items.AddGroupItem(g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Template Information";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        g.Items
+               .Add(m =>
+               {
+                   m.Caption = "Upload Template";
+
+               })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().Button(
+                       ss =>
+                       {
+                           ss.Name = "Download_TP";
+                           ss.RenderMode = ButtonRenderMode.Link;
+                           ss.ToolTip = "Download";
+                           ss.Text = "Download";
+
+                           ss.Images.Image.IconID = IconID.SupportTemplate16x16;
+                       }).GetHtml();
+               });
+    });
+
+    settings.Items.AddGroupItem(g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Upload Information";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "Select file to upload";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.Name = "FileUploadMQ";
+                    ss.UploadMode = UploadControlUploadMode.Standard;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 350;
+                    ss.CallbackRouteValues = new { Controller = "TRELearningAnswer", Action = "UploadControlCallbackAction" };
+                    ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ValidationSettings.MaxFileSize = 4194304;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".xlsx" };
+                    ss.BrowseButton.Text = "Browse";
+                    ss.ClientSideEvents.FileUploadComplete = "completedUploadFile";
+                }).Render();
+            });
+    });
+
+}).GetHtml()
+
+@model IEnumerable<Humica.Core.Process.MDUploadTemplate>
+
+@Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultUpload, Model)
+
+
+
+
+
+
+
+
+

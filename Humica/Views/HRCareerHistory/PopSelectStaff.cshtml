@@ -1,0 +1,108 @@
+﻿
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopSelectStaff";
+        settings.Width = 400;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Pop Select Staff";
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "ModalModeFormLayout";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 2;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+
+
+                s.Items.Add(i =>
+                {
+                    i.Name = "EmpCode";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                    i.ColumnSpan = 2;
+                    i.NestedExtension().ComboBox(tbox =>
+                    {
+                        tbox.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        tbox.Properties.TextField = "AllName";
+                        tbox.Properties.ValueField = "EmpCode";
+                        tbox.Properties.DisplayFormatString ="{1}";
+                        tbox.Properties.DataSource = ViewData["STAFF_SELECT"];
+                        tbox.Properties.Columns.Add("EmpCode", "Employeee Code", 120);
+                        tbox.Properties.Columns.Add("AllName", "Employeee Name", 120);
+                        tbox.Properties.Columns.Add("Position", "Position", 120);
+                        tbox.Properties.ValueType = typeof(string);
+                        tbox.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeEmp";
+
+                    });
+
+                });
+                s.Items.Add(i =>
+                {
+                    i.Name = "Position";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+                    i.ColumnSpan = 2;
+
+                    i.NestedExtension().TextBox(tbox =>
+                    {
+                        tbox.ReadOnly = true;
+                        tbox.ControlStyle.HorizontalAlign = HorizontalAlign.Left;
+
+
+                    });
+                    i.ClientVisible = true;
+                });
+
+                s.Items.Add(i =>
+                {
+
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.SetNestedContent(() =>
+                    {
+
+                        ViewContext.Writer.Write("<div  style=\"margin-left:110px;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+
+                                buttonSettings.Name = "OK";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "OK";
+                                buttonSettings.UseSubmitBehavior = false;
+                                //buttonSettings.ImagePosition=ImagePosition.Bottom;
+                                buttonSettings.ClientSideEvents.Click = "_clickConfirm";
+                            }
+                        ).Render();
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnCancel";
+                                buttonSettings.ControlStyle.BackColor = System.Drawing.Color.Red;
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "Cancel";
+                                buttonSettings.ClientSideEvents.Click = "function(s, e){ PopSelectStaff.Hide(); }";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+
+        // settings.ClientSideEvents.CloseUp = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(null, '', true); }";
+    }).GetHtml()
+
+
+

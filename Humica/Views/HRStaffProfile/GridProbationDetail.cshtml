@@ -1,0 +1,75 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridProbationDetail";
+        settings.KeyFieldName = "TranNo";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "GridProbationDetail" };
+
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Month");
+            column.Width = 200;
+            column.FieldName = "Day";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinProperties = column.PropertiesEdit as SpinEditProperties;
+            spinProperties.ValidationSettings.Display = Display.None;
+            spinProperties.NumberType = SpinEditNumberType.Integer;
+            spinProperties.DisplayFormatString = "{0}";
+            spinProperties.ClientSideEvents.NumberChanged = "valueChangeProbation";
+            spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Probation");
+            column.FieldName = "EndProbation";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.ReadOnly = true;
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ClientInstanceName = "txtProbation";
+            textProperties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            textProperties.ValidationSettings.SetFocusOnError = true;
+            textProperties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.ValidationSettings.ErrorText = "*";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Reason");
+            column.Width = 300;
+            column.FieldName = "Reason";
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

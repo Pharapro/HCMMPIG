@@ -1,0 +1,90 @@
+﻿<script type="text/javascript">
+    var ss;
+        var selectedIDs = "";
+    $(document).ready(function () {
+
+        @*$('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), '@ViewData[CLOUDVIEW.Models.ClsConstant.PARAM_INDEX]', OnGetRowValues);
+        });*@
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+
+
+    function confirmRun(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Administrator/Users/RunScript/Execute',
+            data: { 'Script': txtRunScript.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    GridItems.Refresh();
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+
+@*@model Humica.Logic.MD.ClsRunScript*@
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "GCreate";
+        settings.Width = Unit.Percentage(90);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        Html.DevExpress().Memo(s =>
+        {
+            s.Name = "txtRunScript";
+            s.Width = Unit.Percentage(50);
+            s.Height = 200;
+        }).Render();
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTCANCEL_R";
+            s.Text = "Execute";
+            s.ClientSideEvents.Click = "confirmRun";
+            //  s.UseSubmitBehavior = true;
+        }).Render();
+
+    }).GetHtml()
+@{ 
+    Html.RenderPartial("GridItems");
+}
+@*@Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridItems";
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Controller = "RunScript", Action = "GridItems" };
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.SettingsBehavior.AllowSort = false;
+        settings.DataBound = (sender, e) =>
+        {
+            var gridLookup = (MVCxGridView)sender;
+            var demoAreaWidth = 894;
+            if (gridLookup.Columns.Count == 0)
+            {
+            }
+            else
+            {
+                var columnWidth = Math.Max(115, demoAreaWidth / gridLookup.Columns.Count);
+                for (var i = 1; i < gridLookup.Columns.Count; i++)
+                {
+                    gridLookup.Columns[i].MinWidth = columnWidth;
+                }
+                gridLookup.Columns[0].MinWidth = demoAreaWidth - (gridLookup.Columns.Count - 1) * columnWidth;
+            }
+        };
+    }).Bind(Model).GetHtml()*@

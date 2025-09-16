@@ -1,0 +1,76 @@
+﻿@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopUpreason";
+        settings.Width = 400;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "ModalModeFormLayout";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 2;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+                s.Items.Add(i =>
+                {
+                    i.Name = "Code";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark") + "*";
+                    i.ColumnSpan = 2;
+                    i.NestedExtension().TextBox(tbox =>
+                    {
+                        tbox.Properties.ClientInstanceName = "txtRemark";
+                    });
+                });
+
+
+                s.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.SetNestedContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div  style=\"margin-left:110px;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "OK";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "OK";
+                                buttonSettings.UseSubmitBehavior = false;
+                                //buttonSettings.ImagePosition=ImagePosition.Bottom;
+                                buttonSettings.ClientSideEvents.Click = "_clickConfirm";
+                            }
+                        ).Render();
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnCancel";
+                                buttonSettings.ControlStyle.BackColor = System.Drawing.Color.Red;
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "Cancel";
+                                buttonSettings.ClientSideEvents.Click = "function(s, e){ PopUpreason.Hide(); }";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+
+        // settings.ClientSideEvents.CloseUp = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(null, '', true); }";
+    }).GetHtml()
+
+
+

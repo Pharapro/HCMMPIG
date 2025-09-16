@@ -1,0 +1,94 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "_IdentityDiscip";
+        settings.KeyFieldName = "IdentityTye";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "StaffProfile", Action = "GridItemDiscip" };
+
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Disciplinay Type");
+            column.Width = 150;
+            column.FieldName = "DiscType";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["DISCIPLINAY_LIST"];
+            textProperties.TextFormatString = "{1}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            textProperties.ValueType = typeof(string);
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Date");
+            column.Width = 130;
+            column.FieldName = "TranDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.Width = 120;
+            column.FieldName = "Remark";
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+        });        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ExpiryDate");
+        //    column.Width = 130;
+        //    column.FieldName = "ExpiryDate";
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    var textProperties = column.PropertiesEdit as DateEditProperties;
+        //    textProperties.ValidationSettings.Display = Display.None;
+        //    column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        //});
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

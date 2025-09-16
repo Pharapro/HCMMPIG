@@ -1,0 +1,120 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "_ReferenceDetails";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "RCMApplicant", Action = "_ReferenceDetails" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.AllowFocusedRow = false;
+           settings.SettingsBehavior.ConfirmDelete = false;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+           settings.Columns.Add(column =>
+           {
+               column.Visible = false;
+               column.FieldName = "LineItem";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "RefName";
+               column.Width = 170;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Reference Name");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Company";
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Occupation";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Occupation");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Phone1";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone 1");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Phone2";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone 2");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Email";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Address";
+               column.Width = 160;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Address");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 10;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.None;
+               //if (e.KeyValue == null)
+               //{
+               //    if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "RefName" || e.Column.FieldName == "Company")
+               //    {
+               //        editor.ReadOnly = true;
+               //    }
+               //}
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListRef).GetHtml()
+
+

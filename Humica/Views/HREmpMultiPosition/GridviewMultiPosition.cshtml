@@ -1,0 +1,169 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+
+        settings.Name = "GridviewMultiPosition";
+        settings.KeyFieldName = "EmpCode;PositionCode";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "HREmpMultiPosition", Action = "GridviewMultiPosition" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HREmpMultiPosition", Action = "CreateMultiPosition" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HREmpMultiPosition", Action = "EditMultiPosition" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HREmpMultiPosition", Action = "DeleteMultiPosition" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.InitNewRow = (sender, e) =>
+        {
+            e.NewValues["EffectiveDate"] = DateTime.Now;
+        };
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+            column.FieldName = "EmpCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["Staff_SELECT"];
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.ValueField = "EmpCode";
+            textProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"), 100);
+            textProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"), 250);
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 250;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.FieldName = "PositionCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["PositionStructure_SELECT"];
+            textProperties.TextFormatString = "{1}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 70);
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+            textProperties.Columns.Add("ReportingID", Humica.EF.Models.SY.SYSettings.getLabel("ReportingID"), 100);
+            textProperties.ClientSideEvents.SelectedIndexChanged = "getPositionStructureID";
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.ReadOnly = true;
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PositionID");
+            column.FieldName = "PositionID";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+            textProperties.ClientInstanceName = "txtPositionID";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.ReadOnly = true;
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PositionStructureID");
+            column.FieldName = "PositionStructureID";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+            textProperties.ClientInstanceName = "txtPositionStructureID";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.ReadOnly = false;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EffectiveDate");
+            column.Width = 150;
+            column.FieldName = "EffectiveDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var dateProperties = column.PropertiesEdit as DateEditProperties;
+            dateProperties.DisplayFormatString = "dd.MMM.yyyy";
+            dateProperties.EditFormatString = "dd.MMM.yyyy";
+            dateProperties.DisplayFormatInEditMode = true;
+            dateProperties.AllowUserInput = true; // Ensure user can type or select
+            dateProperties.CalendarProperties.EnableYearNavigation = true;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndDate");
+            column.Width = 150;
+            column.FieldName = "EndDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var dateProperties = column.PropertiesEdit as DateEditProperties;
+            dateProperties.DisplayFormatString = "dd.MMM.yyyy";
+            dateProperties.EditFormatString = "dd.MMM.yyyy";
+            dateProperties.DisplayFormatInEditMode = true;
+            dateProperties.AllowUserInput = true;
+            dateProperties.CalendarProperties.EnableYearNavigation = true;
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 250;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PositionStructureID");
+        //    column.FieldName = "PositionStructureID";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var textProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    textProperties.ValidationSettings.Display = Display.None;
+        //    textProperties.DataSource = ViewData["PositionStructure_SELECT"];
+        //    textProperties.TextFormatString = "{0}:{1}";
+        //    textProperties.ValueField = "ReportingID";
+        //    textProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 70);
+        //    textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //    textProperties.Columns.Add("ReportingID", Humica.EF.Models.SY.SYSettings.getLabel("ReportingID"), 100);
+        //    textProperties.ValueType = typeof(string);
+        //});
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "EmpCode")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+                //if (e.Column.FieldName == "PositionCode")
+                //{
+                //    e.Editor.ReadOnly = true;
+                //}
+            }
+        };
+
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

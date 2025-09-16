@@ -1,0 +1,56 @@
+﻿@model Humica.Training.TrainingProcessObject
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PartialCourseSearch";
+    settings.CallbackRouteValues = new { Controller = "TRTrainingCatalogue", Action = "PartialCourseSearch" };
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = System.Web.UI.WebControls.Unit.Pixel(500);
+    settings.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "btnShow";
+    settings.HeaderText = "Select Training Course(s)";
+    settings.EnableClientSideAPI = true;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.CloseOnEscape = true;
+    settings.PopupAnimationType = AnimationType.None;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("GridItemCourse");
+    });
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"overflow: hidden\"><div style=\"margin: 10px; float: right;\">");
+        ButtonSettings btnLocationsSave = new ButtonSettings()
+        {
+            Name = "btnSelect",
+            Text = "Ok"
+        };
+        //btnLocationsSave.ClientSideEvents.Click = "function(s, e) { alert('save'); }";
+        //btnLocationsSave.ClientSideEvents.Click = "Save_Click";
+        new ButtonExtension(btnLocationsSave).Render();
+        ButtonSettings btnLocationsCancel = new ButtonSettings()
+        {
+            Name = "btnClear",
+            Text = "Clear"
+        };
+        //btnLocationsCancel.ClientSideEvents.Click = "function(s, e) { alert('Cancel');; }";
+        //btnLocationsCancel.ClientSideEvents.Click = "clearSelectedPosition";
+        new ButtonExtension(btnLocationsCancel).Render();
+
+        ViewContext.Writer.Write("</div></div>");
+    });
+
+}).GetHtml()
+<script>
+    $(document).ready(function () {
+        $('#btnSelect').css({ "transform":"translateX(-5px)"});
+    })
+</script>
+
+
+
+

@@ -1,0 +1,183 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gridItem";
+        settings.KeyFieldName = "LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.SettingsBehavior.AllowSort = false;
+        settings.CallbackRouteValues = new { Controller = "HRKPITracking", Action = "GridItemsDetails" };
+
+        settings.CommandColumn.Visible = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowUpdateButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.Width = 250;
+            column.FieldName = "Description";
+        });
+        
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromTime");
+            column.FieldName = "FromTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToTimes");
+            column.FieldName = "ToTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hours");
+            column.FieldName = "Hours";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 310;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.FieldName = "Remark";
+
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            var textProperties = column.PropertiesEdit as MemoProperties;
+            textProperties.Width = 310;
+            textProperties.Height = 100;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attachment");
+            column.FieldName = "Attachment";
+            column.SetDataItemTemplateContent(container =>
+            {
+                var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "Attachment"));
+                if (!(attachment == null || attachment == ""))
+                {
+                    Html.DevExpress().HyperLink(hyperlink =>
+                    {
+                        hyperlink.Name = "file_" + container.VisibleIndex;
+                        hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+                        hyperlink.Properties.Target = "_BLANK";
+                        hyperlink.NavigateUrl = attachment;
+                    }).Render();
+                }
+            });
+
+            column.SetEditItemTemplateContent(c =>
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.CallbackRouteValues = new { Controller = "HRKPITracking", Action = "UploadControlCallbackActionIdentity" };
+                    ss.Name = "FileUploadIdentify";
+                    ss.UploadMode = UploadControlUploadMode.Auto;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 80;
+                    ss.DialogTriggerID = "externalDropZone";
+                    ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ShowTextBox = false;
+                    ss.ShowUploadButton = false;
+                    ss.ShowAddRemoveButtons = false;
+                    ss.ShowProgressPanel = true;
+                    ss.ShowClearFileSelectionButton = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                    ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                    ss.AdvancedModeSettings.DropZoneText = "";
+                    ss.ValidationSettings.MaxFileSize = 4194304;
+                    ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".jpe", ".gif", ".bmp", ".png", ".doc", ".docx", ".pdf" };
+                    ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                    ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                    ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                }).Render();
+
+                Html.DevExpress().HyperLink(
+                s =>
+                {
+                    s.Name = "file_uploaded";
+                    s.ToolTip = "File";
+                    s.ClientVisible = false;
+                    s.Properties.Target = "_BLANK";
+                    s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+
+                }).GetHtml();
+
+            });
+        });
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.SettingsEditing.EditFormColumnCount = 2;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            editor.ReadOnly = false;
+            if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "Hours")
+            {
+                if (e.KeyValue != null)
+                {
+                    editor.ReadOnly = true;
+                }
+            }
+            if (e.Column.FieldName == "Hours")
+            {
+                if (e.KeyValue == null)
+                {
+                    editor.Value = 0;
+                }
+            }
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

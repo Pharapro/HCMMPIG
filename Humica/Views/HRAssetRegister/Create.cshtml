@@ -1,0 +1,334 @@
+﻿@model  Humica.Logic.Asset.AssetRegisterObject
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function getAssetClass(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetRegister/getAssetClass',
+            data: { 'id': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    cboAssetType.SetValue(data.AssetType);
+                    GridItemAssetQTY.Refresh();
+                    if (data.CheckNumberRank != null && data.CheckNumberRank !== "") {
+                        txtAssetCode.SetValue(data.assetCode);
+                        txtAssetCode.SetReadOnly(true);
+                    } else {
+                        txtAssetCode.SetValue(null);
+                        txtAssetCode.SetReadOnly(false);
+                    }
+                }
+                else {
+                    txtAssetCode.SetValue(null);
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function selectAssetClass(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetRegister/FitlerType',
+            data: { 'code': s.GetValue() },
+            success: function (data) {
+                txtAssetCode.SetValue("");
+                if (data.ASSET_NUMBER == "INTERNAL") {
+                    txtAssetCode.SetEnabled(false);
+                    txtAssetCode.SetValue(data.ASSET_NUMBER);
+                } else {
+                    txtAssetCode.SetEnabled(true);
+                    txtAssetCode.SetFocus();
+                }
+            }
+
+        });
+    }
+    function GetQtyAssetCode(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetRegister/GetQtyAssetCode',
+            data: { 'Qty': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    GridItemAssetQTY.Refresh();
+                }
+                else {
+                    GridItemAssetQTY.Refresh();
+                    AlertMessage(data.MS);
+                }
+            }
+
+        });
+    }
+    function GetIsCombone(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetRegister/GetIsCombone',
+            data: { 'IsCombined': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+            }
+
+        });
+    }
+    function onAssetCodeKeyUp(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetRegister/ValidateAssetCode',
+            data: { 'code': s.GetValue() },
+            success: function (data) {
+                GridItemAssetQTY.Refresh();
+                if (data.MS == "OK") {
+                    txtAssetCode.SetEnabled(true);
+                    txtAssetCode.SetFocus();
+                } else {
+                    txtAssetCode.SetValue(null);
+                    txtQTY.SetValue(null);
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+</script>
+@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "CreateFixAsset";
+        settings.AlignItemCaptionsInAllGroups = true;
+        // settings.Width = Unit.Percentage(80);
+
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.SettingsItemCaptions.VerticalAlign = FormLayoutVerticalAlign.Top;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Class") + "*";
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.Header.AssetClassCode, s =>
+                {
+                    s.Style.Add("margin-left", "2px");
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ClientInstanceName = "cboAssetClass";
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}-{1}";
+                    s.Properties.TextField = "Description";
+                    s.Properties.ValueField = "AssetClassCode";
+                    s.Properties.Columns.Add("AssetClassCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetClassCode"));
+                    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    s.Properties.ClientSideEvents.SelectedIndexChanged = "getAssetClass";
+                }).BindList(ViewData["FIXASSETCLASS"]).Render();
+
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Code");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.AssetCode, s =>
+                {
+                    //s.Width = Unit.Percentage(150);
+                    s.Properties.ClientInstanceName = "txtAssetCode";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.KeyUp = "onAssetCodeKeyUp";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsCombine");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.Header.IsCombone, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtIsCombone";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.CheckedChanged = "GetIsCombone";
+                }).Render();
+            });
+            // g.Items.Add(m =>
+            // {
+            //     m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+            //         ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Parent Asset");
+            // })
+            //.SetNestedContent(() =>
+            //{
+            //    Html.DevExpress().ComboBoxFor(i => i.Header.ParentAsset, s =>
+            //    {
+            //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            //        s.Properties.ValidationSettings.SetFocusOnError = true;
+            //        s.Properties.ValidationSettings.ErrorText = "*";
+
+            //        s.Properties.ValidationSettings.ErrorText = "*";
+            //        s.Properties.TextField = "Description";
+            //        s.Properties.ValueField = "AssetCode";
+            //        s.Properties.Columns.Add("AssetCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetCode"));
+            //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+            //    }).BindList(ViewData["FIXED_ASSET_LIST"]).Render();
+
+            //});
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+                {
+                    s.Width = Unit.Percentage(244);
+                    s.Properties.ClientInstanceName = "txtDescription";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+        });
+
+    }).GetHtml();
+
+    @Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingAssetClass";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "GENERAL SETTING")).SetContent(() =>
+    {
+
+        Html.DevExpress().FormLayout(ss1 =>
+        {
+
+            ss1.Name = "frmGeneralSetting";
+            ss1.AlignItemCaptionsInAllGroups = true;
+            ss1.SettingsItems.VerticalAlign = FormLayoutVerticalAlign.Top;
+
+            ss1.Items.AddGroupItem(m => Model.Header, g =>
+            {
+                g.ColCount = 2;
+                g.GroupBoxDecoration = GroupBoxDecoration.None;
+
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "");
+                })
+                .SetNestedContent(() =>
+                {
+                    @Html.RenderPartial("AssetSummary", Model);
+                });
+
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "");
+                })
+                .SetNestedContent(() =>
+                {
+                    @Html.RenderPartial("TrackingInfo", Model);
+
+                });
+            });
+
+        }).GetHtml();
+
+    });
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+     )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "PURCHASING/TANGIBLE INFO")).SetContent(() =>
+     {
+
+         Html.DevExpress().FormLayout(ss1 =>
+         {
+
+             ss1.Name = "frmPURCHASINGTANGIBLEINFO";
+             ss1.AlignItemCaptionsInAllGroups = true;
+             ss1.SettingsItems.VerticalAlign = FormLayoutVerticalAlign.Top;
+
+             ss1.Items.AddGroupItem(m => Model.Header, g =>
+             {
+                 g.ColCount = 2;
+                 g.GroupBoxDecoration = GroupBoxDecoration.None;
+
+                 g.Items
+                    .Add(m =>
+                    {
+                        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "");
+
+                    })
+                    .SetNestedContent(() =>
+                    {
+                        @Html.RenderPartial("PurchasingDetail", Model);
+
+                    });
+
+                 g.Items
+                    .Add(m =>
+                    {
+                        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "");
+
+                    })
+                    .SetNestedContent(() =>
+                    {
+                        @Html.RenderPartial("Tangibleinfo", Model);
+
+                    });
+             });
+
+
+         }).GetHtml();
+
+     });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "AssetCode Detail")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemAssetQTY", Model.ListAssetQTYDetail);
+    });
+    // settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "HISTORY ASSET")).SetContent(() =>
+    //{
+    //    Html.RenderPartial("GridItemAssetRecord", Model);
+    //});
+
+}).GetHtml()
+    }

@@ -1,0 +1,248 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "gridViewItem3";
+          settings.KeyFieldName = "ID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "SYReport", Action = "GridItems3", ScreenID = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "SYReport", Action = "CreatePartial3", ScreenID = ViewData[Humica.EF.SYSConstant.PARAM_ID] };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SYReport", Action = "EditPartial3", ScreenID = ViewData[Humica.EF.SYSConstant.PARAM_ID] };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SYReport", Action = "DeletePartial3", ScreenID = ViewData[Humica.EF.SYSConstant.PARAM_ID] };
+          
+
+          settings.CommandColumn.Visible = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ID");
+              column.FieldName = "ID";
+              column.Visible = false;
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+              column.ToolTip = "Key 1";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "...");
+                   column.Width = 80;
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "hl" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Download");
+                           hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "ID"));
+                           hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl()
+                               + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]
+                               + "Download?ID=" + Convert.ToString(DataBinder.Eval(container.DataItem, "ID"));
+                           //hyperlink.Properties.ClientSideEvents.Click = "ShowSlip";
+                       }).Render();
+                   });
+               });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ReportObject");
+              column.FieldName = "ReportObject";
+
+              column.Width = 250;
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = Humica.Models.SY.ClsConstant.GetFilesReport(ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString());
+
+              textProperties.ValueField = "FileName";
+              textProperties.TextField = "FileName";
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PathStore");
+              column.FieldName = "PathStore";
+              
+              column.SetDataItemTemplateContent(container =>
+              {
+                  var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "PathStore"));
+                  if (!(attachment == null || attachment == ""))
+                  {
+                      Html.DevExpress().HyperLink(hyperlink =>
+                      {
+                          hyperlink.Name = "file_" + container.VisibleIndex;
+                          hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+                          hyperlink.Properties.Target = "_BLANK";
+                          hyperlink.NavigateUrl = attachment;
+                      }).Render();
+                  }
+              });
+
+              column.SetEditItemTemplateContent(c =>
+              {
+                  Html.DevExpress().UploadControl(ss =>
+                  {
+                      ss.ShowProgressPanel = true;
+                      ss.CallbackRouteValues = new { Controller = "SYReport", Action = "UploadControlCallbackActionImage" };
+                      
+                      ss.Name = "FileUploadOPB";
+                      ss.UploadMode = UploadControlUploadMode.Auto;
+                      ss.AutoStartUpload = true;
+                      ss.Width = 80;
+                      ss.DialogTriggerID = "externalDropZone";
+                      ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                      ss.AdvancedModeSettings.EnableMultiSelect = false;
+                      ss.ShowTextBox = false;
+                      ss.ShowUploadButton = false;
+                      ss.ShowAddRemoveButtons = false;
+                      ss.ShowProgressPanel = true;
+                      ss.ShowClearFileSelectionButton = true;
+                      ss.AdvancedModeSettings.EnableFileList = true;
+                      ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                      ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                      ss.AdvancedModeSettings.DropZoneText = "";
+                      ss.ValidationSettings.MaxFileSize = 4194304;
+                      ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                      ss.ValidationSettings.AllowedFileExtensions = new string[] { ".repx" };
+                      ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                      ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                      ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                  }).Render();
+
+                  Html.DevExpress().HyperLink(
+                  s =>
+                  {
+                      s.Name = "file_uploaded";
+                      s.ToolTip = "File";
+                      s.ClientVisible = false;
+                      s.Properties.Target = "_BLANK";
+                      s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+
+                  }).GetHtml();
+
+              });
+          });
+
+
+          settings.Columns.Add(column =>
+          {
+
+              Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "DocType");
+              column.FieldName = "DocType";
+
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              var textProperties = column.PropertiesEdit as TextBoxProperties;
+
+              textProperties.MaxLength = 30;
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Version");
+              column.FieldName = "Version";
+
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+              var textProperties = column.PropertiesEdit as SpinEditProperties;
+
+              textProperties.MinValue = 0;
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ObjectName");
+              column.FieldName = "ObjectName";
+              column.Width = 250;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "RowLimit");
+              column.FieldName = "RowLimit";
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+
+
+          });
+
+
+          settings.Columns.Add(column =>
+          {
+
+              Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Active");
+              column.FieldName = "IsActive";
+
+              column.ColumnType = MVCxGridViewColumnType.CheckBox;
+
+
+          });
+
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.Settings.ShowGroupPanel = false;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+          settings.SettingsPager.PageSize = 20;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue!=null)
+              {
+                  if (e.Column.FieldName == "PathStore")
+                  {
+                      e.Editor.ReadOnly=true;
+                  }
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

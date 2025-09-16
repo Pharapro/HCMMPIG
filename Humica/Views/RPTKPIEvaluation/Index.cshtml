@@ -1,0 +1,27 @@
+﻿﻿@model Humica.Core.FT.FTFilterEmployee
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+    //function rowSelected(s, e) {
+    //    EmployeeGridListSelector.GetRowValues(EmployeeGridListSelector.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+    //    cboEmployee.HideDropDown();
+    //}
+    //function OnGetRowValuesEmp(values) {
+    //    cboEmployee.SetValue(values[0]);
+    //    selectedIDs = values[0];
+    //    ShowDataEmp();
+    //}
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+@Html.Partial("EmpoyeeReport", Model)

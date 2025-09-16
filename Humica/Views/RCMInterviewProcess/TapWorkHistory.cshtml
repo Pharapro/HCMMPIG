@@ -1,0 +1,164 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "TapWorkHistory";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Action = "GirdWorkHistory", Controller = "RCMInterviewProcess" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.AllowFocusedRow = false;
+           settings.SettingsBehavior.ConfirmDelete = false;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "FromDate";
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Date");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "ToDate";
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Date");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Company";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Position";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Title");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "LeaveReason";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Leave Reason");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Duties";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Duties");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "SupervisorName";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Supervisor Name");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "SupervisorPhone";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Supervisor Phone");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "StartSalary";
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Salary");
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "EndSalary";
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Salary");
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.None;
+
+               if (e.KeyValue == null)
+               {
+                   if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "FromDate" || e.Column.FieldName == "ToDate")
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListWorkHistory).GetHtml()
+
+
+

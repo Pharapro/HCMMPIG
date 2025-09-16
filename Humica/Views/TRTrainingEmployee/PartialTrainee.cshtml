@@ -1,0 +1,112 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "PartialTrainee";
+        settings.Width = Unit.Percentage(100);
+        settings.KeyFieldName = "TrainNo;EmpCode";
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "PartialTrainee", Controller = "TRTrainingEmployee" };
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+        settings.ClientSideEvents.Init = "OnInit";
+        settings.ClientSideEvents.RowDblClick = "DbRowClick";
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        //settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.Columns.Add(column =>
+        {
+            column.Name = "CourseName";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CourseName");
+            column.Width = 200;
+            column.FieldName = "CourseName";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InYear");
+            column.Width = 80;
+            column.FieldName = "InYear";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GroupDescription");
+            column.Width = 150;
+            column.FieldName = "GroupDescription";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "EmpCode";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+            column.Width = 120;
+            column.FieldName = "EmpCode";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            column.Width = 200;
+            column.FieldName = "EmpName";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+            column.FieldName = "Department";
+            column.Width = 200;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.FieldName = "Position";
+            column.Width = 200;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScoreTheory");
+            column.FieldName = "ScoreTheory";
+            column.PropertiesEdit.DisplayFormatString = "{0:N2}";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScorePractice");
+            column.FieldName = "ScorePractice";
+            column.PropertiesEdit.DisplayFormatString = "{0:N2}";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.FieldName = "Status";
+
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 12;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            ASPxGridView gridView = (ASPxGridView)sender;
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    grid.Bind(Model).GetHtml();
+}
+
+

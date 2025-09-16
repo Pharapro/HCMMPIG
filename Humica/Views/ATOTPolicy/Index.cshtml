@@ -1,0 +1,37 @@
+﻿<script type="text/javascript">
+</script>
+
+@model Humica.Logic.Atts.ATOTPolicyObject
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Policy Late/Early")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemPLeEas", Model.ListPolicyLeEa);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT Setting")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemOTSettings", Model.ListOTSetting);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT Pro-rate")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems", Model.ListOTPolicy);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Late/Early Deduction")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemLaEa", Model.ListLaEa);
+        });
+        //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT Condition Rate")).SetContent(() =>
+        //{
+        //    @Html.RenderPartial("GridItemOTCons", Model.ListOTCondition);
+        //});
+    }).GetHtml()
+

@@ -1,0 +1,170 @@
+﻿@model Humica.Logic.MD.MDMaterialObject
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 3;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 3) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+    function onUploadControlFileUploadCompleteProfile(s, e) {
+        if (e.isValid) {
+            //alert(e.callbackData);
+            txtImage.SetText(e.callbackData);
+            $("#uploadedImage").attr("src", e.callbackData);
+            setElementVisible("uploadedImage", e.isValid);
+        }
+    }
+</script>
+
+@{Html.DevExpress().FormLayout(settings =>
+    {
+        var isReadOnly = true;
+        settings.Name = "HRMaterial";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Items.AddGroupItem(m => Model.Material, g =>
+        {
+            g.ColCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ItemCode");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Material.ItemCode, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Material.ItemDescription, s =>
+                {
+                    s.Width = Unit.Percentage(50);
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description 2");
+                m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Material.ItemDescription2, s =>
+                {
+                    s.Width = Unit.Percentage(50);
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Quantity");
+                m.ColSpan = 2;
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Material.Quantity, s =>
+                {
+                    s.Width = Unit.Percentage(50);
+                    s.ShowModelErrors = true;
+                    s.ReadOnly = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(mm =>
+            {
+                mm.Caption = "";
+            }).SetNestedContent(() =>
+            {
+                if (isReadOnly == true)
+                {
+                    ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+                    ViewContext.Writer.Write("<img id='uploadedImage' src='" + Model.Material.Images + "' alt=''   />");
+                    ViewContext.Writer.Write("</div>");
+                }
+                if (isReadOnly == false)
+                {
+                    ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'><div id='dragZone'><span class='dragZoneText'>Drop Profile Image</span></div>");
+                    ViewContext.Writer.Write("<img id='uploadedImage' src='' alt='' style='width: 350px;' onload='onImageLoad()' />");
+                    ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+                    ViewContext.Writer.Write("<span class='dropZoneText'>Drop Image</span>");
+                    ViewContext.Writer.Write("</div></div>");
+                    ViewContext.Writer.Write("</div></div>");
+                    Html.DevExpress().UploadControl(ss =>
+                    {
+                        ss.ShowProgressPanel = true;
+                        ss.CallbackRouteValues = new { Controller = "HRMaterial", Action = "UploadControlCallbackActionImage" };
+                        ss.Name = "uc_image";
+                        ss.UploadMode = UploadControlUploadMode.Auto;
+                        ss.AutoStartUpload = true;
+                        ss.Width = 350;
+                        ss.DialogTriggerID = "externalDropZone";
+                        ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                        ss.AdvancedModeSettings.EnableFileList = false;
+                        ss.AdvancedModeSettings.EnableMultiSelect = false;
+                        ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                        ss.AdvancedModeSettings.DropZoneText = "";
+                        ss.ValidationSettings.MaxFileSize = 9194304;
+                        ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png" };
+                        ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                        ss.BrowseButton.Text = "Choose Image.";
+                        ss.Styles.DropZone.CssClass = "uploadControlDropZone";
+                        ss.Styles.ProgressBar.CssClass = "uploadControlProgressBar";
+                        ss.ClientSideEvents.DropZoneEnter = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', true); }";
+                        ss.ClientSideEvents.DropZoneLeave = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', false); }";
+                        ss.ClientSideEvents.FileUploadComplete = "onUploadControlFileUploadCompleteProfile";
+                    }).Render();
+                    Html.DevExpress().TextBoxFor(i => i.Material.Images, s =>
+                    {
+                        s.Properties.ClientInstanceName = "txtImage";
+                        //s.Properties.ClientSideEvents.GotFocus = "OnFocus";
+                        s.Properties.EnableClientSideAPI = true;
+                        s.ClientVisible = false;
+                        s.Width = 200;
+                    }).Render();
+
+                    Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btRemoveP";
+                        s.Text = "Remove";
+                        s.ClientSideEvents.Click = "RemoveFile1";
+                    }).Render();
+                }
+            });
+        });
+    }).GetHtml();}
+

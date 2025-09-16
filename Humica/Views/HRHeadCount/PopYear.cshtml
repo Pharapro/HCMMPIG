@@ -1,0 +1,82 @@
+﻿@model Humica.Logic.HR.HRHeadCountObject
+
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopYear";
+        settings.Width = 400;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Copy";
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "ModalModeFormLayout";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 3;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+                s.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Year");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.FromYear, m =>
+                    {
+                        m.ShowModelErrors = true;
+                        m.Properties.ClientInstanceName = "txtFromYear";
+                        m.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        m.Properties.ValidationSettings.SetFocusOnError = true;
+                        m.Properties.ValidationSettings.ErrorText = "*";
+                        m.Properties.ValueField = "INYear";
+                        m.Properties.TextField = "INYear";
+                    }).BindList(ViewData["YEAR_SELECT"]).Render();
+                });
+                s.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Year");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().SpinEditFor(i => i.ToYear, a =>
+                    {
+                        a.Properties.ClientInstanceName = "txtToYear";
+                        a.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        a.Properties.ValidationSettings.SetFocusOnError = true;
+                        a.Properties.ValidationSettings.ErrorText = "*";
+                        a.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                    }).Render();
+                });
+                s.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.SetNestedContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnClosed";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 40;
+                                buttonSettings.Text = "Save";
+                                buttonSettings.UseSubmitBehavior = true;
+                                buttonSettings.ClientSideEvents.Click = "_clickConfirm";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+    }).GetHtml()

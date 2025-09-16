@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().ComboBox(s =>
+{
+    s.Name = "Module";
+    s.Properties.ClientInstanceName = "cboModule";
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+    s.Properties.TextFormatString = "{0}:{1}";
+    s.CallbackRouteValues = new { Controller = "TRELearningQuestion", Action = "Module" };
+    s.Properties.ValueField = "ModuleCode";
+    s.Properties.ValueType = typeof(string);
+    s.Properties.Columns.Add("ModuleCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "changeModule";
+}).BindList(ViewData["Module_List"]).GetHtml()

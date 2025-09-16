@@ -1,0 +1,109 @@
+﻿@model Humica.Logic.PR.PROverTimeObject
+@{
+    var grid = Html.DevExpress().GridView(
+     settings =>
+     {
+         settings.Name = "gridItemEmpInfor";
+         settings.KeyFieldName = "EmpCode";
+         settings.EnableTheming = true;
+         settings.EnableRowsCache = true;
+         settings.Width = Unit.Percentage(100);
+         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+         settings.SettingsBehavior.AllowSort = false;
+         settings.CallbackRouteValues = new { Controller = "PROverTime", Action = "GridItemsImport" };
+         settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+         settings.CommandColumn.ShowDeleteButton = true;
+         settings.CommandColumn.ShowNewButtonInHeader = true;
+         settings.CommandColumn.ShowCancelButton = true;
+         settings.CommandColumn.ShowEditButton = true;
+         settings.CommandColumn.ShowUpdateButton = true;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+         settings.CommandColumn.Width = 80;
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 100;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+             column.FieldName = "EmpCode";
+
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 100;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpName");
+             column.FieldName = "EmpName";
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTType");
+             column.FieldName = "OTType";
+             column.ReadOnly = true;
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTDate");
+             column.FieldName = "OTDate";
+             column.ReadOnly = true;
+             column.ColumnType = MVCxGridViewColumnType.DateEdit;
+             column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 130;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTHour");
+             column.FieldName = "OTHour";
+             column.ReadOnly = true;
+             column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+             column.PropertiesEdit.DisplayFormatString = "N2";
+         });
+         //settings.DataBinding = (sender, e) =>
+         //{
+
+         //    MVCxGridView grid = (MVCxGridView)sender;
+
+         //    grid.ExpandAll();
+
+
+         //};
+
+
+
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Quantity").DisplayFormat = "N0";
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Discount").DisplayFormat = "C";
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "C";
+
+
+         //});
+         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+         settings.Settings.ShowHeaderFilterButton = true;
+         settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+         settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+         settings.SettingsPager.PageSize = 200;
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+         settings.CellEditorInitialize = (s, e) =>
+         {
+             if (e.Column.FieldName == "EmpCode")
+             {
+
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.None;
+                 editor.ReadOnly = false;
+             }
+
+         };
+
+     });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListHeader).GetHtml()
+
+
+

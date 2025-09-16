@@ -1,0 +1,44 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+    });
+     function getPositionStructureID(s, e) {
+         var selectedItem = s.GetSelectedItem();
+         var id = selectedItem ? selectedItem.GetColumnText("ID") : null;
+         $.ajax({
+             type: 'post',
+             url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/getPostStructureID',
+             data: { 'id': id, 'Action': 'Create' },
+             success: function (data) {
+                 if (data.MS == "OK") {
+                     txtPositionStructureID.SetValue(data.PostStructureID);
+                     txtPositionID.SetValue(data.PostID);
+                 }
+                 else {
+                     AlertMessage(data.MS);
+                 }
+             },
+             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                 AlertMessage(XMLHttpRequest.responseText);
+
+             }
+         });
+    }
+</script>
+
+@model  Humica.Logic.HR.HREmpMultiPositionObject
+    
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Multi Position")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridviewMultiPosition", Model.ListHREmpMultiPosition);
+    });
+}).GetHtml()

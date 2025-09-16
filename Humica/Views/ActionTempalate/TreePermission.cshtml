@@ -1,0 +1,112 @@
+﻿@model Humica.EF.Models.SY.SYPermissionObject
+
+@{
+    var treeList = Html.DevExpress().TreeList(
+        settings =>
+        {
+
+            
+            settings.Name = "treeList";
+            settings.CallbackRouteValues = new { Controller = "ActionTempalate", Action = "TreePermission" };
+
+            settings.AutoGenerateColumns = false;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ID";
+            settings.ParentFieldName = "TemplateID";
+
+            settings.SettingsSelection.Recursive = true;
+
+            //settings.Columns.Add(column =>
+            //{
+            //    column.FieldName = "ID";
+            //    column.PropertiesEdit.EncodeHtml = false;
+            //});
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "Name";
+                column.PropertiesEdit.EncodeHtml = false;
+            });
+
+            settings.CommandColumn.Visible = true;
+    
+            settings.CommandColumn.NewButton.Visible = true;
+            settings.CommandColumn.DeleteButton.Visible = true;
+    
+            
+            //settings.Columns.Add(column =>
+            //{
+            //    column.FieldName = "Part";
+            //    column.PropertiesEdit.EncodeHtml = false;
+            //});
+
+            foreach (var key in Model.ListActionTemplate.GroupBy(w => w.TemplateID))
+            {
+                settings.Nodes.Add(node =>
+                   {
+                       node.KeyObject = key.Key + "_HEADER";
+                       node["Name"] = key.Key;
+                       //node["ID"] = key.Key;
+                       node.Expanded = false;
+                       node.AllowSelect = true;
+                       foreach (var read in Model.ListActionTemplate)
+                       {
+                           if (read.TemplateID == key.Key)
+                           {
+                               node.ChildNodes.Add(child =>
+                               {
+                                   child.KeyObject = read.TemplateID + "_" + read.IsAction;
+                                   child["Name"] = read.IsAction;
+                                   //child["ID"] = read.ID;
+                                   child.Expanded = false;
+                                   child.AllowSelect = true;
+                               });
+                           }
+                       }
+                   });
+            }
+
+       
+
+            //settings.SettingsEditing.Mode = TreeListEditMode.PopupEditForm;
+
+            settings.SettingsEditing.ConfirmDelete = true;
+
+
+            settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+            settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            settings.SettingsSelection.AllowSelectAll = false;
+            settings.SettingsSelection.Enabled = false;
+
+
+            settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+
+            settings.Settings.ShowColumnHeaders = true;
+
+
+           
+            
+            //settings.SetDataCellTemplateContent(
+            //        c =>
+            //        {
+            //            var iconName = DataBinder.Eval(c.DataItem, "Name");
+            //            ViewContext.Writer.Write(
+            //                "<div>" +
+                                
+            //                    "&nbsp;" +
+            //                    "<label style=\"vertical-align: middle\">" + c.Text + "</label>" +
+            //                "</div>"
+            //            );
+            //        }
+            //    );
+            
+        }
+    );
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.GetHtml()

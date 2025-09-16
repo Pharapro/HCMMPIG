@@ -1,0 +1,59 @@
+﻿<script type="text/javascript">
+    var id;
+    var typeIn;
+    $('#linkFavoriteList').hide();
+    PopTheLoading.Show();
+
+    $(document).ready(function () {
+        PopTheLoading.Hide();
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'Id;StateName', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        //view
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Details?id=" + values[0];
+        }
+        //alert("hehe" + values);
+    }
+
+</script>
+
+@model Humica.Core.SY.ClsEmail
+
+@*<div class="fitler-doc">
+    @Html.Partial("Filter", Model)
+</div>*@
+
+@{
+    if (Model.ScreenId != null)
+    {
+        @Html.DevExpress().PageControl(settings =>
+   {
+       settings.Name = "pcScrollingMaterial1";
+       settings.Width = Unit.Percentage(100);
+       settings.EnableTabScrolling = true;
+       settings.TabAlign = TabAlign.Justify;
+       settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+
+       settings.TabPages.Add("Mail send out box").SetContent(() =>
+       {
+           @Html.RenderPartial("GridItems1", Model.ListJobs);
+       });
+
+       //if (Humica.EF.Models.SY.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_2"))
+       //{
+       //    settings.TabPages.Add("Integration Error Log").SetContent(() =>
+       //    {
+       //        @Html.RenderPartial("GridItems2", Model.ListSunIntegrations2);
+       //    });
+       //}
+
+   }).GetHtml();
+        }
+    }

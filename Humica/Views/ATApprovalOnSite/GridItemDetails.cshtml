@@ -1,0 +1,84 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemDetails";
+        settings.KeyFieldName = "LineItem";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "ATApprovalOnSite", Action = "GridItemDetails" };
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 50;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.FieldName = "LineItem";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InDate");
+            column.FieldName = "InDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 450;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+            column.FieldName = "Location";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "MapURL";
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Maps URL");
+            column.SetDataItemTemplateContent(container =>
+            {
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "hl" + container.VisibleIndex;
+                    hyperlink.Properties.Text = "Link";
+                    hyperlink.Properties.Target = "_BLANK";
+                    hyperlink.NavigateUrl = Convert.ToString(DataBinder.Eval(container.DataItem, "MapURL"));
+                }).Render();
+            });
+        });
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

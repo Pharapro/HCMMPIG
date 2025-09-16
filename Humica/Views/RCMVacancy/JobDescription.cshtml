@@ -1,0 +1,71 @@
+﻿    @model Humica.Logic.RCM.IClsRCMVacancy
+
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "jdesc";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            m.ColumnSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.PostOfJD, s =>
+            {
+                s.ReadOnly = true;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ClientInstanceName = "txtPosition";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+            }).BindList(ViewData["POSITION_SELECT"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobResponsibility");
+            m.ColSpan = 3;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().MemoFor(i => i.JobResponsibility, s =>
+            {
+                s.ReadOnly = true;
+                s.Height = 500;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ClientInstanceName = "txtResponsibility";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobRequirement");
+            m.ColSpan = 3;
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().MemoFor(i => i.JobRequirement, s =>
+           {
+               s.ReadOnly = true;
+               s.Height = 500;
+               s.Width = Unit.Percentage(100);
+               s.Properties.ClientInstanceName = "txtJobRequire";
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+           }).Render();
+       });
+    });
+
+}).GetHtml()

@@ -1,0 +1,108 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewListUpload";
+               settings.KeyFieldName = ViewData[Humica.EF.SYSConstant.LIST_CONF_KEYNAME].ToString();
+               settings.KeyFieldName = "ID";
+               //settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = false;
+               settings.CallbackRouteValues = new { Action = "UploadList", Controller = ViewData[Humica.EF.SYSConstant.LIST_CONF_CONTROLLER].ToString() };
+
+               settings.SettingsBehavior.ConfirmDelete = false;
+
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = false;
+               settings.SettingsContextMenu.Enabled = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+
+               if (ViewData[Humica.EF.SYSConstant.LIST_CONF_SETTING] != null)
+               {
+                   List<Humica.EF.MD.CFList> ls=(      List<Humica.EF.MD.CFList>)ViewData[Humica.EF.SYSConstant.LIST_CONF_SETTING];
+                   foreach (Humica.EF.MD.CFList l in ls)
+                   {
+                       if(l.ViewAs==Humica.EF.ViewDataAs.DATE.ToString())
+                       {
+                           settings.Columns.Add(column => {
+                               column.FieldName= l.FieldName;
+                               column.Caption= l.Description;
+                               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                           });
+                       }
+
+                       else if (l.ViewAs == Humica.EF.ViewDataAs.LINK.ToString())
+                       {
+                           settings.Columns.Add(column =>
+                           {
+                               column.FieldName = l.FieldName;
+                               column.Caption = l.Description;
+                               column.ColumnType = MVCxGridViewColumnType.HyperLink;
+
+                               column.SetDataItemTemplateContent(container =>
+                               {
+                                   Html.DevExpress().HyperLink(hyperlink =>
+                                   {
+                                       hyperlink.Name = "hl" + container.ID;
+                                       hyperlink.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, l.FieldName));
+                                       hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + l.NavigationUrl + "?id=" + container.KeyValue;
+                                   }).Render();
+                               });
+
+
+                           });
+                       }
+
+
+                       else
+                       {
+                           settings.Columns.Add(l.FieldName, l.Description);
+                       }
+
+                   }
+               }
+
+               settings.Columns.Add(column =>
+               {
+
+                   column.ColumnType = MVCxGridViewColumnType.HyperLink;
+
+                   column.SetDataItemTemplateContent(container =>
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "h1l" + container.ID;
+                           hyperlink.ToolTip = container.KeyValue + "";
+                           hyperlink.Properties.Text = "Delete";
+                           hyperlink.Properties.ClientSideEvents.Click = "deleteFileUploated";
+                       }).Render();
+                   });
+
+
+               });
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.PreRender = (s, e) =>
+               {
+                   var grid = s as MVCxGridView;
+                   if (grid != null)
+                       grid.ExpandRow(1);
+               };
+
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+           });
+
+
+}
+
+@gridExtension.Bind(Model).GetHtml()
+

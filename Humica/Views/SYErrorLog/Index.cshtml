@@ -1,0 +1,31 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+    function DbRowClick(s, e) {
+        ss = 1;
+       // s.GetRowValues(s.GetFocusedRowIndex(), 'ID;', OnGetRowValues);
+    }
+</script>
+
+
+@model IEnumerable<Humica.EF.MD.SYEventLog>
+
+
+<style>
+    #FixAssetCreate_1 .dxflGroup_DevEx {
+        padding: 0px 5px;
+    }
+
+    #FixAssetCreate_0 .dxflGroup_DevEx {
+        padding: 0px 5px;
+    }
+</style>
+  
+       @Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model)
+

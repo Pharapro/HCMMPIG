@@ -1,0 +1,89 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemDetails";
+        settings.KeyFieldName = "LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(65);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+
+        settings.CallbackRouteValues = new { Controller = "RPTTransferAndpromotionReport", Action = "GridItemDetails" };
+        //settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "RPTTransferAndpromotionReport", Action = "EditLeave" };
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "LineItem";
+            column.Visible = false;
+            column.Width = 120;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.FieldName = "EduType";  //
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Degree Type");
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.FieldName = "Major"; //
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Majors");
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.FieldName = "EduCenter";  //
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Institution");
+        });
+
+        settings.SettingsPager.PageSize = 200;
+        settings.CommandColumn.Width = 80;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "LeaveDate")
+            {
+                editor.ReadOnly = true;
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

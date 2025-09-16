@@ -1,0 +1,56 @@
+﻿
+@*<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>*@
+
+
+@model Humica.Logic.Mission.ClsMISSType
+
+@Html.DevExpress().PageControl(
+
+
+        settings =>
+        {
+            settings.Name = "pcScrollingMaterial1";
+            settings.Width = Unit.Percentage(100);
+
+            settings.EnableTabScrolling = true;
+            settings.TabAlign = TabAlign.Justify;
+
+            settings.Styles.Tab.CssClass = "scrolling_Tab";
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Mission Type")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridMMissType", Model.ListMType);
+
+            });
+        
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Travel By")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridHRMTravelBy", Model.ListTravelBy);
+            });
+          
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Oil Rating")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridHRMOilRating", Model.ListMissOilRating);
+
+            });
+
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Mission Item")).SetContent(() =>
+            {
+                @Html.RenderPartial("GridMissItem", Model.ListItem);
+
+            });
+           
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Claim Type")).SetContent(() =>
+{
+    @Html.RenderPartial("GridHRMClaimType", Model.ListMClaimType);
+});
+
+
+        }).GetHtml()

@@ -1,0 +1,69 @@
+﻿@model Humica.Core.FT.FTFilterEmployee
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTGernalAccountings";
+    settings.AlignItemCaptionsInAllGroups = true;
+    int width = 180;
+    Html.RenderPartial("~/Views/FILTER/FREmpoyeeReport.cshtml");
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.AddGroupItem(m => Model, g1 =>
+        {
+            g1.ColCount = 2;
+            g1.GroupBoxDecoration = GroupBoxDecoration.None;
+            g1.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g1.Caption = "";
+            g1.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpName");
+            })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().DropDownEditFor(i => Model.EmpCode, s =>
+              {
+                  s.Style.Add("margin-left", "7px");
+                  //s.Width = 180;
+                  s.Properties.ClientInstanceName = "checkComboBoxEmpCode";
+                  //s.SkinID = "CheckComboBox";
+                  //s.ReadOnly = true;
+                  s.SetDropDownWindowTemplateContent(c =>
+                  {
+                      Html.RenderPartial(Humica.Models.SY.SYListFilter.ListFilterViewEmp);
+
+                      ViewContext.Writer.Write("<div style=\"padding: 6px; height: 24px;\">");
+                      @Html.DevExpress().Button(buttonSettings =>
+                      {
+                          buttonSettings.Name = "buttonCloseEmpCode";
+                          buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Ok");
+                          buttonSettings.Style.Add("float", "right");
+                          buttonSettings.Style.Add("padding", "0px 2px");
+                          buttonSettings.ClientSideEvents.Click = "function(s, e){ checkComboBoxEmpCode.HideDropDown(); }";
+                          buttonSettings.Height = 26;
+                      }).Render();
+
+                      @Html.DevExpress().Button(buttonSettings =>
+                      {
+                          buttonSettings.Name = "buttonClearEmpCode";
+                          buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Clear");
+                          buttonSettings.Style.Add("float", "right");
+                          buttonSettings.Style.Add("margin", "0px 3px");
+                          buttonSettings.ClientSideEvents.Click = "clearSelectedEmpCode";
+                          buttonSettings.Height = 26;
+                      }).Render();
+                      ViewContext.Writer.Write("</div>");
+
+                  });
+                  s.Properties.AnimationType = AnimationType.None;
+              }).Render();
+          });
+
+        });
+
+    });
+
+
+}).Bind(Model).GetHtml()

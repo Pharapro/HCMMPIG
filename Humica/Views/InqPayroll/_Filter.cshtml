@@ -1,0 +1,77 @@
+﻿@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTDGeneralFilter";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 180;
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => Model.Filter.FromDate, s =>
+            {
+                s.Width = width;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.PickerType = DatePickerType.Months;
+                s.Properties.NullText = "MMMM-yyyy";
+                s.Properties.EditFormatString = "MMMM-yyyy";
+                s.Properties.DisplayFormatString = "MMMM-yyyy";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => Model.Filter.ToDate, s =>
+            {
+                s.Width = width;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.PickerType = DatePickerType.Months;
+                s.Properties.NullText = "MMMM-yyyy";
+                s.Properties.EditFormatString = "MMMM-yyyy";
+                s.Properties.DisplayFormatString = "MMMM-yyyy";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReportType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Filter.STReportType, s =>
+            {
+                s.Width = width;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.TextField = "SelectText";
+                s.Properties.ValueField = "SelectValue";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "_SELECT"); ;
+            }).BindList(new Humica.EF.Models.SY.SYDataList("REPORT_TYPE").ListData).Render();
+        });
+
+    });
+
+}).Bind(Model).GetHtml()
+
+@model Humica.Logic.Inquiry.ClsInqPayroll

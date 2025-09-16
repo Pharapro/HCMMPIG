@@ -1,0 +1,83 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnAssignStaff').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "AssignStaff?FromDate=" + convert(txtFromDate.GetDate()) + "&ToDate=" + convert(txtToDate.GetDate()) + "&TimeShift=" + txtTimeShift.GetValue() + "&Remark=" + txtRemark.GetValue() + "&LeaveType=" + txtLeaveType.GetValue();
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'ID;', OnGetRowValues);
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-") + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/Leave/HRLeaveBusClosures/getEmpCode',
+            data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+    function btnFilter(s, e) {
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Filter",
+            data: { 'Branch': cboBranch.GetValue(), 'Department': cboDepartment.GetValue(), "INYear": txtInYear.GetValue() },
+            success: function (data) {
+                if (data == "OK") {
+                    //alert(data);
+                    Gridview.Refresh();
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+</script>
+
+@model Humica.Logic.LM.GenerateLeaveObject
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+<div class="box-body">
+    @Html.Partial("GridItems", Model.ListStaff)
+</div>

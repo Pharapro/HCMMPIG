@@ -1,0 +1,26 @@
+﻿
+@Html.DevExpress().ComboBox(s =>
+{
+    var isReadOnly = true;
+    if (ViewData[Humica.EF.SYSConstant.PARAM_ID1] != null)
+    {
+        isReadOnly =(bool)ViewData[Humica.EF.SYSConstant.PARAM_ID1];
+    }
+    s.Name = "Course";
+    s.ReadOnly = true;
+    s.Properties.ClientInstanceName = "cboCourse";
+    s.ShowModelErrors = true;
+    s.CallbackRouteValues = new { Controller = "TRTrainingPlan", Action = "Course" };
+    //s.Width = Unit.Percentage(100);
+    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    s.Properties.ValidationSettings.SetFocusOnError = true;
+    s.Properties.ValidationSettings.ErrorText = "*";
+    s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    s.Properties.TextFormatString = "{0}:{1}";
+    s.Properties.ValueField = "Code";
+    s.Properties.TextField = "Description";
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "selectCourse";
+    s.ReadOnly = isReadOnly;
+}).BindList(ViewData["COURSE"]).GetHtml()

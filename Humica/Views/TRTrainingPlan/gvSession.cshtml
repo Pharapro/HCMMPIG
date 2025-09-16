@@ -1,0 +1,129 @@
+﻿@using Humica.EF
+@{
+    var isReadOnly = true;
+    if (ViewData[SYSConstant.PARAM_ID1] != null)
+    {
+        isReadOnly = !(bool)ViewData[SYSConstant.PARAM_ID1];
+    }
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSession";
+        settings.KeyFieldName = "TrainNo";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new
+        {
+            Controller = "TRTrainingPlan",
+            Action = "gvSession" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TRTrainingPlan", Action = "CreateSession" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TRTrainingPlan", Action = "EditSession" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingPlan", Action = "DeleteSession" };
+
+        settings.CommandColumn.Visible = isReadOnly;
+        settings.CommandColumn.ShowDeleteButton = isReadOnly;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = isReadOnly;
+        settings.CommandColumn.ShowCancelButton = isReadOnly;
+        settings.CommandColumn.ShowEditButton = isReadOnly;
+        settings.SettingsBehavior.AllowFocusedRow = isReadOnly;
+        settings.SettingsBehavior.ConfirmDelete = isReadOnly;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TrainerType";
+            c.Caption = "Trainer Type";
+            c.AdaptivePriority = 1;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.DataSource = ViewData["LIST_TRAINERTYPE"];
+                cb.ValueField = "SelectValue";
+                cb.TextField = "SelectText";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+                cb.ClientSideEvents.SelectedIndexChanged = "TrainnerTypeSelectedChanged";
+                cb.ClientInstanceName = "cboTrainerType";
+            });
+        });
+
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TrainerID";
+            c.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Trainer");
+            c.AdaptivePriority = 1;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.TextField = "TrainerName";
+                cb.ValueField = "TrainNo";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+                cb.CallbackRouteValues = new { Controller = "TRTrainingPlan", Action = "GetTrainerInfo" };
+                cb.TextFormatString = "{1}";
+                cb.Columns.Add("TrainerCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+                cb.Columns.Add("TrainerName", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+                cb.BindList(Humica.Training.TrainingProcessObject.GetTrainerInfo());
+                cb.ClientInstanceName = "cboTrainerID";
+                cb.ClientSideEvents.SelectedIndexChanged = "cboTrainerID_SelectedIndexChanged";
+            });
+        });
+        //settings.Columns.Add(c =>
+        //{
+        //    c.FieldName = "SessionCode";
+        //    c.Caption = "Session";
+        //    c.AdaptivePriority = 1;
+        //    c.EditorProperties().ComboBox(cb =>
+        //    {
+        //        cb.DataSource = ViewData["SESSION"];
+        //        cb.TextField = "SelectText";
+        //        cb.ValueField = "SelectValue";
+        //        cb.DropDownStyle = DropDownStyle.DropDownList;
+        //    });
+        //});
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TopicID";
+            c.Caption = "Topic/Subject";
+            c.AdaptivePriority = 1;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.DataSource = ViewData["Topic"];
+                cb.TextField = "Description";
+                cb.ValueField = "TrainNo";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 90;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+            column.FieldName = "InMonth";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 12;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 90;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Week");
+            column.FieldName = "Week";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 5;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

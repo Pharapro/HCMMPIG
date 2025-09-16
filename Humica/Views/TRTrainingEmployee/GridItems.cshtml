@@ -1,0 +1,129 @@
+﻿@model Humica.Training.TrainingProcessObject
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        bool isReadOnly = false;//(bool)ViewData[SYSConstant.PARAM_ID1];
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "TrainNo;EmpCode";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "TRTrainingEmployee" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingEmployee", Action= "DeleteTrainee" };
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;//isReadOnly;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        #region old
+        //settings.Columns.Add(c =>
+        //{
+        //    c.Caption= Humica.EF.Models.SY.SYSettings.getLabel("Course Code");
+        //    c.Width = Unit.Percentage(100);
+        //    c.SetEditItemTemplateContent(content => {
+        //        Html.DevExpress().DropDownEditFor(i => Model.ListCourseType, ddeSettings => {
+        //            ddeSettings.Name = "templateCheckComboBox";
+        //            ddeSettings.Properties.ClientInstanceName = "checkComboBoxBranch";
+        //            ddeSettings.Width = Unit.Percentage(100);
+        //            //ddeSettings.SkinID = "CheckComboBox";
+        //            ddeSettings.SetDropDownWindowTemplateContent(d =>
+        //            {
+        //                //Html.RenderPartial("PartialCourseSearch");
+
+        //                ViewContext.Writer.Write("<div style=\"padding: 6px; height: 24px;\">");
+        //                @Html.DevExpress().Button(buttonSettings =>
+        //                {
+        //                    buttonSettings.Name = "buttonCloseBranch";
+        //                    buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Ok");
+        //                    buttonSettings.Style.Add("float", "right");
+        //                    buttonSettings.Style.Add("padding", "0px 2px");
+        //                    buttonSettings.ClientSideEvents.Click = "function(s, e){ checkComboBoxBranch.HideDropDown(); }";
+        //                    buttonSettings.Height = 26;
+        //                }).Render();
+
+        //                @Html.DevExpress().Button(buttonSettings =>
+        //                {
+        //                    buttonSettings.Name = "buttonClearBranch";
+        //                    buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Clear");
+        //                    buttonSettings.Style.Add("float", "right");
+        //                    buttonSettings.Style.Add("margin", "0px 3px");
+        //                    //buttonSettings.ClientSideEvents.Click = "clearSelectedBranch";
+        //                    buttonSettings.Height = 26;
+        //                }).Render();
+        //                ViewContext.Writer.Write("</div>");
+
+        //            });
+        //            ddeSettings.Properties.AnimationType = AnimationType.None;
+        //        }).Render();
+        //    });
+        //});
+        #endregion
+        settings.Columns.Add(column =>
+        {
+            column.Name = "EmpCode";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.Width = Unit.Percentage(100);
+            column.FieldName = "EmpCode";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "EmpName";
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Date");
+        //    column.Width = Unit.Percentage(100);
+        //    column.FieldName = "Staff.StartDate";
+        //    column.PropertiesEdit.DisplayFormatString = "dd-MMM-yyyy";
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "Department";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.Width = Unit.Percentage(200);
+            column.FieldName = "Position";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Score");
+            column.Width = Unit.Percentage(70);
+            column.FieldName = "Score";
+            column.PropertiesEdit.DisplayFormatString = "{0:N2}";
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            ASPxGridView gridView = (ASPxGridView)sender;
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.ClientSideEvents.RowDblClick = "";
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    grid.Bind(Model.ListTempTrainee).GetHtml();
+}

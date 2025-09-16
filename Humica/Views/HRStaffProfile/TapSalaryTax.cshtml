@@ -1,0 +1,47 @@
+﻿@model Humica.Logic.HR.HRStaffProfileObject
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+
+    s1.Name = "TapSalaryTax";
+    s1.AlignItemCaptionsInAllGroups = true;
+
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        var isReadOnly = false;
+        var IsSalary = false;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SalaryTax");
+        })
+      .SetNestedContent(() =>
+      {
+          Html.DevExpress().TextBoxFor(i => i.SalaryTax, s =>
+          {
+              s.ReadOnly = IsSalary;
+              s.ShowModelErrors = true;
+              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+              s.Properties.ValidationSettings.SetFocusOnError = true;
+              s.Properties.ValidationSettings.ErrorText = "*";
+          }).Render();
+      });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SalaryNSSF");
+        })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().TextBoxFor(i => i.SalaryNSSF, s =>
+         {
+             s.ReadOnly = IsSalary;
+             s.ShowModelErrors = true;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+         }).Render();
+     });
+    });
+}).GetHtml()

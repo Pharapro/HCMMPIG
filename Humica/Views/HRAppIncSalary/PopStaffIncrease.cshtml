@@ -1,0 +1,98 @@
+﻿@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopStaffIncrease";
+        settings.Width = 400;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Pop Select Leave Type";
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "ModalModeFormLayout";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 2;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+
+                s.Items.Add(i =>
+                {
+                    i.Name = "PayrollMonth";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Effective Date");
+                    i.NestedExtension().DateEdit(tbox =>
+                    {
+                        tbox.Properties.ClientInstanceName = "dptEffectiveDate";
+                        tbox.ControlStyle.HorizontalAlign = HorizontalAlign.Left;
+                        tbox.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        tbox.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        tbox.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                        tbox.Properties.AllowNull = true;
+                        tbox.Date = DateTime.Now;
+                        tbox.Width = Unit.Percentage(50);
+                    });
+                    i.ClientVisible = true;
+                });
+                s.Items.Add(i =>
+                {
+                    i.Name = "Code";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Career Type");
+                    i.ColumnSpan = 2;
+                    i.NestedExtension().ComboBox(tbox =>
+                    {
+                        tbox.Properties.ClientInstanceName = "cboCareerType";
+                        tbox.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        tbox.Properties.TextField = "Description";
+                        tbox.Properties.ValueField = "Code";
+                        tbox.Properties.DisplayFormatString ="{1}";
+                        tbox.Properties.DataSource = ViewData["CAREER_TYPE"];
+                        tbox.Properties.Columns.Add("Code", "Code", 120);
+                        tbox.Properties.Columns.Add("Description", "Description", 150);
+                        tbox.Properties.ValueType = typeof(string);
+                    });
+                });
+
+
+                s.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.SetNestedContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div  style=\"margin-left:110px;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "OK";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "OK";
+                                buttonSettings.UseSubmitBehavior = false;
+                                //buttonSettings.ImagePosition=ImagePosition.Bottom;
+                                buttonSettings.ClientSideEvents.Click = "confirmIncrease";
+                            }
+                        ).Render();
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnCancel";
+                                buttonSettings.ControlStyle.BackColor = System.Drawing.Color.Red;
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "Cancel";
+                                buttonSettings.ClientSideEvents.Click = "function(s, e){ PopStaffIncrease.Hide(); }";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+    }).GetHtml()

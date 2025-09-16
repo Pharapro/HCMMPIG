@@ -1,0 +1,179 @@
+﻿@{
+  var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "gridViewItem3";
+        settings.KeyFieldName = "ID";
+      
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "SYWorkFlow", Action = "GridItems3" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "SYWorkFlow", Action = "CreatePartial3" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SYWorkFlow", Action = "EditPartial3" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SYWorkFlow", Action = "DeletePartial3" };
+        
+            
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+    
+        settings.Columns.Add(column =>
+        {
+
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ID");
+            column.FieldName = "ID";
+            column.Visible = false;
+            column.ToolTip = "Key 1";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+        });
+        settings.Columns.Add(column =>
+        {
+
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ScreenId");
+            column.FieldName = "ScreenId";            
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            column.ToolTip = "Key 1";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "WFObject");
+            column.FieldName = "WFObject";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.ToolTip = "Key 2";
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            var listNumber = (List<SaleModule.CF.CFWorkFlow>)ViewData["WORK_FLOW_OBJECT"];
+
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = listNumber;
+
+            textProperties.ValueField = "WFObject";
+            textProperties.TextField = "WFObject";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+            
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "WFType");
+            column.FieldName = "WFType";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            column.ToolTip = "Key 3";
+            var listNumber = (List<Humica.EF.MD.SYData>)ViewData["WORK_FLOW_TYPE"];
+
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = listNumber;
+
+            textProperties.ValueField = "SelectValue";
+            textProperties.TextField = "SelectText";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "EMTemplate");
+            column.FieldName = "EMTemplate";
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+          
+            
+            var listNumber = (List<SaleModule.CF.TPEmailTemplate>)ViewData["EMT_LIST"];
+
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = listNumber;
+
+            textProperties.ValueField = "EMTemplateObject";
+            textProperties.TextField = "EMTemplateObject";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "IsUserEmailOwnerMaster");
+            column.FieldName = "IsUserEmailOwnerMaster";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        });
+        
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "MailToAfterRequested");
+            column.FieldName = "MailCCAfterRequested";
+            column.Width = 250;
+        });
+        
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "MailCCAfterApproved");
+            column.FieldName = "MailCCAfterApproved";
+            column.Width = 250;
+        
+        });
+
+     
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 20;
+        
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+        
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;            
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue!=null)
+            {
+                if (e.Column.FieldName == "NumberObject")
+                {
+                    e.Editor.ReadOnly=true;
+                }
+            }
+        };
+
+    });
+ 
+
+        if (ViewData["EditError"] != null)
+        {
+            grid.SetEditErrorText((string)ViewData["EditError"]);
+        }
+}
+@grid.Bind(Model).GetHtml()
+

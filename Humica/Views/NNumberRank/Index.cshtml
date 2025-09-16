@@ -1,0 +1,54 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model  Humica.Core.CF.CFNumberRankObject
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        // if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_1"))
+        // {
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("NumberRank")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems1", Model.ListNumberRankHeader);
+        });
+        //  }
+
+        //  if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_2"))
+        //  {
+        //NumberRankItem
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Global")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems2", Model.ListNumberRankHofCom);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Company & Year")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems5", Model.ListNumberSofComYear);
+        });
+        //  }
+        //  if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_3"))
+        //  {
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("NumberEmpCode")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems3", Model.ListNumEmpCode);
+        });
+        //   }
+    }).GetHtml()
+
+

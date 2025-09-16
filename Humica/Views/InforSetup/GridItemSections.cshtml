@@ -1,0 +1,112 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "gridViewItem2";
+        settings.KeyFieldName = "Code";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "InforSetup", Action = "GridItemSections" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "InforSetup", Action = "CreateSection" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "InforSetup", Action = "EditSection" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "InforSetup", Action = "DeleteSection" };
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("SortKey");
+            column.FieldName = "SortKey";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.FieldName = "Code";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.FieldName = "Description";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+            column.FieldName = "SecDescription";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.FieldName = "Remark";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+            column.FieldName = "IsActive";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+        });
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        //settings.SettingsExport.EnableClientSideExportAPI = true;
+        //settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.FileName = "Template Section";
+        settings.Toolbars.Add(t =>
+        {
+            t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        });
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+
+            if (e.KeyValue != null && e.Column.FieldName == "Code")
+            {
+                e.Editor.ReadOnly = true;
+            }
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "IsActive")
+                {
+                    e.Editor.Value = true;
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

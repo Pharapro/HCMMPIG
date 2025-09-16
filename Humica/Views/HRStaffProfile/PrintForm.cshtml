@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().DocumentViewer(
+    settings =>
+    {
+        settings.Name = "DocumentViewer";
+        settings.Report = Model;
+        settings.SettingsSplitter.DocumentMapCollapsed = true;
+        settings.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "DocumentViewerPartial", Empcode = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() };
+        settings.ExportRouteValues = new { Controller = "HRStaffProfile", Action = "DocumentViewerExportTo", Empcode = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() };
+        settings.ToolbarMode = DevExpress.XtraReports.Web.DocumentViewer.DocumentViewerToolbarMode.StandardToolbar;
+    }).GetHtml()

@@ -1,0 +1,125 @@
+﻿@{     
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "_BasicSalary";
+           settings.KeyFieldName = "ID";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRPayDetail", Action = "_BasicSalary" };
+           //settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.Settings.ShowGroupPanel = false;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+               column.Width = 100;
+               column.FieldName = "PayFrom";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+               column.Width = 100;
+               column.FieldName = "PayTo";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CareerCode");
+               column.Width = 120;
+               column.FieldName = "CareerCode";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkDay");
+               column.Width = 100;
+               column.FieldName = "WorkDay";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkHour");
+               column.Width = 100;
+               column.FieldName = "WorkHour";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ActualWork");
+               column.Width = 120;
+               column.FieldName = "ActWorkDay";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+
+               spinEditProperties.Width = Unit.Percentage(100);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BasicSalary");
+               column.Width = 100;
+               column.FieldName = "BasicSalary";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.MinValue = 0;
+               spinEditProperties.MaxValue = 1000000;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+
+           settings.SettingsBehavior.AllowEllipsisInText = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()
+
+

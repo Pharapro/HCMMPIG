@@ -1,0 +1,99 @@
+﻿<script type="text/javascript">
+    ////var _L = "*Model*.CourseName";
+    var sessionName = "@Model.SessionName";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+           $("form").submit();
+        });
+    });
+
+    function selectCourse(s, e) {
+        txtCourseCode.SetValue(s.GetValue());
+    }
+</script>
+@model Humica.Training.TrainingProcessObject
+@Html.DevExpress().FormLayout(settings =>
+{
+    var isReadOnly = false;
+    if (ViewData[Humica.EF.SYSConstant.PARAM_ID1] != null)
+    {
+        isReadOnly = (bool)ViewData[Humica.EF.SYSConstant.PARAM_ID1];
+    }
+    settings.Name = "frmLayout";
+    settings.Width = Unit.Percentage(100);
+    //#region staff information
+    settings.Items.AddGroupItem(m => Model.TrainingAttendance, g =>
+    {
+        // g.Caption = "Staff Information";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.ColCount = 2;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.TrainingAttendance.EmpCode, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.TrainingAttendance.InDate, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DisplayFormatString = "dd-MMM-yyyy";
+                s.Properties.EditFormatString = "dd-MMM-yyyy";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsAttend");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.TrainingAttendance.IsAttend, s =>
+            {
+                s.Width = Unit.Percentage(80);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            m.ColumnSpan = 2;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.TrainingAttendance.Remark, s =>
+            {
+                s.Properties.ClientInstanceName = "txtRemark";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Width = Unit.Percentage(81);
+            }).Render();
+        });
+    });
+
+
+}).GetHtml()

@@ -1,0 +1,55 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnGenerate').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Generate?PeriodID=" + txtPeriod.GetValue() + "&Branch=" + checkComboBoxBranch.GetValue();
+        });
+    });
+    $(document).ready(function () {
+        $('#_btnTransfer').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Transfer?PeriodID=" + txtPeriod.GetValue() + "&Branch=" + checkComboBoxBranch.GetValue();
+        });
+        $('#_DownloadLeter').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "DownloadLeter?PeriodID=" + txtPeriod.GetValue() + "&Branch=" + checkComboBoxBranch.GetValue() + "&ValueDate=" + convert(txtValueDate.GetDate());
+        });
+    });
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function cboPeriodChange(s, e) {
+        ShowData();
+    }
+    function ShowData() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl +"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]"+ '/ShowData',
+            data: { 'PeriodID': txtPeriod.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtExchangeRate.SetValue(data.Exchange);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+@model Humica.Logic.PR.PRGenerate_Salary
+
+@Html.Partial("FTFilterEmployeeGen", Model)

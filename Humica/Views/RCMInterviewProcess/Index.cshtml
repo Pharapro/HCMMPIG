@@ -1,0 +1,150 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var ID = "";
+    $(document).ready(function () {
+        $('#_bthInterview').click(function () {
+            ss = 5;
+            _ListWaiting.GetRowValues(_ListWaiting.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#_btnPrint').click(function () {
+            ss = 6;
+            if (ID == 0) {
+                _ListWaiting.GetRowValues(_ListWaiting.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+            }
+            else {
+                _ListInterview.GetRowValues(_ListInterview.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+            }
+        });
+        $('#_btnNext').click(function () {
+            ss = 7;
+            _ListInterview.GetRowValues(_ListInterview.GetFocusedRowIndex(), 'TranNo;Status', OnGetRowValues);
+        });
+        //$('#_btnNext').click(function () {
+        //    ss = 7;
+        //    _ListInterview.GetRowValues(_ListInterview.GetFocusedRowIndex(), 'ApplicantID;', GetDate);
+        //});
+        $('#pageToolbar_DXI3i1_').click(function () {
+            ss = 8;
+            _ListInterview.GetRowValues(_ListInterview.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        $('#pageToolbar_DXI3i0_').click(function () {
+            ss = 9;
+            _ListInterview.GetRowValues(_ListInterview.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+        });
+        @{
+            ViewContext.Writer.Write("$('#_btnImageView').hide()");
+        }
+    })
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 7) {
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "NextStep?Code=" + selectedIDs;
+            }
+        }
+    }
+    function tabClick(s, e) {
+
+        index = s.GetActiveTab().index;
+        if (index == 0) {
+            ID = 0;
+            $("#_bthInterview").show();
+            $("#_btnNext").hide();
+            $("#pageToolbar_DXI3_").hide();
+            $("#_bthInterview").css({"transform":"translateX(-120px)"});
+        }
+        else {
+            ID = 1;
+            $("#_bthInterview").hide();
+            $("#pageToolbar_DXI3_").hide();
+            $("#_btnNext").show();
+            //$("#pageToolbar_DXI3_").css({ "transform": "translateX(-220px)" });
+            //$("#pageToolbar_DXME3_").css({ "transform": "translateX(20px)" });
+        }
+    }
+    //function GetDate(values) {
+    //    selectedIDs = values[0];
+    //    $.ajax({
+    //        type: 'post',
+    //        url: _baseUrl + '//HRM/RCM/RCMInterviewProcess/GetDate',
+    //        data: { 'Code': selectedIDs, 'Action': 'Create' },
+    //        success: function (data) {
+    //            AlertMessage("Next Step is Successed");
+    //        },
+    //        error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //            AlertMessage(XMLHttpRequest.responseText);
+    //        }
+    //    });
+    //}
+    function DbRowClick(s, e) {
+        ss = 5;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+    function RowClick(s, e) {
+        ss = 6;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo;', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+        if (ss == 5) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Interview?TranNo=" + selectedIDs;
+        }
+        if (ss == 6) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Print?TranNo="+ selectedIDs;
+        }
+        if (ss == 7) {
+            if (status == "@Humica.EF.SYDocumentStatus.PASS.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("NEXT_STEP_Q", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 8) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Pass?TranNo="+ selectedIDs;
+        }
+        if (ss == 9) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Keep?TranNo="+ selectedIDs;
+        }
+    }
+    function VACANCY_SE(s, e) {
+        cboApplyPosition.SetValue(s.GetSelectedItem().GetColumnText(1));
+    }
+
+</script>
+
+@model Humica.Logic.RCM.IClsRCMInterviewProc
+
+@Html.Partial("Filter", Model)
+
+@{
+    
+    Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterialCreate";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.ClientSideEvents.ActiveTabChanged = "tabClick";
+        settings.ClientSideEvents.Init = "tabClick";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Waiting List")).SetContent(() =>
+        {
+            Html.RenderPartial("_ListWaiting", Model.ListWaiting);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("List Interview")).SetContent(() =>
+        {
+            Html.RenderPartial("_ListInterview", Model.ListInterview);
+        });
+
+    }).Render();
+}
+}

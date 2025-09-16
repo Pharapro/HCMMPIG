@@ -1,0 +1,75 @@
+﻿@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopUpRemark";
+        settings.Width = 600;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Comment";
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "PopUp";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 2;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+                s.Items.Add(g =>
+                {
+                    g.Name = "Remark";
+                    g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Comment");
+                    g.ColumnSpan = 2;
+                    g.NestedExtension().TextBox(column =>
+                    {
+                        column.Properties.ClientInstanceName = "txtRemark";
+                        column.ControlStyle.HorizontalAlign = HorizontalAlign.Left;
+                        column.Width =500;
+                    });
+                    g.ClientVisible = true;
+                });
+                s.Items.Add(g =>
+                {
+                    g.ShowCaption = DefaultBoolean.False;
+                    g.SetNestedContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div  style=\"margin-left:110px;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "OK";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "OK";
+                                buttonSettings.UseSubmitBehavior = false;
+                                buttonSettings.ClientSideEvents.Click = "_ConfirmRemark";
+                            }
+                        ).Render();
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnCancel";
+                                buttonSettings.ControlStyle.BackColor = System.Drawing.Color.Red;
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "Cancel";
+                                buttonSettings.ClientSideEvents.Click = "function(s, e){ PopUpRemark.Hide(); }";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+    }).GetHtml()
+
+
+

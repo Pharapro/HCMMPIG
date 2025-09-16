@@ -1,0 +1,121 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "gridViewItem11";
+               settings.KeyFieldName = "Code";
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.CallbackRouteValues = new { Controller = "PRCOA", Action = "GridSetting" };
+               settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRCOA", Action = "EditSetting" };
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CommandColumn.Visible = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+               settings.CommandColumn.ShowCancelButton = true;
+               settings.CommandColumn.ShowEditButton = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+               settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+                   column.FieldName = "Code";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 300;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GroupCode");
+                   column.FieldName = "GroupAcc";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 250;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                   column.FieldName = "Description";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ObjectName");
+                   column.Width = 120;
+                   column.FieldName = "ObjectName";
+
+                   //column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   //var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   ////textProperties.DataSource = ViewData["ALLOWANCE_SELECT"];
+                   ////textProperties.ValueField = "Code";
+                   ////textProperties.TextField = "Description";
+                   //textProperties.Items.Add("Debit", "D").Selected = true;
+                   //textProperties.Items.Add("Credit", "C");
+                   ////textProperties.TextFormatString = "{1}";
+                   //textProperties.DropDownStyle = DropDownStyle.DropDownList;
+
+                   //textProperties.ValueType = typeof(string);
+                   //textProperties.Width = Unit.Percentage(100);
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FieldName");
+                   column.FieldName = "FieldName";
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsCredit");
+                   column.FieldName = "IsCredit";
+                   column.ColumnType = MVCxGridViewColumnType.CheckBox;
+
+               });
+
+               settings.SettingsSearchPanel.Visible = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.SettingsPager.PageSize = 20;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.CustomJSProperties = (sender, e) =>
+               {
+                   e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+               };
+
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.Dynamic;
+                   if (e.KeyValue != null)
+                   {
+                       if (e.Column.FieldName == "Code")
+                       {
+                           e.Editor.ReadOnly = true;
+                       }
+                   }
+               };
+           });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

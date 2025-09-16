@@ -1,0 +1,752 @@
+﻿@model Humica.Employee.IClsEmpCareerMovement
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+    s1.Name = "CreateStaff1";
+    s1.AlignItemCaptionsInAllGroups = true;
+    s1.SettingsItems.VerticalAlign = FormLayoutVerticalAlign.Top;
+    var IsSalary = false;
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_SALARY] != null)
+    {
+        IsSalary = (bool)ViewData[Humica.Models.SY.ClsConstant.IS_SALARY];
+    }
+
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+        })
+        .SetNestedContent(() =>
+        {
+            @Html.RenderPartial("TabOldJob", Model);
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+        })
+        .SetNestedContent(() =>
+        {
+            @Html.RenderPartial("TabNewJob", Model);
+        });
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.CompanyCode, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "txtCCompany";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Company";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Company", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //        //s.Properties.ClientSideEvents.SelectedIndexChanged = "selectBranch";
+        //    }).BindList(ViewData["Company_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Company") + "*";
+        //    m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewCompanyCode, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Company";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Company", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["Company_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Division");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Division, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "cboDision";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["DIVISION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Division");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewDivision, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["DIVISION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BusinessUnit");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.BusinessUnit, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboGroupDepartment";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //        //s.Properties.ClientSideEvents.SelectedIndexChanged = "selectGroupDepartment";
+        //        //s.Properties.ClientSideEvents.Init = "initDataGroupDepartment";
+        //    }).BindList(ViewData["BUSINESSUNIT_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New BusinessUnit");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewBusinessUnit, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["BUSINESSUNIT_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.BranchCode, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "txtCBranch";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["BRANCHES_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Branch") + "*";
+        //    m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewBranch, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["BRANCHES_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.DepartmentCode, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboDepartment";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //        //s.Properties.ClientSideEvents.Init = "initDataDepartment";
+        //    }).BindList(ViewData["DEPARTMENT_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Department");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewDepartment, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["DEPARTMENT_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Office");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Office, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "cboOffice";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["OFFICE_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Office");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewOffice, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["OFFICE_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Section");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Section, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboSection";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["SECTION_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Section");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewSection, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["SECTION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Groups");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Groups, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "cboGroups";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["GROUP_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Groups");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewGroups, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["GROUP_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+        //})
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.PositionCode, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboPosition";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.Columns.Add("Reporting", Humica.EF.Models.SY.SYSettings.getLabel("Reporting"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["POSITION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Position");
+        //})
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewPosition, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.Columns.Add("Reporting", Humica.EF.Models.SY.SYSettings.getLabel("Reporting"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["POSITION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LevelCode") + "*";
+        //    m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.JobLevel, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboLevel";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["Level_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New JobLevel") + "*";
+        //    m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewJobLevel, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["Level_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Grade");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.JobGrade, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "cboJobGrade";
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["JOBGRADE_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New JobGrade");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewJobGrade, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["JOBGRADE_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Category");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Category, s =>
+        //    {
+        //        s.Properties.ClientInstanceName = "txtCategory";
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = true;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["CATEGORY_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Category");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewCategory, s =>
+        //    {
+        //        s.Width = Unit.Percentage(100);
+        //        s.ReadOnly = isReadOnly;
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["CATEGORY_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Type");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.EmployeeType, s =>
+        //    {
+        //        s.ReadOnly = true;
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "txtCEmpType";
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["EMPTYPE_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Employee Type");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewEmployeeType, s =>
+        //    {
+        //        s.ReadOnly = isReadOnly;
+        //        s.Width = Unit.Percentage(100);
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["EMPTYPE_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Location");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.Location, s =>
+        //    {
+        //        s.ReadOnly = true;
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "txtCLocation";
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("OthDesc", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["LOCATION_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Location");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewLocation, s =>
+        //    {
+        //        s.ReadOnly = isReadOnly;
+        //        s.Width = Unit.Percentage(100);
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.AllowNull = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("OthDesc", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["LOCATION_SELECT"]).Render();
+        //});
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Staff Type");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.StaffType, s =>
+        //    {
+        //        s.ReadOnly = true;
+        //        s.Width = Unit.Percentage(100);
+        //        s.Properties.ClientInstanceName = "txtStaffType";
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+
+        //    }).BindList(ViewData["STAFFTYPE_SELECT"]).Render();
+        //});
+
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Staff Type");
+        //}).SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().ComboBoxFor(i => i.Header.NewStaffType, s =>
+        //    {
+        //        s.ReadOnly = isReadOnly;
+        //        s.Width = Unit.Percentage(100);
+        //        s.ShowModelErrors = true;
+        //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //        s.Properties.ValidationSettings.SetFocusOnError = true;
+        //        s.Properties.ValidationSettings.ErrorText = "*";
+        //        s.Properties.TextFormatString = "{1}";
+        //        s.Properties.ValueField = "Code";
+        //        s.Properties.TextField = "Description";
+        //        s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+        //        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+        //        s.Properties.Columns.Add("SecDescription", Humica.EF.Models.SY.SYSettings.getLabel("Second Description"), 250);
+        //        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //    }).BindList(ViewData["STAFFTYPE_SELECT"]).Render();
+        //});
+    });
+}).GetHtml()

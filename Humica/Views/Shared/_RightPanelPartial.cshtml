@@ -1,0 +1,50 @@
+@Html.DevExpress().Menu(s =>
+{
+
+    if (Humica.EF.MD.SYSession.getSessionUserBS() != null)
+    {
+        var objUsr = Humica.EF.MD.SYSession.getSessionUserBS();
+        var objlang = Humica.EF.MD.SYSession.getSessionUser();
+        s.ItemAutoWidth = false;
+        s.AllowSelectItem = false;
+        s.ApplyItemStyleToTemplates = true;
+
+        s.SettingsAdaptivity.Enabled = true;
+        s.SettingsAdaptivity.EnableAutoHideRootItems = true;
+        s.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        s.SettingsAdaptivity.CollapseRootItemsToIconsAtWindowInnerWidth = 600;
+        s.Name = "_SystemData";
+        s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("SYSTEM_INFO"));
+        s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("LOGIN") + " : " + objlang.LoginName);
+        s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("LANG") + " : " + objlang.Lang);
+        s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("DATE") + " : " + DateTime.Now.ToString("dd-MM-yyyy hh:mm tt"));
+        if (Session[Humica.EF.Models.SY.SYConstant.SCREEN_REF] != null)
+        {
+            s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("SCREEN") + " : " + Session[Humica.EF.Models.SY.SYConstant.SCREEN_REF].ToString());
+        }
+        if(Session[Humica.EF.SYSConstant.LICENSE_SESSION]!=null)
+        {
+            var license=(Humica.License.Model.LicenseBucket)Session[Humica.EF.SYSConstant.LICENSE_SESSION];
+            s.Items.Add(Humica.EF.Models.SY.SYMessages.getMessage("LICENSE") + " : " + license.info.LicesneType);
+        }
+    }
+
+
+
+}).GetHtml()
+
+@{
+    if (Humica.EF.MD.SYSession.getSessionUserBS() != null)
+    {
+        Html.DevExpress().ColorEdit(s => {
+            s.Name = "_pickColorTheme";
+            s.Properties.AllowUserInput = false;
+            foreach(var read in new Humica.EF.Models.SY.SYDataList("SY_COLOR_THEME").ListData)
+            {
+                s.Properties.Items.Add(System.Drawing.ColorTranslator.FromHtml(read.SelectValue));
+            }
+            s.Properties.ClientSideEvents.ColorChanged = "colorChange";
+            s.Width = Unit.Percentage(100);
+        }).Render();
+    }
+} 

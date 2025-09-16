@@ -1,0 +1,100 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupControl";
+    settings.CallbackRouteValues = new { Controller = "SystemActivity", Action = "PopTheTextPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(330);
+    settings.Width = Unit.Pixel(420);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "NOTE";
+
+
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.OnWindowInnerWidth;
+    settings.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowTop;
+    settings.AllowDragging = false;
+    settings.ShowFooter = true;
+    settings.Styles.Content.Paddings.Padding = 0;
+    settings.Styles.Content.Paddings.PaddingTop = 12;
+    settings.ClientSideEvents.Init = "function(s, e){ }";
+
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().Memo(s => {
+
+            s.Name = "TXTNOTE1";
+            s.Width = Unit.Percentage(100);
+            s.Height = Unit.Percentage(100);
+
+        }).Render();
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        @Html.DevExpress().Button(s => {
+            s.Name = "BTNOTE";
+            s.Text = "OK";
+            s.ClientSideEvents.Click = "function(s, e){ SaveDataNote(s,e); }";
+
+        }).Render();
+
+        @Html.DevExpress().Button(s =>
+        {
+            s.Name = "BTCANCEL";
+            s.Text = "CANCEL";
+
+            s.ClientSideEvents.Click = "function(s, e){popupControl.Hide();  }";
+
+        }).Render();
+    });
+}).GetHtml()
+
+<script type="text/javascript">
+    function GetDataNote()
+    {
+        $.post(
+             "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "/SystemActivity/GetNote",
+             {
+                 'noted': TXTNOTE1.GetText(),
+                 'screenId': "@ViewBag.ScreenId",
+                 'objId': "@ViewBag.ObjectId"
+             }
+             ,
+             function (data) {
+
+                 TXTNOTE1.SetText(data);
+
+             }, 'text'
+          );
+    }
+    function SaveDataNote(s,e)
+    {
+        
+        $.post(
+			"@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "/SystemActivity/SaveNote",
+			{
+			    'noted': TXTNOTE1.GetText(),
+			    'screenId': "@ViewBag.ScreenId",
+                'objId':"@ViewBag.ObjectId"
+			}
+			,
+			function (data) {
+			    
+			   
+			    @*var image = _btnHelpAction.GetImageUrl();
+			    
+			    _btnHelpAction.SetImageUrl("@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"/Content/Images/Icon/note.png");
+			    var image = _btnHelpAction.GetImageUrl();*@
+			    
+			    popupControl.Hide();
+			 
+			}, 'text'
+		 );
+    }
+</script>
+

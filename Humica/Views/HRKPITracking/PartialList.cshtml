@@ -1,0 +1,158 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridViewList";
+        settings.Width = Unit.Percentage(100);
+        //settings.Height = Unit.Percentage(100);
+        settings.KeyFieldName = "TranNo";
+        settings.ClientSideEvents.Init = "OnInitX";
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "PartialList", Controller = "HRKPITracking" };
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.CommandColumn.Visible = true;
+        settings.SettingsSearchPanel.Visible = true;
+        //settings.Settings.ShowHeaderFilterButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.Width = 60;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssignCode");
+            column.FieldName = "AssignCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.Width = 120;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocumentDate");
+            column.FieldName = "DocumentDate";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.Width = 140;
+            column.PropertiesEdit.DisplayFormatString = "dd/MMM/yyyy";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Code");
+            column.Width = 140;
+            column.FieldName = "EmpCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+            column.Width = 150;
+            column.FieldName = "EmpName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Measure");
+            column.Width = 100;
+            column.FieldName = "Measure";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPI");
+            column.Width = 300;
+            column.FieldName = "KPIDescription";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TimeSheet");
+            column.Width = 350;
+            column.FieldName = "TimeSheet";
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            var textProperties = column.PropertiesEdit as MemoProperties;
+            textProperties.Width = 310;
+            textProperties.Height = 100;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Target");
+            column.Width = 80;
+            column.FieldName = "Target";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Actual");
+            column.Width = 80;
+            column.FieldName = "Actual";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+            column.Width = 250;
+            column.FieldName = "Department";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.Width = 200;
+            column.FieldName = "Position";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.FieldName = "Status";
+
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.BoldText);
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'COMPLETED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'CLOSED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.Custom);
+            column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+            column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'CANCELLED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+            settings.FormatConditions.AddHighlight("Status", "[Status] = 'APPROVED'", GridConditionHighlightFormat.Custom);
+
+            column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+            column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+        });
+        settings.ClientSideEvents.RowDblClick = "DbRowClick";
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 12;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Settings.VerticalScrollableHeight = 450;
+
+        settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.FileName = "Template KPITracking";
+        settings.Toolbars.Add(t =>
+        {
+            t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        });
+        //settings.ClientSideEvents.ToolbarItemClick = "OnToolbarItemClick";
+        //settings.SettingsExport.EnableClientSideExportAPI = true;
+        //settings.SettingsExport.ExportSelectedRowsOnly = true;
+        //settings.SettingsBehavior.AllowFocusedRow = true;
+        //settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            ASPxGridView gridView = (ASPxGridView)sender;
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    grid.Bind(Model).GetHtml();
+}

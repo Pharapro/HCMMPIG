@@ -1,0 +1,161 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemViewDetails";
+        settings.KeyFieldName = "LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+
+        settings.CallbackRouteValues = new { Controller = "MyTeamLeaveRequest", Action = "GridItemViewDetails" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MyTeamLeaveRequest", Action = "EditLeave" };
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 50;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.FieldName = "LineItem";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LeaveDate");
+            column.FieldName = "LeaveDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "StartTime";
+            column.Width = 120;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "StartTime");
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "EndTime";
+            column.Width = 120;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "EndTime");
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hour");
+            column.FieldName = "LHour";
+            column.ReadOnly = true;
+            var controlls = column.PropertiesEdit as TextBoxProperties;
+            controlls.ClientInstanceName = "txtAmountHour";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TimeShift");
+            column.FieldName = "Remark";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["LEAVE_TIME_SELECT"];
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "SelectValue";
+            textProperties.TextField = "SelectText";
+            textProperties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        });
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "LeaveDate")
+            {
+                editor.ReadOnly = true;
+            }
+        };
+        settings.Init = (send, evargs) =>
+        {
+            MVCxGridView gv = send as MVCxGridView;
+            if (Model.Units == "Day")
+            {
+                gv.Columns["StartTime"].Visible = false;
+                gv.Columns["EndTime"].Visible = false;
+                gv.Columns["LHour"].Visible = false;
+                gv.Columns["Remark"].Visible = true;
+            }
+            else
+            {
+                gv.Columns["StartTime"].Visible = true;
+                gv.Columns["EndTime"].Visible = true;
+                gv.Columns["LHour"].Visible = true;
+                gv.Columns["Remark"].Visible = false;
+            }
+        };
+        settings.DataBinding = (sender, e) =>
+        {
+            MVCxGridView gv = sender as MVCxGridView;
+            if (Model.Units == "Day")
+            {
+                gv.Columns["StartTime"].Visible = false;
+                gv.Columns["EndTime"].Visible = false;
+                gv.Columns["LHour"].Visible = false;
+                gv.Columns["Remark"].Visible = true;
+            }
+            else
+            {
+                gv.Columns["StartTime"].Visible = true;
+                gv.Columns["EndTime"].Visible = true;
+                gv.Columns["LHour"].Visible = true;
+                gv.Columns["Remark"].Visible = false;
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListEmpLeaveD).GetHtml()

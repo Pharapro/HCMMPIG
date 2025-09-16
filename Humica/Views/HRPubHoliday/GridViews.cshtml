@@ -1,0 +1,136 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridViews";
+           settings.KeyFieldName = "PDate;Branch";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRPubHoliday", Action = "GridViews" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRPubHoliday", Action = "CreateItem" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRPubHoliday", Action = "EditItem" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRPubHoliday", Action = "DeleteItem" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+           //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+               column.FieldName = "Branch";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["BRANCHES_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 250);
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("AllName"), 250);
+               textProperties.ValueType = typeof(string);
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Date");
+               column.FieldName = "PDate";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.FieldName = "Description";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+               column.FieldName = "SecDescription";
+
+           });
+
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+           settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.FileName = "Public Holiday";
+           settings.Toolbars.Add(t =>
+           {
+               t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+           });
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "PDate" || e.Column.FieldName == "Branch")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+               //if (e.KeyValue == null)
+               //{
+               //    if (e.Column.FieldName == "PDate")
+               //    {
+               //        e.Editor.Value = DateTime.Now;
+               //    }
+               //}
+               //if (e.Column.FieldName == "Status")
+               //{
+               //    //e.Editor.ReadOnly = true;
+               //}
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

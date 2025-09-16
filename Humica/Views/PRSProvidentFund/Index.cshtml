@@ -1,0 +1,16 @@
+﻿
+
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model Humica.Logic.PR.PRSProvidentFund
+
+@Html.Partial("Gridview", Model.ListHeader)

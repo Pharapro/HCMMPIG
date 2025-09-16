@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-AU">
+  <Title Visible="false" Text="Employee" />
+  <DataSources>
+    <ObjectDataSource Name="Movement" ComponentName="objectDataSource1" />
+    <ObjectDataSource Name="NewStaff" ComponentName="objectDataSource2" />
+    <ObjectDataSource Name="Leave" ComponentName="objectDataSource3" />
+    <ObjectDataSource Name="Notificat" ComponentName="objectDataSource4" />
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource2">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="Staff Profile">
+        <Tables>
+          <Table Name="HR_STAFF_VIEW" />
+        </Tables>
+        <Columns>
+          <AllColumns />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_EmployeeBirthday">
+        <Tables>
+          <Table Name="Z_EmployeeBirthday" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmployeeBirthday" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_TotalStaff">
+        <Tables>
+          <Table Name="Z_TotalStaff" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_TotalStaff" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_EmployeeGender">
+        <Tables>
+          <Table Name="Z_EmployeeGender" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmployeeGender" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_GeneralNotitication">
+        <Tables>
+          <Table Name="Z_GeneralNotitication" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_GeneralNotitication" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_StaffMovement">
+        <Tables>
+          <Table Name="Z_StaffMovement" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_StaffMovement" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_TotalStaff_TwoYear">
+        <Tables>
+          <Table Name="Z_TotalStaff_TwoYear" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_TotalStaff_TwoYear" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_Employee60Year">
+        <Tables>
+          <Table Name="Z_Employee60Year" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_Employee60Year" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="Employee Movement" ParentContainer="dashboardTabPage3" DataSource="sqlDataSource2" DataMember="Z_StaffMovement">
+      <InteractivityOptions MasterFilterMode="Multiple" TargetDimensions="Points" />
+      <DataItems>
+        <Measure DataMember="TotalEmp" DefaultId="DataItem0" />
+        <Dimension DataMember="Month" DefaultId="DataItem1" />
+        <Dimension DataMember="MonthDesc" DefaultId="DataItem2" />
+        <Dimension DataMember="MovementStaff" DefaultId="DataItem3" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem3" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <AxisY TitleVisible="false" />
+          <Series>
+            <Simple SeriesType="Line">
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem3" Name="Employee by Last 2 Years" ParentContainer="dashboardTabPage3" DataSource="sqlDataSource2" DataMember="Z_TotalStaff_TwoYear">
+      <DataItems>
+        <Measure DataMember="TotalEmp" DefaultId="DataItem0">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" />
+        </Measure>
+        <Dimension DataMember="Year" DefaultId="DataItem1">
+          <NumericFormat FormatType="General" />
+        </Dimension>
+        <Dimension DataMember="Month" DefaultId="DataItem2" />
+        <Dimension DataMember="MonthDesc" DefaultId="DataItem3" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem1" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+        <Argument DefaultId="DataItem3" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <AxisY TitleVisible="false" />
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Grid ComponentName="gridDashboardItem2" Name="General Notification" ParentContainer="dashboardTabPage4" DataSource="sqlDataSource2" DataMember="Z_GeneralNotitication">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="AllName" DefaultId="DataItem1" />
+        <Dimension DataMember="Department" DefaultId="DataItem2" />
+        <Dimension DataMember="Position" DefaultId="DataItem3" />
+        <Dimension DataMember="Type" DefaultId="DataItem4" />
+        <Dimension DataMember="StartDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem5" />
+        <Dimension DataMember="EndDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem6" />
+        <Measure DataMember="DayLeft" DefaultId="DataItem7" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="48.063423899578858">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Name" Weight="77.297877611693835">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="99.59534230737475">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="127.343298373111">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="75.315880749855538">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Start Date" Weight="58.964406639689528">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="End Date" Weight="62.432901147906556">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Day Left" Weight="50.9868692707904">
+          <Measure DefaultId="DataItem7" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+    <Grid ComponentName="gridDashboardItem1" Name="Employee Birthday" ShowCaption="false" ParentContainer="dashboardTabPage5" DataSource="sqlDataSource2" DataMember="Z_EmployeeBirthday">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="EmpName" DefaultId="DataItem1" />
+        <Dimension DataMember="Gender" DefaultId="DataItem2" />
+        <Dimension DataMember="Position" DefaultId="DataItem3" />
+        <Dimension DataMember="ServicesLenght" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem4" />
+        <Dimension DataMember="EndDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem5" />
+        <Measure DataMember="Age" DefaultId="DataItem6" />
+        <Dimension DataMember="Department" DefaultId="DataItem7" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="35.668789808917225">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Name" Weight="99.363057324840852">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Sex" Weight="28.450106157112547">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="152.86624203821668">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="90.445859872611535">
+          <Dimension DefaultId="DataItem7" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Year of Service" Weight="70.9129511677283">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Birth Date" Weight="78.980891719745287">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Age" Weight="43.312101910828055">
+          <Measure DefaultId="DataItem6" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+    <TabContainer ComponentName="tabContainerDashboardItem2" Name="Tab Container 2">
+      <Pages>
+        <Page ComponentName="dashboardTabPage3" Name="Employee Dashboard" />
+        <Page ComponentName="dashboardTabPage4" Name="Employee Notification" ShowItemAsTabPage="false">
+          <InteractivityOptions IsMasterFilter="false" />
+        </Page>
+        <Page ComponentName="dashboardTabPage5" Name="Employee Birthday" />
+        <Page ComponentName="dashboardTabPage1" Name="Employee Over 60 Years" />
+      </Pages>
+    </TabContainer>
+    <Pie ComponentName="pieDashboardItem1" Name="Employee Gender" ShowCaption="false" ParentContainer="dashboardTabPage3" DataSource="sqlDataSource2" DataMember="Z_EmployeeGender" PieType="Donut" LabelContentType="ArgumentAndValue" TooltipContentType="None" LabelPosition="Inside">
+      <DataItems>
+        <Measure DataMember="TotalStaff" Name="Total Gender" DefaultId="DataItem0" />
+        <Dimension DataMember="Type" ColoringMode="Hue" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <ListBox ComponentName="listBoxDashboardItem1" Name="Type" ParentContainer="dashboardTabPage4" DataSource="sqlDataSource2" DataMember="Z_GeneralNotitication">
+      <DataItems>
+        <Dimension DataMember="Type" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ListBox>
+    <Grid ComponentName="gridDashboardItem3" Name="Employee Over 60 Years" ParentContainer="dashboardTabPage1" DataSource="sqlDataSource2" DataMember="Z_Employee60Year">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="EmpName" DefaultId="DataItem1" />
+        <Dimension DataMember="Department" DefaultId="DataItem2" />
+        <Dimension DataMember="Position" DefaultId="DataItem3" />
+        <Dimension DataMember="ServicesLenght" DefaultId="DataItem4" />
+        <Measure DataMember="Age" DefaultId="DataItem5" />
+        <Dimension DataMember="Gender" DefaultId="DataItem6" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="43.817619783616706">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Employee Name" Weight="101.83539412673882">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="45.440494590417323">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="116.84698608964453">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="116.44126738794438">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="62.480680061823811">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Age" Weight="38.137557959814536">
+          <Measure DefaultId="DataItem5" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+      <ColumnFilterOptions />
+    </Grid>
+  </Items>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="HR_STAFF_VIEW" Color="-15982347">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Sex" />
+          <Value Type="System.String" Value="F" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="HR_STAFF_VIEW" Color="-12937009">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Sex" />
+          <Value Type="System.String" Value="M" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="objectDataSource2" Color="-15939851">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2021" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="objectDataSource2" Color="-4567727">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2022" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_EmployeeGender" Color="-718158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Type" />
+          <Value Type="System.String" Value="Female" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_EmployeeGender" Color="-14480142">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Type" />
+          <Value Type="System.String" Value="Male" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="objectDataSource2" Color="-15201035">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2023" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_TotalStaff" Color="-15201035">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2023" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_TotalStaff" Color="-2545854">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2022" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="objectDataSource1" Color="-12186382">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="MovementStaff" />
+          <Value Type="System.String" Value="New Join" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="objectDataSource1" Color="-1370795">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="MovementStaff" />
+          <Value Type="System.String" Value="Resign" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_TotalStaff_TwoYear" Color="-4567727">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2022" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource2" DataMember="Z_TotalStaff_TwoYear" Color="-15201035">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Year" />
+          <Value Type="System.Int32" Value="2023" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical" Weight="100">
+      <LayoutTabContainer DashboardItem="tabContainerDashboardItem2" Weight="100">
+        <LayoutTabPage DashboardItem="dashboardTabPage3">
+          <LayoutGroup Orientation="Vertical">
+            <LayoutItem DashboardItem="chartDashboardItem3" Weight="155.24947824790496" />
+            <LayoutGroup Weight="95.819455525956144">
+              <LayoutItem DashboardItem="pieDashboardItem1" Weight="76.182059142216971" />
+              <LayoutItem DashboardItem="chartDashboardItem1" Weight="133.93447429636871" />
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutTabPage>
+        <LayoutTabPage DashboardItem="dashboardTabPage4">
+          <LayoutItem DashboardItem="listBoxDashboardItem1" Weight="46.496529046071856" />
+          <LayoutItem DashboardItem="gridDashboardItem2" Weight="313.88377087334379" />
+        </LayoutTabPage>
+        <LayoutTabPage DashboardItem="dashboardTabPage5">
+          <LayoutItem DashboardItem="gridDashboardItem1" />
+        </LayoutTabPage>
+        <LayoutTabPage DashboardItem="dashboardTabPage1">
+          <LayoutItem DashboardItem="gridDashboardItem3" />
+        </LayoutTabPage>
+      </LayoutTabContainer>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

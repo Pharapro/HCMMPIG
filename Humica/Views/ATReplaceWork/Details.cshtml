@@ -1,0 +1,173 @@
+﻿@model Humica.Logic.Att.ATReplaceWorkObject
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?TranNo=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+
+    });
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?TranNo=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        }
+
+    }
+
+</script>
+
+@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "CreateWork";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Width = Unit.Percentage(70);
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 4;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            //g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+            g.VerticalAlign = FormLayoutVerticalAlign.Middle;
+
+            //FromEmpCode
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "From Emp Code* ");
+                m.ColumnSpan = 2;
+
+            })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.FromEmpCode, s =>
+                    {
+                        s.Properties.ClientInstanceName = "txtFromEmpCode";
+                        s.ShowModelErrors = true;
+                        s.ReadOnly = true;
+                        s.Width = Unit.Percentage(100);
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.AllowNull = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextField = "AllName";
+                        s.Properties.TextFormatString = "{0} {1}";
+                        s.Properties.ValueField = "EmpCode";
+                        s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                        s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                        s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    }).BindList(ViewData["EMPCODE_SELECT"]).Render();
+                });
+            //ToEmpCode
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "To Emp Code");
+                m.ColumnSpan = 2;
+
+            })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.ToEmpCode, s =>
+                    {
+                        s.Properties.ClientInstanceName = "txtToEmpCode";
+                        s.ShowModelErrors = true;
+                        s.ReadOnly = true;
+                        s.Width = Unit.Percentage(100);
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.AllowNull = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextField = "AllName";
+                        s.Properties.TextFormatString = "{0} {1}";
+                        s.Properties.ValueField = "EmpCode";
+                        s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                        s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                        s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    }).BindList(ViewData["EMPCODE_SELECT"]).Render();
+                });
+            //RequestDate
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Request Date*");
+                m.ColumnSpan = 2;
+
+            })
+                              .SetNestedContent(() =>
+                              {
+                                  Html.DevExpress().DateEditFor(i => i.Header.RequestDate, s =>
+                                  {
+                                      s.Width = Unit.Percentage(100);
+                                      s.ReadOnly = true;
+                                      s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                                      s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                                      s.Properties.ClientInstanceName = "txtRequestDate";
+                                      s.ShowModelErrors = true;
+                                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                                      s.Properties.ValidationSettings.ErrorText = "*";
+                                  }).Render();
+                              });
+            //'RequestDate'
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "InDate*");
+                m.ColumnSpan = 2;
+
+            })
+                              .SetNestedContent(() =>
+                              {
+                                  Html.DevExpress().DateEditFor(i => i.Header.InDate, s =>
+                                  {
+                                      s.Width = Unit.Percentage(100);
+                                      s.ReadOnly = true;
+                                      s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                                      s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                                      s.Properties.ClientInstanceName = "txtInDate";
+                                      s.ShowModelErrors = true;
+                                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                                      s.Properties.ValidationSettings.ErrorText = "*";
+                                  }).Render();
+                              });
+
+            //'Remark'
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Remark") + '*';
+                m.ColumnSpan = 4;
+
+            })
+                               .SetNestedContent(() =>
+                               {
+                                   Html.DevExpress().TextBoxFor(i => i.Header.Remark, s =>
+                                   {
+                                       s.Width = Unit.Percentage(100);
+                                       s.Properties.ClientInstanceName = "txtRemark";
+                                       s.ReadOnly = true;
+                                       s.ShowModelErrors = true;
+                                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                                       s.Properties.ValidationSettings.ErrorText = "*";
+                                   }).Render();
+                               });
+        });
+
+    }).GetHtml();
+}

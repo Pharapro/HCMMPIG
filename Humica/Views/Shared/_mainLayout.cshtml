@@ -1,0 +1,419 @@
+﻿@using Humica.Model
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>
+        @{ var pageTitleParts = new string[] { ViewBag.Title, "Humica" }; }
+        @string.Join(" - ", @pageTitleParts.Where(s => !string.IsNullOrEmpty(s)))
+    </title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+    @Html.DevExpress().GetScripts(
+
+    //new Script { ExtensionSuite = ExtensionSuite.GridView },
+    //new Script { ExtensionSuite = ExtensionSuite.TreeList },
+    //new Script { ExtensionSuite = ExtensionSuite.Editors }
+    //new Script { ExtensionSuite = ExtensionSuite.Report }
+    //new Script { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Content.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Layout.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Sites.css")" />
+    @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootmetro.css")" />
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/metro-ui-light.css")" />*@
+    @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/icomoon.css")" />*@
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootstrap.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content(Humica.Models.SY.ClsConstant.GetDefaultThemeFile())" />
+    <style>
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    @RenderSection("Head", false)
+    <script type="text/javascript" src="@Url.Content("~/Content/Script.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/CustomJs.js")"></script>
+
+    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.bundle.min.js")"></script>
+
+    <script>
+        
+        if (window.jQuery) {
+            $.ajaxPrefilter(function (options, originalOptions, xhr) {
+                if (options.dataType && options.dataType !== "html")
+                    return;
+                var tokenValue = $('input:hidden[name="__RequestVerificationToken"]').val();
+                if (tokenValue && options && options.data && options.data.indexOf('RequestVerificationToken') === -1)
+                    options.data += "&__RequestVerificationToken=" + tokenValue;
+            });
+
+        }
+    </script>
+
+</head>
+<body>
+    
+
+    @Html.DevExpress().Panel(settings => {
+    settings.Name = "headerPanel";
+    settings.FixedPosition = PanelFixedPosition.WindowTop;
+    settings.FixedPositionOverlap = true;
+    settings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#EEEEEE");
+    settings.ControlStyle.CssClass = "app-header";
+    settings.SetContent(() => {
+        ViewContext.Writer.Write("<div class='left-block'>");
+
+        @Html.DevExpress().Menu(menuSettings => {
+            menuSettings.Name = "leftAreaMenu";
+            menuSettings.ItemAutoWidth = false;
+            menuSettings.EnableHotTrack = false;
+            menuSettings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#EEEEEE");
+            menuSettings.SettingsAdaptivity.Enabled = true;
+            menuSettings.Width = Unit.Percentage(100);
+            menuSettings.SyncSelectionMode = SyncSelectionMode.None;
+            menuSettings.ControlStyle.CssClass = "header-menu";
+            menuSettings.ControlStyle.SeparatorWidth = 0;
+            menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+            menuSettings.Styles.Item.CssClass = "item";
+            menuSettings.ClientSideEvents.ItemClick = "onLeftMenuItemClick";
+
+            if (ViewBag.ShowBackButton != null && ViewBag.ShowBackButton)
+            {
+                menuSettings.Items.Add(item =>
+                {
+                    item.Text = "";
+                    item.Name = "Back";
+                    item.Image.Url = "~/Content/Images/back.svg";
+                    item.Image.Height = Unit.Pixel(18);
+                    item.Image.Width = Unit.Pixel(18);
+                    item.ItemStyle.CssClass = "toggle-item vertically-aligned";
+                });
+            }
+            if (IsSectionDefined("LeftPanelContent"))
+            {
+                menuSettings.Items.Add(item =>
+                {
+                    item.Text = "";
+                    item.Name = "ToggleLeftPanel";
+                    item.GroupName = "LeftPanel";
+                    item.Image.Url = "~/Content/Images/menu.svg";
+                    item.Image.Height = Unit.Pixel(18);
+                    item.Image.Width = Unit.Pixel(18);
+                    item.ItemStyle.CssClass = "toggle-item vertically-aligned";
+                    item.ItemStyle.CheckedStyle.CssClass = "checked selected";
+                });
+            }
+            menuSettings.Items.Add(item => {
+                item.Text = "";
+                item.ItemStyle.BackColor = System.Drawing.Color.White;
+                item.NavigateUrl = "~/";
+                item.ItemStyle.CssClass = "image-item vertically-aligned";
+                item.Image.SpriteProperties.CssClass = "header-logo";
+            });
+        }).GetHtml();
+        ViewContext.Writer.Write("</div><div class='right-block'>");
+        @Html.DevExpress().Menu(menuSettings => {
+            menuSettings.Name = "rightAreaMenu";
+            menuSettings.ItemAutoWidth = false;
+            menuSettings.SettingsAdaptivity.Enabled = true;
+            menuSettings.Width = Unit.Percentage(100);
+            menuSettings.ShowPopOutImages = DefaultBoolean.False;
+            menuSettings.ControlStyle.SeparatorWidth = 0;
+            menuSettings.ApplyItemStyleToTemplates = true;
+            menuSettings.ControlStyle.CssClass = "header-menu";
+            menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+            menuSettings.Styles.Item.CssClass = "item";
+            menuSettings.Styles.SubMenu.CssClass = "header-sub-menu";
+            menuSettings.Styles.SubMenuItem.CssClass = "item";
+            menuSettings.ClientSideEvents.ItemClick = "onRightMenuItemClick";
+            menuSettings.Items.Add(item => {
+                item.Name = "AccountItem";
+                item.ItemStyle.CssClass = "image-item";
+                item.SetTextTemplateContent(template => {
+                    string className = AuthHelper.IsAuthenticated() ? "account-image" : "empty-image";
+                    string accountItemContent = "", accountItemBackgroundStyle = "";
+                    if (AuthHelper.IsAuthenticated()) {
+                        var user = AuthHelper.GetLoggedInUserInfo();
+                        if (string.IsNullOrEmpty(user.AvatarUrl))
+                            accountItemContent = string.Format("{0}{1}", user.FirstName[0], user.LastName[0]).ToUpper();
+                        else
+                            accountItemBackgroundStyle = string.Format("style=\"background-image: url('{0}')\"", Url.Content(user.AvatarUrl));
+                    }
+                    ViewContext.Writer.Write("<div class='account-background'>");
+                    ViewContext.Writer.Write("<div " + accountItemBackgroundStyle + " class='" + className + "'>" + accountItemContent + "</div>");
+                    ViewContext.Writer.Write("</div>");
+                });
+
+                item.Items.Add(subItem =>
+                {
+                    subItem.Name = "USDSPRO";
+                    subItem.Text = @Humica.EF.Models.SY.SYSettings.getLabel("User Profile");
+                    subItem.Image.Url = "~/Content/Images/user.svg";
+                    subItem.Image.Width = Unit.Pixel(18);
+                    subItem.Image.Height = Unit.Pixel(16);
+                    subItem.NavigateUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Administrator/Systems/Controlling/UserProfile";
+                });
+
+
+                item.Items.Add(subItem =>
+                {
+                    subItem.Name = "SignOutItem";
+                    subItem.Text = "Sign out";
+                    subItem.Image.Url = "~/Content/Images/sign-out.svg";
+                    subItem.Image.Width = Unit.Pixel(16);
+                    subItem.Image.Height = Unit.Pixel(16);
+                    subItem.NavigateUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Administrator/Systems/Controlling/LogOff";
+                });
+
+
+
+            });
+            if (IsSectionDefined("RightPanelContent")) {
+                menuSettings.Items.Add(item => {
+                    item.Name = "ToggleRightPanel";
+                    item.Text = "";
+                    item.GroupName = "RightPanel";
+                    item.ItemStyle.CssClass = "toggle-item vertically-aligned";
+                    item.ItemStyle.CheckedStyle.CssClass = "checked selected";
+                    item.Image.Height = Unit.Pixel(18);
+                    item.Image.SpriteProperties.CssClass = "image";
+                });
+            }
+        }).GetHtml();
+        ViewContext.Writer.Write("</div><div class='menu-container'><div>");
+        @Html.DevExpress().Menu(menuSettings => {
+            menuSettings.Name = "applicationMenu";
+            menuSettings.ItemAutoWidth = false;
+            menuSettings.EnableSubMenuScrolling = true;
+            menuSettings.ShowPopOutImages = DefaultBoolean.True;
+            menuSettings.Width = Unit.Percentage(100);
+            menuSettings.SettingsAdaptivity.Enabled = true;
+            menuSettings.ControlStyle.SeparatorWidth = 0;
+            menuSettings.ControlStyle.CssClass = "header-menu application-menu";
+            menuSettings.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+            menuSettings.Styles.Item.CssClass = "item";
+            menuSettings.Styles.Item.SelectedStyle.CssClass = "selected";
+            menuSettings.Styles.Item.HoverStyle.CssClass = "hovered";
+            menuSettings.Styles.SubMenu.CssClass = "header-sub-menu";
+            menuSettings.Images.AdaptiveMenu.SpriteProperties.CssClass = "adaptive-image";
+            menuSettings.Images.Item.Width = Unit.Pixel(22);
+            menuSettings.Images.Item.Height = Unit.Pixel(22);
+            menuSettings.ItemDataBound = (sender, e) => {
+                e.Item.Image.Url = string.Format("~/Content/Images/{0}.svg", e.Item.Text);
+                e.Item.Image.UrlSelected = string.Format("~/Content/Images/{0}-white.svg", e.Item.Text);
+            };
+            menuSettings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#EEEEEE");
+            menuSettings.ClientSideEvents.ItemClick = "TopMenuClick";
+            Humica.EF.Models.SY.SYMenuObject mo = new Humica.EF.Models.SY.SYMenuObject();
+            var listHeader = mo.GetHeaderMenu().OrderBy(w => w.InOrder).ToList();
+            foreach (Humica.EF.MD.SYMenu header in listHeader)
+            {
+
+                menuSettings.Items.Add(p =>
+                {
+                    //header.Text,"TABLE"+header.ID,header.ImageUrl
+
+                    p.Text = header.Text;
+                    p.Name = "MENU_" + header.ID;
+                    p.NavigateUrl = header.NavigateUrl;
+                    if (!(header.ImageUrl == null || header.ImageUrl == ""))
+                    {
+                        p.Image.Url = header.ImageUrl;
+                    }
+
+                    if (Session[Humica.EF.Models.SY.SYConstant.MENU_HEADER_SELECTED] != null)
+                    {
+                        var objHead = (Humica.EF.Models.MenuIDAction)Session[Humica.EF.Models.SY.SYConstant.MENU_HEADER_SELECTED];
+                        if (objHead.MenuId == header.ID)
+                        {
+                            p.Checked = true;
+                            p.ItemStyle.CheckedStyle.CssClass = "checked selected";
+                        }
+                    }
+                });
+
+            }
+
+
+        }).GetHtml();
+        ViewContext.Writer.Write("</div></div><div class='dx-clear'></div>");
+    });
+}).GetHtml()
+
+    @if (IsSectionDefined("RightPanelContent"))
+    {
+        @Html.DevExpress().Panel(settings =>
+   {
+       settings.Name = "rightPanel";
+       settings.Collapsible = true;
+       settings.FixedPosition = PanelFixedPosition.WindowRight;
+       settings.FixedPositionOverlap = true;
+       settings.ScrollBars = ScrollBars.Auto;
+       settings.Width = Unit.Pixel(260);
+       settings.ControlStyle.CssClass = "right-panel";
+       settings.Styles.ExpandBar.CssClass = "expand-bar";
+       settings.SettingsCollapsing.ExpandButton.Visible = false;
+       settings.SettingsCollapsing.ExpandEffect = PanelExpandEffect.PopupToLeft;
+       settings.SettingsCollapsing.Modal = true;
+       settings.ClientSideEvents.Collapsed = "onRightPanelCollapsed";
+       settings.SetContent(() => ViewContext.Writer.Write(RenderSection("RightPanelContent", false)));
+   }).GetHtml()
+    }
+
+   
+  @if (IsSectionDefined("LeftPanelContent"))
+  {
+      Html.DevExpress().Panel(settings =>
+      {
+          settings.Name = "leftPanel";
+          settings.Collapsible = true;
+          settings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#EEEEEE");
+          settings.ScrollBars = ScrollBars.Auto;
+          settings.FixedPosition = PanelFixedPosition.WindowLeft;
+          settings.Width = Unit.Pixel(308);
+          settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 960;
+          settings.ControlStyle.CssClass = "left-panel";
+          settings.Styles.Panel.Paddings.Padding = Unit.Pixel(0);
+          settings.Styles.ExpandBar.CssClass = "expand-bar";
+          settings.SettingsCollapsing.ExpandButton.Visible = false;
+          settings.SettingsCollapsing.ExpandEffect = PanelExpandEffect.PopupToRight;
+          settings.SettingsCollapsing.AnimationType = AnimationType.Slide;
+          settings.SettingsCollapsing.Modal = true;
+          settings.ClientSideEvents.Init = "onLeftPanelInit";
+          settings.ClientSideEvents.Collapsed = "onLeftPanelCollapsed";
+          settings.SetContent(() =>
+                                   ViewContext.Writer.Write(RenderSection("LeftPanelContent", false))
+                                   );
+      }).GetHtml();
+  }
+
+
+    @{
+        @Html.AntiForgeryToken();
+        @RenderBody();
+    }
+
+
+            <div class="footer-wrapper" id="footerWrapper">
+                <div class="footer">
+                  
+                </div>
+            </div>
+      
+
+            <script type="text/javascript">
+                MVCxClientGlobalEvents.AddControlsInitializedEventHandler(onControlsInitialized);
+                ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(onBrowserWindowResized);
+
+                var _baseUrl = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()";
+                function iframeURLChange(iframe, callback) {
+                    var lastDispatched = null;
+
+                    var dispatchChange = function () {
+                        var newHref = iframe.contentWindow.location.href;
+
+                        if (newHref !== lastDispatched) {
+                            callback(newHref);
+                            lastDispatched = newHref;
+
+                            PopTheLoading.Show();
+                        }
+                    };
+
+                    var unloadHandler = function () {
+                        setTimeout(dispatchChange, 0);
+                    };
+
+                    function attachUnload() {
+                        iframe.contentWindow.removeEventListener("unload", unloadHandler);
+                        iframe.contentWindow.addEventListener("unload", unloadHandler);
+                    }
+
+                    iframe.addEventListener("load", function () {
+                        attachUnload();
+
+                        dispatchChange();
+
+                        $(this).contents().find("#_btnSaveActionGrid").on('click', function (event) {
+                            PopTheLoading.Show();
+                        });
+
+                        $(this).contents().find("#_btnActionRun").on('click', function (event) {
+                            PopTheLoading.Show();
+                        });
+                        $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_I").on('click', function (event) {
+                            PopTheLoading.Show();
+                        });
+                        $(this).contents().find("form").on('submit', function (event) {
+                            PopTheLoading.Show();
+                        });
+                        $(this).contents().find("#_btnGenerateAction").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                PopTheLoading.Show();
+                            });
+                        });
+                        $(this).contents().find("#_btnDeleteAction").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                PopTheLoading.Show();
+                            });
+                        });
+
+                        $(this).contents().find("#pageToolbar_DXME4_ ul #pageToolbar_DXI4i1_").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                PopTheLoading.Show();
+                            });
+                        });
+                        $(this).contents().find("#pageToolbar_DXME4_ ul #pageToolbar_DXI4i0_").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                $(this).contents().find("#PopTheReverse_PW-1 #_BTOK_CD").on('click', function (event) {
+                                    PopTheLoading.Show();
+                                });
+                            });
+                        });
+                        $(this).contents().find("#pageToolbar_DXM5_ ul #pageToolbar_DXI5i0_").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                PopTheLoading.Show();
+                            });
+                        });
+                        $(this).contents().find("#pageToolbar_DXM5_ ul #pageToolbar_DXI5i1_").on('click', function (event) {
+                            $(this).contents().find("#PopTheQuestion_PW-1 #_BTOK_CD").on('click', function (event) {
+                                PopTheLoading.Show();
+                            });
+                        });
+
+                        PopTheLoading.Hide();
+
+                    });
+
+                    attachUnload();
+
+
+                }
+
+                // Usage:
+                var iframe = document.getElementById('_main_loading');
+
+                iframeURLChange(iframe, function (newURL) {
+                    //console.log("URL changed:", newURL);
+
+                });
+
+    </script>
+</body>
+</html>
+

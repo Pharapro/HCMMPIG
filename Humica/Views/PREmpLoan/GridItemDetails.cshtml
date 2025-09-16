@@ -1,0 +1,147 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemDetails";
+        settings.KeyFieldName = "LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+
+        settings.CallbackRouteValues = new { Controller = "PREmpLoan", Action = "GridItemDetails" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PREmpLoan", Action = "CreatEditLoan" };
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 50;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.FieldName = "LineItem";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LoanDate");
+            column.FieldName = "LoanDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PayMonth");
+            column.FieldName = "PayMonth";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+            column.Width = 120;
+            column.FieldName = "LoanAm";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 1000000;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Beginning Balance");
+            column.Width = 120;
+            column.FieldName = "BeginingBalance";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Ending Balance");
+            column.Width = 120;
+            column.FieldName = "EndingBalance";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.Width = 90;
+            column.FieldName = "Status";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.Width = 200;
+            column.FieldName = "Remark";
+        });
+        settings.FormatConditions.AddHighlight("Status", "[Status] = 'CLEARED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+        settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.BoldText);
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "LoanDate" ||
+            e.Column.FieldName == "BeginingBalance" || e.Column.FieldName == "EndingBalance"
+            || e.Column.FieldName == "Status")
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.None;
+                editor.ReadOnly = true;
+                //if (e.Column.FieldName == "LineItem")
+                //{
+                //    if(e.KeyValue==)
+                //    editor.Value = -1;
+                //}
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+  }
+
+@grid.Bind(Model).GetHtml()

@@ -1,0 +1,123 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridItems1";
+        settings.KeyFieldName = "Id";
+        settings.Width = Unit.Percentage(100);
+        int width = 150;
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "MailSendBox", Action = "GridItems1" };
+        //settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "MailSendBox", Action = "CreatePartialGridItems1" };
+        //settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MailSendBox", Action = "EditPartialGridItems1" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MailSendBox", Action = "DeletePartialGridItems1" };
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("#");
+            column.FieldName = "Id";
+            column.Visible = true;
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            column.ToolTip = "Id";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StateName");
+            column.FieldName = "StateName";
+            column.Visible = true;
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            column.ToolTip = "State Name";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = width * 6;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Arguments");
+        //    column.FieldName = "Arguments";
+        //    column.Visible = true;
+        //    column.ToolTip = "Arguments";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //});
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CreatedOn");
+            column.FieldName = "CreatedAt";
+            column.Visible = true;
+            column.ToolTip = "Created On";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ExpireOn");
+            column.FieldName = "ExpireAt";
+            column.Visible = true;
+            column.ToolTip = "Expire On";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        });
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.ClientSideEvents.RowDblClick = "DbRowClick";
+
+        settings.FormatConditions.AddHighlight("StateName", "[StateName] = 'Succeeded'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("StateName", "[StateName] = 'Succeeded'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+        settings.FormatConditions.AddHighlight("StateName", "[StateName] = 'Deleted'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+        settings.FormatConditions.AddHighlight("StateName", "[StateName] = 'Scheduled'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("StateName", "[StateName] = 'Scheduled'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Id"/* || e.Column.FieldName == "CreatedOn" || e.Column.FieldName == "CreatedBy"*/)
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

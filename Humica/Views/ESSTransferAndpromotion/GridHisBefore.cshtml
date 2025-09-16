@@ -1,0 +1,95 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridHisBef";
+        settings.KeyFieldName = "ApplicantID;LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(65);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "GridHisBefore" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "CreateHisBefore" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "EditHisBefore" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "DeleteHisBefore" };
+
+
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CommandColumn.Visible = true;
+        if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+        {
+            settings.CommandColumn.Visible = false;
+        }
+
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+            column.Width = 160;
+            column.FieldName = "Company";
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            column.Width = 160;
+            column.FieldName = "Position";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+            column.Width = 100;
+
+            column.FieldName = "FromDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+            column.Width = 100;
+
+            column.FieldName = "ToDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.SettingsPager.PageSize = 122;
+
+
+    });
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

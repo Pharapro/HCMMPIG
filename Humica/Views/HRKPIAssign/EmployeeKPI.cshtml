@@ -1,0 +1,24 @@
+﻿@Html.DevExpress().ComboBox(s =>
+{
+    s.Width = Unit.Percentage(100);
+    s.Name = "EmployeeKPI";
+    s.Properties.ClientInstanceName = "cboEmployeeKPI";
+    s.ShowModelErrors = true;
+    s.CallbackRouteValues = new { Controller = "HRKPIAssign", Action = "EmployeeKPI" };
+
+    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    s.Properties.ValidationSettings.SetFocusOnError = true;
+    s.Properties.ValidationSettings.ErrorText = "*";
+    s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    s.Properties.TextFormatString = "{0}";
+    s.Properties.ValueField = "EmpCode";
+    s.Properties.TextField = "AllName";
+    s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"), 100);
+    s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"), 150);
+    s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"), 120);
+    s.Properties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"), 200);
+
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectEmployee";
+}).BindList(ViewData["Staff_KPI"]).GetHtml()

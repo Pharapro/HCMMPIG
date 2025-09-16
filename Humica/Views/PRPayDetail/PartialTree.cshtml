@@ -1,0 +1,70 @@
+﻿@Html.DevExpress().TreeList(settings =>
+{
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "PRPayDetail", Action = "DataBindingPartial" };
+    settings.Width = Unit.Percentage(80);
+    settings.AutoGenerateColumns = false;
+    settings.CommandColumn.HeaderStyle.Border.BorderWidth = Unit.Pixel(10);
+    settings.KeyFieldName = "Code";
+    settings.ParentFieldName = "ParentID";
+    //settings.Toolbars.Add(t =>
+    //{
+    //    t.SettingsAdaptivity.Enabled = true;
+    //    t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+    //    t.Items.Add(TreeListToolbarCommand.ExportToXls);
+    //});
+    //settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "IncomeType";
+        column.HeaderStyle.Font.Bold = true;
+        column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IncomeType");
+        column.ColumnType = MVCxTreeListColumnType.TextBox;
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Description";
+        column.HeaderStyle.Font.Bold = true;
+        column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+        column.MinWidth = 50;
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Amount";
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.HeaderStyle.Font.Bold = true;
+        column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+        column.MinWidth = 50;
+        column.Width = Unit.Percentage(15);
+        column.ColumnType = MVCxTreeListColumnType.SpinEdit;
+        column.PropertiesEdit.DisplayFormatString = "{0:#,0.00;(#,0.00);}";
+    });
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Vertical;
+    settings.Settings.SuppressOuterGridLines = true;
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+    settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+    settings.HtmlRowPrepared = (s, e) =>
+    {
+        e.Row.BackColor = System.Drawing.Color.FromArgb(240, 248, 255);
+        if (e.GetValue("IncomeType") != null)
+        {
+
+            var equipmentCode = Convert.ToString(e.GetValue("IncomeType"));
+            e.Row.BackColor = System.Drawing.Color.LightGreen;
+        }
+    };
+    settings.SettingsPopup.HeaderFilter.Height = Unit.Pixel(440);
+    //settings.ClientSideEvents.Init = "function(s, e) { s.ExpandToLevel(1); }";
+    settings.CustomJSProperties = (s, e) =>
+    {
+        ((MVCxTreeList)s).ExpandToLevel(1);
+        //e.Properties["cpExpandedKeys"] = treeList.GetExpandedNodes();
+    };
+    settings.PreRender = (sender, e) =>
+    {
+        ((MVCxTreeList)sender).ExpandToLevel(1);
+    };
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,139 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewList1";
+               settings.KeyFieldName = "TrainNo;InMonth;Week";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Action = "PartialListPending", Controller = "TRTrainingCalender" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainNo");
+                   column.Width = 130;
+                   column.FieldName = "TrainNo";
+                   column.Visible = false;
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Year");
+                   column.Width = 90;
+                   column.FieldName = "InYear";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CourseName");
+                   column.Width = 250;
+                   column.FieldName = "CourseName";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CourseCategory");
+                   column.Width = 200;
+                   column.FieldName = "CourseCategory";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainingType");
+                   column.Width = 200;
+                   column.FieldName = "TrainingType";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+                   column.Width = 100;
+                   column.FieldName = "InMonth";
+
+                   column.EditorProperties().ComboBox(cb =>
+                   {
+                       cb.DataSource = ViewData["MONTH_SELECE"];
+                       cb.ValueField = "Month";
+                       cb.TextField = "MonthDesc";
+                       cb.DropDownStyle = DropDownStyle.DropDownList;
+                   });
+
+                   //column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   //var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   //textProperties.DataSource = ViewData["MONTH_SELECE"];
+                   //textProperties.ValueField = "Month";
+                   //textProperties.TextField = "MonthDesc";
+
+                   //textProperties.TextFormatString = "{0}";
+                   //textProperties.DropDownStyle = DropDownStyle.DropDownList;
+                   //textProperties.Columns.Add("MonthDesc", Humica.EF.Models.SY.SYSettings.getLabel("Month"));
+
+                   //textProperties.ValueType = typeof(string);
+                   //textProperties.Width = Unit.Percentage(100);
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Week");
+                   column.Width = 100;
+                   column.FieldName = "Week";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total Topic");
+                   column.Width = 120;
+                   column.FieldName = "TotalTopic";
+               });
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'COMPLETED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.Custom);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'APPROVED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'ACCEPT'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               //column.CellStyle.BackColor = System.Drawing.Color.LightCyan;
+               //column.CellStyle.ForeColor = System.Drawing.Color.DarkCyan;
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'CANCELLED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'REJECTED'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 50;
+
+
+           });
+}
+
+@gridExtension.Bind(Model).GetHtml()

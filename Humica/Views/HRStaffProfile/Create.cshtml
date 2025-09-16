@@ -1,0 +1,637 @@
+﻿@model Humica.Employee.IClsEmployee
+<script type="text/javascript">
+    var _L = "@Model.Header.JobGrade";
+    var _d = "@Model.Header.District";
+    var _c = "@Model.Header.Commune";
+    var _v = "@Model.Header.Village";
+    var _Div = "@Model.Header.Division";
+    var _GDept = "@Model.Header.GroupDept";
+    var _Dept = "@Model.Header.DEPT";
+    var _JC = "@Model.Header.JobCode";
+    var _SECT = "@Model.Header.SECT";
+    var _LC = "@Model.Header.LevelCode";
+    var _JG = "@Model.Header.JobGrade";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+
+    function ValueChange(s, e) {
+        var FirstName = txtFirstName.GetValue();
+        var LastName = txtLastName.GetValue();
+        if (txtFirstName.GetValue() == null) FirstName = "";
+        if (txtLastName.GetValue() == null) LastName = "";
+        if ("@Model.Fist_Last" == "True")
+            txtAllName.SetValue(FirstName + " " + LastName);
+        else txtAllName.SetValue(LastName + " " + FirstName);
+    }
+    function EmpValueChange(s, e) {
+        txtFingerPrint.SetValue(s.GetValue());
+    }
+    function OthValueChange(s, e) {
+        var OthFirstName = txtOthFirstName.GetValue();
+        var OthLastName = txtOthLastName.GetValue();
+        if (txtOthFirstName.GetValue() == null) OthFirstName = "";
+        if (txtOthLastName.GetValue() == null) OthLastName = "";
+        if ("@Model.Fist_Last_KH" == "True")
+            txtOthAllName.SetValue(OthFirstName + " " + OthLastName);
+        else txtOthAllName.SetValue(OthLastName + " " + OthFirstName);
+    }
+    function OnClientValueChanged(s, e) {
+        ShowData();
+    }
+    function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/ShowData',
+            data: { 'StartDate': convert(txtStartDate.GetDate()), 'ProType': txtProbationType.GetValue() },
+            success: function (data) {
+                if (data.MS == "@Humica.EF.SYSConstant.OK") {
+                    var Probat = data.Probation;
+                    ProDate = new Date(parseInt(Probat.substr(6)));
+                    var Leave = data.LeaveCof;
+                    LeaveDate = new Date(parseInt(Leave.substr(6)));
+                    txtProbation.SetValue(ProDate);
+                    txtLeaveConf.SetValue(LeaveDate);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        })
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function select_Level(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/FilterLevel',
+            data: { 'Level': s.GetValue() },
+            success: function (data) {
+                txtSalary.SetEnabled(data.IsSalary);
+                if (data.IsSalary == true) {
+                    txtSalary.SetValue(0);
+                }
+                else {
+                    txtSalary.SetValue("#####");
+                }
+            }
+        });
+    }
+    function onImageLoadQr() {
+        var externalDropZone = $("#externalDropZoneQr");
+        var uploadedImage = $("#uploadedImageQr");
+        uploadedImage.css({
+            left: (externalDropZone.width() - uploadedImage.width()) / 2,
+            top: (externalDropZone.height() - uploadedImage.height()) / 2
+        });
+        setElementVisible("dragZone", false);
+    }
+    function onUploadControlFileUploadCompleteQR(s, e) {
+        if (e.isValid) {
+            txtImgQr.SetText(e.callbackData);
+            $("#uploadedImageQr").attr("src", e.callbackData);
+            setElementVisible("uploadedImageQr", e.isValid);
+        }
+    }
+    function selectLevels(s, e) {
+        ShowDataJob(s.GetValue(), 'Level');
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/EmployeeInfo/HRStaffProfile/FilterLevel',
+            data: { 'Level': s.GetValue() },
+            success: function (data) {
+                GridItemBank.Refresh();
+            }
+        });
+    }
+    function RemoveFileQr(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/EmployeeInfo/HRStaffProfile/DeleteFile',
+            data: {
+                'FileName': txtImgQr.GetValue()
+            },
+            success: function (data) {
+                if (data == "OK") {
+                    $("#uploadedImageQr").attr("src", "");
+                    txtImgQr.SetValue("");
+                    setElementVisible("uploadedImageQr", false);
+                }
+                else {
+                    AlertMessage(data);
+                }
+            }
+
+        });
+    }
+</script>
+
+<script type="text/javascript" src="~/Content/Staff3.js"></script>
+<link rel="stylesheet" href="~/Content/Staff.css">
+<style>
+    .staff-image-container {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 0 !important;
+    }
+    .staff-profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background: white;
+    }
+    .dropZoneExternal3 {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+        border: 2px dashed #f17f21 !important;
+    }
+    .dropZoneExternal3:hover {
+        border-color: #0056b3;
+        background-color: #f8f9fa;
+    }
+    .dragZone, .dropZone {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 123, 255, 0.1);
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+    .dragZoneText3 {
+        color: #007bff;
+        font-size: 8px;
+        font-weight: 600;
+        text-align: center;
+        background-color: #ffffff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .dropZone .dragZoneText3 {
+        color: #ffffff;
+        background-color: #007bff;
+        transform: scale(1.05);
+    }
+    .dropZoneExternal3 img#uploadedImage {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .dropZoneExternal3 img#uploadedImage[src=""],
+    .dropZoneExternal3 img#uploadedImage:not([src]) {
+        display: none;
+    }
+    .uploadControlDropZone {
+        display: none;
+    }
+    .uploadControlProgressBar {
+        background-color: #28a745;
+        border-radius: 4px;
+    }
+    .validationMessage {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+    }
+    .dxbButton_MaterialCreate {
+        margin-top: 5px;
+        background-color: #dc3545;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+    .dxbButton_MaterialCreate:hover {
+        background-color: #c82333;
+    }
+    .dxbButton_MaterialCreate .dxb {
+            color: #ffffff !important;
+    }
+    [id^="uc_image_"] .dxucBrowseButton_Office365,
+    [id^="uc_image_"] .dxucEditArea_Office365,
+    [id^="uc_image_"] .dxuc-browseButton,
+    [id^="uc_image_"] .dxBB.dxucBrowseButton_Office365,
+    [id^="uc_image_"] .dxucTextBox_Office365,
+    [id^="uc_image_"] .dxuc > .dxbButton,
+    [id^="uc_image_"] .dxuc > .dxeButton,
+    [id^="uc_image_"] .dxuc > input[type="file"] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    .remove-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        background-color: #dc3545;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        z-index: 100;
+        transition: background-color 0.3s ease;
+    }
+    .remove-icon:hover {
+        background-color: #c82333;
+    }
+    .getBtnRemove:hover .remove-icon {
+        display: block;
+    }
+    .getBtnRemove img#uploadedImage:not([src]),
+    .getBtnRemove img#uploadedImage[src=""] {
+        display: none;
+    }
+    .getBtnRemove img#uploadedImage:not([src]) ~ .remove-icon,
+    .getBtnRemove img#uploadedImage[src=""] ~ .remove-icon {
+         display: none !important;
+    }
+</style>
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "MaterialCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.AddGroupItem(sub =>
+        {
+            sub.ColCount = 3;
+            sub.GroupBoxDecoration = GroupBoxDecoration.None;
+
+            var IsEmpAuto = true;
+            if (Model != null && Model.IsEmpAuto == true)
+            {
+                IsEmpAuto = false;
+            }
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                if (IsEmpAuto == false)
+                    m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.EmpCode, s =>
+                {
+                    s.ReadOnly = IsEmpAuto;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientInstanceName = "txtEmpCode";
+                    s.Properties.ClientSideEvents.KeyUp = "EmpValueChange";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CareerCode");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.CareerDesc, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientInstanceName = "txtCareerDesc";
+                }).Render();
+            });
+
+            sub.Items.AddEmptyItem();
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FirstName");
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.FirstName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtFirstName";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.KeyUp = "ValueChange";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LastName");
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.LastName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtLastName";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.KeyUp = "ValueChange";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FullName");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.AllName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtAllName";
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OthFirstName");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OthFirstName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtOthFirstName";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.KeyUp = "OthValueChange";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OthLastName");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OthLastName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtOthLastName";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ClientSideEvents.KeyUp = "OthValueChange";
+                }).Render();
+            });
+
+            sub.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OthFullName");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OthAllName, s =>
+                {
+                    s.Properties.ClientInstanceName = "txtOthAllName";
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+        });
+
+        g.Items.Add(mm =>
+        {
+            mm.Caption = "";
+            mm.Width = Unit.Pixel(120);
+            mm.Height = Unit.Pixel(120);
+            mm.CssClass = "staff-image-container";
+        })
+        .SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write(@"
+            <div style='width: 120px; height: 120px; overflow: hidden; position: relative;'>
+                <div class='getBtnRemove'>
+                    <div id='externalDropZone' class='dropZoneExternal3'>
+                        <div id='dragZone' style='top: 10px;'>
+                            <span class='dragZoneText3'>Add Profile Image</span>
+                        </div>
+                        <img id='uploadedImage' src='" + (string.IsNullOrEmpty(Model.Header.Images) ? Url.Content("~/Content/img/default-profile.png") : Model.Header.Images) + @"' 
+                             class='staff-profile-image'
+                             onload='onImageLoad()' />
+                        <div id='dropZone' style='display: none; top: 10px;'>
+                            <span class='dragZoneText3'>Drop Image</span>
+                        </div>
+                    </div> <div id='removeIcon' class='remove-icon' onclick='RemoveFile1()'>X</div>
+                </div>
+            </div>");
+            Html.DevExpress().UploadControl(ss =>
+            {
+                ss.ShowProgressPanel = true;
+                ss.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "UploadControlCallbackActionImage" };
+                ss.Name = "uc_image";
+                ss.UploadMode = UploadControlUploadMode.Auto;
+                ss.AutoStartUpload = true;
+                ss.Width = 150;
+                ss.DialogTriggerID = "externalDropZone";
+                ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                ss.AdvancedModeSettings.EnableFileList = false;
+                ss.AdvancedModeSettings.EnableMultiSelect = false;
+                ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                ss.AdvancedModeSettings.DropZoneText = "";
+                ss.ValidationSettings.MaxFileSize = 9194304;
+                ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png" };
+                ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                // Removed: ss.BrowseButton.Text = "Choose Image"; (This removes the "Choose Image" button)
+                ss.Styles.DropZone.CssClass = "uploadControlDropZone";
+                ss.Styles.ProgressBar.CssClass = "uploadControlProgressBar";
+                ss.ClientSideEvents.DropZoneEnter = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', true); }";
+                ss.ClientSideEvents.DropZoneLeave = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', false); }";
+                ss.ClientSideEvents.FileUploadComplete = "onUploadControlFileUploadCompleteProfile";
+            }).Render();
+            Html.DevExpress().TextBoxFor(i => i.Header.Images, s =>
+            {
+                s.Properties.ClientInstanceName = "txtImage";
+                s.Properties.EnableClientSideAPI = true;
+                s.ClientVisible = false;
+                s.Width = 200;
+            }).Render();
+            //Html.DevExpress().Button(s =>
+            //         {
+            //               s.Name = "btRemoveP";
+            //               s.Text = "Remove";
+            //               s.ClientSideEvents.Click = "RemoveFile1";
+            //         }).Render();
+        });
+        //g.Items.Add(mmm =>
+        //{
+        //    mmm.Caption = "";
+        //})
+        // .SetNestedContent(() =>
+        // {
+        //     Html.DevExpress().Button(s =>
+        //     {
+        //         s.Name = "btRemoveP";
+        //         s.Text = "Remove";
+        //         s.ClientSideEvents.Click = "RemoveFile1";
+        //         s.Styles.Style.CssClass = "btnRemove";
+        //     }).Render();
+
+        // });
+    });
+}).GetHtml()
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Personal Information")).SetContent(() =>
+    {
+        Html.RenderPartial("TapPersonalInfor", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Job Information")).SetContent(() =>
+    {
+        Html.RenderPartial("TapJob", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+     )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Salary Info")).SetContent(() =>
+     {
+         @Html.RenderPartial("GridItemBank", Model.ListSaparate);
+     });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Manager & Approver")).SetContent(() =>
+    {
+        Html.RenderPartial("TapManApprover", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Bank Information")).SetContent(() =>
+    {
+        Html.RenderPartial("TapBankInfo", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Personal Documents")).SetContent(() =>
+    {
+        Html.RenderPartial("_Identity", Model.ListEmpIdentity);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Family")).SetContent(() =>
+    {
+        Html.RenderPartial("GridFamily", Model.ListEmpFamily);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Education")).SetContent(() =>
+    {
+        Html.RenderPartial("GridEducation", Model.ListEducation);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Contract")).SetContent(() =>
+    {
+        Html.RenderPartial("GridContract", Model.ListContract);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Probation Extension")).SetContent(() =>
+    {
+        Html.RenderPartial("GridProbationDetail", Model.ListDelayProbation);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Disciplinary")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemDiscip", Model.ListEmpDisciplinary);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Certified Letter")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemCertificate", Model.ListEmpCertificate);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Medical Check")).SetContent(() =>
+    {
+        Html.RenderPartial("GridItemMedical", Model.ListEmpMedical);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Employee Address")).SetContent(() =>
+    {
+        Html.RenderPartial("TapContactAddress", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Job Description")).SetContent(() =>
+    {
+        Html.RenderPartial("GridJobDescription", Model.ListEmpJobDescription);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Photo & Signature")).SetContent(() =>
+    {
+        @Html.RenderPartial("TapPicture", Model);
+    });
+    if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Qr"))
+    {
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Qr Code")).SetContent(() =>
+        {
+            Html.RenderPartial("TapQr", Model);
+        });
+    }
+    //if (Model.IsTax == true)
+    //{
+    //    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    //  )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Salary Tax")).SetContent(() =>
+    //  {
+    //      @Html.RenderPartial("TapSalaryTax", Model);
+    //  });
+    //}
+}).GetHtml()

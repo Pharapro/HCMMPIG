@@ -1,0 +1,138 @@
+﻿@model Humica.Training.TrainingProcessObject
+<script type="text/javascript">
+    var selectedIDs = "";
+    var selectedIDs_ = "";
+    var Empcode = "";
+    var ss;
+    $(document).ready(function (s, e) {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+        });
+         $('#_btnImport').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+         })
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            if (!selectedIDs_.length > 0) {
+
+                  window.alert('Please select item(s) you want to delete.');
+            }
+            else {
+                ss = 4;
+                PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+            }
+        })
+    });
+    $("#_btnNewAction").hide();
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        Empcode = values[1];
+         if (ss == 1) {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + selectedIDs + "&EmpCode=" + Empcode;
+        }
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + selectedIDs + "&EmpCode=" + Empcode;
+        }
+        if (ss == 4) {
+
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 10) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("ACCEPT_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+
+    }
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnAccept") {
+            ss = 10;
+            if (!selectedIDs_.length > 0) {
+
+                window.alert('Please select item(s) you want to Accept.');
+            }
+            else {
+                GridViewListPending.GetRowValues(GridViewListPending.GetFocusedRowIndex(), 'TrainNo;EmpCode', OnGetRowValues);
+            }
+        }
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            //Accept
+            if (ss == 10) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Accept?id=" + selectedIDs_;
+            }
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?IDs=" + selectedIDs_;
+            }
+        }
+    }
+    function Tap_ActiveTabChanged(s, e) {
+        //var tab = s.GetActiveTab();
+        //var isChecked = false;
+        var tapName = e.tab.name;
+        $('.fitler-doc').show();
+        if (tapName == "Tap2") {
+            $('.fitler-doc').hide();
+        }
+    }
+    // event grideview checkbox
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("TrainNo;EmpCode", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs_ = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs_ += values[index] + ";";
+            ssFrom = selectedIDs_;
+        }
+        if (selectedIDs_.length > 0) {
+            selectedIDs_ = selectedIDs_.substring(0, selectedIDs_.length - 1);
+        }
+    }
+</script>
+<script src="~/Content/AdjustSizePage.js"></script>
+@*<style>
+        #_bthEditAction, #_btnDeleteAction, #_btnImageView {
+            transform: translateX(-70px);
+            /*position: unset;*/
+        }
+    </style>*@
+<div class="fitler-doc">
+    @Html.Partial("FTTraining", Model)
+</div>
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.ActivateTabPageAction = ActivateTabPageAction.Click;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.ClientSideEvents.ActiveTabChanged = "Tap_ActiveTabChanged";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Trainnee(s)"), "Tap1").SetContent(() =>
+        {
+            Html.RenderPartial("PartialTrainee", Model.ListTrainee);
+
+        });
+        if (Model.ListTraineePeding.Count > 0)
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "WaitingList"), "Tap2").SetContent(() =>
+            {
+                Html.RenderPartial("PartialProcess", Model.ListTraineePeding);
+
+            });
+        }
+    }).GetHtml()

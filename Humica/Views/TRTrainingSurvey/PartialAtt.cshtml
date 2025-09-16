@@ -1,0 +1,165 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "PartialAtt";
+        settings.KeyFieldName = "TrainNo;CalendarID;LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CallbackRouteValues = new { Action = "PartialAtt", Controller = "TRTrainingSurvey" };
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowUpdateButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.Columns.Add(column =>
+        {
+            column.Name = "TrainNo";
+            //column.Visible = false;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainNo");
+            column.Width = 100;
+            column.FieldName = "TrainNo";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "CalendarID";
+            // column.Visible = false;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CalendarID");
+            column.Width = 100;
+            column.FieldName = "CalendarID";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "LineItem";
+            //column.Visible = false;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+            column.Width = 100;
+            column.FieldName = "LineItem";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "InDate";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InDate");
+            column.Width = 100;
+            column.FieldName = "InDate";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "IsAttend";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsAttend");
+            column.Width = 100;
+            column.FieldName = "IsAttend";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Name = "EmpCode";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+            column.Width = 100;
+            column.FieldName = "EmpCode";
+        });
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName != "LeadTime")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+        settings.CustomJSProperties = (s, e) =>
+        {
+            ASPxGridView grid1 = (ASPxGridView)s;
+            var result = new System.Collections.Hashtable();
+            foreach (var col in grid1.AllColumns)
+            {
+                var dataCol = col as GridViewDataColumn;
+                if (dataCol != null)
+                {
+                    var visible = "T";
+                    if (dataCol.Visible == false)
+                    {
+                        visible = "F";
+                    }
+                    result[dataCol.FieldName] = new Dictionary<string, object>() {
+                            {"fieldName",dataCol.FieldName},
+                            {"caption",dataCol.Caption},
+                            { "sortIndex", dataCol.SortIndex },
+                            { "sortOrder", dataCol.SortOrder },
+                            { "groupIndex", dataCol.GroupIndex },
+                            { "width", dataCol.Width },
+                            { "visibleIndex", dataCol.VisibleIndex },
+                            { "visible", visible },
+                            { "fitler", dataCol.FilterExpression},
+                                           };
+                }
+            }
+
+            e.Properties["cpColumnsProp"] = result;
+        };
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+
+
+
+
+
+
+
+
+

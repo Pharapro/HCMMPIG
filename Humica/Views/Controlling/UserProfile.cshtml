@@ -1,0 +1,224 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoadingLayout.cshtml";
+}
+@model Humica.EF.Models.SY.SYUserObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "MaterialCreate";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.User, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "UserName");
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.UserObject.UserName, s =>
+            {
+                s.ReadOnly = true;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "LoginName");
+
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().TextBoxFor(i => i.UserObject.LoginName, s =>
+              {
+                  s.ReadOnly = true;
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+              }).Render();
+          });
+
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "UserType");
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.UserObject.UserType, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.ValueField = "SelectValue";
+                    s.Properties.TextField = "SelectText";
+                }).BindList(ViewData["USER_TYPE"]).Render();
+            });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Owner");
+
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().ComboBoxFor(i => i.UserObject.CompanyOwner, s =>
+             {
+                 s.ReadOnly = true;
+                 s.ShowModelErrors = true;
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+                 s.Properties.ValueField = "DealerCode";
+                 s.Properties.TextField = "ShopName";
+                 s.Properties.Columns.Add("DealerCode", Humica.EF.Models.SY.SYSettings.getLabel("Owner"));
+                 s.Properties.Columns.Add("ShopName", Humica.EF.Models.SY.SYSettings.getLabel("ShopName"));
+                 s.Properties.TextFormatString = "{0}:{1}";
+             }).BindList(ViewData["DLR_LIST"]).Render();
+         });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ExpireDate");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().DateEditFor(i => i.UserObject.ExpireDate, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                    s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                }).Render();
+            });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "IsApprover");
+
+        })
+       .SetNestedContent(() =>
+       {
+           Html.DevExpress().CheckBoxFor(i => i.UserObject.IsApprover, s =>
+           {
+               s.ReadOnly = true;
+               s.ShowModelErrors = true;
+               s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+               s.Properties.ValidationSettings.SetFocusOnError = true;
+               s.Properties.ValidationSettings.ErrorText = "*";
+           }).Render();
+       });
+
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+
+        })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.UserObject.Email, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "IsActive");
+
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().CheckBoxFor(i => i.UserObject.IsActive, s =>
+             {
+                 s.ReadOnly = true;
+                 s.ShowModelErrors = true;
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+             }).Render();
+         });
+        //g.Items
+        //  .Add(m =>
+        //  {
+        //      m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+        //          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "JDType");
+
+        //  })
+        //  .SetNestedContent(() =>
+        //  {
+        //      Html.DevExpress().ComboBoxFor(i => i.UserObject.JDType, s =>
+        //      {
+        //          s.ReadOnly = true;
+        //          s.ShowModelErrors = true;
+        //          s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //          s.Properties.ValidationSettings.SetFocusOnError = true;
+        //          s.Properties.ValidationSettings.ErrorText = "*";
+        //          s.Properties.ValueField = "SelectValue";
+        //          s.Properties.TextField = "SelectText";
+        //      }).BindList(ViewData["JD_TYPE"]).Render();
+        //  });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().HyperLink(s =>
+             {
+                 s.Name = "ChangePwd_";
+                 s.Enabled = true;
+                 s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("Change Your Password");
+                 s.NavigateUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Administrator/Systems/Controlling/ChangePassword";
+             }).Render();
+         });
+
+    });
+
+}).GetHtml()
+
+@Html.DevExpress().TextBox(s =>
+             {
+                 s.Name = "RoleSelected";
+                 s.Text = Model.RoleSelected;
+                 s.ClientVisible = false;
+             }).GetHtml()
+
+@Html.DevExpress().TextBox(s =>
+             {
+                 s.Name = "DataSelected";
+                 s.Text = Model.DataSelected;
+                 s.ClientVisible = false;
+             }).GetHtml()
+

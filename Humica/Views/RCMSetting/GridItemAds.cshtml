@@ -1,0 +1,143 @@
+﻿    @{
+        var grid = Html.DevExpress().GridView(settings =>
+        {
+            settings.Name = "GridItemAds";
+            settings.KeyFieldName = "Code;Company";
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+
+            settings.CallbackRouteValues = new { Controller = "RCMSetting", Action = "GridItemAds" };
+
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "RCMSetting", Action = "CreateAds" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "RCMSetting", Action = "EditAds" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "RCMSetting", Action = "DeleteAds" };
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowCancelButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "AdsType";
+                column.Width = 100;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Ads. Type");
+                column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                textProperties.ValidationSettings.Display = Display.None;
+                textProperties.DataSource = ViewData["ADS_SELECT"];
+                textProperties.TextField = "Description";
+                textProperties.ValueField = "Code";
+                textProperties.ValueType = typeof(string);
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 120;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code") + "*";
+                column.FieldName = "Code";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 170;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company") + "*";
+                column.FieldName = "Company";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 150;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Address");
+                column.FieldName = "Address";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 150;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Contact Person");
+                column.FieldName = "Contact";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 150;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+                column.FieldName = "Email";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 150;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone 1");
+                column.FieldName = "Phone1";
+            });
+            settings.Columns.Add(column =>
+            {
+                column.Width = 150;
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone 2");
+                column.FieldName = "Phone2";
+            });
+            settings.SettingsSearchPanel.Visible = true;
+            settings.SettingsBehavior.ConfirmDelete = true;
+
+            settings.Settings.ShowGroupPanel = false;
+            settings.Settings.ShowFooter = true;
+            settings.SettingsContextMenu.Enabled = true;
+            settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+            settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.SettingsPopup.HeaderFilter.Height = 200;
+
+            settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+            settings.SettingsPager.PageSize = 10;
+
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.ShowHeaderFilterButton = true;
+
+            settings.SettingsPager.EnableAdaptivity = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+            settings.SettingsExport.EnableClientSideExportAPI = true;
+            settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+            settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+            settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+            settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+            settings.SettingsBehavior.AllowFocusedRow = true;
+
+            settings.PreRender = (sender, e) =>
+            {
+                //((MVCxGridView)sender).StartEdit(1);
+            };
+
+            settings.CellEditorInitialize = (s, e) =>
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.Dynamic;
+                if (e.KeyValue != null)
+                {
+                    if (e.Column.FieldName == "Code")
+                    {
+                        e.Editor.ReadOnly = true;
+                    }
+                }
+                if (e.KeyValue != null)
+                {
+                    if (e.Column.FieldName == "Company")
+                    {
+                        e.Editor.ReadOnly = true;
+                    }
+                }
+
+            };
+
+        });
+
+        if (ViewData["EditError"] != null)
+        {
+            grid.SetEditErrorText((string)ViewData["EditError"]);
+        }
+        }
+    @grid.Bind(Model).GetHtml()

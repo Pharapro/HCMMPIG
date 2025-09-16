@@ -1,0 +1,162 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "gridViewItem";
+        settings.KeyFieldName = "ID";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = Humica.EF.Models.DMSGridViewEditingHelper.BatchStartEditAction;
+        settings.CallbackRouteValues = new { Controller = "NTRCode", Action = "GridItems" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "NTRCode", Action = "BatchEditingUpdateModel" };
+        settings.SettingsBehavior.AllowSort = false;
+        //settings.CallbackRouteValues = new { Controller = "Editing", Action = "BatchEditingPartial" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().Button(
+                                settings1 =>
+                                {
+                                    settings1.Name = "_btnNewGrid";
+                                    settings1.ToolTip = "New";
+                                    settings1.RenderMode = ButtonRenderMode.Link;
+                                    settings1.Text = "";
+                                    settings1.Images.Image.IconID = IconID.ActionsAdd16x16;
+                                    settings1.ClientSideEvents.Click = "AddNewRow";
+                                }).Render();
+
+            c.Column.Width = 100;
+        });
+
+
+        settings.Columns.Add(column =>
+        {
+
+            column.Width = 150;
+            column.FieldName = "PostalCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+        
+
+        });
+        
+        settings.Columns.Add(column =>
+        {
+            Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "TRCode");
+            column.Width = 150;            
+            column.FieldName = "TRCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("TRCode_SELECT");
+            textProperties.TextField = "SelectText";
+            textProperties.ValueField = "SelectValue";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Province/City");
+            column.Width = 150;
+            
+            column.FieldName = "City";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("City_SELECT");
+            textProperties.TextField = "SelectText";
+            textProperties.ValueField = "SelectValue";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+
+            Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "District");
+            column.Width = 150;
+            
+            column.FieldName = "District";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("District_SELECT");
+            textProperties.TextField = "SelectText";
+            textProperties.ValueField = "SelectValue";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Commune");
+            column.Width = 150;
+            
+            column.FieldName = "Commune";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("Commune_SELECT");
+            textProperties.TextField = "SelectText";
+            textProperties.ValueField = "SelectValue";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Village");
+            column.Width = 150;            
+            column.FieldName = "Village";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("Village_SELECT");
+            textProperties.TextField = "SelectText";
+            textProperties.ValueField = "SelectValue";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+     
+
+        settings.ClientSideEvents.Init = "function(s, e){ SetButtonsVisibility(s); }";
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 330;
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+    }).Bind(Model).GetHtml()
+
+
+
+

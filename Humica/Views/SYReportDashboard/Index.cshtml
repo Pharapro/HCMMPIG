@@ -1,0 +1,56 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+  
+</script>
+
+
+@model Humica.Core.CF.CFSystem
+
+
+@*@Html.Partial("GridItems", Model)*@
+
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_DashboardMaster"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+             ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "DashboardMaster")).SetContent(() =>
+             {
+                 @Html.RenderPartial("GridItems3", Model.ListDashboardMaster);
+
+             });
+
+        }
+        if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Dashboard"))
+        {
+            settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+             ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Dashboard")).SetContent(() =>
+             {
+                 @Html.RenderPartial("GridItems4", Model.ListDashboard);
+
+             });
+
+        }
+        //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+        //                 ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "ModelReport")).SetContent(() =>
+        //                 {
+        //                     @Html.RenderPartial("GridItems5", Model.ListReportModelTemplate);
+
+        //                 });   
+
+    }).GetHtml()
+
+

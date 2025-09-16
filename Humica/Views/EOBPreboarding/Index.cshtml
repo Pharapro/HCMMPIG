@@ -1,0 +1,40 @@
+﻿
+<script type="text/javascript">
+
+</script>
+
+
+@model   Humica.Logic.EOB.MDEOBPreboarding
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Pre Boarding Step")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemPreBoStep", Model.ListPreBoardingStep);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Pre Boarding Item")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemPreBoItem", Model.ListPreBoardingItem);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Pre Boarding Stage")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemPreBoStage", Model.ListPreBoardingStage);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Social Media Account")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemSocMedAcc", Model.ListSocialMediaAcc);
+        });
+
+    }).GetHtml()
+
+

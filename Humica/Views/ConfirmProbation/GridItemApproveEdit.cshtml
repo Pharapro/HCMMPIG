@@ -1,0 +1,142 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemApprove1";
+           settings.KeyFieldName = "ID";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "ConfirmProbation", Action = "GridItemApproveEDIT" };
+
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ConfirmProbation", Action = "CreateApproval" };
+           ////settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ConfirmProbation", Action = "EditTrainingRating" };
+           //settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ConfirmProbation", Action = "DeleteApprover" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           settings.Columns.Add(column =>
+           {
+
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Approver");
+               column.FieldName = "Approver";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["WF_LIST"];
+               //textProperties.ClientSideEvents.SelectedIndexChanged = "approverChange";
+               textProperties.ClientSideEvents.SelectedIndexChanged = "approverChange";
+               textProperties.ValueField = "Employee";
+               textProperties.TextField = "EmployeeName";
+               textProperties.Columns.Add("Employee", Humica.EF.Models.SY.SYSettings.getLabel("Employee"));
+               textProperties.Columns.Add("EmployeeName", Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName"));
+               textProperties.Columns.Add("ApproveLevel", Humica.EF.Models.SY.SYSettings.getLabel("Level"));
+               textProperties.TextFormatString = "{0}:{1}";
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocumentNo");
+               column.FieldName = "DocumentNo";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.FieldName = "ApproverName";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproverName");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.PropertiesEdit.ClientInstanceName = "txtApproverName";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproveLevel");
+               column.FieldName = "ApproveLevel";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               column.PropertiesEdit.ClientInstanceName = "txtApproveLevel";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+               column.FieldName = "Status";
+
+           });
+
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Approver")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+<style>
+    #gridViewItem1_DXCBtn0 {
+        opacity: 0;
+    }
+</style>
+
+<script>
+
+</script>

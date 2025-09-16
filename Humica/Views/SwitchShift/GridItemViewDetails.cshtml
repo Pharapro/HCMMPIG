@@ -1,0 +1,122 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemViewDetails";
+        settings.KeyFieldName = "LineItem";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+
+        settings.CallbackRouteValues = new { Controller = "HRLeaveRequest", Action = "GridItemViewDetails" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRLeaveRequest", Action = "EditLeave" };
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 50;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.FieldName = "LineItem";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LeaveDate");
+            column.FieldName = "LeaveDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartTime");
+            column.FieldName = "StartTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndTime");
+            column.FieldName = "EndTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+        //    column.FieldName = "Remark";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var textProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    textProperties.DataSource = ViewData["LEAVE_TIME_SELECT"];
+        //    textProperties.ValueType = typeof(string);
+        //    textProperties.Width = Unit.Percentage(100);
+
+        //    textProperties.TextFormatString = "{0}";
+        //    textProperties.ValueField = "SelectValue";
+        //    textProperties.TextField = "SelectText";
+        //    textProperties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+        //});
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            if (e.Column.FieldName == "LineItem" || e.Column.FieldName == "LeaveDate" )
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.None;
+                editor.ReadOnly = true;
+
+                //if (e.Column.FieldName == "LineItem")
+                //{
+                //    if(e.KeyValue==)
+                //    editor.Value = -1;
+                //}
+
+            }
+
+
+
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+  }
+
+@grid.Bind(Model).GetHtml()

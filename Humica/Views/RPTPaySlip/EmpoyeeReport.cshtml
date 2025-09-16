@@ -1,0 +1,67 @@
+﻿@model Humica.Core.FT.FTFilerPayroll
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EmpoyeeReport";
+    settings.AlignItemCaptionsInAllGroups = true;
+    // int width = 180;
+    settings.Items.AddGroupItem(m => Model.EmpCode, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+        })
+    .SetNestedContent(() =>
+    {
+        Html.DevExpress().DropDownEditFor(i => Model.EmpCode, s =>
+        {
+            s.Width = 180;
+            s.Properties.ClientInstanceName = "checkComboBoxEmpCode";
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.ValidationSettings.SetFocusOnError = true;
+            s.Properties.ValidationSettings.ErrorText = "*";
+            s.SetDropDownWindowTemplateContent(c =>
+            {
+                Html.RenderPartial("EmpCode_");
+
+                ViewContext.Writer.Write("<div style=\"padding: 6px; height: 24px;\">");
+                @Html.DevExpress().Button(buttonSettings =>
+                {
+                    buttonSettings.Name = "buttonCloseEmpCode";
+                    buttonSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Ok");
+                    buttonSettings.Style.Add("float", "right");
+                    buttonSettings.Style.Add("padding", "0px 2px");
+                    buttonSettings.ClientSideEvents.Click = "function(s, e){ checkComboBoxEmpCode.HideDropDown(); }";
+                    buttonSettings.Height = 26;
+                }).Render();
+                ViewContext.Writer.Write("</div>");
+
+            });
+            s.Properties.AnimationType = AnimationType.None;
+        }).Render();
+    });
+        g.Items.Add(m =>
+         {
+             m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Period");
+         })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().ComboBoxFor(i => Model.Period, s =>
+             {
+                 s.Properties.ClientInstanceName = "txtPeriod";
+                 s.ShowModelErrors = true;
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+                 s.Properties.TextFormatString = "{0}";
+                 s.Properties.ValueField = "PeriodID";
+                 s.Properties.TextField = "PeriodString";
+                 s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+             }).BindList(ViewData["PERIOD_SELECT"]).Render();
+         });
+    });
+
+}).Bind(Model).GetHtml() 

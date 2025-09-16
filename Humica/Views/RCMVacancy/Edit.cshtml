@@ -1,0 +1,19 @@
+﻿@model Humica.Logic.RCM.IClsRCMVacancy
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function Selected(s, e) {
+        txtIntVName.SetValue(s.GetSelectedItem().GetColumnText(1));
+        txtIntVPosition.SetValue(s.GetSelectedItem().GetColumnText(2));
+    }
+</script>
+
+@Html.Partial("VacancyInfor", Model);

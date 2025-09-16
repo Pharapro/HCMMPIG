@@ -1,0 +1,133 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+          settings.Name = "GridItemEdit";
+          settings.KeyFieldName = "LineItem";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "HRResquestPayment", Action = "GridItemEdit" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRResquestPayment", Action = "CreateItemEdit" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRResquestPayment", Action = "EditItemEdit" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRResquestPayment", Action = "DeleteItemEdit" };
+
+          settings.CommandColumn.Visible = false;
+          settings.CommandColumn.ShowDeleteButton = true;
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          var isReadOnly = false;
+          if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+          {
+              isReadOnly = true;
+              settings.SettingsBehavior.AllowSort = false;
+          }
+          if (isReadOnly == false)
+          {
+              settings.CommandColumn.Visible = true;
+          }
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "LineItem";
+              column.Width = 100;
+              column.ReadOnly = true;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Description";
+              column.Width = 190;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "SupportingDoc";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 150;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Supporting Doc");
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "AmountReq";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 150;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Amount Requested");
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "AmountRev";
+              column.Width = 150;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount Revised");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Width = 120;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Document Reference");
+              column.FieldName = "DocumentReference";
+          });
+          //settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          //settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh - 150;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+
+          settings.SettingsPager.Position = PagerPosition.Bottom;
+          settings.SettingsPager.FirstPageButton.Visible = true;
+          settings.SettingsPager.LastPageButton.Visible = true;
+          settings.SettingsPager.PageSize = 5;
+          settings.SettingsPager.EnableAdaptivity = true;
+          settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+          settings.SettingsExport.EnableClientSideExportAPI = true;
+          settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue == null)
+              {
+                  if (e.Column.FieldName == "LineItem")
+                  {
+                      e.Editor.ReadOnly = true;
+                      e.Editor.Value = -1;
+                  }
+                  else
+                  {
+                      e.Editor.ReadOnly = false;
+                  }
+
+
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListPItem).GetHtml()

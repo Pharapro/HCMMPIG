@@ -1,0 +1,218 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewCompany";
+           settings.KeyFieldName = "Company";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+
+           settings.CallbackRouteValues = new { Controller = "InforSetup", Action = "GridItemCompany" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "InforSetup", Action = "CreateCompany" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "InforSetup", Action = "EditCompany" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "InforSetup", Action = "DeleteCompany" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           //settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.Columns.Add(column =>
+           {
+
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Photo");
+
+               column.Width = 80;
+               column.FieldName = "Images";
+
+               column.SetDataItemTemplateContent(container =>
+               {
+
+                   var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "Images"));
+                   if (!(attachment == null || attachment == ""))
+                   {
+                       Html.DevExpress().HyperLink(hyperlink =>
+                       {
+                           hyperlink.Name = "file_" + container.VisibleIndex;
+                           hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+                           hyperlink.Properties.Target = "_BLANK";
+                           hyperlink.NavigateUrl = attachment;
+                       }).Render();
+                   }
+               });
+
+               column.SetEditItemTemplateContent(c =>
+               {
+                   Html.DevExpress().UploadControl(ss =>
+                   {
+                       ss.ShowProgressPanel = true;
+                       ss.CallbackRouteValues = new { Controller = "InforSetup", Action = "UploadControlCallbackActionImage" };
+                       ss.Name = "uc_image";
+                       ss.UploadMode = UploadControlUploadMode.Auto;
+                       ss.AutoStartUpload = true;
+                       ss.Width = 80;
+                       ss.DialogTriggerID = "externalDropZone";
+                       ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                       ss.AdvancedModeSettings.EnableMultiSelect = false;
+                       ss.ShowTextBox = false;
+                       ss.ShowUploadButton = false;
+                       ss.ShowAddRemoveButtons = false;
+                       ss.ShowProgressPanel = true;
+                       ss.ShowClearFileSelectionButton = true;
+                       ss.AdvancedModeSettings.EnableFileList = true;
+                       ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                       ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                       ss.AdvancedModeSettings.DropZoneText = "";
+                       ss.ValidationSettings.MaxFileSize = 4194304;
+                       ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                       ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png", ".pdf" };
+                       ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                       ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                       ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                   }).Render();
+
+                   Html.DevExpress().HyperLink(s =>
+                   {
+                       s.Name = "file_uploaded";
+                       s.ToolTip = "File";
+                       s.ClientVisible = false;
+                       s.Properties.Target = "_BLANK";
+                       s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+
+                   }).GetHtml();
+
+               });
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Group");
+               column.FieldName = "GroupCompany";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["GroupCompany_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.ValueField = "CompanyCode";
+               textProperties.Columns.Add("CompanyCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 70);
+               textProperties.Columns.Add("CompENG", Humica.EF.Models.SY.SYSettings.getLabel("Name"), 250);
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company Code");
+               column.FieldName = "Company";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+               column.FieldName = "Description";
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+               column.FieldName = "SecDescription";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Emails");
+               column.FieldName = "Email";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone");
+               column.FieldName = "Phone";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Address");
+               column.FieldName = "Address";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 80;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NSSFNo");
+               column.FieldName = "NSSFNo";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 120;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Vatin Number");
+               column.FieldName = "VatinNumber";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.FieldName = "Remark";
+
+           });
+
+           settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+           settings.SettingsEditing.EditFormColumnCount = 2;
+
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "Company" || e.Column.FieldName == "GroupCompany")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

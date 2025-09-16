@@ -1,0 +1,140 @@
+@model Humica.EF.Models.MenuIDAction
+@Html.DevExpress().TreeView(settings =>
+{
+    settings.Name = "tableOfContentsTreeView";
+    settings.EnableNodeTextWrapping = true;
+    settings.AllowSelectNode = true;
+    settings.Width = Unit.Percentage(100);
+    settings.SyncSelectionMode = SyncSelectionMode.None;
+    settings.NodeLinkMode = ItemLinkMode.ContentBounds;
+    settings.Styles.Node.CssClass = "tree-view-node";
+    settings.Styles.Node.HoverStyle.CssClass = "hovered";
+    settings.Styles.Elbow.CssClass = "tree-view-elbow";
+    //settings.ClientSideEvents.NodeClick = "function (s, e) { HideLeftPanelIfRequired(); }";
+    settings.ClientSideEvents.NodeClick = "renderMainIframe";
+
+    Humica.EF.Models.SY.SYMenuObject mo = new Humica.EF.Models.SY.SYMenuObject();
+
+
+    foreach (Humica.EF.MD.SYMenu submenu in mo.GetSubHeaderMenu(Model.MenuId))
+    {
+        settings.Nodes.Add(n =>
+        {
+            if (submenu.ImageUrl == null || submenu.ImageUrl == "")
+            {
+                n.Image.Url = "~/Content/Images/s-menu.svg";
+                n.Image.Width = Unit.Pixel(22);
+                n.Image.Height = Unit.Pixel(22);
+                n.Image.SpriteProperties.CssClass = "adaptive-image";
+            }
+            else
+            {
+                n.Image.Url = submenu.ImageUrl;
+                n.Image.Width = Unit.Pixel(22);
+                n.Image.Height = Unit.Pixel(22);
+                n.Image.SpriteProperties.CssClass = "adaptive-image";
+            }
+
+            n.Index = submenu.ID;
+            n.Name = "N" + submenu.ID;
+            n.Text = submenu.Text;
+            var listSubmenu = mo.GetSubHeaderMenu3(submenu.ID);
+            if (listSubmenu.Count > 0)
+            {
+                foreach (var inner in listSubmenu)
+                {
+                    n.Nodes.Add(m =>
+                    {
+                        if (inner.ImageUrl == null || inner.ImageUrl == "")
+                        {
+                            m.Image.Url = "~/Content/Images/right-arrow.svg";
+                            m.Image.Width = Unit.Pixel(22);
+                            m.Image.Height = Unit.Pixel(22);
+                            m.Image.SpriteProperties.CssClass = "adaptive-image";
+                        }
+                        else
+                        {
+                            m.Image.Url = inner.ImageUrl;
+                            m.Image.Width = Unit.Pixel(22);
+                            m.Image.Height = Unit.Pixel(22);
+                            m.Image.SpriteProperties.CssClass = "adaptive-image";
+
+                        }
+                        m.Index = inner.ID;
+                        m.Name = "N" + inner.ID;
+                        m.Text = inner.Text;
+                        m.ToolTip = inner.Text;
+                        var listSub1 = mo.GetSubMenuItem(inner.ID);
+                        foreach (var innersub in listSub1)
+                        {
+                            m.Nodes.Add(subNodes =>
+                            {
+                                if (innersub.ImageUrl == null || innersub.ImageUrl == "")
+                                {
+                                    subNodes.Image.Url = "~/Content/Images/right-arrow.svg";
+                                    subNodes.Image.Width = Unit.Pixel(22);
+                                    subNodes.Image.Height = Unit.Pixel(22);
+                                    subNodes.Image.SpriteProperties.CssClass = "adaptive-image";
+                                }
+                                else
+                                {
+                                    subNodes.Image.Url = innersub.ImageUrl;
+                                    subNodes.Image.Width = Unit.Pixel(22);
+                                    subNodes.Image.Height = Unit.Pixel(22);
+                                    subNodes.Image.SpriteProperties.CssClass = "adaptive-image";
+
+                                }
+                                subNodes.Index = innersub.ID;
+                                subNodes.Name = innersub.ScreenId;
+                                subNodes.Text = innersub.Text;
+                                subNodes.ToolTip = innersub.Text;
+                                if (ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID] != null)
+                                {
+                                    if (innersub.ScreenId == ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())
+                                    {
+                                        subNodes.NodeStyle.CssClass = "MenuNode";
+                                        subNodes.TextStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml("#A9D08E");
+                                        subNodes.TextStyle.BorderBottom.BorderWidth = 2;
+                                        subNodes.TextStyle.BorderBottom.BorderColor = System.Drawing.ColorTranslator.FromHtml("#A9D08E");
+                                        m.Expanded = true;
+                                    }
+                                }
+
+                            });
+                        }
+
+                    });
+                }
+
+            }
+
+        });
+    }
+
+    settings.PreRender = (source, e) =>
+    {
+        ASPxTreeView treeView = (ASPxTreeView)source;
+
+    };
+}).GetHtml()
+
+@Html.DevExpress().PopupMenu(
+        settings =>
+        {
+            settings.Name = "PopupMenu";
+            settings.PopupElementID = "ImgButton1";
+            settings.ShowPopOutImages = DefaultBoolean.True;
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "New Window";
+                item.Name = "NewWindow";
+                item.GroupName = "Sort";
+            });
+
+            settings.ClientSideEvents.Init = "InitPopupMenu";
+            settings.ClientSideEvents.ItemClick = "OnPopupMenuItemClick";
+            settings.PopupAction = PopupAction.RightMouseClick;
+            settings.PopupHorizontalAlign = PopupHorizontalAlign.NotSet;
+            settings.PopupVerticalAlign = PopupVerticalAlign.NotSet;
+        }).GetHtml()

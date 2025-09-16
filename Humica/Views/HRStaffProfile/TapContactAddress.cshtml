@@ -1,0 +1,330 @@
+﻿@model Humica.Employee.IClsEmployee
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+    s1.Name = "Address1";
+    s1.AlignItemCaptionsInAllGroups = true;
+    var isReadOnly1 = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY1] != null)
+    {
+        isReadOnly1 = true;
+    }
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Place Of Birth");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Width = 700;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Province");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.Province, s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.ReadOnly = isReadOnly1;
+                s.ShowModelErrors = true;
+                s.Properties.ClientInstanceName = "cboProvince";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                s.Properties.CallbackPageSize = 30;
+                s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                s.Properties.TextFormatString = "{2}";
+                s.Properties.ValueField = "Code";
+                s.Properties.ValueType = typeof(string);
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "Code"), 100);
+                s.Properties.Columns.Add("Desc2", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesKH"), 150);
+                s.Properties.Columns.Add("Desc1", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesEN"), 150);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "selectProvince";
+                s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+
+                s.Properties.ClientSideEvents.Init = "initDataEdit";
+            }).BindList(ViewData["PROVINCE"]).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("District");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.District, s =>
+            {
+                s.Properties.ClientInstanceName = "cboDistrict";
+                s.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "District" };
+                s.Width = Unit.Percentage(100);
+                s.Enabled = !isReadOnly1;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{2}";
+                s.Properties.ValueField = "Code";
+                s.Properties.ValueType = typeof(string);
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "Code"), 100);
+                s.Properties.Columns.Add("Desc2", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesKH"), 150);
+                s.Properties.Columns.Add("Desc1", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesEN"), 150);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "selectDistrict";
+                s.Properties.ClientSideEvents.Init = "initDataEdit";
+            }).BindList(Humica.Employee.ClsEmployee.District()).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Commune");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.Commune, s =>
+            {
+                s.Properties.ClientInstanceName = "cboCommune";
+                s.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "Commune" };
+                s.Width = Unit.Percentage(100);
+                s.Enabled = !isReadOnly1;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{2}";
+                s.Properties.ValueField = "Code";
+                s.Properties.ValueType = typeof(string);
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "Code"), 100);
+                s.Properties.Columns.Add("Desc2", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesKH"), 150);
+                s.Properties.Columns.Add("Desc1", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesEN"), 150);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "selectCommune";
+                s.Properties.ClientSideEvents.Init = "initDataEdit";
+            }).BindList(Humica.Employee.ClsEmployee.Commune()).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Village");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.Header.Village, s =>
+            {
+                s.Properties.ClientInstanceName = "cboVillage";
+                s.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "Village" };
+                s.Width = Unit.Percentage(100);
+                s.Enabled = !isReadOnly1;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.TextFormatString = "{2}";
+                s.Properties.ValueField = "Code";
+                s.Properties.ValueType = typeof(string);
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "Code"), 100);
+                s.Properties.Columns.Add("Desc2", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesKH"), 150);
+                s.Properties.Columns.Add("Desc1", Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "DesEN"), 150);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "selectVillage";
+                s.Properties.ClientSideEvents.Init = "initDataEdit";
+            }).BindList(Humica.Employee.ClsEmployee.Village()).Render();
+        });
+    });
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Permanent Address");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Width = 700;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Peraddress");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Peraddress, s =>
+            {
+                s.ReadOnly = isReadOnly1;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PeraddressOth");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.PeraddressOth, s =>
+            {
+                s.ReadOnly = isReadOnly1;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Current Address");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Width = 700;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Current Address");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.ConAddress, s =>
+            {
+                s.ReadOnly = isReadOnly1;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Current address2");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.ConAddressOth, s =>
+            {
+                s.ReadOnly = isReadOnly1;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GPS And Image Address");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Width = 700;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GPS Data");
+            m.ColSpan = 2;
+        })
+        .SetNestedContent(() =>
+        {
+            if (!string.IsNullOrEmpty(Model.Header.GPSData))
+            {
+                Html.DevExpress().HyperLinkFor(i => i.Header.GPSData, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.Text = Model.Header.GPSData;
+                    s.Name = "link_uploaded";
+                    s.Properties.Target = "_blank";
+                    s.ClientVisible = true;
+                    s.NavigateUrl = Url.Action("ActionName", "HRStaffProfile", new { id = Model.Header.GPSData });
+                    s.Style.Add("width", "600px");
+                    s.Style.Add("text-align", "center");
+                    s.Style.Add("text-decoration", "none");
+                    s.Style.Add("overflow", "hidden");
+                }).Render();
+            }
+            else
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.GPSData, s =>
+                {
+                    s.ReadOnly = isReadOnly1;
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            }
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attach File");
+        })
+        .SetNestedContent(() =>
+        {
+            //if (!isReadOnly1)
+            //{
+            Html.DevExpress().UploadControl(ss =>
+            {
+                ss.ShowProgressPanel = true;
+                ss.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "UploadControlCallbackActionImageAddress" };
+                ss.Name = "UploadControl_GPS";
+                ss.UploadMode = UploadControlUploadMode.Auto;
+                ss.AutoStartUpload = true;
+                ss.Width = 120;
+                ss.DialogTriggerID = "externalDropZone3";
+                ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                ss.AdvancedModeSettings.EnableMultiSelect = false;
+                ss.ShowTextBox = false;
+                ss.ShowUploadButton = false;
+                ss.ShowAddRemoveButtons = true;
+                ss.ShowProgressPanel = true;
+                ss.ShowClearFileSelectionButton = true;
+                ss.AdvancedModeSettings.EnableFileList = true;
+                ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone3";
+                ss.AdvancedModeSettings.DropZoneText = "";
+                ss.ValidationSettings.MaxFileSize = Convert.ToInt64(Humica.EF.Models.SY.SYSettings.getSetting(Humica.Models.SY.ClsConstant.MAX_FILE_SIZE_ATTACHMENT).SettinValue); ;
+                ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                ss.UploadButton.Text = String.Empty;
+                ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg",".png",".pdf" };
+                ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+            }).Render();
+            Html.DevExpress().HyperLink(s =>
+            {
+                s.Name = "file_uploaded";
+                s.ToolTip = "File";
+                s.ClientVisible = false;
+                s.Properties.Target = "_BLANK";
+                s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+            }).GetHtml();
+            //}
+            //var attachments = Model.Header.AttachFile;
+            //var documents = Model.Header.Attachment;
+
+            //if (!string.IsNullOrEmpty(attachments) && !string.IsNullOrEmpty(documents))
+            //{
+            //    Html.DevExpress().HyperLink(hyperlink =>
+            //    {
+            //        hyperlink.Name = "file_uploadedPGS";
+            //        hyperlink.Properties.Text = "";
+            //        hyperlink.Properties.Target = "_BLANK";
+            //    }).Render();
+            //    string[] attachmentList = attachments.Split(';');
+            //    string[] documentList = documents.Split(';');
+
+            //    for (int i = 0; i < attachmentList.Length; i++)
+            //    {
+            //        string attachment = attachmentList[i];
+            //        string doc = documentList[i];
+
+            //        if (!string.IsNullOrEmpty(attachment))
+            //        {
+            //            Html.DevExpress().HyperLink(hyperlink =>
+            //            {
+            //                hyperlink.Name = "file_" + i;
+            //                hyperlink.Properties.Text = doc;
+            //                hyperlink.Properties.Target = "_BLANK";
+            //                hyperlink.NavigateUrl = attachment;
+            //            }).Render();
+            //        }
+            //    }
+            //}
+        });
+    });
+}).GetHtml()

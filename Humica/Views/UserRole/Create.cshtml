@@ -1,0 +1,373 @@
+﻿@model Humica.EF.Models.SY.SYPermissionObject
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Role Permissions</title>
+    <style>
+        .tree-container {
+            max-height: 100vh;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            background: #f9f9f9;
+        }
+
+        .tree {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .node {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 5px 0;
+            transition: background-color 0.2s;
+        }
+
+            .node:hover {
+                background-color: #f0f0f0;
+            }
+
+        .nested {
+            display: none;
+            margin-left: 20px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .checkbox {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .node-label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+
+        .node::before {
+            content: '►';
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 10px;
+            transition: transform 0.2s;
+        }
+
+        .active.node::before {
+            transform: rotate(90deg);
+        }
+
+        .btn-container {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    @Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "permissionFormLayout";
+        settings.Items.AddGroupItem(g =>
+        {
+            g.ColCount = 1;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            g.Items
+                .Add(m => m.HeaderRole.Description, item =>
+                {
+                    item.Caption = "Description";
+                    item.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+                    item.NestedExtension().TextBox(s =>
+                    {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                    });
+                });
+        });
+    }).GetHtml()
+    
+    <div id="statusMessage" class="status-message"></div>
+
+    <div class="tree-container">
+        <ul id="tree" class="tree"></ul>
+    </div>
+
+    <input type="hidden" id="NodeSelect" name="NodeSelect" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Data sources
+            const treeData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ListMenu));
+            const menuItems = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ListMenuItem));
+            const actionNames = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ListActionName));
+
+            // Save functionality
+            $('#_btnSaveActionGrid').click(function () {
+                prepareSaveData();
+                $('form').submit();
+            });
+
+            // Populate the tree with data
+            populateTree(treeData, menuItems, actionNames);
+
+            // Tree interaction handlers
+            $('#tree').on('click', '.node-label', function (e) {
+                const node = $(this).parent();
+                node.toggleClass('active');
+                node.children('.nested').toggle();
+            });
+
+            // Checkbox change handler
+            $('#tree').on('change', '.checkbox', function () {
+                const isChecked = $(this).is(':checked');
+                const parentNode = $(this).closest('li');
+
+                // Update all child checkboxes
+                parentNode.find('.nested .checkbox').prop('checked', isChecked);
+
+                // Update parent states
+                updateParentCheckboxState(parentNode);
+
+                // Update NodeSelect immediately
+                updateNodeSelectValue();
+            });
+
+            // Function to update parent checkbox states
+            function updateParentCheckboxState(childNode) {
+                const parentNode = childNode.parent().closest('li');
+                if (!parentNode.length) return;
+
+                const allCheckboxes = parentNode.find('.nested .checkbox');
+                const checkedCheckboxes = parentNode.find('.nested .checkbox:checked');
+
+                if (checkedCheckboxes.length === allCheckboxes.length) {
+                    parentNode.find('> .checkbox').prop('checked', true).prop('indeterminate', false);
+                } else if (checkedCheckboxes.length > 0) {
+                    parentNode.find('> .checkbox').prop('checked', true).prop('indeterminate', true);
+                } else {
+                    parentNode.find('> .checkbox').prop('checked', false).prop('indeterminate', false);
+                }
+
+                // Recursively update parents
+                updateParentCheckboxState(parentNode);
+            }
+
+            // Populate the tree structure
+            function populateTree(data, menuItems, actionNames) {
+                const tree = $('#tree');
+                tree.empty();
+
+                // Create root nodes (Segment 1)
+                data.forEach(item => {
+                    if (item.Segment === 1) {
+                        const node = createNode(item, 'S1');
+                        node.append(createChildNodes(item.ID, data, menuItems, actionNames));
+                        tree.append(node);
+                    }
+                });
+
+                // Expand all nodes by default
+                $('#tree .node').addClass('active');
+                $('#tree .nested').show();
+
+                // Initialize NodeSelect value
+                updateNodeSelectValue();
+            }
+
+            // Create child nodes (Segment 2)
+            function createChildNodes(parentId, data, menuItems, actionNames) {
+                const childUl = $('<ul class="nested"></ul>');
+
+                data.forEach(child => {
+                    if (child.Parent === parentId && child.Segment === 2) {
+                        const childNode = createNode(child, 'S2');
+                        childNode.append(createSegment3Nodes(child.ID, data, menuItems, actionNames));
+                        childUl.append(childNode);
+                    }
+                });
+
+                return childUl;
+            }
+
+            // Create Segment 3 nodes with their menu items
+            function createSegment3Nodes(parentId, data, menuItems, actionNames) {
+                const segment3Ul = $('<ul class="nested"></ul>');
+
+                data.forEach(segment3 => {
+                    if (segment3.Parent === parentId && segment3.Segment === 3) {
+                        const segment3Node = createNode(segment3, 'S3');
+
+                        // Create menu items for this Segment 3
+                        const menuItemsUl = $('<ul class="nested"></ul>');
+                        const itemsForThisSegment = menuItems.filter(mi => mi.MenuId == segment3.ID);
+
+                        itemsForThisSegment.forEach(menuItem => {
+                            const menuItemNode = createNode({
+                                ID: menuItem.ID,
+                                Text: menuItem.Text || "Menu Item",
+                                ScreenId: menuItem.ScreenId
+                            }, 'S4');
+
+                            // Create actions for this menu item
+                            const actionsUl = $('<ul class="nested"></ul>');
+                            const actionsForItem = actionNames.filter(an => an.ScreenID == menuItem.ScreenId);
+
+                            actionsForItem.forEach(action => {
+                                actionsUl.append(createNode({
+                                    ID: action.ID,
+                                    Text: action.ActionName,
+                                    ScreenID: action.ScreenID,
+                                    ActionTemplateID: action.ActionTemplateID,
+                                    ActionName: action.ActionName
+                                }, 'ACTION'));
+                            });
+
+                            menuItemNode.append(actionsUl);
+                            menuItemsUl.append(menuItemNode);
+                        });
+
+                        segment3Node.append(menuItemsUl);
+                        segment3Ul.append(segment3Node);
+                    }
+                });
+
+                return segment3Ul;
+            }
+
+            // Create a tree node with proper data attributes
+            function createNode(item, segment = '') {
+                const node = $('<li class="node"></li>');
+                const checkbox = $('<input type="checkbox" class="checkbox" />')
+                    .data('id', item.ID)
+                    .data('segment', segment);
+
+                const label = $('<span class="node-label"></span>').text(item.Text);
+
+                node.append(checkbox).append(label)
+                    .data('id', item.ID)
+                    .data('segment', segment);
+
+                if (segment === 'ACTION') {
+                    node.data('action-data', {
+                        screenId: item.ScreenID,
+                        actionTemplateId: item.ActionTemplateID,
+                        actionName: item.ActionName
+                    });
+                }
+
+                return node;
+            }
+
+            // Update NodeSelect hidden field value with both simple segments and full paths
+            function updateNodeSelectValue() {
+                const permissions = [];
+                $('#tree .checkbox:checked').each(function () {
+                    const node = $(this).closest('li');
+                    const segment = $(this).data('segment');
+                    const id = $(this).data('id');
+
+                    // Always add the simple segment:id format for S1-S4
+                    if (segment === 'S1' || segment === 'S2' || segment === 'S3' || segment === 'S4') {
+                        permissions.push(`${segment}:${id}`);
+                    }
+
+                    // For actions, add the full path and all parent segments
+                    if (segment === 'ACTION') {
+                        const actionData = node.data('action-data');
+                        const menuItemNode = node.parent().closest('li');
+                        const menuNode = menuItemNode.parent().closest('li');
+                        const subModuleNode = menuNode.parent().closest('li');
+                        const moduleNode = subModuleNode.parent().closest('li');
+
+                        // Add each parent segment
+                        permissions.push(`S1:${moduleNode.data('id')}`);
+                        permissions.push(`S2:${subModuleNode.data('id')}`);
+                        permissions.push(`S3:${menuNode.data('id')}`);
+                        permissions.push(`S4:${menuItemNode.data('id')}`);
+
+                        // Add the full action path
+                        permissions.push(
+                            `S1:${moduleNode.data('id')}:S2:${subModuleNode.data('id')}:S3:${menuNode.data('id')}:S4:${menuItemNode.data('id')}:${actionData.screenId}:${actionData.actionTemplateId}:${actionData.actionName}`
+                        );
+                    }
+                });
+
+                // Remove duplicates while preserving order
+                const uniquePermissions = [];
+                const seen = new Set();
+                permissions.forEach(item => {
+                    if (!seen.has(item)) {
+                        seen.add(item);
+                        uniquePermissions.push(item);
+                    }
+                });
+
+                $('#NodeSelect').val(uniquePermissions.join(';'));
+            }
+
+            // Prepare save data
+            function prepareSaveData() {
+                updateNodeSelectValue();
+                $('input[name="HeaderRole.Description"]').val($('#description').val());
+            }
+        });
+    </script>
+</body>
+</html>

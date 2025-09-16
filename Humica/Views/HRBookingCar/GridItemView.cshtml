@@ -1,0 +1,140 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridItemView";
+        settings.KeyFieldName = "LineItem";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRBookingCar" };
+        settings.SettingsBehavior.AllowSort = false;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+            column.Width = 60;
+            column.FieldName = "LineItem";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CarID");
+            column.Width = 170;
+            column.FieldName = "CarID";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["CARTypes_SELECT"];
+            textProperties.ValueField = "ID";
+            textProperties.TextField = "Description";
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.DropDownStyle = DropDownStyle.DropDownList;
+            textProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 80);
+            //textProperties.Columns.Add("VehicleType", Humica.EF.Models.SY.SYSettings.getLabel("VehicleType"), 150);
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            textProperties.Columns.Add("PlateNumber", Humica.EF.Models.SY.SYSettings.getLabel("PlateNumber"), 100);
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HaveDriver");
+            column.FieldName = "HaveDriver";
+            column.Width = 100;
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var checkBoxProperties = column.PropertiesEdit as CheckBoxProperties;
+            checkBoxProperties.ClientSideEvents.ValueChanged = "function(s, e) { ToggleDriverCombo(s, e); }";
+        });
+        settings.Columns.Add(column =>
+        {
+
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BookingDate");
+            column.FieldName = "BookingDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            textProperties.EditFormat = EditFormat.Date;
+            textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartTime");
+            column.FieldName = "StartTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndTime");
+            column.FieldName = "EndTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Driver");
+            column.Width = 200;
+            column.FieldName = "DriverCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["Driver_SELECT"];
+            textProperties.ValueField = "DriverCode";
+            textProperties.TextField = "DriverName";
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.DropDownStyle = DropDownStyle.DropDownList;
+            textProperties.Columns.Add("DriverCode", Humica.EF.Models.SY.SYSettings.getLabel("DriverCode"), 80);
+            textProperties.Columns.Add("DriverName", Humica.EF.Models.SY.SYSettings.getLabel("DriverName"), 150);
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+            textProperties.ClientSideEvents.Init = "function(s, e) { ToggleDriverComboOnInit(s, e); }";
+        });
+        //settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                //if (e.Column.FieldName == "EmpCode")
+                //{
+                //  //  e.Editor.ReadOnly = true;
+                //}
+            }
+        };
+
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        gridExtension.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

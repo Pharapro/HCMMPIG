@@ -1,0 +1,130 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridItemDetails";
+        settings.KeyFieldName = "MUserID";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+
+        settings.CallbackRouteValues = new { Controller = "SYUserMobile", Action = "GridItems" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SYUserMobile", Action = "GridItemsEdit" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SYUserMobile", Action = "GridItemsDelete" };
+        settings.SettingsBehavior.AllowSort = false;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        //settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "MUserID";
+        //    column.Width = 100;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "MUserID");
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "UserName");
+            column.FieldName = "UserName";
+            column.Width = 150;
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["USER_LIST"];
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.ValueField = "UserName";
+            textProperties.Columns.Add("UserName", Humica.EF.Models.SY.SYSettings.getLabel("UserName"), 250);
+            textProperties.Columns.Add("LoginName", Humica.EF.Models.SY.SYSettings.getLabel("LoginName"), 250);
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "DeviceID";
+            column.Width = 280;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "DeviceID");
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Model";
+            column.Width = 180;
+            column.ReadOnly = true;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Model");
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Token";
+            column.Width = 350;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Token");
+
+        });
+        settings.Columns.Add(column =>
+           {
+               column.Width = 155;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LoginDate");
+               column.FieldName = "LoginDate";
+               column.PropertiesEdit.DisplayFormatString = "dd.MM.yyyy hh:mm tt";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy hh:mm tt";
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy hh:mm tt";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+
+           });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "IsLock";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Is Lock");
+        });
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "MUserID" || e.Column.FieldName == "DeviceID"
+                || e.Column.FieldName == "Token")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+
+}
+
+@grid.Bind(Model).GetHtml()

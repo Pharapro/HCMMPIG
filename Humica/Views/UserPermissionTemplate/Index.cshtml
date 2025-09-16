@@ -1,0 +1,271 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var selectKeys = "";
+    $(document).ready(function () {
+
+        $('#_btnNewAction').click(function () {
+            pcModalModeP.Show();
+        });
+
+        $('#_bthEditAction').click(function () {
+            DeleteTemplateAction();
+        });
+
+    });
+
+    function GetFocusedNodeValues() {
+        var keyValue = treeList.GetFocusedNodeKey();
+        selectKeys = keyValue;
+        treeList.GetNodeValues(keyValue, 'Name', ProcessValue);
+    }
+
+    function ProcessValue(value) {
+        selectedIDs = value;
+        //alert(value);
+    }
+
+    function SaveTemplateAction(s, e) {
+        //GetFocusedNodeValues();        
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Administrator/Users/UserPermissionTemplate/SaveTemplateAction',
+            data: { 'ScreenId': selectedIDs, 'ActionName': ActionName.GetValue(), 'TemplateID': ActionTemplate.GetValue() },
+            success: function (data) {
+
+                if (data == "OK") {
+
+                    $.ajax({
+                        type: "POST",
+                        url: _baseUrl + '/Administrator/Users/UserPermissionTemplate/TreePermission',
+                        beforeSend: function () {
+                            //loadingPanel.Show();
+                        },
+                        success: function (response) {
+                            $("#tree_permission").html(response);
+                            pcModalModeP.Hide();
+                            ActionName.SetValue("");
+                            ActionTemplate.SetValue("");
+                            treeList.UnselectAll();
+                            //loadingPanel.Hide();
+                        }
+                    });
+                }
+            }
+
+        });
+    }
+
+    function DeleteTemplateAction() {
+        //GetFocusedNodeValues();                
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Administrator/Users/UserPermissionTemplate/DeleteTemplateAction?selectKeys=' + selectKeys,
+            data: { 'selectKeys': selectKeys },
+            success: function (data) {
+                if (data == "OK") {
+                    $.ajax({
+                        type: "POST",
+                        url: _baseUrl + '/Administrator/Users/UserPermissionTemplate/TreePermission',
+                        beforeSend: function () {
+                            //loadingPanel.Show();
+                        },
+                        success: function (response) {
+                            $("#tree_permission").html(response);
+                            pcModalModeP.Hide();
+                            ActionName.SetValue("");
+                            ActionTemplate.SetValue("");
+                            //loadingPanel.Hide();
+                        }
+                    });
+                }
+            }
+
+        });
+    }
+
+    function NodeClick1(s, e) {
+        //alert(s.GetVisibleSelectedNodeKeys());
+        var key = s.GetVisibleSelectedNodeKeys();
+        selectKeys = key;
+        s.GetNodeValues(key, 'Name', ProcessValue);
+      
+    }
+
+</script>
+
+@*<script type="text/javascript" src="~/Content/UserpermissionTemplate.js">
+
+</script>*@
+
+@model Humica.EF.Models.SY.SYPermissionObject
+
+
+@*@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "ImportBank";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "Template Type";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.TemplateType, s =>
+                {
+
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextField = "SelectText";
+                    s.Properties.ValueField = "SelectValue";
+                    s.Properties.ValueType = typeof(string);
+                }).BindList(ViewData["USER_TYPE"]).Render();
+            });
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = "";
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "btnGo";
+                s.Text = "Go";
+                s.UseSubmitBehavior = true;
+            }).Render();
+
+        });
+
+
+
+    });
+
+
+
+}).GetHtml()*@
+
+
+<div id="tree_permission">
+    @Html.Partial("TreePermission", Model)
+</div>
+
+    
+
+
+
+
+
+
+@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "pcModalModeP";
+        settings.Width = 100;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Action Name";
+        settings.Modal = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+            
+                Html.Hidden("ProductID");
+                ViewContext.Writer.Write("<div class=\"line\">");
+                Html.DevExpress().Label(
+                    labelSettings =>
+                    {
+                        labelSettings.ControlStyle.CssClass = "label";
+                        labelSettings.Text = "Action Name:";
+                        labelSettings.AssociatedControlName = "ActionName";
+                    }
+                )
+                .Render();
+                ViewContext.Writer.Write("<br/>");
+                Html.DevExpress().TextBox(
+                    TextBoxSetting =>
+                    {
+                        TextBoxSetting.Name = "ActionName";
+                        TextBoxSetting.ControlStyle.CssClass = "editor";
+                    }
+                )
+                .Render();
+                ViewContext.Writer.Write("</div><div class=\"line\"><br/>");
+                Html.DevExpress().Label(
+                    labelSettings =>
+                    {
+                        labelSettings.ControlStyle.CssClass = "label";
+                        labelSettings.Text = "Action Template:";
+                        labelSettings.AssociatedControlName = "ActionTemplate";
+                    }
+                )
+                .Render();
+                Html.DevExpress().ComboBox(
+                     ComboBoxSetting =>
+                     {
+                         ComboBoxSetting.Name = "ActionTemplate";
+                         ComboBoxSetting.ControlStyle.CssClass = "editor";
+                         ComboBoxSetting.Properties.TextField = "DocumentNo";
+                         ComboBoxSetting.Properties.ValueField = "DocumentNo";
+                     }
+                ).BindList(ViewData["ACTION_LIST"])
+                .Render();
+                ViewContext.Writer.Write("</div><div class=\"line\"><br/>");
+                Html.DevExpress().Label(
+                    labelSettings =>
+                    {
+                        labelSettings.ControlStyle.CssClass = "label";
+                    }
+                )
+                .Render();
+                Html.DevExpress().Button(
+                    buttonSettings =>
+                    {
+                        buttonSettings.Name = "btnUpdate";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Width = 80;
+                        buttonSettings.Text = "OK";
+                        buttonSettings.ClientSideEvents.Click = "SaveTemplateAction";
+                        buttonSettings.UseSubmitBehavior =false;
+                    }
+                )
+                .Render();
+                Html.DevExpress().Button(
+                    buttonSettings =>
+                    {
+                        buttonSettings.Name = "btnCancel";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Width = 80;
+                        buttonSettings.Text = "Cancel";
+                        buttonSettings.ClientSideEvents.Click = "function(s, e){ pcModalModeP.Hide(); }";
+                    }
+                )
+                .Render();
+                ViewContext.Writer.Write("</div><b class=\"Clear\"></b>");
+            
+        });
+
+        //settings.ClientSideEvents.CloseUp = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(null, '', true); }";
+    }).GetHtml()

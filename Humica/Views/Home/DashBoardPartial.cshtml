@@ -1,0 +1,14 @@
+﻿@model List<Humica.EF.SY.SYDashboard>
+<style>
+    .content-wrapper>.content {
+        padding:15px  .5rem;
+    }
+</style>
+<div class="row">
+    @{
+        foreach (var read in Model)
+        {
+            Html.RenderPartial("~/Views/Dashboards/" + read.DashboardName + ".cshtml");
+        }
+    }
+</div>

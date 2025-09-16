@@ -1,0 +1,130 @@
+﻿@{     
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "_GLCharge";
+           settings.KeyFieldName = "AccountCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRIntegration", Action = "_GLCharge" };
+
+           settings.Settings.ShowGroupPanel = false;
+           settings.Settings.ShowFooter = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+               column.Width = 100;
+               column.FieldName = "Branch";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CostCenter");
+               column.Width = 120;
+               column.FieldName = "CostCenter";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PaymentDate");
+               column.Width = 120;
+               column.FieldName = "PaymentDate";
+               column.PropertiesEdit.DisplayFormatString = "MMM.yyyy";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "PayMonth");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = "MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+               (column.PropertiesEdit as DateEditProperties).PickerType = DatePickerType.Months;
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AccountCode");
+               column.Width = 120;
+               column.FieldName = "AccountCode";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.Width = 250;
+               column.FieldName = "Description";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DebitAmount");
+               column.Width = 135;
+               column.FieldName = "DebitAmount";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CreditAmount");
+               column.Width = 135;
+               column.FieldName = "CreditAmount";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.Settings.ShowFooter = true;
+           //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "DebitAmount").DisplayFormat = "N2";
+           //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "CreditAmount").DisplayFormat = "N2";
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+           settings.SettingsPager.PageSize = 25;
+           settings.SettingsBehavior.AllowEllipsisInText = true;
+           settings.ClientSideEvents.EndCallback = "EndCallBack";
+           settings.CustomJSProperties = (s, e) =>
+           {
+               ASPxGridView grid1 = (ASPxGridView)s;
+               Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+               Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+               e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()
+
+

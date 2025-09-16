@@ -1,0 +1,17 @@
+﻿@model Humica.Core.FT.FTFilterReport
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js"> 
+</script>
+@Html.Partial("EmpoyeeReport", Model)

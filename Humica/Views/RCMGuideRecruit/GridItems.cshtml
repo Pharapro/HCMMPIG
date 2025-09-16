@@ -1,0 +1,100 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "Gridview";
+             settings.KeyFieldName = "RequestNo";
+             settings.Width = Unit.Percentage(100);
+             settings.EnableRowsCache = true;
+             settings.EnableTheming = true;
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+             settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+             settings.CallbackRouteValues = new { Action = "GridItems", Controller = "RCMGuideRecruit" };
+             settings.CommandColumn.Visible = false;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsPager.PageSizeItemSettings.Visible = false;
+
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Applicant ID");
+                 column.Width = 100;
+                 column.FieldName = "ApplicantID";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+                 column.Width = 160;
+                 column.FieldName = "AllName1";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gender");
+                 column.Width = 80;
+                 column.FieldName = "Gender";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone 1");
+                 column.Width = 120;
+                 column.FieldName = "Phone1";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+                 column.Width = 175;
+                 column.FieldName = "Email";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Apply Date");
+                 column.Width = 110;
+                 column.FieldName = "ApplyDate";
+                 column.ColumnType = MVCxGridViewColumnType.DateEdit;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+                 column.Width = 80;
+                 column.FieldName = "ShortList";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Int.Step");
+                 column.Width = 70;
+                 column.FieldName = "IntvStep";
+                 var textProperties = column.PropertiesEdit as TextBoxProperties;
+                 textProperties.ValidationSettings.Display = Display.None;
+             });
+
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 150;
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+         });
+}
+
+@grid.Bind(Model.ListHeader).GetHtml()
+
+
+
+
+

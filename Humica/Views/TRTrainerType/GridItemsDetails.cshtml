@@ -1,0 +1,121 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemsDetails";
+           settings.KeyFieldName = "TrainNo";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "TRTrainerType", Action = "GridItemsDetails" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainerCode");
+               column.FieldName = "TrainerCode";
+               if (Model.InputType == "EXTERNAL")
+               {
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   var TextBoxProperties = column.PropertiesEdit as TextBoxProperties;
+                   TextBoxProperties.Width = Unit.Percentage(100);
+                   TextBoxProperties.ClientInstanceName = "txtTrainerCode";
+               }
+               else if (Model.InputType == "INTERNAL")
+               {
+                   column.ReadOnly = true;
+                   column.Width = 150;
+                   column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   textProperties.ValidationSettings.Display = Display.None;
+                   textProperties.DataSource = ViewData["EMPCODE_SELECT"];
+                   textProperties.ClientSideEvents.SelectedIndexChanged = "SelectTrainer";
+                   textProperties.TextFormatString = "{0}";
+                   textProperties.ValueField = "EmpCode";
+                   textProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+                   textProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+                   textProperties.ValueType = typeof(string);
+                   textProperties.ClientInstanceName = "txtTrainerCode";
+               }
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainerName");
+               column.FieldName = "TrainerName";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+               column.FieldName = "Position";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+               column.FieldName = "Department";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+               column.FieldName = "Email";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 160;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartDate");
+               column.FieldName = "StartDate";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               var dateEditProperties = column.PropertiesEdit as DateEditProperties;
+               dateEditProperties.ClientInstanceName = "dtStart";
+               dateEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Center;
+               dateEditProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               dateEditProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+           });
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListTrainerInfor).GetHtml()
+

@@ -1,0 +1,94 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+    function getDriver(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRAssetType/getDriver',
+            data: { 'id': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtDriverName.SetValue(data.Model);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    //function getDriver(s, e) {
+    //    var driverCode = s.GetValue();
+    //    if (!driverCode) {
+    //        AlertMessage("Please select a Driver Code.");
+    //        return;
+    //    }
+    //    var grid = ASPxClientControl.GetControlCollection().GetByName("GridItemDriver");
+    //    var isEditing = grid && grid.IsEditing();
+    //    var action = isEditing && grid.GetEditValue("DriverCode") ? "Edit" : "Create";
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: _baseUrl + '/Asset/HRAssetType/getDriver',
+    //        data: { id: driverCode, Action: action },
+    //        success: function (data) {
+    //            if (data.MS === "OK" && data.Model) {
+    //                if (isEditing) {
+    //                    var txtDriverName = ASPxClientControl.GetControlCollection().GetByName("txtDriverName");
+    //                    if (txtDriverName) {
+    //                        txtDriverName.SetValue(data.Model);
+    //                    }
+    //                } else if (grid) {
+    //                    var rowIndex = grid.GetFocusedRowIndex();
+    //                    if (rowIndex >= 0) {
+    //                        grid.SetCellValue(rowIndex, "DriverName", data.Model);
+    //                    }
+    //                }
+    //            } else {
+    //                AlertMessage(data.MS || "No driver found for the selected code.");
+    //            }
+    //        },
+    //        error: function (xhr, status, error) {
+    //            AlertMessage("Error fetching driver name: " + (xhr.responseText || error));
+    //        }
+    //    });
+    //}
+</script>
+
+@model  Humica.Logic.Asset.HRAssetObject
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Asset Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemAssetType", Model.ListAssetType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Asset Class")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemAssetClass", Model.ListAssetClass);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("WareHouse Location")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemAssetLocation", Model.ListAssetLocation);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Driver")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemDriver", Model.ListDriver);
+        });
+    }).GetHtml()
+
+

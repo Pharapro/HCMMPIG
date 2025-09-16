@@ -1,0 +1,354 @@
+﻿@model Humica.Logic.HR.HRResgierVehicleObject
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+        
+    });
+
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+
+    function rowSelected(s, e) {
+        EmployeeGridListSelector.GetRowValues(EmployeeGridListSelector.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+
+    function OnGetRowValuesEmp(values) {
+        cboEmployee.SetValue(values[0]);
+        selectedIDs = values[0];
+        ShowDataEmp();
+    }
+    function getAssetClass(s, e) {
+        txtDescription.SetValue(null);
+        cboAssetCode.SetValue(null);
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRResgierVehicle/GetAssetClass',
+            data: { 'code': s.GetValue() },
+            success: function (data) {
+                cboAssetCode.PerformCallback();
+            }
+        });
+    }
+    function getCarModel(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRResgierVehicle/getCarModel',
+            data: { 'id': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtModel.SetValue(data.Model);
+                    txtHorsepower.SetValue(data.Horsepower);
+                    txtRate.SetValue(data.Rate)
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function selectAssetCode(s, e) {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Asset/HRResgierVehicle/GetAssetDes',
+            data: { 'id': s.GetValue(), 'Action': 'Create' },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtDescription.SetValue(data.Model);
+                    txtAssetCode.SetValue(data.AssetCode);
+                    cboAssetCode.SetValue(data.AssetCode);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+</script>
+
+@{ 
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "HRvehicle";
+        settings.AlignItemCaptionsInAllGroups = true;
+        // settings.Width = Unit.Percentage(100);
+
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Class")+"*";
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.Header.AssetClass, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+
+                    s.Properties.TextFormatString = "{0}:{1}";
+                    s.Properties.ValueField = "AssetClassCode";
+                    s.Properties.TextField = "AssetClassCode";
+                    s.Properties.Columns.Add("AssetClassCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetClassCode"), 100);
+                    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    s.Properties.ClientSideEvents.SelectedIndexChanged = "getAssetClass";
+                }).BindList(ViewData["AssetClass_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Code");
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.RenderPartial("GetAssetCode");
+                Html.DevExpress().TextBoxFor(i => i.Header.AssetCode, s =>
+                {
+                    s.ClientVisible = false;
+                    s.Properties.ClientInstanceName = "txtAssetCode";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Vehicle Type");
+            })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.VehicleType, s =>
+                    {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextFormatString = "{0}:{1}";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.TextField = "Name";
+                        s.Properties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 80);
+                        s.Properties.Columns.Add("CarType", Humica.EF.Models.SY.SYSettings.getLabel("CarType"), 250);
+                        s.Properties.Columns.Add("Model", Humica.EF.Models.SY.SYSettings.getLabel("Model"), 250);
+                        s.Properties.Columns.Add("Horsepower", Humica.EF.Models.SY.SYSettings.getLabel("Horsepower"), 130);
+                        s.Properties.Columns.Add("Rate", Humica.EF.Models.SY.SYSettings.getLabel("Rate"), 80);
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "getCarModel";
+                    }).BindList(ViewData["VEHICLE_SELECT"]).Render();
+                });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Model");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Model, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtModel";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Horsepower");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Horsepower, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtHorsepower";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rate");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Rate, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtRate";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FleetNumber");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.PlateNumber, s =>
+                {
+                    s.Style.Add("margin-left", "2px");
+                    s.Properties.ClientInstanceName = "txtFleetNumber";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Year");
+            })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().SpinEditFor(i => Model.Header.Year, s =>
+               {
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+               }).Render();
+           });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Color");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Color, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Chair");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().SpinEditFor(i => i.Header.Chair, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("MissionCode") + '*';
+                m.CaptionStyle.ForeColor = System.Drawing.Color.Red;
+            })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.MissionCode, s =>
+                    {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.TextFormatString = "{0}:{1}";
+                        s.Properties.ValueField = "MissionCode";
+                        s.Properties.TextField = "Description";
+                        s.Properties.Columns.Add("MissionCode", Humica.EF.Models.SY.SYSettings.getLabel("MissionCode"), 80);
+                        s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 400);
+                        s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    }).BindList(ViewData["MissionCode_SELECT"]).Render();
+                });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Descrription");
+                m.ColumnSpan = 2;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtDescription";
+                    s.Width = Unit.Percentage(100);
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Photo");
+                m.ColSpan = 2;
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.CallbackRouteValues = new { Controller = "HRResgierVehicle", Action = "UploadControlCallbackActionImage" };
+                    ss.Name = "UploadControl";
+                    ss.UploadMode = UploadControlUploadMode.Auto;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 120;
+                    ss.DialogTriggerID = "externalDropZone";
+                    ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ShowTextBox = false;
+                    ss.ShowUploadButton = false;
+                    ss.ShowAddRemoveButtons = true;
+                    ss.ShowProgressPanel = true;
+                    ss.ShowClearFileSelectionButton = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                    ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                    ss.AdvancedModeSettings.DropZoneText = "";
+                    ss.ValidationSettings.MaxFileSize = 4194304;
+                    ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                    ss.UploadButton.Text = String.Empty;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".jpe", ".gif", ".bmp", ".png", ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+                    ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                    ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                    ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                }).Render();
+
+                Html.DevExpress().HyperLink(s =>
+                {
+                    s.Name = "file_uploaded";
+                    s.ToolTip = "File";
+                    s.ClientVisible = false;
+                    s.Properties.Target = "_BLANK";
+                    s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+                }).GetHtml();
+            });
+        });
+    }).GetHtml();
+}
+
+

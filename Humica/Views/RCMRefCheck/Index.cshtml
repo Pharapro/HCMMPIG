@@ -1,0 +1,65 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $("#_bthRefChk").hide();
+    $("#_bthEditAction").hide();
+    $(document).ready(function () {
+
+    });
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'ApplicantID;Status', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+        @*if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details/" + values[0];
+        }*@
+        if (ss == 2) {
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit/" + values[0];
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+    }
+</script>
+
+@model Humica.Logic.RCM.IClsRCMRefCheck
+
+@{
+    if (Model.ListApplicant != null)
+    {
+        if (Model.ListApplicant.Count > 0)
+        {
+            Html.DevExpress().PageControl(settings =>
+            {
+                settings.Name = "pcScrollingMaterialCreate";
+                settings.Width = Unit.Percentage(100);
+                settings.EnableTabScrolling = true;
+                settings.TabAlign = TabAlign.Justify;
+                settings.Styles.Tab.CssClass = "scrolling_Tab";
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Waiting List")).SetContent(() =>
+                {
+                    Html.RenderPartial("GridCandidate", Model.ListApplicant);
+                });
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("List")).SetContent(() =>
+                {
+                    Html.RenderPartial("_ListRefCheck", Model.ListRefPerson);
+                });
+            }).Render();
+        }
+        else
+        {
+            Html.RenderPartial("_ListRefCheck", Model.ListRefPerson);
+        }
+    }
+    else
+    {
+        Html.RenderPartial("_ListRefCheck", Model.ListRefPerson);
+    }
+}

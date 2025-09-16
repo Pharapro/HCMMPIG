@@ -1,0 +1,180 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs;
+    var chkID = '';
+    var isChecked = false;
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+
+        $('#_btnSaveActionGrid').click(function () {
+            $('form').submit();
+        });
+
+    });
+
+    function OnBeginCallback(s, e) {
+        //Pass all selected keys to GridView callback action
+        e.customArgs["selectedIDs"] = selectedIDs;
+    }
+
+    function OnSelectionChanged(s, e) {
+        var key = s.GetVisibleSelectedNodeKeys();
+        selectedIDs = key.join(';');
+        NodeSelect.SetValue(selectedIDs);
+        //alert(selectedIDs);
+        //s.GetSelectedFieldValues("Name", GetSelectedFieldValuesCallback);
+
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        //Capture all selected keys
+        //selectedIDs = values.join(':');
+        //alert(selectedIDs);
+    }
+    function selecet(value) {
+        //selectedDepts = selectedDepts +';'+value
+        //alert(selectedIDs);
+        var chkCheckBox = document.getElementById(value);
+        if (!chkCheckBox.checked) {
+                chkID = chkID + ';' + value
+        }
+        isChecked = chkCheckBox.checked;
+        $.ajax({
+            type: "POST",
+            url: _baseUrl + '/Administrator/Users/UserRoleApp/CheckedValue',
+            data: { 'Value': value, 'IsChecked':isChecked,'Action': "Edit" },
+            beforeSend: function () {
+                //loadingPanel.Show();
+            },
+            success: function (data) {
+
+            }
+
+        });
+    }
+
+    function chkCheckAll_Click() {
+        var isChecked = false;
+
+        var chkCheckBox = document.getElementById('chkCheckAll');
+        isChecked = chkCheckBox.checked;
+        $.ajax({
+            type: "POST",
+            url: _baseUrl + '/Administrator/Users/UserRoleApp/CheckedAllItems',
+            data: {'IsChecked': isChecked, 'Action': "Edit" },
+            beforeSend: function () {
+            },
+            success: function (data) {
+                checkboxes = document.getElementsByName('chkCheckScreenId');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = data.isChecked;
+                }
+
+            }
+
+        });
+    }
+
+</script>
+
+
+@model Humica.Logic.SYPermissionAppObject
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "ImportBank";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        //g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "Description";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.HeaderRoleApp.Description, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                }).Render();
+            });
+         g.Items
+            .Add(m =>
+            {
+                m.Caption = "Is Active";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().CheckBoxFor(i => i.HeaderRoleApp.IsActive, s =>
+                {
+
+                }).Render();
+            });
+    });
+}).GetHtml()
+<div class="col-xl-6">
+    <input  style="font:10px;" id="chkCheckAll" type="checkbox" name="chkCheckAllName" value="1" onclick="chkCheckAll_Click()">
+    Select All
+</div>
+<br />
+
+<style>
+    th, td {
+        border: 1px black;
+        padding: 5px;
+        vertical-align: middle;
+    }
+
+    input {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+    }
+
+    .box {
+        width: 70%;
+        height: 100px;
+        background-color: red;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        @{
+            //int count = 0;
+            bool isChecked = false;
+
+            foreach (var item in Model.ListActionName.ToList())
+            {
+                //count++;
+                isChecked = Model.ListRoleItemApp.Where(x => x.ScreenId == item.ScreenID).Count() > 0;
+                <div class="col-xl-3">
+                    <input id="@item.ScreenID" type="checkbox" name="chkCheckScreenId" value="@item.ScreenID" checked="@isChecked" onclick="selecet('@item.ScreenID')">
+                    @item.ScreenName
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+
+
+

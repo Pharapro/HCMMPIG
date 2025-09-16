@@ -1,0 +1,155 @@
+﻿@using Humica.EF
+@{
+    var isReadOnly = true;
+    if (ViewData[SYSConstant.PARAM_ID1] != null)
+    {
+        isReadOnly = !(bool)ViewData[SYSConstant.PARAM_ID1];
+    }
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvAgenda";
+        settings.KeyFieldName = "LineItem";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "TRTrainingCalender", Action = "gvAgenda" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TRTrainingCalender", Action = "CreateAgenda" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TRTrainingCalender", Action = "EditAgenda" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingCalender", Action = "DeleteAgenda" };
+
+        settings.CommandColumn.Visible = isReadOnly;
+        settings.CommandColumn.ShowDeleteButton = isReadOnly;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = isReadOnly;
+        settings.CommandColumn.ShowCancelButton = isReadOnly;
+        settings.CommandColumn.ShowEditButton = isReadOnly;
+        settings.SettingsBehavior.AllowFocusedRow = isReadOnly;
+        settings.SettingsBehavior.ConfirmDelete = isReadOnly;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        //settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
+        //settings.SetDataItemTemplateContent(cell =>
+        //{
+        //    ViewContext.Writer.Write("<span style=\"color:red\">" + cell.Text + "</span>");
+        //});
+        //settings.SetDataRowTemplateContent(context =>
+        //{
+        //    ViewContext.Writer.Write("<span style=\"color:red\">TEST</span>");
+        //});
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TrainerType";
+            c.Caption = "Trainer Type";
+            c.AdaptivePriority = 1;
+            //c.MinWidth = 100;
+            //c.MaxWidth = 250;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.DataSource = ViewData["LIST_TRAINERTYPE"];
+                cb.ValueField = "Code";
+                cb.TextField = "Code";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+                cb.ClientSideEvents.SelectedIndexChanged = "TrainnerTypeSelectedChanged";
+                cb.ClientInstanceName = "cboTrainerType";
+            });
+        });
+
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TrainerID";
+            c.Caption = "Trainer Name";
+            c.AdaptivePriority = 1;
+            //c.MinWidth = 100;
+            //c.MaxWidth = 250;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.TextField = "TrainerName";
+                cb.ValueField = "TrainNo";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+                cb.CallbackRouteValues = new { Controller = "TRTrainingPlan", Action = "GetTrainerInfo" };
+                cb.TextFormatString = "{1}";
+                cb.Columns.Add("TrainerCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+                cb.Columns.Add("TrainerName", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+                cb.BindList(Humica.Training.TrainingProcessObject.GetTrainerInfo());
+                cb.ClientInstanceName = "cboTrainerID";
+                cb.ClientSideEvents.SelectedIndexChanged = "cboTrainerID_SelectedIndexChanged";
+            });
+        });
+        //settings.Columns.Add(c =>
+        //{
+        //    c.FieldName = "SessionCode";
+        //    c.Caption = "Session";
+        //    c.AdaptivePriority = 1;
+        //    c.EditorProperties().ComboBox(cb =>
+        //    {
+        //        cb.DataSource = ViewData["SESSION"];
+        //        cb.TextField = "SelectText";
+        //        cb.ValueField = "SelectValue";
+        //        cb.DropDownStyle = DropDownStyle.DropDownList;
+        //    });
+        //});
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "TopicID";
+            c.Caption = "Topic/Subject";
+            c.AdaptivePriority = 1;
+            c.EditorProperties().ComboBox(cb =>
+            {
+                cb.DataSource = ViewData["Topic"];
+                cb.TextField = "Description";
+                cb.ValueField = "TrainNo";
+                cb.DropDownStyle = DropDownStyle.DropDownList;
+
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+            column.FieldName = "InMonth";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Week");
+            column.FieldName = "Week";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("TrainingDate");
+            column.FieldName = "TrainingDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+        //    column.FieldName = "EndDate";
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        //});
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromTime");
+            column.FieldName = "FromTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToTimes");
+            column.FieldName = "ToTime";
+            column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        });
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

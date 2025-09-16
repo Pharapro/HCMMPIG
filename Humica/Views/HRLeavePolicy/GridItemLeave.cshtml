@@ -1,0 +1,143 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridItemLeave";
+        settings.KeyFieldName = "ID";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "HRLeavePolicy", Action = "GridItemLeave" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRLeavePolicy", Action = "CreateLeave" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRLeavePolicy", Action = "EditLeave" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRLeavePolicy", Action = "DeleteLeave" };
+
+        settings.SettingsBehavior.AllowSort = false;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Leave Type");
+            column.Width = 130;
+            column.FieldName = "LeaveCode";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.RequiredField.IsRequired = true;
+            textProperties.DataSource = ViewData["LEAVE_SELECT"];
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "FromDay";
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("From Day");
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+            spinEditProperties.DisplayFormatString = "N0";
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ToDay";
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("To Day");
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+            spinEditProperties.DisplayFormatString = "N0";
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "RateDeduct";
+            column.Width = 130;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rate Deduct") + "(%)";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+            spinEditProperties.DisplayFormatString = "N0";
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 99999999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Type");
+            column.Width = 130;
+            column.FieldName = "WorkingType";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.RequiredField.IsRequired = true;
+            textProperties.DataSource = ViewData["LEAVE_WORK_TYPE"];
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "SelectValue";
+            textProperties.Columns.Add("SelectText", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.BindToEF(string.Empty, string.Empty, (s, e) =>
+{
+    e.KeyExpression = "ID";
+    e.QueryableSource = Model.ListLeavePolicy;
+}).GetHtml()

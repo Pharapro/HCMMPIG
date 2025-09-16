@@ -1,0 +1,86 @@
+﻿@model Humica.Logic.PR.PREmpSVCObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTFilterEmployee";
+    settings.AlignItemCaptionsInAllGroups = true;
+    int width = 150;
+    settings.Items.AddGroupItem(m=>Model.Filter,g=>
+    {
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+        })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().DateEditFor(i => Model.Filter.InMonth, s =>
+               {
+                   s.Properties.ClientInstanceName = "txtInMonth";
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.Properties.NullText = "MMMM-yyyy";
+                   s.Properties.EditFormatString = "MMMM-yyyy";
+                   s.Properties.DisplayFormatString = "MMMM-yyyy";
+                   s.Properties.ClientSideEvents.ValueChanged = "OnClientValueChanged";
+               }).Render();
+           });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+        })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().TextBoxFor(i => Model.Filter.Amount, s =>
+               {
+                   s.Properties.ClientInstanceName = "txtExchangeRate";
+                   s.ReadOnly = false;
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                   s.ControlStyle.Font.Bold = true;
+               }).Render();
+           });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Day");
+
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => Model.Filter.Day, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NumberType = SpinEditNumberType.Float;
+                s.Properties.DisplayFormatString = "N2";
+                s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        })
+         .SetNestedContent(() =>
+         {
+             Html.DevExpress().Button(
+                 s =>
+                 {
+                     s.Name = "_btnRunReport";
+                     s.ToolTip = Humica.EF.Models.SY.SYSettings.getLabel("Filter");
+                     s.RenderMode = ButtonRenderMode.Button;
+                     s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Filter");
+                     s.UseSubmitBehavior = true;
+                     s.Images.Image.IconID = IconID.ActionsApply16x16;
+                 }).GetHtml();
+         });
+    });
+
+}).Bind(Model).GetHtml()

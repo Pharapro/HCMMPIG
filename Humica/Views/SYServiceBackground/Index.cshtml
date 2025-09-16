@@ -1,0 +1,135 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var isvisible = true;
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+    function PageLoad() {
+        var isCheckedBD = false;
+        isCheckedBD = chkBirthday.GetChecked();
+        CheckBirthday(isCheckedBD);
+        //Download Att
+        var isChecked_DLATT = false;
+        isChecked_DLATT = chkDownloadAtt.GetChecked();
+        DownloadAtt(isChecked_DLATT);
+        //AttWeekly
+        var isChecked_Weekly = false;
+        isChecked_Weekly = chkAttWeekly.GetChecked();
+        CheckAttWeekly(isChecked_Weekly);
+        //AttMonthly
+        var isChecked_Monthly = false;
+        isChecked_Monthly = chkAttMonthly.GetChecked();
+        CheckAttMonthly(isChecked_Monthly);
+    }
+    function OnCheckedBirthday(s, e) {
+        var isChecked = false;
+        isChecked = s.GetChecked();
+        CheckBirthday(isChecked);
+        
+    }
+    function OnCheckedDownloadAtt(s, e) {
+        var isChecked = false;
+        isChecked = s.GetChecked();
+        DownloadAtt(isChecked);
+    }
+    function OnCheckedAttWeekly(s, e) {
+        var isChecked = false;
+        isChecked = s.GetChecked();
+        CheckAttWeekly(isChecked);
+    }
+    function OnCheckedAttMonthly(s, e) {
+        var isChecked = false;
+        isChecked = s.GetChecked();
+        CheckAttMonthly(isChecked);
+    }
+
+    function CheckBirthday(is_Check) {
+        txtBDScheduleTime.SetEnabled(is_Check);
+        txtBDNextRunTime.SetEnabled(is_Check);
+    }
+    function DownloadAtt(is_Check) {
+        txtDownloadType.SetEnabled(is_Check);
+        txtDLScheduleTime.SetEnabled(is_Check);
+        txtDLNextRunTime.SetEnabled(is_Check);
+    }
+    function CheckAttWeekly(is_Check) {
+        txtScheduleType.SetEnabled(is_Check);
+        txtWeeklySchedule.SetEnabled(is_Check);
+        txtWeeklyChatID.SetEnabled(is_Check);
+    }
+    function CheckAttMonthly(is_Check) {
+        txtMonthlySchedule.SetEnabled(is_Check);
+        txtMonthlyChatID.SetEnabled(is_Check);
+    }
+</script>
+
+@model Humica.Logic.SY.ClsService
+
+@*@Html.Partial("General", Model)*@
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcScrollingAssetClass";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.ClientSideEvents.Init = "PageLoad";
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Service")).SetContent(() =>
+    {
+
+        Html.DevExpress().FormLayout(ss1 =>
+        {
+
+            ss1.Name = "frmGeneralSetting";
+            ss1.AlignItemCaptionsInAllGroups = true;
+            ss1.SettingsItems.VerticalAlign = FormLayoutVerticalAlign.Top;
+
+            ss1.Items.AddGroupItem(m => Model.BackgroundService, g =>
+            {
+                g.ColCount = 2;
+                g.GroupBoxDecoration = GroupBoxDecoration.None;
+
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+                })
+                .SetNestedContent(() =>
+                {
+                    @Html.RenderPartial("Tab_BirthDay", Model);
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+                })
+                .SetNestedContent(() =>
+                {
+                    @Html.RenderPartial("Tab_DownloadAtt", Model);
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+                })
+                .SetNestedContent(() =>
+                {
+                    @Html.RenderPartial("AttendanceWeekly", Model);
+                });
+                g.Items.Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+                })
+               .SetNestedContent(() =>
+               {
+                   @Html.RenderPartial("AttendanceMonthly", Model);
+               });
+            });
+
+        }).GetHtml();
+
+    });
+}).GetHtml()

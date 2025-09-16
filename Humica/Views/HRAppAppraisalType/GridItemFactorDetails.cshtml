@@ -1,0 +1,102 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gridViewItem3";
+        settings.KeyFieldName = "Code";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "HRAppAppraisalType", Action = "GridItemFactorDetails" };
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Appraisal Region");
+            column.Width = 300;
+            column.FieldName = "Region";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.AllowNull = true;
+            textProperties.DataSource = ViewData["REGION_SELECT"];
+            textProperties.TextFormatString = "{1}-{2}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("AppraiselType", Humica.EF.Models.SY.SYSettings.getLabel("AppraiselType"), 100);
+            textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 100);
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 300);
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.FieldName = "Code";
+
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 100;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Weighting") +"%";
+        //    column.FieldName = "Weighting";
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.Width = Unit.Percentage(100);
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 99999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        //});
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 300;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.FieldName = "Description";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 380;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.FieldName = "Remark";
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            var textProperties = column.PropertiesEdit as MemoProperties;
+            textProperties.Width = 380;
+            textProperties.Height = 100;
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Region" || e.Column.FieldName == "Code")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

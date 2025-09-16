@@ -1,0 +1,480 @@
+﻿@model Humica.Logic.PR.PRSParameter
+<script type="text/javascript">
+    function OnCheckedChange(s, e) {
+        var isChecked = s.GetChecked();
+        dtFromDate.SetEnabled(isChecked);
+        dtToDate.SetEnabled(isChecked);
+    }
+    function OnInit() {
+        var isChecked = false;
+        isChecked = chkCalenda.GetChecked();
+        dtFromDate.SetEnabled(isChecked);
+        dtToDate.SetEnabled(isChecked);
+    }
+</script>
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "Create";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ClientSideEvents.Init = "OnInit";
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY]!=null && (bool)ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY])
+    {
+        isReadOnly = true;
+    }
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.ColCount = 2;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code") + "*";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Code, s =>
+            {
+                s.ReadOnly = ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString()!=null && ViewData[Humica.EF.SYSConstant.PARAM_ID].ToString() ==Model.Header.Code;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.Description, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Is Previous Month?");
+            m.ColumnSpan = 2;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.IsPrevoiuseMonth, s =>
+            {
+                s.Properties.ClientInstanceName = "chkCalenda";
+                s.Width = Unit.Percentage(100);
+                s.ReadOnly = isReadOnly;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ClientSideEvents.CheckedChanged = "OnCheckedChange";
+            }).Render();
+
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.FROMDATE, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Properties.ClientInstanceName = "dtFromDate";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.TODATE, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Properties.ClientInstanceName = "dtToDate";
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            }).Render();
+
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Day");
+        g.Width = 802;
+        g.ColCount = 3;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Monday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDMON, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDMONDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+                //s.SelectedIndex = 0;
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Tuesday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-left:20px;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDTUE, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDTUEDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+                //s.SelectedIndex = 0;
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Wednesday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-left:20px;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDWED, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDWEDDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+                //s.SelectedIndex = 0;
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Thursday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDTHU, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDTHUDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Friday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-left:20px;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDFRI, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDFRIDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Saturday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-left:20px;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDSAT, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDSATDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+                //s.SelectedIndex = 0;
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Sunday");
+        }).SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2' style='float:left;margin-right:10px;'>");
+            Html.DevExpress().CheckBoxFor(i => i.Header.WDSUN, s =>
+            {
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6'>");
+            Html.DevExpress().ComboBoxFor(i => i.Header.WDSUNDay, s =>
+            {
+                s.Width = Unit.Percentage(60);
+                s.Properties.DisplayFormatString = "{0}";
+                s.Properties.ValueType = typeof(decimal);
+                s.Properties.Items.Add("1");
+                s.Properties.Items.Add("0.5");
+                //s.SelectedIndex = 0;
+            }).Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working Hour");
+        g.Width = 802;
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.Box;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hour per Day");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.WHOUR, n =>
+            {
+                n.ReadOnly = isReadOnly;
+                n.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                n.Properties.ValidationSettings.SetFocusOnError = true;
+                n.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hour Per Week");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.WHPWEEK, n =>
+            {
+                n.ReadOnly = isReadOnly;
+                n.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                n.Properties.ValidationSettings.SetFocusOnError = true;
+                n.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Working day for Salary Calculate");
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m => m.Header.SALWKTYPE, i =>
+        {
+            i.Caption = "";
+            i.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            i.NestedExtension().RadioButtonList(s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Working Day"), 1);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("System Calender"), 2);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Actual working Day"), 3);
+            });
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.SALWKVAL, r =>
+            {
+                r.ReadOnly = isReadOnly;
+                r.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                r.Properties.ValidationSettings.SetFocusOnError = true;
+                r.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Allowance Setting");
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m => m.Header.ALWTYPE, i =>
+        {
+            i.Caption = "";
+            i.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            i.NestedExtension().RadioButtonList(s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Working Day"), 1);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("System Calender"), 2);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Actual working Day"), 3);
+            });
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.ALWVAL, r =>
+            {
+                g.Width = 40;
+                r.ReadOnly = isReadOnly;
+                r.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                r.Properties.ValidationSettings.SetFocusOnError = true;
+                r.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OverTime and Night Work Setting");
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m => m.Header.OTWKTYPE, i =>
+        {
+            i.Caption = "";
+            i.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            i.NestedExtension().RadioButtonList(s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Working Day"), 1);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("System Calender"), 2);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Actual working Day"), 3);
+            });
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.OTWKVAL, r =>
+            {
+                r.ReadOnly = isReadOnly;
+                r.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                r.Properties.ValidationSettings.SetFocusOnError = true;
+                r.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Deduction Setting");
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m => m.Header.DEDTYPE, i =>
+        {
+            i.Caption = "";
+            i.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            i.NestedExtension().RadioButtonList(s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Working Day"), 1);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("System Calender"), 2);
+                s.Properties.Items.Add(Humica.EF.Models.SY.SYSettings.getLabel("Actual working Day"), 3);
+            });
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.DEDVAL, r =>
+            {
+                r.ReadOnly = isReadOnly;
+                r.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                r.Properties.ValidationSettings.SetFocusOnError = true;
+                r.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+}).GetHtml()

@@ -1,0 +1,104 @@
+﻿@model Humica.Performance.IClsKPIEvaluation
+<style>
+   .performance-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #f0f8ff;
+    }
+
+    .performance-table th {
+        background-color: #f0f8ff;
+        border: 1px solid #000;
+        padding: 2px;
+        text-align: center;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+
+    .kpi-column {
+        width: 25%;
+    }
+
+    .performance-table thead tr:first-child th {
+        height: 20px;
+    }
+
+    .performance-table th[rowspan] {
+        border-bottom: 1px solid #000;
+    }
+
+    .performance-table {
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+<div class="container-fluid" style="margin-top:20px">
+    @{ 
+        bool isReadOnly = false;
+        if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+        {
+            isReadOnly = true;
+        }
+    }
+    @foreach (var indicator in Model.ListKPIIndicator.OrderBy(w => w.Code))
+    {
+        <h5 class="text-Dark text-decoration-underline" style="font-family:'Khmer OS Battambang';">@indicator.Description</h5>
+        <table class="table table-section table-bordered performance-table" style="font-family:'Khmer OS Battambang';font-size:13px">
+            <thead>
+                <tr>
+                    <th rowspan="2">ItemCode</th>
+                    <th rowspan="2" class="kpi-column">KPI</th>
+                    <th rowspan="2">Symbol</th>
+                    <th rowspan="2">Target</th>
+                    <th rowspan="2">Weight %</th>
+                    <th rowspan="2">Actual</th>
+                    <th rowspan="2">Variance</th>
+                    <th rowspan="2">% of Target</th>
+                    <th colspan="2">Score</th>
+                    <th rowspan="2">Final Result</th>
+                    <th rowspan="2">Status</th>
+                </tr>
+				<tr>
+					<th>Evaluator 1</th>
+					<th>Evaluator 2</th>
+				</tr>
+            </thead>
+            <tbody>
+
+                @foreach (var rate in Model.ListItem.Where(w => w.Indicator == indicator.Code).OrderBy(w => w.ItemCode).ToList())
+                {
+                    string _NumName = "Num" + @rate.ItemCode;
+                    string _NumScore = "Score" + @rate.ItemCode;
+                    string _NumScore1 = "SubScore" + @rate.ItemCode;
+                    <tr>
+                        <td>@rate.ItemCode</td>
+                        <td>@rate.KPI</td>
+                        <td>@rate.Symbol</td>
+                        <td>@rate.Target.Value.ToString("N0")</td>
+                        <td>@rate.Weight.ToString("P2")</td>
+                        <td>@rate.Actual.Value.ToString("N2")</td>
+                        <td style="color:@(rate.Variance < 0 ? "red" : "black");">@rate.Variance.ToString("N2")</td>
+                        <td style="color:@(rate.TargetPer < 0 ? "red" : "black");">@rate.TargetPer.ToString("P2")</td>
+                        <td>@rate.Score.Value.ToString("N2")</td>
+                        @if (isReadOnly == true)
+                        {
+                            <td>@rate.ScoreEval</td>
+                            <td>@rate.SubScore</td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="number" id="@_NumName" onchange="RatingChange($(this).val(),'@rate.ItemCode','@_NumName','@_NumScore1')"  class="form-control form-control-sm" value="@rate.ScoreEval" />
+                            </td>
+                            <td>
+                                <input type="number" id="@_NumScore1" class="form-control form-control-sm" value="@rate.SubScore" readonly />
+                            </td>
+                        }
+                        <td style="background:@rate.Color;color:white;">@rate.Status</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+</div>

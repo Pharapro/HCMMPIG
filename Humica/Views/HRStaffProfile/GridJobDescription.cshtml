@@ -1,0 +1,162 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "gridJobDes";
+        settings.KeyFieldName = "LineItem";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "GridJobDescription" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRStaffProfile", Action = "CreateJobDes" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRStaffProfile", Action = "EditJobDes" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRStaffProfile", Action = "DeleteJobDes" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobResponsive");
+            column.Width = 395;
+            column.FieldName = "JobResponsive";
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            (column.PropertiesEdit as MemoProperties).Height = 120;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JobDescription");
+            column.Width = 395;
+            column.FieldName = "JobDescription";
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            (column.PropertiesEdit as MemoProperties).Height = 120;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 90;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+            column.FieldName = "IsActive";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attachment");
+            column.FieldName = "Attachment";
+            column.SetDataItemTemplateContent(container =>
+            {
+                var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "Attachment"));
+                var document = Convert.ToString(DataBinder.Eval(container.DataItem, "Document"));
+                if (!(attachment == null || attachment == ""))
+                {
+                    string[] doc = attachment.Split(';');
+                    string[] docum = document.Split(';');
+                    int i = 1;
+                    foreach (var r in docum)
+                    {
+                        if (r != "")
+                        {
+                            int j = 1;
+                            foreach (var r1 in doc)
+                            {
+                                if (r1 != "" && i == j)
+                                {
+                                    Html.DevExpress().HyperLink(hyperlink =>
+                                    {
+                                        hyperlink.Name = "file_JD" + i + container.VisibleIndex;
+                                        hyperlink.Properties.Text = r + " | ";
+                                        hyperlink.Properties.Target = "_BLANK";
+                                        hyperlink.NavigateUrl = r1;
+                                    }).Render();
+                                }
+                                j++;
+                            }
+                        }
+                        i++;
+                    }
+                }
+            });
+
+            column.SetEditItemTemplateContent(c =>
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "UploadControlCallbackActionJobDes" };
+                    ss.Name = "FileUploadJobDes";
+                    ss.UploadMode = UploadControlUploadMode.Auto;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 80;
+                    ss.DialogTriggerID = "externalDropZone";
+                    ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ShowTextBox = false;
+                    ss.ShowUploadButton = false;
+                    ss.ShowAddRemoveButtons = false;
+                    ss.ShowProgressPanel = true;
+                    ss.ShowClearFileSelectionButton = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                    ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                    ss.AdvancedModeSettings.DropZoneText = "";
+                    ss.ValidationSettings.MaxFileSize = Convert.ToInt64(Humica.EF.Models.SY.SYSettings.getSetting(Humica.Models.SY.ClsConstant.MAX_FILE_SIZE_ATTACHMENT).SettinValue);
+                    ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".jpe", ".gif", ".bmp", ".png", ".doc", ".docx", ".pdf" };
+                    ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                    ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                    ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                }).Render();
+
+                Html.DevExpress().HyperLink(
+                s =>
+                {
+                    s.Name = "file_uploaded";
+                    s.ToolTip = "File";
+                    s.ClientVisible = false;
+                    s.Properties.Target = "_BLANK";
+                    s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+
+                }).GetHtml();
+
+            });
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue == null)
+            {
+                if (e.Column.FieldName == "IsActive")
+                {
+                    e.Editor.Value = true;
+                }
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

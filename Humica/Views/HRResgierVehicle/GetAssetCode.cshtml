@@ -1,0 +1,28 @@
+﻿
+@Html.DevExpress().ComboBox(s =>
+{
+    var isReadOnly = true;
+    if (ViewData[Humica.EF.SYSConstant.PARAM_ID1] != null)
+    {
+        isReadOnly = (bool)ViewData[Humica.EF.SYSConstant.PARAM_ID1];
+    }
+    s.Name = "GetAssetCode";
+    s.Properties.ClientInstanceName = "cboAssetCode";
+    s.ShowModelErrors = true;
+    s.CallbackRouteValues = new { Controller = "HRResgierVehicle", Action = "GetAssetCode" };
+    //s.Width = Unit.Percentage(100);
+    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    s.Properties.ValidationSettings.SetFocusOnError = true;
+    s.Properties.ValidationSettings.ErrorText = "*";
+    s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    s.Properties.CallbackPageSize = 30;
+    s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    s.Properties.TextFormatString = "{1}";
+    s.Properties.ValueField = "AssetCode";
+    s.Properties.TextField = "AssetCode";
+    s.Properties.Columns.Add("AssetClassCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetClassCode"), 150);
+    s.Properties.Columns.Add("AssetCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetCode"), 200);
+    s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+    s.Properties.ClientSideEvents.SelectedIndexChanged = "selectAssetCode";
+    s.ReadOnly = isReadOnly;
+}).BindList(ViewData["GetAssetCode"]).GetHtml()

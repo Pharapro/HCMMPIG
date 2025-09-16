@@ -1,0 +1,46 @@
+﻿
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopTheMessage";
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(150);
+    settings.Width = Unit.Pixel(420);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton2";
+    settings.HeaderText = ViewBag.Title;
+    settings.Modal = true;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+    settings.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+    settings.AllowDragging = false;
+    settings.ShowFooter = true;
+    settings.EnableClientSideAPI = true;
+    //settings.ClientSideEvents.PopUp = "function(s, e){ PopTheLoading.Hide();  }";
+    settings.Styles.Content.Paddings.Padding = 0;
+    settings.Styles.Content.Paddings.PaddingTop = 12;
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='align:center'><img src='~/Content/Images/question-mark.png'/> <div id='_Message'></div></div>");
+
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div class='question_btn'>");
+
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTOK2";
+            s.Text = "OK";
+
+            s.ClientSideEvents.Click = "function(s, e){ PopTheMessage.Hide();  }";
+        }).Render();
+
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='clear'></div>");
+    });
+}).GetHtml()

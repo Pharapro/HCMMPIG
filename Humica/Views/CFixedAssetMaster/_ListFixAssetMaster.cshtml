@@ -1,0 +1,121 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "gridViewItem4";
+             settings.KeyFieldName = "ID";
+
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "CFixedAssetMaster", Action = "_ListFixAssetMaster" };
+             settings.SettingsBehavior.AllowSort = false;
+
+             settings.CommandColumn.Visible = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "ID";
+                 column.Width = 20;
+                 column.Visible = false;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "ID");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "AssetCode";
+                 column.Width = 150;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetCode");
+             });
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Description";
+                 column.Width = 200;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "Description");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "AssetClassCode";
+                 column.Width = 300;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetClass");
+                 column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                 var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                 textProperties.DataSource = ViewData["ASSECLASS_SELECT"];
+                 textProperties.TextFormatString = "{0}:{1}";
+                 textProperties.ValueField = "AssetClassCode";
+                 textProperties.Columns.Add("AssetClassCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetClassCode"), 200);
+                 textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+                 textProperties.ValueType = typeof(string);
+                 textProperties.Width = Unit.Percentage(100);
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "AssetTypeID";
+                 column.Width = 300;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetType");
+                 column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                 var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                 textProperties.DataSource = ViewData["ASSETTYPE_SELECT"];
+                 textProperties.TextFormatString = "{0}:{1}";
+                 textProperties.ValueField = "AssetTypCode";
+                 textProperties.Columns.Add("AssetTypCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetTypCode"), 200);
+                 textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+                 textProperties.ValueType = typeof(string);
+                 textProperties.Width = Unit.Percentage(100);
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Status";
+                 column.Width = 90;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "IsActive";
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsActive");
+                 column.ColumnType = MVCxGridViewColumnType.CheckBox;
+             });
+             settings.SettingsSearchPanel.Visible = true;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 if (e.KeyValue != null)
+                 {
+                     if (e.Column.FieldName == "MaterialGroup")
+                     {
+                         e.Editor.ReadOnly = true;
+                     }
+                 }
+             };
+
+
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()

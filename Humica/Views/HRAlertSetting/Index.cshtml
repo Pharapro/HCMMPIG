@@ -1,0 +1,53 @@
+﻿<script type="text/javascript">
+    var ss;
+        var selectedIDs = "";
+    $(document).ready(function () {
+
+        @*$('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), '@ViewData[CLOUDVIEW.Models.ClsConstant.PARAM_INDEX]', OnGetRowValues);
+        });*@
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+
+    //function DbRowClick(s, e) {
+
+    //    ss = 2;
+    //    s.GetRowValues(s.GetFocusedRowIndex(), 'TranNo', OnGetRowValues);
+    //}
+
+    @*function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 1) {
+
+                GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), '@ViewData[CLOUDVIEW.Models.ClsConstant.PARAM_INDEX]', OnGetRowValues);
+            }
+
+         }
+
+
+    }*@
+
+    </script>
+
+@model Humica.Logic.MD.ClsAlertSetting
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "GCreate";
+        settings.Width = Unit.Percentage(90);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        //General
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("ALERT SETTING")).SetContent(() =>
+        {
+            @Html.RenderPartial("General", Model.ListAlert);
+        });
+
+    }).GetHtml()
+
+

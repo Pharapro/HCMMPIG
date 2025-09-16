@@ -1,0 +1,79 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $("#_btnNewAction").hide();
+    $(document).ready(function ()
+    {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EvaluateID;Status', OnGetRowValues);
+        });
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+    });
+    function tabClick(s, e) {
+
+        index = s.GetActiveTab().index;
+        if (index == 0) {
+            $("#pageToolbar_DXI2_").hide();
+            $("#_btnImageView").hide();
+        }
+        else {
+            $("#pageToolbar_DXI2_").show();
+            $("#_btnImageView").show();
+        }
+    }
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EvaluateID;Status', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?id=" + values[0];
+        }
+    }
+</script>
+
+@model Humica.Logic.HR.HREmpEvaluateObject
+
+@{
+    if (Model.ListEvaluatePending != null)
+    {
+        if (Model.ListEvaluatePending.Count > 0)
+        {
+            Html.DevExpress().PageControl(settings =>
+            {
+                settings.Name = "pcScrollingMaterial1";
+                settings.Width = Unit.Percentage(100);
+                settings.EnableTabScrolling = true;
+                settings.TabAlign = TabAlign.Justify;
+                settings.Styles.Tab.CssClass = "scrolling_Tab";
+                settings.ClientSideEvents.ActiveTabChanged = "tabClick";
+                settings.ClientSideEvents.Init = "tabClick";
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "WaitingList")).SetContent(() =>
+                    {
+                        Html.RenderPartial("PendingList", Model.ListEvaluatePending);
+                    });
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+                    {
+                        Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListEvaluateProcess);
+                    });
+            }).Render();
+        }
+        else
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListEvaluateProcess);
+        }
+    }
+    else
+    {
+        Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListEvaluateProcess);
+    }
+}

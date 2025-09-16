@@ -1,0 +1,48 @@
+﻿
+
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model  Humica.Logic.PR.PRCOAObject
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("COA")).SetContent(() =>
+        {
+            @Html.RenderPartial("Gridview", Model.ListHeader);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Material Master")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridMaterailMaster", Model.ListMaterailMaster);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("JournalType")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridJournalType", Model.ListJournalType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Vendor")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridVendor", Model.ListCFExVendor);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Setting")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewSetting", Model.ListSetting);
+        });
+        
+    }).GetHtml()
+
+@*@Html.Partial("Gridview", Model.ListHeader)*@

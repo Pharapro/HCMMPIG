@@ -1,0 +1,85 @@
+﻿@model Humica.Logic.HR.HREmpEvaluateObject
+
+<div class="container-fluid">
+    @foreach (var l in Model.ListRegion.OrderBy(w => w.InOrder).ToList())
+    {
+        <table class="table table-section table-striped" style="font-family: 'Khmer OS Battambang'">
+            <thead>
+                <tr>
+                    <th>@l.Description</th>
+                    @if (l.IsRating == true)
+                    {
+                        <th>Rating</th>
+                    }
+                    @if (l.IsComment == true)
+                    {
+                        <th>Comment</th>
+                    }
+                </tr>
+            </thead>
+            @{
+                int line = 1;
+            }
+            <tbody>
+                @foreach (var q in Model.ListFactor.Where(w => w.Region == l.Code).OrderBy(w => w.Code).ToList())
+                {
+                    string name = "rate" + line;
+                    <tr>
+                        <th style="width: 40%;">
+                            <span class="text-body">@q.Code/ @q.SecDescription @q.Description</span>
+                            <p class="text-indent text-body">
+                                @q.Remark
+                            </p>
+                        </th>
+
+                        @{string _Comment = "";}
+                        @{
+                            var _Listcheck = Model.ListScore.FirstOrDefault(w => w.Code == q.Code && w.Region == q.Region);
+                            if (_Listcheck != null)
+                            {
+                                _Comment = _Listcheck.Remark;
+                            }
+                        }
+                        @if (l.IsRating == true)
+                        {
+                            <td style="width:25%">
+                                @foreach (var r in Model.ListEmpRating.Where(w => w.Region == l.Code).OrderBy(w => w.RatingID).ToList())
+                                {
+                                    string value = q.Code + "_" + r.RatingID.ToString() + "_" + r.Rating.ToString();
+                                    string strCheck = "";
+
+                                    var _check = Model.ListScore.Where(w => w.Code == q.Code && w.RatingID == r.RatingID).ToList();
+                                    if (_check.Count() > 0)
+                                    {
+                                        strCheck = "checked";
+                                        _Comment = _check.First().Remark;
+                                    }
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="@name" @strCheck onclick="return false" id="chek" value="@value">
+                                        <label class="form-check-label" for="@value">
+                                            @r.Description
+                                        </label>
+                                    </div>
+                                }
+                            </td>
+                        }
+
+                        @if (l.IsComment == true)
+                        {
+
+                            <td>
+                                <textarea class="form-control" id="contactChoice5" readonly>@_Comment</textarea>
+                            </td>
+
+                        }
+                    </tr>
+
+                    line++;
+                }
+
+            </tbody>
+
+
+        </table>
+    }
+</div>

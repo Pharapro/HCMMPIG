@@ -1,0 +1,57 @@
+﻿@model Humica.Logic.Att.ATDownloadObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+
+
+    settings.Name = "FTFilterEmployee";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    int width = 200;
+
+    settings.Items.AddGroupItem(m => Model.Filter, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+        })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().DateEditFor(i => Model.Filter.FromDate, s =>
+               {
+                   s.Width = width;
+                   s.ShowModelErrors = true;
+                   s.Properties.ClientInstanceName = "txtFromDate";
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.Properties.NullText = "dd-MMMM-yyyy HH:mm";
+                   s.Properties.EditFormatString = "dd-MMMM-yyyy HH:mm";
+                   s.Properties.DisplayFormatString = "dd-MMMM-yyyy HH:mm";
+               }).Render();
+           });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+        })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().DateEditFor(i => Model.Filter.ToDate, s =>
+               {
+                   s.Width = width;
+                   s.Properties.ClientInstanceName = "txtToDate";
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.Properties.NullText = "dd-MMMM-yyyy HH:mm";
+                   s.Properties.EditFormatString = "dd-MMMM-yyyy HH:mm";
+                   s.Properties.DisplayFormatString = "dd-MMMM-yyyy HH:mm";
+               }).Render();
+           });
+
+    });
+}).Bind(Model).GetHtml()

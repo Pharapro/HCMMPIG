@@ -1,0 +1,97 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+         $('#_btnBackAction').click(function ()
+         {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+         });
+         $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+         });
+
+         $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+         });
+    });
+    function _clickConfirm(s, e)
+    {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK")
+        {
+            if (ss == 4)
+            {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?TrainNo=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()"
+            }
+        }
+    }
+</script>
+
+@model Humica.Training.TrainingProcessObject
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "trainingCourse";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Width = Unit.Pixel(1000);
+        settings.Items.AddGroupItem(m => Model.TRTrainingCatalogue, g =>
+        {
+            g.ColumnCount = 2;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("In Year");
+                m.ColSpan = 1;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.TRTrainingCatalogue.InYear, s =>
+                   {
+                       s.Width = Unit.Percentage(20);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.ReadOnly = true;
+
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                m.ColSpan = 2;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.TRTrainingCatalogue.Description, s =>
+                   {
+                       s.Width = Unit.Percentage(100);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.ReadOnly = true;
+                   }).Render();
+               });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+                m.ColSpan = 2;
+            })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().TextBoxFor(i => i.TRTrainingCatalogue.Remark, s =>
+                   {
+                       s.Width = Unit.Percentage(100);
+                       s.ShowModelErrors = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.ReadOnly = true;
+                   }).Render();
+               });
+        });
+    }).GetHtml();
+}
+@Html.Partial("GridItems", Model)

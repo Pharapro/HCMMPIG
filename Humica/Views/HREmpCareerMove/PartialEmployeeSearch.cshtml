@@ -1,0 +1,41 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "PartialEmployeeSearch";
+        settings.KeyFieldName = "EmpCode";
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Action = "EmployeeSearch", Controller = "HREmpCareerMove" };
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.Width = 50;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+            column.Width = 130;
+            column.FieldName = "EmpCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+            column.Width = 200;
+            column.FieldName = "AllName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.ClientSideEvents.SelectionChanged = "function(s, e) { OnSelectionChanged(s, e); }";
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.SettingsPager.PageSize = 50;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 200;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    });
+}
+
+@gridExtension.Bind(Model.ListEmpByDept).GetHtml()

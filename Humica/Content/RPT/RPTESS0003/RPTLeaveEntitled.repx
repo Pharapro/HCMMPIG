@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="23.2.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="RPT_LeaveEntitled" DisplayName="RPT_LeaveEntitled" Landscape="true" Margins="25, 25, 25, 25" PaperKind="Custom" PageWidth="2111" PageHeight="433" Version="23.2" DataMember="RPT_ESSLeaveEntitled" DataSource="#Ref-0" Font="Arial, 9.75pt">
+  <Parameters>
+    <Item1 Ref="3" ValueInfo="2024-08-31" Name="InMonth" Type="#Ref-2" />
+    <Item2 Ref="5" Name="EmpCode" />
+  </Parameters>
+  <Bands>
+    <Item1 Ref="6" ControlType="TopMarginBand" Name="TopMargin" HeightF="25" />
+    <Item2 Ref="7" ControlType="DetailBand" Name="Detail" HeightF="25">
+      <Controls>
+        <Item1 Ref="8" ControlType="XRTable" Name="table3" SizeF="2060.00122,25" LocationFloat="0,0" Font="Khmer OS Siemreap, 8.5pt" Padding="2,2,0,0,96">
+          <Rows>
+            <Item1 Ref="9" ControlType="XRTableRow" Name="tableRow3" Weight="1">
+              <Cells>
+                <Item1 Ref="10" ControlType="XRTableCell" Name="tableCell69" Weight="0.99237204728547912" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="11" EventName="BeforePrint" PropertyName="Text" Expression="[EmpCode]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="12" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="13" ControlType="XRTableCell" Name="tableCell70" Weight="1.5505921688541493" Multiline="true" TextAlignment="MiddleLeft" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="14" EventName="BeforePrint" PropertyName="Text" Expression="[AllName]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="15" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="16" ControlType="XRTableCell" Name="tableCell71" Weight="0.93035484457453654" TextFormatString="{0:dd-MMM-yyy}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[StartDate]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="18" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="19" ControlType="XRTableCell" Name="tableCell72" Weight="2.4085740660124064" Multiline="true" TextAlignment="MiddleLeft" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="20" EventName="BeforePrint" PropertyName="Text" Expression="[Position]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="21" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+                <Item5 Ref="22" ControlType="XRTableCell" Name="tableCell75" Weight="0.80630380954415537" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[ALEntitleB]&#xA;" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="24" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item5>
+                <Item6 Ref="25" ControlType="XRTableCell" Name="tableCell76" Weight="0.98203435052567523" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="26" EventName="BeforePrint" PropertyName="Text" Expression="[CurrentALB]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="27" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item6>
+                <Item7 Ref="28" ControlType="XRTableCell" Name="tableCell77" Weight="0.80630376470355247" TextFormatString="{0:N}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="29" EventName="BeforePrint" PropertyName="Text" Expression="[SickLeaveB]+[SpecialLeaveB]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="30" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item7>
+                <Item8 Ref="31" ControlType="XRTableCell" Name="tableCell79" Weight="0.72393447186653725" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="32" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Jan]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="33" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item8>
+                <Item9 Ref="34" ControlType="XRTableCell" Name="tableCell80" Weight="0.69915321513554263" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="35" EventName="BeforePrint" PropertyName="Text" Expression="[Jan]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="36" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item9>
+                <Item10 Ref="37" ControlType="XRTableCell" Name="tableCell81" Weight="0.72393520191942429" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="38" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Feb]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="39" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item10>
+                <Item11 Ref="40" ControlType="XRTableCell" Name="tableCell82" Weight="0.69915397906910282" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="41" EventName="BeforePrint" PropertyName="Text" Expression="[Feb]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="42" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item11>
+                <Item12 Ref="43" ControlType="XRTableCell" Name="tableCell83" Weight="0.72393445492620079" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" Text="1.5" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="44" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Mar]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="45" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item12>
+                <Item13 Ref="46" ControlType="XRTableCell" Name="tableCell84" Weight="0.69915396894255288" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="47" EventName="BeforePrint" PropertyName="Text" Expression="[Mar]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="48" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item13>
+                <Item14 Ref="49" ControlType="XRTableCell" Name="tableCell85" Weight="0.72393371805952711" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="50" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Apr]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="51" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item14>
+                <Item15 Ref="52" ControlType="XRTableCell" Name="tableCell86" Weight="0.699151697583233" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="53" EventName="BeforePrint" PropertyName="Text" Expression="[Apr]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="54" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item15>
+                <Item16 Ref="55" ControlType="XRTableCell" Name="tableCell87" Weight="0.72393523229907364" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="56" EventName="BeforePrint" PropertyName="Text" Expression="[Token_May]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="57" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item16>
+                <Item17 Ref="58" ControlType="XRTableCell" Name="tableCell88" Weight="0.6991531341231445" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="59" EventName="BeforePrint" PropertyName="Text" Expression="[May]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="60" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item17>
+                <Item18 Ref="61" ControlType="XRTableCell" Name="tableCell89" Weight="0.72393522548528677" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" Text="1.5" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="62" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Jun]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="63" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item18>
+                <Item19 Ref="64" ControlType="XRTableCell" Name="tableCell90" Weight="0.69915314093693126" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="65" EventName="BeforePrint" PropertyName="Text" Expression="[Jun]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="66" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item19>
+                <Item20 Ref="67" ControlType="XRTableCell" Name="tableCell91" Weight="0.72393520854495041" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="68" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Jul]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="69" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item20>
+                <Item21 Ref="70" ControlType="XRTableCell" Name="tableCell92" Weight="0.69915317813036726" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="71" EventName="BeforePrint" PropertyName="Text" Expression="[Jul]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="72" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item21>
+                <Item22 Ref="73" ControlType="XRTableCell" Name="tableCell93" Weight="0.72393520854495053" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="74" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Aug]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="75" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item22>
+                <Item23 Ref="76" ControlType="XRTableCell" Name="tableCell94" Weight="0.6991531950707035" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="77" EventName="BeforePrint" PropertyName="Text" Expression="[Aug]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="78" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item23>
+                <Item24 Ref="79" ControlType="XRTableCell" Name="tableCell95" Weight="0.7239352118577137" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="80" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Sep]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="81" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item24>
+                <Item25 Ref="82" ControlType="XRTableCell" Name="tableCell96" Weight="0.69915322857485573" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="83" EventName="BeforePrint" PropertyName="Text" Expression="[Sep]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="84" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item25>
+                <Item26 Ref="85" ControlType="XRTableCell" Name="tableCell97" Weight="0.72393521554699758" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="86" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Oct]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="87" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item26>
+                <Item27 Ref="88" ControlType="XRTableCell" Name="tableCell98" Weight="0.69915248527091611" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="89" EventName="BeforePrint" PropertyName="Text" Expression="[Oct]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="90" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item27>
+                <Item28 Ref="91" ControlType="XRTableCell" Name="tableCell99" Weight="0.72393519160461406" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="92" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Nov]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="93" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item28>
+                <Item29 Ref="94" ControlType="XRTableCell" Name="tableCell100" Weight="0.69915466449205754" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="95" EventName="BeforePrint" PropertyName="Text" Expression="[Nov]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="96" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item29>
+                <Item30 Ref="97" ControlType="XRTableCell" Name="tableCell101" Weight="0.72393372218326013" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" Text="1.5" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="98" EventName="BeforePrint" PropertyName="Text" Expression="[Token_Dec]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="99" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item30>
+                <Item31 Ref="100" ControlType="XRTableCell" Name="tableCell102" Weight="0.69915589315826154" TextFormatString="{0:#,0.00;(#,0.00);'-'}" Multiline="true" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 8.5pt" ForeColor="Black" BackColor="Transparent" Borders="Left, Right, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="101" EventName="BeforePrint" PropertyName="Text" Expression="[Dec]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="102" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item31>
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="103" UseFont="false" />
+        </Item1>
+      </Controls>
+    </Item2>
+    <Item3 Ref="104" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="25" />
+    <Item4 Ref="105" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="153.333328">
+      <Controls>
+        <Item1 Ref="106" ControlType="XRLabel" Name="xrLabel1" Multiline="true" TextAlignment="MiddleLeft" SizeF="571.57605,26.5833588" LocationFloat="10.0000048,119.142166" Font="Khmer OS Siemreap, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="107" EventName="BeforePrint" PropertyName="Text" Expression="'Leave Report Of '+' '+FormatString('{0:MMM-yyyy}',?InMonth)&#xA;" />
+          </ExpressionBindings>
+          <StylePriority Ref="108" UseFont="false" UseTextAlignment="false" />
+        </Item1>
+        <Item2 Ref="109" ControlType="XRPictureBox" Name="pictureBox1" Sizing="StretchImage" SizeF="150,75" LocationFloat="10,19.1421585">
+          <ExpressionBindings>
+            <Item1 Ref="110" EventName="BeforePrint" PropertyName="ImageUrl" Expression="[LOGO]" />
+          </ExpressionBindings>
+        </Item2>
+        <Item3 Ref="111" ControlType="XRLabel" Name="label80" Multiline="true" TextAlignment="MiddleLeft" SizeF="571.58,21" LocationFloat="10.0000048,98.1421661" Font="Khmer OS Siemreap, 10pt, style=Bold" ForeColor="Black" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="112" EventName="BeforePrint" PropertyName="Text" Expression="[Branch]" />
+          </ExpressionBindings>
+          <StylePriority Ref="113" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+        </Item3>
+      </Controls>
+    </Item4>
+    <Item5 Ref="114" ControlType="PageHeaderBand" Name="PageHeader" HeightF="82.49998">
+      <Controls>
+        <Item1 Ref="115" ControlType="XRTable" Name="table5" SizeF="2060.00122,82.49998" LocationFloat="0.9987793,0">
+          <Rows>
+            <Item1 Ref="116" ControlType="XRTableRow" Name="tableRow5" Weight="0.71875034272687088">
+              <Cells>
+                <Item1 Ref="117" ControlType="XRTableCell" Name="tableCell26" Weight="80" RowSpan="2" Multiline="true" Text="ID" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="118" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="119" ControlType="XRTableCell" Name="tableCell27" Weight="125.00088500976563" RowSpan="2" Multiline="true" Text="Name" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="120" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="121" ControlType="XRTableCell" Name="tableCell28" Weight="75.00048828125" RowSpan="2" Multiline="true" Text="Start Date" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="122" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="123" ControlType="XRTableCell" Name="tableCell29" Weight="194.16702270507813" RowSpan="2" Multiline="true" Text="Position" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="124" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+                <Item5 Ref="125" ControlType="XRTableCell" Name="tableCell30" Weight="65.0001220703125" RowSpan="2" Multiline="true" Text="AL Entitle&#xD;&#xA;Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="126" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item5>
+                <Item6 Ref="127" ControlType="XRTableCell" Name="tableCell31" Weight="79.16668701171875" RowSpan="2" Multiline="true" Text="AL Current &#xD;&#xA;Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="128" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item6>
+                <Item7 Ref="129" ControlType="XRTableCell" Name="tableCell32" Weight="65.0001220703125" RowSpan="2" Multiline="true" Text="SL/SP" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="130" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item7>
+                <Item8 Ref="131" ControlType="XRTableCell" Name="tableCell33" Weight="114.72210693359375" Multiline="true" Text="JAN" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="132" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item8>
+                <Item9 Ref="133" ControlType="XRTableCell" Name="tableCell34" Weight="114.72222900390625" Multiline="true" Text="FEB" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="134" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item9>
+                <Item10 Ref="135" ControlType="XRTableCell" Name="tableCell35" Weight="114.72216796875" Multiline="true" Text="MAR" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="136" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item10>
+                <Item11 Ref="137" ControlType="XRTableCell" Name="tableCell36" Weight="114.72216796875" Multiline="true" Text="APR" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="138" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item11>
+                <Item12 Ref="139" ControlType="XRTableCell" Name="tableCell37" Weight="114.7220458984375" Multiline="true" Text="MAY" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="140" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item12>
+                <Item13 Ref="141" ControlType="XRTableCell" Name="tableCell38" Weight="114.72216796875" Multiline="true" Text="JUN" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="142" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item13>
+                <Item14 Ref="143" ControlType="XRTableCell" Name="tableCell39" Weight="114.72216796875" Multiline="true" Text="JUL" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="144" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item14>
+                <Item15 Ref="145" ControlType="XRTableCell" Name="tableCell40" Weight="114.72216796875" Multiline="true" Text="AUG" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="146" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item15>
+                <Item16 Ref="147" ControlType="XRTableCell" Name="tableCell41" Weight="114.72216796875" Multiline="true" Text="SEPT" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="148" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item16>
+                <Item17 Ref="149" ControlType="XRTableCell" Name="tableCell42" Weight="114.72216796875" Multiline="true" Text="OCT" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="150" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item17>
+                <Item18 Ref="151" ControlType="XRTableCell" Name="tableCell43" Weight="114.7222900390625" Multiline="true" Text="NOV" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="152" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item18>
+                <Item19 Ref="153" ControlType="XRTableCell" Name="tableCell44" Weight="114.7220458984375" Multiline="true" Text="DEC" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="154" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item19>
+              </Cells>
+            </Item1>
+            <Item2 Ref="155" ControlType="XRTableRow" Name="tableRow6" Weight="0.71875034272687088">
+              <Cells>
+                <Item1 Ref="156" ControlType="XRTableCell" Name="tableCell73" Weight="80" Multiline="true" Text="tableCell73" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="157" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="158" ControlType="XRTableCell" Name="tableCell74" Weight="125.00088500976563" Multiline="true" Text="tableCell74" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="159" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="160" ControlType="XRTableCell" Name="tableCell78" Weight="75.00048828125" Multiline="true" Text="tableCell78" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="161" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="162" ControlType="XRTableCell" Name="tableCell103" Weight="194.16702270507813" Multiline="true" Text="tableCell103" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="163" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+                <Item5 Ref="164" ControlType="XRTableCell" Name="tableCell104" Weight="65.0001220703125" Multiline="true" Text="tableCell104" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="165" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item5>
+                <Item6 Ref="166" ControlType="XRTableCell" Name="tableCell105" Weight="79.16668701171875" Multiline="true" Text="tableCell105" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="167" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item6>
+                <Item7 Ref="168" ControlType="XRTableCell" Name="tableCell106" Weight="65.0001220703125" Multiline="true" Text="tableCell106" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt, style=Bold" ForeColor="White" BackColor="Green" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="169" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item7>
+                <Item8 Ref="170" ControlType="XRTableCell" Name="tableCell107" Weight="57.361053466796875" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="171" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item8>
+                <Item9 Ref="172" ControlType="XRTableCell" Name="tableCell119" Weight="57.361053466796875" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="173" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item9>
+                <Item10 Ref="174" ControlType="XRTableCell" Name="tableCell108" Weight="57.361114501953125" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="175" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item10>
+                <Item11 Ref="176" ControlType="XRTableCell" Name="tableCell120" Weight="57.361114501953125" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="177" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item11>
+                <Item12 Ref="178" ControlType="XRTableCell" Name="tableCell109" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="179" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item12>
+                <Item13 Ref="180" ControlType="XRTableCell" Name="tableCell126" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="181" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item13>
+                <Item14 Ref="182" ControlType="XRTableCell" Name="tableCell110" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="183" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item14>
+                <Item15 Ref="184" ControlType="XRTableCell" Name="tableCell127" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="185" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item15>
+                <Item16 Ref="186" ControlType="XRTableCell" Name="tableCell111" Weight="57.36102294921875" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="187" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item16>
+                <Item17 Ref="188" ControlType="XRTableCell" Name="tableCell128" Weight="57.36102294921875" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="189" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item17>
+                <Item18 Ref="190" ControlType="XRTableCell" Name="tableCell112" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="191" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item18>
+                <Item19 Ref="192" ControlType="XRTableCell" Name="tableCell129" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="193" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item19>
+                <Item20 Ref="194" ControlType="XRTableCell" Name="tableCell113" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="195" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item20>
+                <Item21 Ref="196" ControlType="XRTableCell" Name="tableCell130" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="197" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item21>
+                <Item22 Ref="198" ControlType="XRTableCell" Name="tableCell114" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="199" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item22>
+                <Item23 Ref="200" ControlType="XRTableCell" Name="tableCell125" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="201" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item23>
+                <Item24 Ref="202" ControlType="XRTableCell" Name="tableCell115" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="203" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item24>
+                <Item25 Ref="204" ControlType="XRTableCell" Name="tableCell124" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="205" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item25>
+                <Item26 Ref="206" ControlType="XRTableCell" Name="tableCell116" Weight="57.361083984375" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="207" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item26>
+                <Item27 Ref="208" ControlType="XRTableCell" Name="tableCell123" Weight="57.361083984375" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="209" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item27>
+                <Item28 Ref="210" ControlType="XRTableCell" Name="tableCell117" Weight="57.36114501953125" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="211" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item28>
+                <Item29 Ref="212" ControlType="XRTableCell" Name="tableCell122" Weight="57.36114501953125" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="213" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item29>
+                <Item30 Ref="214" ControlType="XRTableCell" Name="tableCell118" Weight="57.36102294921875" Multiline="true" Text="Taken" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="215" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item30>
+                <Item31 Ref="216" ControlType="XRTableCell" Name="tableCell121" Weight="57.36102294921875" Multiline="true" Text="Balance" TextAlignment="MiddleCenter" Font="Khmer OS Siemreap, 9pt" ForeColor="Black" BackColor="Transparent" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="217" UseFont="false" UseForeColor="false" UseBackColor="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
+                </Item31>
+              </Cells>
+            </Item2>
+          </Rows>
+        </Item1>
+      </Controls>
+    </Item5>
+    <Item6 Ref="218" ControlType="GroupHeaderBand" Name="GroupHeader1" HeightF="28">
+      <GroupFields>
+        <Item1 Ref="219" FieldName="Code" />
+      </GroupFields>
+      <Controls>
+        <Item1 Ref="220" ControlType="XRTable" Name="table1" SizeF="2060.00122,27.9999981" LocationFloat="0,0" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
+          <Rows>
+            <Item1 Ref="221" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+              <Cells>
+                <Item1 Ref="222" ControlType="XRTableCell" Name="tableCell2" Weight="1" Multiline="true" TextAlignment="MiddleLeft" Font="Khmer OS Siemreap, 9.75pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="223" EventName="BeforePrint" PropertyName="Text" Expression="'  '+[Department]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="224" UseFont="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="225" UseBorders="false" />
+        </Item1>
+      </Controls>
+    </Item6>
+  </Bands>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v23.2" Name="sqlDataSource1" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxDb25uZWN0aW9uIE5hbWU9IlJlcG9ydENvbm5lY3Rpb25TdHJpbmciIEZyb21BcHBDb25maWc9InRydWUiIC8+PFF1ZXJ5IFR5cGU9IlN0b3JlZFByb2NRdWVyeSIgTmFtZT0iUlBUX0VTU0xlYXZlRW50aXRsZWQiPjxQYXJhbWV0ZXIgTmFtZT0iQEVtcENvZGUiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0VtcENvZGUpPC9QYXJhbWV0ZXI+PFBhcmFtZXRlciBOYW1lPSJASW5Nb250aCIgVHlwZT0iRGV2RXhwcmVzcy5EYXRhQWNjZXNzLkV4cHJlc3Npb24iPihTeXN0ZW0uRGF0ZVRpbWUpKD9Jbk1vbnRoKTwvUGFyYW1ldGVyPjxQcm9jTmFtZT5SUFRfRVNTTGVhdmVFbnRpdGxlZDwvUHJvY05hbWU+PC9RdWVyeT48UmVzdWx0U2NoZW1hPjxEYXRhU2V0IE5hbWU9InNxbERhdGFTb3VyY2UxIj48VmlldyBOYW1lPSJSUFRfRVNTTGVhdmVFbnRpdGxlZCI+PEZpZWxkIE5hbWU9IkFsbE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3RhcnREYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iUHJvYmF0aW9uIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iRW1wQ29kZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEZXBhcnRtZW50IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkluWWVhciIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IkNvZGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU29ydEtleSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJCcmFuY2giIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iUG9zaXRpb24iIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3RhdHVzIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkN1cnJlbnRBTEIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkFMRm9yd2FyZEIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkFMRW50aXRsZUIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlNwZWNpYWxMZWF2ZUIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkFMQlVzZSIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iU3BlY2lhbExlYXZlVXNlIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJTaWNrTGVhdmVCIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJTaWNrTGVhdmVVc2UiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlRva2VuX0phbiIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iSmFuIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJUb2tlbl9GZWIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkZlYiIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iVG9rZW5fTWFyIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJNYXIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlRva2VuX0FwciIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iQXByIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJUb2tlbl9NYXkiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9Ik1heSIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iVG9rZW5fSnVuIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJKdW4iIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlRva2VuX0p1bCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iSnVsIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJUb2tlbl9BdWciIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkF1ZyIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iVG9rZW5fU2VwIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJTZXAiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlRva2VuX09jdCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iT2N0IiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJUb2tlbl9Ob3YiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9Ik5vdiIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iVG9rZW5fRGVjIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJEZWMiIFR5cGU9IkRlY2ltYWwiIC8+PC9WaWV3PjwvRGF0YVNldD48L1Jlc3VsdFNjaGVtYT48Q29ubmVjdGlvbk9wdGlvbnMgQ2xvc2VDb25uZWN0aW9uPSJ0cnVlIiAvPjwvU3FsRGF0YVNvdXJjZT4=" />
+  </ComponentStorage>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.2" Ref="2" Content="System.DateTime" Type="System.Type" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>

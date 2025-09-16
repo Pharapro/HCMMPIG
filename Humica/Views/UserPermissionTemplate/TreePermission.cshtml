@@ -1,0 +1,165 @@
+﻿@model Humica.EF.Models.SY.SYPermissionObject
+
+@{
+    var treeList = Html.DevExpress().TreeList(
+        settings =>
+        {
+
+
+            settings.Name = "treeList";
+            settings.CallbackRouteValues = new { Controller = "UserPermissionTemplate", Action = "TreePermission" };
+
+            settings.AutoGenerateColumns = false;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "MenuId";
+            settings.ParentFieldName = "Segment";
+            settings.ClientSideEvents.SelectionChanged = "NodeClick1";
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = "Name";
+                column.PropertiesEdit.EncodeHtml = false;
+            });
+            //settings.Columns.Add(column =>
+            //{
+            //    column.FieldName = "Part";
+            //    column.PropertiesEdit.EncodeHtml = false;
+            //});
+
+
+            settings.SettingsCookies.Enabled = true;
+            settings.SettingsCookies.StoreExpandedNodes = true;
+            settings.SettingsCookies.StoreSelection = true;
+
+            settings.CommandColumn.Visible = false;
+
+            //settings.SettingsEditing.Mode = TreeListEditMode.PopupEditForm;
+
+            settings.SettingsEditing.ConfirmDelete = true;
+
+
+            settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+            settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            settings.SettingsSelection.AllowSelectAll = false;
+            settings.SettingsSelection.Enabled = true;
+            //Module  
+            foreach(var read in Model.ListMenu)
+            {
+                if(read.Segment==1)
+                {
+                    settings.Nodes.Add(node =>
+                    {
+                        node.KeyObject = read.ID;
+
+                        node["Name"] = read.Text;
+                        node.Expanded = true;
+                        node.AllowSelect = false;
+                        //Sub Module            
+                        foreach (var child in Model.ListMenu)
+                        {
+                            if (child.Parent == read.ID && child.Segment == 2)
+                            {
+                                node.ChildNodes.Add(childn =>
+                                {
+                                    childn.KeyObject = child.ID;
+                                    childn["Name"] = child.Text;
+                                    childn.Expanded = false;
+                                    childn.AllowSelect = false;
+
+                                    foreach (var grandchild in Model.ListMenu)
+                                    {
+                                        if (grandchild.Parent == child.ID && grandchild.Segment == 3)
+                                        {
+                                            childn.ChildNodes.Add(grandc =>
+                                            {
+                                                grandc.KeyObject = grandchild.ID;
+                                                grandc["Name"] = grandchild.Text;
+                                                grandc.Expanded = true;
+                                                grandc.AllowSelect = true;
+
+                                                //Feature
+                                                foreach (var grandchildS in Model.ListMenuItem)
+                                                {
+                                                    if (grandchildS.MenuId == grandchild.ID )
+                                                    {
+                                                        grandc.ChildNodes.Add(grandcS =>
+                                                        {
+                                                            grandcS.KeyObject = grandchildS.ID + "_" + child.ID;
+                                                            grandcS["Name"] = grandchildS.ScreenId + ":"+ grandchildS.Text;
+                                                            grandcS.Expanded = false;
+                                                            //Action Name
+                                                            foreach (var acName in Model.ListActionName)
+                                                            {
+                                                                if (grandchildS.ScreenId == acName.ScreenID)
+                                                                {
+                                                                    grandcS.ChildNodes.Add(acNode =>
+                                                                    {
+                                                                        acNode.KeyObject = acName.ScreenID + ":" + acName.ActionName;
+                                                                        acNode["Name"] = acName.ActionName + ":" + acName.ActionTemplateID;
+                                                                        acNode.Expanded = false;
+                                                                        acNode.AllowSelect = true;
+                                                                        //Actions
+                                                                        foreach (var action in Model.ListActionTemplate)
+                                                                        {
+                                                                            if (acName.ActionTemplateID == action.TemplateID)
+                                                                            {
+                                                                                acNode.ChildNodes.Add(lastNode =>
+                                                                                {
+                                                                                    lastNode.KeyObject = grandchildS.ScreenId + "_" + acName.ActionName + "_" + action.IsAction;
+                                                                                    lastNode["Name"] = action.IsAction;
+                                                                                    lastNode.Expanded = false;
+                                                                                    lastNode.AllowSelect = false;
+
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+
+                                            });
+
+                                        }
+                                    }
+
+
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+
+
+
+            settings.Settings.ShowColumnHeaders = false;
+
+            //settings.SetDataCellTemplateContent(
+            //        c =>
+            //        {
+            //            var iconName = DataBinder.Eval(c.DataItem, "Name");
+            //            ViewContext.Writer.Write(
+            //                "<div>" +
+
+            //                    "&nbsp;" +
+            //                    "<label style=\"vertical-align: middle\">" + c.Text + "</label>" +
+            //                "</div>"
+            //            );
+            //        }
+            //    );
+
+        }
+    );
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.GetHtml()

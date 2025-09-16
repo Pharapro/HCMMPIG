@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="23.2.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="RptEssMonthltAttByDate" DisplayName="RptEssMonthltAttByDate" Margins="25, 18.333334, 25, 25" PaperKind="A4" PageWidth="827" PageHeight="1169" Version="23.2" DataMember="HR_RPT_ESSMonthlyAtt" DataSource="#Ref-0">
+  <Parameters>
+    <Item1 Ref="3" Name="EmpCode" />
+    <Item2 Ref="5" ValueInfo="2024-07-01" Name="FromDate" Type="#Ref-4" />
+    <Item3 Ref="6" ValueInfo="2024-07-31" Name="ToDate" Type="#Ref-4" />
+  </Parameters>
+  <Bands>
+    <Item1 Ref="7" ControlType="DetailBand" Name="Detail" HeightF="25" KeepTogether="true" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+      <SortFields>
+        <Item1 Ref="8" FieldName="LeaveCode" />
+        <Item2 Ref="9" FieldName="EmpCode" />
+        <Item3 Ref="10" FieldName="TranDate" />
+      </SortFields>
+      <Controls>
+        <Item1 Ref="11" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="783.333252,25" LocationFloat="0.333372742,0" Font="Khmer OS Siemreap, 8pt" Padding="2,2,0,0,96" Borders="Left, Bottom">
+          <Rows>
+            <Item1 Ref="12" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+              <Cells>
+                <Item1 Ref="13" ControlType="XRTableCell" Name="tableCell41" Weight="1.2654143204793542" TextFormatString="{0:dd-MMM-yyyy}" Multiline="true" TextAlignment="MiddleCenter" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="14" EventName="BeforePrint" PropertyName="Text" Expression="[TranDate]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="15" UseFont="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="16" ControlType="XRTableCell" Name="tableCell5" Weight="0.870999490190684" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[SHIFT]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="18" UseFont="false" />
+                </Item2>
+                <Item3 Ref="19" ControlType="XRTableCell" Name="tableCell42" Weight="0.88743344973178906" TextFormatString="{0:hh:mmtt}" Multiline="true" Text="tableCell42" Font="Arial, 8pt" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="20" EventName="BeforePrint" PropertyName="Text" Expression="[IN1]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="21" UseFont="false" UseBorders="false" />
+                </Item3>
+                <Item4 Ref="22" ControlType="XRTableCell" Name="tableCell43" Weight="0.88743343716340806" TextFormatString="{0:hh:mmtt}" Multiline="true" Text="tableCell43" Font="Arial, 8pt" Borders="Left, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[OUT1]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="24" UseFont="false" UseBorders="false" />
+                </Item4>
+                <Item5 Ref="25" ControlType="XRTableCell" Name="tableCell7" Weight="0.88743343619168424" TextFormatString="{0:hh:mmtt}" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="26" EventName="BeforePrint" PropertyName="Text" Expression="[Start]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="27" UseFont="false" />
+                </Item5>
+                <Item6 Ref="28" ControlType="XRTableCell" Name="tableCell8" Weight="0.88743344356258125" TextFormatString="{0:hh:mmtt}" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="29" EventName="BeforePrint" PropertyName="Text" Expression="[EndDate]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="30" UseFont="false" />
+                </Item6>
+                <Item7 Ref="31" ControlType="XRTableCell" Name="tableCell9" Weight="0.88743344295382365" TextFormatString="{0:hh:mmtt}" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="32" EventName="BeforePrint" PropertyName="Text" Expression="[Start2]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="33" UseFont="false" />
+                </Item7>
+                <Item8 Ref="34" ControlType="XRTableCell" Name="tableCell10" Weight="0.8874334209441932" TextFormatString="{0:hh:mmtt}" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="35" EventName="BeforePrint" PropertyName="Text" Expression="[EndDate2]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="36" UseFont="false" />
+                </Item8>
+                <Item9 Ref="37" ControlType="XRTableCell" Name="tableCell11" Weight="1.0024710853813474" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="38" EventName="BeforePrint" PropertyName="StyleName" Expression="Iif(!IsNullOrEmpty([LeaveCode]),[LeaveCode] ,iif(!IsNullOrEmpty([ABS_]),[ABS_],[LeaveDesc]))" />
+                    <Item2 Ref="39" EventName="BeforePrint" PropertyName="Text" Expression="Iif(!IsNullOrEmpty([LeaveCode]),[LeaveCode] ,iif(!IsNullOrEmpty([ABS_]),[ABS_],[LeaveDesc] ))" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="40" UseFont="false" />
+                </Item9>
+                <Item10 Ref="41" ControlType="XRTableCell" Name="tableCell12" Weight="1.1937043444345485" TextFormatString="{0:N0}" Multiline="true" Font="Arial, 8pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="42" EventName="BeforePrint" PropertyName="Text" Expression="[totalMissScan]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="43" UseFont="false" />
+                </Item10>
+                <Item11 Ref="44" ControlType="XRTableCell" Name="tableCell13" Weight="0.89975488346093468" TextFormatString="{0:#,0.00;(#,0);'-';}" Multiline="true" TextAlignment="MiddleRight" Font="Arial, 8pt" Borders="Left, Right, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="45" EventName="BeforePrint" PropertyName="Text" Expression="[Late]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="46" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item11>
+                <Item12 Ref="47" ControlType="XRTableCell" Name="tableCell14" Weight="1.2090981923136317" TextFormatString="{0:#,0.00;(#,0);'-';}" Multiline="true" TextAlignment="MiddleRight" Font="Arial, 8pt" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="48" EventName="BeforePrint" PropertyName="Text" Expression="[Early]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="49" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item12>
+                <Item13 Ref="50" ControlType="XRTableCell" Name="tableCell17" Weight="1.1072186189022495" TextFormatString="{0:#,0.00;(#,0);'-';}" Multiline="true" TextAlignment="MiddleRight" Font="Arial, 8pt" Borders="Left, Right, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="51" EventName="BeforePrint" PropertyName="Text" Expression="[wokingHour]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="52" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item13>
+              </Cells>
+            </Item1>
+          </Rows>
+          <ExpressionBindings>
+            <Item1 Ref="53" EventName="BeforePrint" PropertyName="BackColor" Expression="Iif([SHIFT]='OFF','Red' ,'' )&#xA;" />
+            <Item2 Ref="54" EventName="BeforePrint" PropertyName="ForeColor" Expression="Iif([SHIFT]='OFF','White' ,'Black' )&#xA;" />
+          </ExpressionBindings>
+          <StylePriority Ref="55" UseFont="false" UseForeColor="false" UseBorders="false" UseTextAlignment="false" />
+        </Item1>
+      </Controls>
+    </Item1>
+    <Item2 Ref="56" ControlType="TopMarginBand" Name="TopMargin" HeightF="25" TextAlignment="TopLeft" Padding="0,0,0,0,100" />
+    <Item3 Ref="57" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="25" TextAlignment="TopLeft" Padding="0,0,0,0,100" />
+    <Item4 Ref="58" ControlType="GroupHeaderBand" Name="GroupHeader3" PageBreak="BeforeBandExceptFirstEntry" Level="1" HeightF="143.999969" KeepTogether="true">
+      <GroupFields>
+        <Item1 Ref="59" FieldName="EmpCode" />
+      </GroupFields>
+      <Controls>
+        <Item1 Ref="60" ControlType="XRLabel" Name="label1" Multiline="true" Text="Monthly Attendance Report" TextAlignment="MiddleCenter" SizeF="783.6667,33.83334" LocationFloat="0,0" Font="Khmer OS Siemreap, 12pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="61" UseFont="false" UseTextAlignment="false" />
+        </Item1>
+        <Item2 Ref="62" ControlType="XRLabel" Name="label2" Multiline="true" Text="Monthly Attendance Report" SizeF="748.618652,22.9999886" LocationFloat="0,51.9999962" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="63" EventName="BeforePrint" PropertyName="Text" Expression="'របាយការណ៍វត្តមានប្រចាំខែ ' + [FromDateKH] +' ដល់ ' + [ToDateKH]" />
+          </ExpressionBindings>
+          <StylePriority Ref="64" UseFont="false" />
+        </Item2>
+        <Item3 Ref="65" ControlType="XRLabel" Name="label4" Multiline="true" SizeF="292.499969,22.9999924" LocationFloat="103.048042,74.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="66" EventName="BeforePrint" PropertyName="Text" Expression="[EmpCode]" />
+          </ExpressionBindings>
+          <StylePriority Ref="67" UseFont="false" />
+        </Item3>
+        <Item4 Ref="68" ControlType="XRLabel" Name="label3" Multiline="true" Text="អត្ដលេខ" SizeF="103.048012,22.9999924" LocationFloat="3.17891427E-05,74.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="69" UseFont="false" />
+        </Item4>
+        <Item5 Ref="70" ControlType="XRLabel" Name="label7" Multiline="true" Text="Division" SizeF="103.048012,23" LocationFloat="3.17891427E-05,97.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="71" UseFont="false" />
+        </Item5>
+        <Item6 Ref="72" ControlType="XRLabel" Name="label11" Multiline="true" Text="Department" SizeF="103.048012,23" LocationFloat="6.866455E-05,120.999969" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="73" UseFont="false" />
+        </Item6>
+        <Item7 Ref="74" ControlType="XRLabel" Name="label12" Multiline="true" SizeF="292.499939,23" LocationFloat="103.048096,120.999969" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="75" EventName="BeforePrint" PropertyName="Text" Expression="[Department]" />
+          </ExpressionBindings>
+          <StylePriority Ref="76" UseFont="false" />
+        </Item7>
+        <Item8 Ref="77" ControlType="XRLabel" Name="label8" Multiline="true" SizeF="292.499939,23" LocationFloat="103.04808,97.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="78" EventName="BeforePrint" PropertyName="Text" Expression="[Division]" />
+          </ExpressionBindings>
+          <StylePriority Ref="79" UseFont="false" />
+        </Item8>
+        <Item9 Ref="80" ControlType="XRLabel" Name="label5" Multiline="true" Text="ឈ្មោះ" SizeF="96.11862,22.9999924" LocationFloat="395.548,74.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="81" UseFont="false" />
+        </Item9>
+        <Item10 Ref="82" ControlType="XRLabel" Name="label6" Multiline="true" SizeF="256.952026,22.9999924" LocationFloat="491.666626,74.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="83" EventName="BeforePrint" PropertyName="Text" Expression="[AllName]" />
+          </ExpressionBindings>
+          <StylePriority Ref="84" UseFont="false" />
+        </Item10>
+        <Item11 Ref="85" ControlType="XRLabel" Name="label10" Multiline="true" SizeF="256.952026,23" LocationFloat="491.666626,97.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="86" EventName="BeforePrint" PropertyName="Text" Expression="[Position]" />
+          </ExpressionBindings>
+          <StylePriority Ref="87" UseFont="false" />
+        </Item11>
+        <Item12 Ref="88" ControlType="XRLabel" Name="label9" Multiline="true" Text="មុខដំណែង" SizeF="96.11859,23" LocationFloat="395.548035,97.99997" Font="Khmer OS Siemreap, 9pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="89" UseFont="false" />
+        </Item12>
+      </Controls>
+    </Item4>
+    <Item5 Ref="90" ControlType="GroupHeaderBand" Name="GroupHeader1" HeightF="53">
+      <GroupFields>
+        <Item1 Ref="91" FieldName="ToDateKH" />
+        <Item2 Ref="92" FieldName="FromDateKH" />
+      </GroupFields>
+      <Controls>
+        <Item1 Ref="93" ControlType="XRTable" Name="xrTable1" AnchorHorizontal="Both" TextAlignment="MiddleCenter" SizeF="783.666565,53" LocationFloat="6.993612E-05,0" Font="Khmer OS Siemreap, 9pt" ForeColor="White" BackColor="Green" Padding="2,2,0,0,96" Borders="Left, Top, Bottom">
+          <Rows>
+            <Item1 Ref="94" ControlType="XRTableRow" Name="xrTableRow1" Weight="1.892857271797814">
+              <Cells>
+                <Item1 Ref="95" ControlType="XRTableCell" Name="tableCell22" Weight="1.0314572123075845" RowSpan="2" Multiline="true" Text="កាលបរិច្ឆេទ" />
+                <Item2 Ref="96" ControlType="XRTableCell" Name="xrTableCell29" Weight="0.70690424927196149" RowSpan="2" Multiline="true" Text="វេន" />
+                <Item3 Ref="97" ControlType="XRTableCell" Name="xrTableCell31" Weight="1.4404837528601937" RowSpan="2" Multiline="true" Text="ម៉ោងធ្វើការ" />
+                <Item4 Ref="98" ControlType="XRTableCell" Name="xrTableCell5" Weight="0.720242194122398" CanGrow="false" RowSpan="2" Multiline="true" Text="ម៉ោង&#xD;&#xA;ចូល១" />
+                <Item5 Ref="99" ControlType="XRTableCell" Name="xrTableCell3" Weight="0.72024193650638924" CanGrow="false" RowSpan="2" Multiline="true" Text="ម៉ោង&#xD;&#xA;ចេញ១" />
+                <Item6 Ref="100" ControlType="XRTableCell" Name="xrTableCell7" Weight="0.72024201058733506" CanGrow="false" RowSpan="2" Multiline="true" Text="ម៉ោង&#xD;&#xA;ចូល២" />
+                <Item7 Ref="101" ControlType="XRTableCell" Name="xrTableCell8" Weight="0.72024194957789323" CanGrow="false" RowSpan="2" Multiline="true" Text="ម៉ោង&#xD;&#xA;ចេញ២" />
+                <Item8 Ref="102" ControlType="XRTableCell" Name="xrTableCell9" Weight="0.81360667043837787" CanGrow="false" RowSpan="2" Multiline="true" Text="ប្រភេទ&#xD;&#xA;អវត្តមាន" />
+                <Item9 Ref="103" ControlType="XRTableCell" Name="xrTableCell11" Weight="0.96881144706381506" CanGrow="false" RowSpan="2" Multiline="true" Text="ភ្លេចស្កេន" />
+                <Item10 Ref="104" ControlType="XRTableCell" Name="xrTableCell10" Weight="0.73024164880793319" CanGrow="false" RowSpan="2" Multiline="true" Text="មកយឺត&#xD;&#xA;(នាទី)" Borders="All" />
+                <Item11 Ref="105" ControlType="XRTableCell" Name="xrTableCell12" Weight="0.98130588697092347" CanGrow="false" RowSpan="2" Multiline="true" Text="ចេញមុន&#xD;&#xA;(នាទី)" Borders="Top, Bottom" />
+                <Item12 Ref="106" ControlType="XRTableCell" Name="xrTableCell13" Weight="0.898620005057405" CanGrow="false" RowSpan="2" Multiline="true" Text="ម៉ោងធ្វើការ&#xD;&#xA;សរុប" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="107" UseBorders="false" />
+                </Item12>
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="108" UseFont="false" UseForeColor="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+        </Item1>
+      </Controls>
+    </Item5>
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="109" Name="xrControlStyle1" BorderStyle="Inset" ForeColor="Black" BackColor="Red" StringFormat="Near;Near;0;None;Character;GenericDefault" />
+  </StyleSheet>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v23.2" Name="sqlDataSource1" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxDb25uZWN0aW9uIE5hbWU9IlJlcG9ydENvbm5lY3Rpb25TdHJpbmciIEZyb21BcHBDb25maWc9InRydWUiIC8+PFF1ZXJ5IFR5cGU9IlN0b3JlZFByb2NRdWVyeSIgTmFtZT0iSFJfUlBUX0VTU01vbnRobHlBdHQiPjxQYXJhbWV0ZXIgTmFtZT0iQEVtcENvZGUiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0VtcENvZGUpPC9QYXJhbWV0ZXI+PFBhcmFtZXRlciBOYW1lPSJARnJvbURhdGUiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLkRhdGVUaW1lKSg/RnJvbURhdGUpPC9QYXJhbWV0ZXI+PFBhcmFtZXRlciBOYW1lPSJAVG9EYXRlIiBUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuRXhwcmVzc2lvbiI+KFN5c3RlbS5EYXRlVGltZSkoP1RvRGF0ZSk8L1BhcmFtZXRlcj48UHJvY05hbWU+SFJfUlBUX0VTU01vbnRobHlBdHQ8L1Byb2NOYW1lPjwvUXVlcnk+PFJlc3VsdFNjaGVtYT48RGF0YVNldCBOYW1lPSJzcWxEYXRhU291cmNlMSI+PFZpZXcgTmFtZT0iSFJfUlBUX0VTU01vbnRobHlBdHQiPjxGaWVsZCBOYW1lPSJFbXBDb2RlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkFsbE5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQnJhbmNoIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkRlcGFydG1lbnQiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iUG9zaXRpb24iIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iVHJhbkRhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJJTjEiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJMZWF2ZUNvZGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iTGVhdmVEZXNjIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9Ik9VVDEiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJTdGFydCIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9Indva2luZ0hvdXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iRW5kRGF0ZSIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9IlN0YXJ0MiIgVHlwZT0iRGF0ZVRpbWUiIC8+PEZpZWxkIE5hbWU9IkVuZERhdGUyIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iTGF0ZSIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IkVhcmx5IiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iV0hPVVIiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IlNISUZUIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9Ik1pc3NTY2FuIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9InRvdGFsTWlzc1NjYW4iIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJJU19TY2FuIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iR2VuZGVyS0giIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQUJTXyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJEZXNMb2NhdGlvbiIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJMT0NUIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkRlcHRPcmRlciIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQb3N0T3JkZXIiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iV09UIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJPVEFwcHJvdmFsIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJEaXZpc2lvbiIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJPVFBsYW4iIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkZyb21EYXRlS0giIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iVG9EYXRlS0giIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iTGV2ZWxDb2RlIiBUeXBlPSJTdHJpbmciIC8+PC9WaWV3PjwvRGF0YVNldD48L1Jlc3VsdFNjaGVtYT48Q29ubmVjdGlvbk9wdGlvbnMgQ2xvc2VDb25uZWN0aW9uPSJ0cnVlIiAvPjwvU3FsRGF0YVNvdXJjZT4=" />
+  </ComponentStorage>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.2" Ref="4" Content="System.DateTime" Type="System.Type" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>

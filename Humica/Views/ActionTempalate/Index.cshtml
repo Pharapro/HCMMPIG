@@ -1,0 +1,62 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+
+       
+
+        $('#_btnNewAction').click(function () {
+            window.location = "@Request.Url.AbsoluteUri" + "/Create";
+        });
+
+        $('#_bthEditAction').click(function () {
+
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TemplateID', OnGetRowValues);
+
+        });
+
+
+
+        $('#_btnExportAction').click(function () {
+            window.location = "@Request.Url.AbsoluteUri" + "/ExportTo";
+        });
+
+       
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TemplateID', OnGetRowValues);
+    }
+
+
+    function OnGetRowValues(values) {
+        
+        if (ss == 2) {
+            window.location = "@Request.Url.AbsoluteUri" + "/Create?id=" + values;
+        }      
+
+    }
+
+
+</script>
+
+@model Humica.EF.Models.SY.SYPermissionObject
+
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            @*<i style="margin-right: 5px;" class="fa fa-dashboard"></i>*@
+            @Session["Screen"]
+        </h3>
+    </div>
+    <div class="box-body">
+       @Html.Partial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListAction)
+    </div>
+    <!-- /.box-body -->
+</div>
+
+

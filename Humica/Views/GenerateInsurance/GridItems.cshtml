@@ -1,0 +1,174 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "Gridview";
+               settings.KeyFieldName = "EmpCode";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Action = "GridItems", Controller = "GenerateInsurance" };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+               settings.CommandColumn.Visible = false;
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.CommandColumn.ShowSelectCheckbox = false;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.Width = 50;
+
+               settings.CommandColumn.Width = 50;
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+                   column.Width = 90;
+                   column.FieldName = "ID";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+                   column.Width = 150;
+                   column.FieldName = "EmpCode";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Generate Date");
+                   column.Width = 180;
+                   column.FieldName = "DocumentDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   var properties = column.PropertiesEdit as DateEditProperties;
+                   properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                   properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Insurance Type");
+                   column.Width = 120;
+                   column.FieldName = "InsurType";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Insurance Company");
+                   column.Width = 150;
+                   column.FieldName = "InsurComp";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company name");
+                   column.Width = 150;
+                   column.FieldName = "InsurDescription";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkingDay");
+                   column.Width = 150;
+                   column.FieldName = "WorkingDay";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rate");
+                   column.FieldName = "Rate";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+                   column.FieldName = "Amount";
+                   column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                   var PropertiesEdit = column.PropertiesEdit as SpinEditProperties;
+                   PropertiesEdit.DisplayFormatString = "N2";
+               });
+       //settings.Columns.Add(column =>
+       //{
+       //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InMonth");
+       //    column.FieldName = "InMonth";
+       //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+       //    //column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+       //});
+
+       //settings.Columns.Add(column =>
+       //{
+       //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InYear");
+       //    column.FieldName = "InYear";
+       //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+       //    //column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+       //});
+       //settings.Columns.Add(column =>
+       //{
+       //    column.Width = 150;
+       //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+       //    column.FieldName = "CAREERDESC";
+
+       //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+       //    var textProperties = column.PropertiesEdit as ComboBoxProperties;
+       //    textProperties.DataSource = ViewData["CareerHistories_SELECT"];
+       //    textProperties.ValueField = "Code";
+       //    textProperties.TextField = "Description";
+
+       //    textProperties.TextFormatString = "{1}";
+       //});
+       //settings.Columns.Add(column =>
+       //{
+       //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndDate");
+       //    column.FieldName = "EndDate";
+       //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+       //    column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+       //});
+       settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+       //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+       settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+       //settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+       settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 50;
+
+
+           });
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

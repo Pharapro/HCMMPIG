@@ -1,0 +1,103 @@
+﻿
+@{var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "_ListRefCheck";
+        settings.KeyFieldName = "ApplicantID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "RCMRefCheck", Action = "_ListRefCheck" };
+        settings.CommandColumn.Visible = false;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "");
+            column.Width = 100;
+            column.SetDataItemTemplateContent(container =>
+            {
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "hll" + container.VisibleIndex;
+                    hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "View");
+                    hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "ApplicantID"));
+                    hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL] + "Edit?ApplicantID=" + Convert.ToString(DataBinder.Eval(container.DataItem, "ApplicantID"));
+                }).Render();
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Candidate’s Name");
+            column.Width = 175;
+            column.FieldName = "Name";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PhoneNo";
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PhoneNo");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "RefChkDate";
+            column.Width = 110;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("RefChkDate");
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "NameOfRef";
+            column.Width = 110;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NameOfRef");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "OccupationOfRef";
+            column.Width = 140;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OccupationOfRef");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CompanyOfRef";
+            column.Width = 140;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CompanyOfRef");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ReasonForLeaving";
+            column.Width = 140;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+    });
+
+    if (ViewData["EditError"] != null) { grid.SetEditErrorText((string)ViewData["EditError"]); }}
+
+
+@grid.Bind(Model).GetHtml()
+
+

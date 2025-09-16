@@ -1,0 +1,86 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        IsDeductSalary.SetValue(true);
+        cboLeaveType.SetEnabled(false);
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_btnTransferOT") {
+            ss = 4;
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferOT?TranNo=" + selectedIDs;
+        }
+        if (e.item.name == "_btnTransferAtt") {
+            ss = 9;
+            //PopSelectStaff.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs;
+            @*window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs;
+            PopSelectStaff.Hide();*@
+        }
+    }
+    function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                day = ("0" + date.getDate()).slice(-2),
+                Minutes = ("0" + date.getMinutes()).slice(-2);
+            return [date.getFullYear(), mnth, day].join("-");
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+
+    function _clickConfirm(s, e) {
+        //if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 9) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs; //"&IsDudSalary=" + IsDeductSalary.GetValue() + "&Code=" + cboLeaveType.GetValue() + "&PayrollMonth=" + convert(PayrollMonth.GetValue())
+                //window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferAtt?TranNo=" + selectedIDs + "&IsDudSalary=" + IsDeductSalary.GetValue() + "&Code=" + Code.GetValue()
+                //PopSelectStaff.Hide();
+            }
+       // }
+    }
+    function OnClientChanged(s, e) {
+        var checked = s.GetChecked();
+        cboLeaveType.SetEnabled(false);
+        PayrollMonth.SetEnabled(true);
+        if (checked == false) {
+            cboLeaveType.SetEnabled(true);
+            PayrollMonth.SetEnabled(false);
+        }
+    }
+</script>
+
+@model Humica.Logic.Att.ATEmpSchObject
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Summary")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems", Model.ListSumLaEa);
+        });
+    }).GetHtml()
+@Html.Partial("PopSelectStaff")

@@ -1,0 +1,142 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "_pivotGrid";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "RPTMaternityLeave",
+            Action = "PivotLeave"
+        };
+        settings.Height = Humica.EF.MD.SYSession.PageHieigh + 150;
+
+        settings.OptionsView.ShowColumnTotals = false;
+        settings.OptionsView.ShowRowTotals = false;
+
+        settings.OptionsView.VerticalScrollingMode = PivotScrollingMode.Standard;
+        settings.OptionsView.HorizontalScrollingMode = PivotScrollingMode.Standard;
+        settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+        settings.OptionsCustomization.AllowDrag = false;
+        settings.OptionsView.ShowColumnHeaders = false;
+        settings.OptionsView.ShowDataHeaders = false;
+
+        settings.OptionsView.DataHeadersDisplayMode = PivotDataHeadersDisplayMode.Popup;
+
+        settings.Width = Unit.Percentage(100);
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+        settings.OptionsView.ShowFilterHeaders = false;
+
+        settings.OptionsPager.Visible = false;
+        settings.OptionsFilter.NativeCheckBoxes = false;
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+
+            f.ID = "_EmpCode";
+            f.FieldName = "EmpCode";
+            f.Area = PivotArea.RowArea;
+            f.AreaIndex = 1;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName");
+
+            f.ID = "_EmployeeName";
+            f.FieldName = "EmployeeName";
+            f.Area = PivotArea.RowArea;
+            f.AreaIndex = 1;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("GroupNo");
+
+            f.FieldName = "GroupNo";
+            f.ExportBestFit = false;
+            f.Area = PivotArea.ColumnArea;
+            f.AreaIndex = 0;
+            f.Visible = false;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Order");
+
+            f.FieldName = "Order";
+            f.ExportBestFit = false;
+            f.Area = PivotArea.ColumnArea;
+            f.AreaIndex = 1;
+            f.Visible = true;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("InYear");
+
+            //f.ID = "_TranDate";
+            f.FieldName = "InYear";
+            f.ExportBestFit = false;
+            //f.GroupInterval = PivotGroupInterval.DateMonthYear;
+            //f.ValueFormat.FormatType = FormatType.Custom;
+            //f.ValueFormat.FormatString = "yyyy";
+            f.Area = PivotArea.ColumnArea;
+            //f.UnboundFieldName = "TranDate";
+            f.AreaIndex = 2;
+        });
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+
+
+        //    f.ID = "_FromDate";
+        //    f.FieldName = "FromDate";
+        //    f.ExportBestFit = true;
+        //    f.GroupInterval = PivotGroupInterval.DateMonth;
+        //    f.ValueFormat.FormatType = FormatType.Custom;
+        //    f.ValueFormat.FormatString = "MMM";
+        //    f.Area = PivotArea.ColumnArea;
+        //    f.UnboundFieldName = "FromDate";
+        //    // f.ExportBestFit = true;
+        //    f.AreaIndex = 3;
+        //});
+
+        settings.Fields.Add(f =>
+        {
+            f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary");
+
+            f.ID = "_NetWage";
+            f.FieldName = "Salary";
+            f.SummaryType = PivotSummaryType.Sum;
+            f.Area = PivotArea.DataArea;
+            f.AreaIndex = 4;
+        });
+        //settings.Fields.Add(f =>
+        //{
+        //    f.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Total");
+
+        //    f.ID = "_Total";
+        //    f.FieldName = "Total";
+        //    f.Area = PivotArea.RowArea;
+
+        //    f.AreaIndex = 50;
+        //});
+        settings.OptionsView.ShowRowGrandTotalHeader = false;
+        settings.OptionsView.ShowRowGrandTotals = false;
+        settings.OptionsView.ShowColumnGrandTotalHeader = false;
+        settings.OptionsView.ShowColumnGrandTotals = false;
+
+        settings.OptionsView.ShowGrandTotalsForSingleValues = true;
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            var pivot = (MVCxPivotGrid)sender;
+
+        };
+        settings.CustomJsProperties = (sender, e) =>
+        {
+
+            var pivot = (MVCxPivotGrid)sender;
+            //Session[Humica.EF.SYSConstant.PIVOT_VIEW_LAYOUT + ViewData[Humica.EF.SYSConstant.REPORT_SCREEN_ID].ToString()] = pivot;
+
+        };
+    }).Bind(Model.ListSalary).GetHtml()

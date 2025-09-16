@@ -1,0 +1,113 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+           settings.Name = "_Interviewer";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "RCMVacancy", Action = "_Interviewer" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "RCMVacancy", Action = "CreateInterviewer" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "RCMVacancy", Action = "EditInterviewer" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "RCMVacancy", Action = "DeleteInterviewer" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "IntStep";
+               column.Width = 70;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Step *");
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.MinValue = 1;
+               spinEditProperties.MaxValue = 1000000;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "EmpCode";
+               column.PropertiesEdit.ClientInstanceName = "cboEmpCode";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Interviewer Code *");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+               cboProperties.DataSource = ViewData["EMPCODE_SELECT"];
+               cboProperties.ClientSideEvents.SelectedIndexChanged = "Selected";
+               cboProperties.ValueField = "EmpCode";
+               cboProperties.TextField = "EmpCode";
+               cboProperties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+               cboProperties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+               cboProperties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+               cboProperties.DropDownStyle = DropDownStyle.DropDownList;
+               cboProperties.TextFormatString = "{0},{1}";
+               cboProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.FieldName = "EmpName";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.PropertiesEdit.ClientInstanceName = "txtIntVName";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Interviewer Name");
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.FieldName = "Remark";
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               column.PropertiesEdit.ClientInstanceName = "txtIntVPosition";
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["POST_SELECT"];
+               textProperties.TextField = "Description";
+               textProperties.ValueField = "Code";
+               textProperties.ValueType = typeof(string);
+           });
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 10;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

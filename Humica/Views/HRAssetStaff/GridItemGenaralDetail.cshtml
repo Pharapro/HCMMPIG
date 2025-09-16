@@ -1,0 +1,147 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemGenaral";
+           settings.KeyFieldName = "AssetCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRAssetStaff", Action = "GridItemGenaral" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAssetStaff", Action = "CreateItemGenaral" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAssetStaff", Action = "EditItemGenaral" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAssetStaff", Action = "DeleteItemGenaral" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           //settings.CommandColumn.Visible = true;
+           //settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+           //settings.CommandColumn.ShowNewButtonInHeader = true;
+           //settings.CommandColumn.ShowCancelButton = true;
+           //settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.InitNewRow = (sender, e) =>
+           {
+               e.NewValues["Status"] = "ASSIGN";         // ✅ Default status
+               e.NewValues["AssignDate"] = DateTime.Today;
+               e.NewValues["Condition"] = "GOOD";
+           };
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Code");
+               column.FieldName = "AssetCode";
+               column.Width = 250;
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["ASSETCODE_SELECT"];
+               textProperties.TextFormatString = "{1}";
+               textProperties.TextField = "AssetCode";
+               textProperties.ValueField = "AssetCode";
+               textProperties.Columns.Add("AssetCode", Humica.EF.Models.SY.SYSettings.getLabel("Asset Code"));
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssignDate");
+               column.FieldName = "AssignDate";
+               column.PropertiesEdit.DisplayFormatString = "dd/MM/yyyy";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+               column.FieldName = "Status";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.ReadOnly = true;
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Condition");
+               column.FieldName = "Condition";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetDescription");
+               column.FieldName = "AssetDescription";
+           });
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Width = 250;
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Assign Date");
+           //    column.FieldName = "AssignDate";  // Ensure this matches your model
+
+           //    string dateFormat = ViewData[Humica.EF.SYSConstant.DATE_FORMAT]?.ToString() ?? "MM/dd/yyyy";
+
+           //    column.NullText = dateFormat;
+           //    column.EditFormatString = dateFormat;
+           //    column.DisplayFormatString = dateFormat;
+
+           //    column.ShowModelErrors = true;
+           //    column.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+           //    column.ValidationSettings.SetFocusOnError = true;
+           //    column.ValidationSettings.ErrorText = "*";
+
+           //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+           //    var dateEditProperties = column.PropertiesEdit as DateEditProperties;
+           //    if (dateEditProperties != null)
+           //    {
+           //        dateEditProperties.EditFormat = EditFormat.Custom;
+           //        dateEditProperties.EditFormatString = dateFormat;
+           //        dateEditProperties.DisplayFormatString = dateFormat;
+           //    }
+           //});
+
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "EmpCode")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

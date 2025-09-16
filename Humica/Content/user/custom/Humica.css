@@ -1,0 +1,122 @@
+﻿
+
+.app-header
+{
+	background-color: #008000!important;
+}
+.dxeCalendarDay_Office365.dxeCalendarSelected_Office365
+{
+    background-color: #008000!important;
+}
+.dxeCalendarDay_Office365.dxeCalendarSelected_Office365.dxeCalendarToday_Office365 {
+    box-shadow: inset 0 0 0 1px #008000!important;
+}
+.dxeListBoxItemSelected_Office365 {    
+    background-color: #008000!important;
+    color:#FFF!important;
+}
+.dxeButtonEditButton_Office365:hover,.dxeButtonEditButton_Office365:active,.dxeButtonEditButton_Office365:focus{
+    background-color: #008000!important;
+}
+
+.dxtcLite_Office365.dxtc-top > .dxtc-stripContainer .dxtc-activeTab {
+    border-bottom: 3px solid #008000!important;
+}
+.dxtcLite_Office365.dxtc-top > .dxtc-stripContainer .dxtc-activeTab .dxtcLite_Office365 > .dxtc-stripContainer .dxtc-activeTab, .dxtcLite_Office365 > .dxtc-stripContainer .dxtc-activeTab a
+{
+    color: #008000!important;
+}
+
+.dxgvControl_Office365 .dxgvTable_Office365 .dxgvFocusedRow_Office365, .dxgvControl_Office365 .dxgvTable_Office365 .dxgvFocusedRow_Office365.dxgvDataRowHover_Office365 {
+    background-color: #e5e5e5 !important;
+    color: #000000;
+}
+.dxgvTable_Office365 td.dxgvHeader_Office365,.dxgvHeader_Office365 td
+{
+    font-weight:bold!important;
+}
+.dxmLite_Office365 .dxm-item.dxm-checked, .dxmLite_Office365 .dxm-item.dxm-selected
+{
+    background-color:#008000!important;
+}
+.dxtvControl_Office365 .dxtv-ndSel
+{
+    background-color:#008000!important;
+}
+.dxflGroupBoxCaption_Office365
+{
+    color:#008000!important;
+}
+.menu-container .dxm-horizontal.dxm-autoWidth > ul, 
+.menu-container .dxm-horizontal.dxm-autoWidth > ul > li, 
+.menu-container .dxm-horizontal.dxm-noWrap > ul > li
+{
+    background-color: #008000!important;
+}
+.dxflNestedControlCell_Office365 .dxbButton_Office365
+{
+    background-color: #008000!important;
+    color:#FFFFFF !important;
+    font-weight:bold;
+}
+.dxeButtonEditButtonHover_0ffice365 
+{
+      background-color: #008000!important;
+}
+.dxeFocused_Office365
+{
+    border: 1px solid #008000!important;
+}
+
+.menu-container .dxm-horizontal.dxm-autoWidth > ul > li:hover, 
+.menu-container .dxm-horizontal.dxm-noWrap > ul > li:hover
+{
+    background-color:#E5E5E5;
+}
+ .dxmLite_Office365 span.dx-vam,
+ .dxmLite_Office365 span.dx-vat,
+ .dxmLite_Office365 span.dx-vab,
+ .dxmLite_Office365 a.dx-vam,
+ .dxmLite_Office365 a.dx-vat,
+ .dxmLite_Office365 a.dx-vab
+{
+    font-weight:bold;    
+}
+.app-header .header-menu .item.selected, .app-header .header-menu .item.hovered
+{
+    background-color:none!important;
+}
+.menu-container .dxmLite_Office365,.menu-container .dxmLite_Office365 .dxm-item a.dx
+{
+    color:#fff!important;
+}
+.dxpLite_Office365 .dxp-current
+{
+   background-color: #008000!important;
+}
+/*a.dxbButton_Office365{
+    color:#008000!important;
+}
+.dxtc-content .dxgvControl_Office365 a
+{
+    color:#008000!important;
+}
+.form .dxm-horizontal.dxm-autoWidth > ul, .form .dxm-horizontal.dxm-autoWidth > ul > li, .form .dxm-horizontal.dxm-noWrap > ul > li
+{
+    color:#008000!important;
+}*/
+
+div.dxtcSys, div.dxtcSys > .dxtc-content > div a.dxbButton_Office365{
+    color:#008000;
+}
+div.dxtcSys > .dxtc-content .dxgvControl_Office365 a
+{
+    color:#008000;
+}
+.question_btn .dxbButton_Office365{
+    background-color: #008000!important;
+}
+.MenuNode
+{
+	background-color: #008000!important;
+}

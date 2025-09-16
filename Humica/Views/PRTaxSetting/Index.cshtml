@@ -1,0 +1,34 @@
+﻿<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+</script>
+
+@model Humica.Payroll.IClsPRTaxSetting
+<div class="fitler-doc">
+    @Html.Partial("TabSetting", Model)
+</div>
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "GCreate";
+    settings.Width = Unit.Percentage(90);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Tax Setting")).SetContent(() =>
+    {
+        @Html.RenderPartial("Gridview", Model.ListHeader);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Other Except Type")).SetContent(() =>
+    {
+        @Html.RenderPartial("GridItemExceptType", Model.ListExceptType);
+    });
+
+}).GetHtml()

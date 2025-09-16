@@ -1,0 +1,390 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridItemView";
+        settings.KeyFieldName = "Id";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "MailSendBox", Action = "GridJobDetails" };
+
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsSearchPanel.Visible = false;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Id";
+            column.Width = 60;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("#");
+            column.Visible = true;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.FieldName = "Name";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+            var cboProperties = column.PropertiesEdit as TextBoxProperties;
+            cboProperties.ClientInstanceName = "gridLineName";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 500;
+            column.FieldName = "Reason";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Reason");
+            var cboProperties = column.PropertiesEdit as TextBoxProperties;
+            cboProperties.ClientInstanceName = "gridLineReason";
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attachment");
+
+        //    column.Width = 80;
+        //    column.FieldName = "Attachment";
+        //    column.SetDataItemTemplateContent(container =>
+        //    {
+
+        //        var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "Attachment"));
+        //        if (!(attachment == null || attachment == ""))
+        //        {
+        //            Html.DevExpress().HyperLink(hyperlink =>
+        //            {
+        //                hyperlink.Name = "file_" + container.VisibleIndex;
+        //                hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+        //                hyperlink.Properties.Target = "_BLANK";
+        //                hyperlink.NavigateUrl = attachment;
+        //            }).Render();
+        //        }
+        //    });
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.FieldName = "MaterialCode";
+        //    column.ColumnType = MVCxGridViewColumnType.HyperLink;
+        //    var cboProperties = column.PropertiesEdit as HyperLinkProperties;
+        //    cboProperties.NavigateUrlFormatString = "~/Configuration/MasterData/Material/Details?id=0&pro=1&mat={0}";
+        //    cboProperties.Target = "_BLANK";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("MaterialCode");
+        //});
+
+
+
+        //settings.Columns.Add(column =>
+        //{
+
+        //    column.FieldName = "Unit";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.ClientInstanceName = "gridBaseUnit";
+        //    cboProperties.DataSource = ViewData["MAT_UNIT"];
+        //    cboProperties.TextField = "Description";
+        //    cboProperties.ValueField = "UnitCode";
+        //    cboProperties.Columns.Add("UnitCode", Humica.EF.Models.SY.SYSettings.getLabel("UnitCode"));
+        //    cboProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+        //    cboProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING_SINGLE;
+
+
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Unit");
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "Quantity";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Quantity");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "OpenQuantity";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OpenQty");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "QuantityReply";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproveQty");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "ReceiptQuantity";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReceiptQty");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "CurrentStock";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CurrentStock");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 120;
+        //    column.FieldName = "ExpectedPrice";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EstimatePriceUnit");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.ClientInstanceName = "gridUnitPrice";
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "TotalExpectCost";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EstimatePrice");
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinProperties.MinValue = 0;
+        //    spinProperties.MaxValue = 99999999999;
+        //    spinProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinProperties.DisplayFormatString = "N2";
+
+        //});
+
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetCode");
+        //    column.FieldName = "AssetCode";
+        //    column.ColumnType = MVCxGridViewColumnType.HyperLink;
+        //    var cboProperties = column.PropertiesEdit as HyperLinkProperties;
+        //    cboProperties.NavigateUrlFormatString = "~/Asset/FixAssetMaster/Details?id={0}";
+        //    cboProperties.Target = "_BLANK";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+
+
+        //    column.FieldName = "PromisedDate";
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PromisedDate");
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        //    var textProperties = column.PropertiesEdit as DateEditProperties;
+        //    textProperties.EditFormat = EditFormat.Custom;
+        //    textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //    textProperties.Width = Unit.Percentage(100);
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CostCenter");
+        //    column.FieldName = "CostCode";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = new Humica.EF.Models.MD.SMMasterData().FIAnalysisCodes.Where(w => w.Dimension == "BUDGETLINE").ToList();
+
+        //    cboProperties.TextField = "Description";
+        //    cboProperties.ValueField = "AnalysisCode";
+        //});
+
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.FieldName = "Remark";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+        //    var cboProperties = column.PropertiesEdit as TextBoxProperties;
+        //    cboProperties.ClientInstanceName = "gridRemark";
+        //    cboProperties.MaxLength = 50;
+
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+
+        //    column.Width = 150;
+        //    column.FieldName = "ProjectTask";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = ViewData["PROJECT_TAST"];
+        //    cboProperties.TextField = "Description";
+        //    cboProperties.ValueField = "ProjectTask";
+        //    cboProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING_SINGLE;
+        //    cboProperties.Columns.Add("ProjectTask", Humica.EF.Models.SY.SYSettings.getLabel("ProjectTask"));
+        //    cboProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+
+        //    column.Width = 150;
+        //    column.FieldName = "UnitCode";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = ViewData["UNIT_CODE"];
+        //    cboProperties.TextField = "Description";
+        //    cboProperties.ValueField = "UnitNo";
+        //    cboProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING_SINGLE;
+        //    cboProperties.Columns.Add("UnitNo", Humica.EF.Models.SY.SYSettings.getLabel("UnitNo"));
+        //    cboProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+        //});
+
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 250;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BudgetLine");
+        //    column.FieldName = "AttItem01";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AttItem02");
+        //    column.FieldName = "AttItem02";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = new Humica.EF.Models.SY.SYDataList("PO_AttItem02").ListData;
+
+        //    cboProperties.TextField = "SelectText";
+        //    cboProperties.ValueField = "SelectValue";
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AttItem03");
+        //    column.FieldName = "AttItem03";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = new Humica.EF.Models.SY.SYDataList("PO_AttItem03").ListData;
+
+        //    cboProperties.TextField = "SelectText";
+        //    cboProperties.ValueField = "SelectValue";
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AttItem04");
+        //    column.FieldName = "AttItem04";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    cboProperties.DataSource = new Humica.EF.Models.SY.SYDataList("PO_AttItem04").ListData;
+
+        //    cboProperties.TextField = "SelectText";
+        //    cboProperties.ValueField = "SelectValue";
+        //});
+
+        //settings.ClientSideEvents.FocusedRowChanged = "DbRowClicItem";
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Enqueued'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Succeeded'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Succeeded'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Deleted'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Failed'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Failed'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Scheduled'", GridConditionHighlightFormat.BoldText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Scheduled'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+        settings.FormatConditions.AddHighlight("Name", "[Name] = 'Processing'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue == null)
+            {
+                //if (e.Column.FieldName == "TotalExpectCost")
+                //{
+                //    e.Editor.ReadOnly = true;
+                //    e.Editor.Value = 0;
+                //}
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

@@ -1,0 +1,202 @@
+﻿@model Humica.Logic.LM.FormPOObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+
+    settings.Name = "POViewReason";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Vendor");
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ContactPersonName");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.ContactPerson, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.Width = Unit.Percentage(100);
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PaymentTerm");
+        }).SetNestedContent(() =>
+          {
+              Html.DevExpress().TextBoxFor(i => i.Header.PaymentTerm, s =>
+              {
+                  s.ReadOnly = isReadOnly;
+                  s.Width = Unit.Percentage(100);
+                  s.ShowModelErrors = true;
+                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                  s.Properties.ValidationSettings.ErrorText = "*";
+              }).Render();
+          });
+
+        g.Items .Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Email");
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.VendorEmail, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ShowModelErrors = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Phone");
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.Header.VendorPhone, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ShowModelErrors = true;
+                s.Width = Unit.Percentage(100);
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+           ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Address");
+            m.ColSpan = 2;
+        }).SetNestedContent(() =>
+         {
+             Html.DevExpress().TextBoxFor(i => i.Header.VendorAddress, s =>
+             {
+                 s.ReadOnly = isReadOnly;
+                 s.Width = Unit.Percentage(100);
+                 s.ShowModelErrors = true;
+                 s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 s.Properties.ValidationSettings.SetFocusOnError = true;
+                 s.Properties.ValidationSettings.ErrorText = "*";
+             }).Render();
+         });
+
+    });
+
+
+    //settings.Items.AddGroupItem(m => Model.Header, g =>
+    //{
+
+    //    g.ColCount = 2;
+    //    g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+    //    g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Ship");
+    //    g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ShipName");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.Header.ShipName, s =>
+    //        {
+    //            s.ReadOnly = isReadOnly;
+    //            s.Width = Unit.Percentage(100);
+    //            s.ShowModelErrors = true;
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ShipTerm");
+    //    })
+    //      .SetNestedContent(() =>
+    //      {
+    //          Html.DevExpress().TextBoxFor(i => i.Header.ShipTerm, s =>
+    //          {
+    //              s.ReadOnly = isReadOnly;
+    //              s.Width = Unit.Percentage(100);
+    //              s.ShowModelErrors = true;
+    //              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //              s.Properties.ValidationSettings.SetFocusOnError = true;
+    //              s.Properties.ValidationSettings.ErrorText = "*";
+    //          }).Render();
+    //      });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+    //    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Email");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.Header.ShipEmail, s =>
+    //        {
+    //            s.ReadOnly = isReadOnly;
+    //            s.Width = Unit.Percentage(100);
+    //            s.ShowModelErrors = true;
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //    {
+    //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+    //    ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Phone");
+    //    })
+    //    .SetNestedContent(() =>
+    //    {
+    //        Html.DevExpress().TextBoxFor(i => i.Header.ShipPhone, s =>
+    //        {
+    //            s.ReadOnly = isReadOnly;
+    //            s.ShowModelErrors = true;
+    //            s.Width = Unit.Percentage(100);
+    //            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //            s.Properties.ValidationSettings.SetFocusOnError = true;
+    //            s.Properties.ValidationSettings.ErrorText = "*";
+    //        }).Render();
+    //    });
+    //    g.Items.Add(m =>
+    //     {
+    //         m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+    //            ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Address");
+    //         m.ColSpan = 2;
+    //     })
+    //     .SetNestedContent(() =>
+    // {
+    //     Html.DevExpress().TextBoxFor(i => i.Header.ShipAddress, s =>
+    //     {
+    //         s.ReadOnly = isReadOnly;
+    //         s.Width = Unit.Percentage(100);
+    //         s.ShowModelErrors = true;
+    //         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //         s.Properties.ValidationSettings.SetFocusOnError = true;
+    //         s.Properties.ValidationSettings.ErrorText = "*";
+    //     }).Render();
+    // });
+
+    //});
+}).GetHtml()

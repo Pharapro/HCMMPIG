@@ -1,0 +1,168 @@
+﻿@model Humica.EF.MD.SYScreenActionRow
+
+@Html.DevExpress().FormLayout(settings =>
+{
+   
+
+    settings.Name = "ImportBank";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    
+        g.Items
+            .Add(m =>
+            {
+                m.Caption = "IsAction";
+
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.IsAction, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.ReadOnly = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    
+                }).Render();
+            });
+        g.Items
+     .Add(m =>
+     {
+         m.Caption = "ActionId";
+     })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().TextBoxFor(i => i.ActionId, s =>
+         {
+             s.ShowModelErrors = true;
+             s.ReadOnly = true;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+             
+         }).Render();
+
+
+     });
+
+
+
+        g.Items
+      .Add(m =>
+      {
+          m.Caption = "ActionName";
+
+      })
+      .SetNestedContent(() =>
+      {
+          Html.DevExpress().TextBoxFor(i => i.ActionName, s =>
+          {
+              s.ShowModelErrors = true;
+              s.ReadOnly = true;
+              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+              s.Properties.ValidationSettings.SetFocusOnError = true;
+              s.Properties.ValidationSettings.ErrorText = "*";
+              
+          }).Render();
+      });
+
+
+
+        g.Items
+      .Add(m =>
+      {
+          m.Caption = "LinkMode";
+
+      })
+      .SetNestedContent(() =>
+      {
+          Html.DevExpress().TextBoxFor(i => i.LinkMode, s =>
+          {
+              s.ShowModelErrors = true;
+              s.ReadOnly = true;
+              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+              s.Properties.ValidationSettings.SetFocusOnError = true;
+              s.Properties.ValidationSettings.ErrorText = "*";
+              
+          }).Render();
+      });
+
+
+        g.Items
+    .Add(m =>
+    {
+        m.Caption = "ToolTip";
+    })
+    .SetNestedContent(() =>
+    {
+        Html.DevExpress().TextBoxFor(i => i.ToolTip, s =>
+        {
+            s.ShowModelErrors = true;
+            s.ReadOnly = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.ValidationSettings.SetFocusOnError = true;
+            s.Properties.ValidationSettings.ErrorText = "*";
+            
+        }).Render();
+
+
+
+
+    });
+
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = "IconID";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().TextBoxFor(i => i.IconID, s =>
+            {
+                s.ShowModelErrors = true;
+                s.ReadOnly = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+
+            }).Render();
+
+        });
+
+
+        g.Items
+.Add(m =>
+{
+    m.Caption = "UseSubmitBehavior";
+})
+.SetNestedContent(() =>
+{
+    Html.DevExpress().CheckBoxFor(i => i.UseSubmitBehavior, s =>
+    {
+        s.ShowModelErrors = true;
+        s.ReadOnly = true;
+        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        s.Properties.ValidationSettings.SetFocusOnError = true;
+        s.Properties.ValidationSettings.ErrorText = "*";
+
+    }).Render();
+
+
+
+});
+        
+    
+    });
+
+
+
+}).GetHtml()

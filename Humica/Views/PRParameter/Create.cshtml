@@ -1,0 +1,35 @@
+﻿@model Humica.Logic.PR.PRSParameter
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_btnSaveActionGrid').click(function () {
+            $("form").submit();
+        });
+    });
+    function rbTypeSelected(s, e) {
+        var dd = s.GetItemValue(s.GetSelectedIndex());
+    }
+</script>
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "pcPayrollParameterSetting";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Pay Parameter")).SetContent(() =>
+    {
+        @Html.RenderPartial("tappayparameter", Model);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("First Pay Setting")).SetContent(() =>
+    {
+        @Html.RenderPartial("TapBiMonthlySalary", Model.ListBIMonthlySalarySettings);
+    });
+
+}).GetHtml()
+

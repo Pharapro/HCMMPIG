@@ -1,0 +1,178 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gidMatixIncrease_";
+           settings.KeyFieldName = "EmpCode;InYear";
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+           settings.CallbackRouteValues = new { Action = "GridMatix", Controller = "HRAppMatrixIncSalary" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAppMatrixIncSalary", Action = "ItemEdit" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAppMatrixIncSalary", Action = "ItemDelete" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.SettingsBehavior.AllowSort = false;
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.SettingsContextMenu.Enabled = true;
+           settings.Settings.ShowHeaderFilterButton = true;
+           //settings.SettingsPopup.HeaderFilter.Height = 200;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.FieldName = "EmpCode";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValueType = typeof(string);
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+               column.Width = 200;
+               column.FieldName = "EmpName";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Level");
+               column.Width = 150;
+               column.FieldName = "JobLevel";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Level MidPoint");
+               column.Width = 150;
+               column.FieldName = "JobLevelMidPoint";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary");
+               column.Width = 110;
+               column.FieldName = "Salary";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var textProperties = column.PropertiesEdit as TextBoxProperties;
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Rating");
+               column.Width = 90;
+               column.FieldName = "Rating";
+               column.ReadOnly = true;
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "#";
+               textProperties.NumberType = SpinEditNumberType.Integer;
+               textProperties.MinValue = 0;
+               textProperties.MaxValue = 99;
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CompaRatio");
+               column.Width = 100;
+               column.ReadOnly = true;
+               column.FieldName = "CompaRatio";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "N2";
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary Increase") + "(%)";
+               column.Width = 150;
+               column.ReadOnly = true;
+               column.FieldName = "SalaryIncPers";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "P2";
+               textProperties.MinValue = 0;
+               textProperties.MaxValue = 100;
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Salary Increase Amount");
+               column.Width = 150;
+               column.ReadOnly = true;
+               column.FieldName = "SalaryIncAmount";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "N2";
+               textProperties.MinValue = 1;
+               textProperties.MaxValue = 999999999;
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Adding");
+               column.Width = 90;
+               column.FieldName = "Adding";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "N2";
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("New Salary");
+               column.Width = 150;
+               column.ReadOnly = true;
+               column.FieldName = "NewSalary";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var textProperties = column.PropertiesEdit as SpinEditProperties;
+               textProperties.DisplayFormatString = "N2";
+               textProperties.MinValue = 1;
+               textProperties.MaxValue = 999999999;
+               textProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.ClientSideEvents.EndCallback = "EndCallBack";
+           settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.FileName = "Matrix Increase Salary";
+           settings.Toolbars.Add(t =>
+           {
+               t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+           });
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

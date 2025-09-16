@@ -1,0 +1,209 @@
+﻿<script type="text/javascript">
+    var ss;
+    var status = "";
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnNewAction').hide(function () {
+            @*window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";*@
+        });
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+        });
+        $('#_btnPrint').click(function () {
+            ss = 3;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'CPID;EmpCode;', OnGetRowValues);
+        });
+        $('#_btnDeleteAction').click(function () {
+             ss = 4;
+             GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+             ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_mnApprove") {
+            ss = 6;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'CPID;EmpCode', OnGetRowValues);
+        }
+        if (e.item.name == "_mnRequest") {
+            ss = 7;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+        }
+        if (e.item.name == "_mnCancel") {
+            ss = 8;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'CPID;EmpCode', OnGetRowValues);
+        }
+    }
+
+
+    $('#linkFavoriteList').hide();
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+    }
+
+   function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+       if (ss == 1) {
+           window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?EmpCode=" + values[0];
+       }
+        if (ss == 3) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Print?CPID=" + values[0];
+        }
+       if (ss ==2) {
+           window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?EmpCode=" + values[0];
+       }
+       if (ss == 4) {
+           if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+               window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?EmpCode=" + values[0];
+           }
+
+        }
+        if (ss == 6) {
+            if (!(status == "@Humica.EF.SYDocumentStatus.APPROVED.ToString()")) {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("APPROVE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        //Request
+        if (ss == 7) {
+            @*if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {*@
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REQUEST_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            @*}
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }*@
+        }
+        if (ss == 8) {
+            if (!(status == "@Humica.EF.SYDocumentStatus.APPROVED.ToString()")) {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("CANCEL_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+    }
+   /* ActionItemClick();*/
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?EmpCode=" + selectedIDs;
+            }
+            if (ss == 6) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Approve?CPID=" + selectedIDs;
+            }
+            if (ss == 7) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "RequestForApproval?EmpCode=" + selectedIDs;
+            }
+             if (ss == 8) {
+                 window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Cancel?EmpCode=" + selectedIDs;
+            }
+        }
+    }
+    //function _clickMenuAction(s, e) {
+    //    if (e.item.name == "_mnRequest") {
+    //        ss = 7;
+    //        GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode', OnGetRowValues);
+    //    }
+    //    if (e.item.name == "_mnApprove") {
+    //        ss = 6;
+    //        GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode', OnGetRowValues);
+    //    }
+    //    if (e.item.name == "_mnCancel") {
+    //        ss = 8;
+    //        GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'EmpCode', OnGetRowValues);
+    //    }
+    //}
+
+    function tabClickCommand1(s, e) {
+
+        index = s.GetActiveTab().index;
+        //alert(index);
+        if (index == 0) {
+            $('#pageToolbar').css({"display":"none"})
+            //$("#_btnImageView").hide();
+            //$("#_bthEditAction").hide();
+            //$("#_btnDeleteAction").hide();
+            //$("#_mnApprove").hide();
+            //$("#_mnRequest").hide();
+            //$("#_mnCancel").hide();
+        }
+        else {
+
+            //$("#_btnImageView").show();
+            //$("#_bthEditAction").show();
+            //$("#_btnDeleteAction").show();
+            //$("#_mnApprove").show();
+            //$("#_mnRequest").show();
+            //$("#_mnCancel").show();
+            $('#pageToolbar').css({ "display": "block" });
+
+        }
+    }
+
+</script>
+
+
+@model Humica.POD.Models.HR.ConfirmProbationObject
+
+@{
+    if (Model.ListStaff.Count > 0)
+    {
+
+
+        Html.DevExpress().PageControl(
+       settings =>
+       {
+           settings.Name = "pcScrollingMaterial1";
+           settings.Width = Unit.Percentage(100);
+           settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+           settings.ClientSideEvents.Init = "tabClickCommand1";
+           settings.EnableTabScrolling = true;
+           settings.TabAlign = TabAlign.Justify;
+
+           settings.Styles.Tab.CssClass = "scrolling_Tab";
+           settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+               )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "WaitingList")).SetContent(() =>
+               {
+                   Html.RenderPartial("PartialProcess", Model.ListStaff);
+               });
+           settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListHeader);
+        });
+
+       }).Render();
+    }
+    else
+    {
+        Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListHeader);
+    }
+}
+
+@*@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial2";
+        settings.Width = Unit.Percentage(100);
+     
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Approval")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemApprove", Model.ListHeader);
+        });
+        
+    }).GetHtml()*@
+

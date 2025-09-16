@@ -1,0 +1,124 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+
+    settings =>
+    {
+        settings.Name = "GridItems";
+        settings.KeyFieldName = "ID";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRAssetStaff" };
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = false;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        //settings.ClientSideEvents.RowClick = "onGridRowClick";
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReferenceNum");
+            column.Width = 130;
+            column.FieldName = "ReferenceNum";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "AssetCode";
+            column.Width = 180;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset");
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["ASSET"];
+            textProperties.ValueField = "AssetCode";
+            textProperties.TextField = "Description";
+            textProperties.ValueType = typeof(string);
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Asset Description");
+            column.Width = 200;
+            column.FieldName = "AssetDescription";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Assign Date");
+            column.Width = 110;
+            column.FieldName = "AssignDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Return Date");
+            column.Width = 110;
+            column.FieldName = "ReturnDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.Width = 120;
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Condition");
+            column.Width = 120;
+            column.FieldName = "Condition";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.Width = 200;
+            column.FieldName = "Remark";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        });
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.SettingsPager.PageSize = 122;
+
+    });
+}
+@gridExtension.Bind(Model.ListHeader).GetHtml()
+
+
+

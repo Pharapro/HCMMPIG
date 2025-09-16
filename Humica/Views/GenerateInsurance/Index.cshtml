@@ -1,0 +1,241 @@
+﻿@model Humica.Logic.HR.HRInsuranceObject
+
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var ID;
+    var EmpCode;
+    $(document).ready(function () {
+        $('#_btnDeleteAction').hide();
+        $('#_btnGenerate').show();
+        $("#progressBar1").hide();
+        $('#_btnGenerate').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(),"EmpCode;AllName",OnGetRowValues)
+            //var favDialog = document.getElementById('favDialog');
+            //favDialog.showModal();
+            //StartTimer();
+           // window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Generate";//?Empcode=" + selectedIDs;
+            //StartTimer();
+
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 2;
+            Gridview.GetRowValues(Gridview.GetFocusedRowIndex(), "ID;EmpCode", OnGetRowValues)
+        });
+    });
+    function OnGetRowValues(values) {
+        if (ss == 1) {
+            if (selectedIDs == "") {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_ACC", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+                return;
+            }
+            $("#progressBar1").show();
+            progressBar1.AdjustControl();
+            StartTimer();
+             $.ajax({
+                type: "post",
+                 url: _baseUrl + '/PR/PRM/GenerateInsurance/Generate',
+                data: {'Action':'Index','EmpCode':selectedIDs},
+                success: function (data) {
+
+                },
+                //fail: function () {
+                //    alert("error ....");
+                //},
+                //error: function () {
+
+              //  }
+            });
+
+        }
+        if (ss == 2) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            ID = values[0];
+            EmpCode = values[1];
+        }
+    }
+     function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 2) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "/Delete?ID="+ID+"&EmpCode="+EmpCode;
+            }
+        }
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function DbRowClick(s, e) {
+
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("TranNo;EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+       // ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+           // ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        //$.ajax({
+        //    type: 'post',
+        //    url: _baseUrl + 'PR/Benefit/PRGenerateInsurance/getEmpCode',
+        //    data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+        //    success: function (data) {
+        //        if (data == "OK") {
+
+        //        }
+        //        else {
+        //            AlertMessage(data);
+        //        }
+        //    },
+        //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //        AlertMessage(XMLHttpRequest.responseText);
+        //    }
+        //});
+
+    }
+    var interval = null;
+    function StartTimer(s, e) {
+        if (interval == null) {
+            var counter = 0;
+            interval = setInterval(function () {
+                counter += 1;
+                // Do your task.
+                $.ajax({
+                    type: "POST",
+                    url: _baseUrl + '/PR/PRM/GenerateInsurance/ShowProcess',
+                    data: {},
+                    success: function (result) {
+                        var percen = result.Percen;
+                        if (result.MS == "OK") {
+                            progressBar1.SetValue(percen);
+                        }
+                        else {
+                            progressBar1.SetValue(percen);
+                            //favDialog.close();
+                            StopTimer();
+                        }
+                    },
+                    //fail: function () {
+                    //    alert("error ....");
+                    //},
+                    //error: function () {
+                    //    alert("error ....");
+                    //}
+                });
+
+            }, 1000);
+        }
+    }
+   
+
+    function StopTimer() {
+        clearInterval(interval);
+        interval = null;
+         window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()";
+    }
+    function tabClickCommand1(s, e) {
+        var index = s.GetActiveTab().index;
+        
+        if (index == 0) {
+            $('#_btnDeleteAction').hide();
+            $('#_btnGenerate').show();
+        } else {
+            $('#_btnDeleteAction').show();
+            $('#_btnGenerate').hide();
+        }
+
+    }
+
+</script>
+<link rel="stylesheet" href="~/Content/styleLoanding.css">
+<style>
+   /* #progressBar1 {
+        margin-left: auto !important;
+        top: 56px;
+        margin-top: 1px;
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        .navbar-nav
+    }*/
+    .percen-dis {
+        top: 7px;
+        position:absolute;
+        z-index: 9;
+        margin-left:200px;
+    }
+</style>
+<div class="percen-dis">
+    @Html.DevExpress().ProgressBar(
+        settings =>
+        {
+            settings.Name = "progressBar1";
+            settings.RightToLeft = DefaultBoolean.False;
+            settings.Properties.Minimum = 0;
+            //settings.Properties.Maximum = Humica.Logic.HR.HRInsuranceObject.Percen;
+            settings.Position = 0;
+
+            settings.Properties.ShowPosition = true;
+
+            settings.Width = 150;
+        }).GetHtml()
+</div>
+
+@Html.Partial("FTFilterInsuranceGen", Model)
+
+@*@Html.DevExpress().ProgressBar(settings =>
+    {
+        settings.Name = "progressBar1";
+
+        //settings.Height = Unit.Pixel(23);
+
+        settings.Properties.Caption = "Caption";
+        settings.Properties.Minimum = 0;
+        settings.Properties.Maximum = Model.Progress;
+        settings.Properties.ShowPosition = true;
+       // settings.Properties.DisplayFormatString = "{0} / 100";
+        // settings.Properties.ClientSideEvents.Init
+        settings.Width = 150;
+    }).GetHtml()*@
+
+@*@Html.Partial("GridItems", Model.GridInsurance);*@
+
+@{
+    @Html.DevExpress().PageControl(
+          settings =>
+          {
+              settings.Name = "pcScrollingMaterial1";
+              settings.Width = Unit.Percentage(100);
+
+              settings.EnableTabScrolling = true;
+              settings.TabAlign = TabAlign.Justify;
+
+              settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+              settings.ClientSideEvents.Init = "tabClickCommand1";
+              settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+              settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+            )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Waiting List")).SetContent(() =>
+            {
+                @Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultViewSelect, Model.GridInsurance);
+
+            });
+
+              settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                 )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+                 {
+                     @Html.RenderPartial("GridItems", Model.ListHeaderHisInsurance);
+                 });
+          }).GetHtml()
+}

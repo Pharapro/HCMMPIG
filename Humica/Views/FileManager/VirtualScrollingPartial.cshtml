@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().FileManager(
+    settings =>
+    {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "VirtualScrollingPartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "VirtualScrollingDownloadFiles" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.InitialFolder = "Projects (1000)";
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = Humica.Models.FL.FileManagerDemoHelper.VirtualScrollingAllowedFileExtensions;
+
+        settings.SettingsEditing.Assign(Humica.Models.FL.FileManagerDemoHelper.CreateFileManagerEditingSettings());
+
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+        settings.SettingsUpload.AdvancedModeSettings.EnableMultiSelect = true;
+
+        settings.SettingsFileList.View = Humica.Models.FL.FileManagerDemoHelper.VirtualScrollingViewMode;
+        settings.SettingsFileList.PageSize = Humica.Models.FL.FileManagerDemoHelper.VirtualScrollingPageSize;
+
+        settings.FileUploading = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemCopying = (s, e) => { Humica.Models.FL.FileManagerDemoHelper.ValidateSiteEdit(e); };
+    }
+).BindToFolder(Model).GetHtml()

@@ -1,0 +1,119 @@
+﻿@using Humica.Model
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>
+        @{ var pageTitleParts = new string[] { ViewBag.Title, "Humica" }; }
+        @string.Join(" - ", @pageTitleParts.Where(s => !string.IsNullOrEmpty(s)))
+    </title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    @Html.DevExpress().GetStyleSheets(
+    //new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    //new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+    @Html.DevExpress().GetScripts(
+//new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+
+//new Script { ExtensionSuite = ExtensionSuite.GridView },
+//new Script { ExtensionSuite = ExtensionSuite.TreeList },
+//new Script { ExtensionSuite = ExtensionSuite.Editors }
+//new Script { ExtensionSuite = ExtensionSuite.Report }
+//new Script { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Content.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Layout.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Sites.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootmetro.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/metro-ui-light.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/icomoon.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content(Humica.Models.SY.ClsConstant.GetDefaultThemeFile())" />
+
+    @RenderSection("Head", false)
+    <script type="text/javascript" src="@Url.Content("~/Content/Script.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/CustomJs.js")"></script>
+    
+
+    <script>
+
+        $(document).ready(function () {
+            $('div.dxflFormLayout_Office365').on('keydown', 'input, select', function (e) {
+                if (e.key === "Enter") {
+                    var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+                    focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                    if (focusable.eq(focusable.index(this)).attr("id") != "Material_I") {
+                        next = focusable.eq(focusable.index(this) + 1);
+                        if (next.length) {
+                            next.focus();
+                        }
+                        return false;
+                    }                                                          
+                }
+            });
+
+            $(document).ready(function () {
+                $('#_btnSaveActionGrid').click(function () { this.remove(); });
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+    
+
+    <div class="form" style="margin-top:45px;">
+@using (Html.BeginForm())
+{
+
+    @Html.DevExpress().Panel(settings =>
+{
+settings.Name = "pageToolbarPanel1";
+
+settings.SetContent(() => Html.RenderPartial("_WindowCommand"));
+    }).GetHtml()
+    ViewContext.Writer.Write("<div class='content' id='pageContent'>");
+    //--------
+    if (ViewData[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT] != null)
+    {
+        @Html.Partial("_MessagePartial")
+    }
+    else
+    {
+        if (Session[Humica.EF.Models.SY.SYConstant.MESSAGE_SUBMIT] != null)
+        {
+            @Html.Partial("_MessagePartial")
+        }
+    }
+    @Html.AntiForgeryToken();
+    @RenderBody();
+}            
+            <div class="footer-wrapper" id="footerWrapper">
+                <div class="footer">
+                  
+                </div>
+            </div>
+        </div>    
+    </div>
+    <script type="text/javascript">
+        MVCxClientGlobalEvents.AddControlsInitializedEventHandler(onControlsInitialized);
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(onBrowserWindowResized);
+
+        var _baseUrl = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()";
+
+    </script>
+</body>
+</html>
+

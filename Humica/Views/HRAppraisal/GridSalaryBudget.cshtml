@@ -1,0 +1,111 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "GridSalaryBudget_";
+        settings.KeyFieldName = "ID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "HRAppraisal", Action = "GridSalaryBudget" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAppraisal", Action = "CreateSalaryBudget" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAppraisal", Action = "EditSalaryBudget" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAppraisal", Action = "DeleteSalaryBudget" };
+
+        settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+        settings.CommandColumn.Visible = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("In Year");
+            column.Width = 120;
+            column.FieldName = "InYear";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N0";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 9999;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Budget") + "%";
+            column.Width = 350;
+            column.FieldName = "Budget";
+
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var textProperties = column.PropertiesEdit as SpinEditProperties;
+            textProperties.MinValue = 0;
+            textProperties.MaxLength = 99;
+            textProperties.DisplayFormatString = "P2";
+        });
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "InYear")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.CustomJSProperties = (s, e) =>
+        {
+            ASPxGridView grid1 = (ASPxGridView)s;
+            Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+            Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+            e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+        };
+
+    });
+
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

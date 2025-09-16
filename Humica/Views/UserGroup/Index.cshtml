@@ -1,0 +1,162 @@
+﻿@model Humica.EF.Models.SY.ClsRollUser
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var selectedRoleIDs = "";
+    var selectedRoleIDAPPs = "";
+    var selectedDataIDs = "";
+    $(document).ready(function () {
+        $('#_btnGenerate').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Generate?Branch=" + checkComboBoxBranch.GetValue() + "&Level=" + checkComboBoxLevel.GetValue() + "&APP=" + RoleSelectedAPP.GetValue() + "&WEB=" + RoleSelected.GetValue();
+        });
+    });
+    //EmpCode
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Administrator/Users/UserGroup/getEmpCode',
+            data: { 'EmpCode': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data == "OK") {
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+
+    }
+
+
+
+    function OnBeginRoleCallback(s, e) {
+        //Pass all selected keys to GridView callback action
+        e.customArgs["selectedRoleIDs"] = selectedRoleIDs;
+    }
+
+    function OnSelectionRoleChanged(s, e) {
+        var key = s.GetVisibleSelectedNodeKeys();
+        selectedRoleIDs = key.join(';');
+        RoleSelected.SetValue(selectedRoleIDs);
+    }
+    function OnBeginRoleCallbackAPP(s, e) {
+        //Pass all selected keys to GridView callback action
+        e.customArgs["selectedRoleIDAPPs"] = selectedRoleIDs;
+    }
+
+    function OnSelectionRoleChangedAPP(s, e) {
+        var key = s.GetVisibleSelectedNodeKeys();
+        selectedRoleIDAPPs = key.join(';');
+        RoleSelectedAPP.SetValue(selectedRoleIDAPPs);
+    }
+
+    //function OnBeginDataCallback(s, e) {
+    //    //Pass all selected keys to GridView callback action
+    //    e.customArgs["selectedRoleIDs"] = selectedDataIDs;
+    //}
+
+    //function OnSelectionDataChanged(s, e) {
+    //    var key = s.GetVisibleSelectedNodeKeys();
+    //    selectedDataIDs = key.join(';');
+    //    DataSelected.SetValue(selectedDataIDs);
+    //}
+
+    @*function UserTypeChange(s,e)
+    {
+        if(s.GetValue()=="@Humica.EF.UserType.N.ToString()")
+        {
+            $("#data_acess").show();
+            CompanyOwner.SetValue("NCX");
+        }
+        else if (s.GetValue() == "@Humica.EF.UserType.D.ToString()")
+        {
+            $("#data_acess").hide();
+            CompanyOwner.SetValue("");
+        }
+
+        $.ajax({
+            type: "POST",
+            url: _baseUrl + '/Administrator/Users/User/ChangeRoleByType',
+            data: { 'UserType': s.GetValue() },
+            beforeSend: function () {
+                //loadingPanel.Show();
+            },
+            success: function (response) {
+                $("#role_acess").html(response);
+                treeList.UnselectAll();
+            }
+        });
+
+    }*@
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js"></script>
+<script type="text/javascript" src="~/Content/NUser.js"></script>
+@*<link rel="stylesheet" href="~/Content/styleLoanding.css">*@
+
+@Html.Partial("FTFilterEmployeeGen", Model)
+@Html.DevExpress().TextBox(s =>
+             {
+                 s.Name = "RoleSelected";
+                 s.ClientVisible = false;
+             }).GetHtml()
+@Html.DevExpress().TextBox(s =>
+             {
+                 s.Name = "RoleSelectedAPP";
+                 s.ClientVisible = false;
+             }).GetHtml()
+@Html.DevExpress().TextBox(s =>
+             {
+                 s.Name = "DataSelected";
+                 s.ClientVisible = false;
+             }).GetHtml()
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+     )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Employee")).SetContent(() =>
+     {
+         @Html.RenderPartial("GridItems", Model.ListStaff);
+
+     });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+       )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Role & Permission")).SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div id='role_acess'>");
+           @Html.RenderPartial("TreeRole", Model);
+           ViewContext.Writer.Write("</div>");
+       });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+     )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Role & Permission Mobile")).SetContent(() =>
+     {
+         ViewContext.Writer.Write("<div id='role_acess'>");
+         @Html.RenderPartial("TreeRoleAPP", Model);
+         ViewContext.Writer.Write("</div>");
+     });
+
+    }).GetHtml()

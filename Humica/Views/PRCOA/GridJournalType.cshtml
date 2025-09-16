@@ -1,0 +1,116 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "gridViewItem";
+               settings.KeyFieldName = "JournalType";
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.CallbackRouteValues = new { Controller = "PRCOA", Action = "GridJournalType" };
+               settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRCOA", Action = "CreateJournalType" };
+               settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRCOA", Action = "EditJournalType" };
+               settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRCOA", Action = "DeleteJournalType" };
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.ShowDeleteButton = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+               settings.CommandColumn.ShowNewButtonInHeader = true;
+               settings.CommandColumn.ShowCancelButton = true;
+               settings.CommandColumn.ShowEditButton = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+               settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("JournalType");
+                   column.FieldName = "JournalType";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 300;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+                   column.FieldName = "Description";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NumberRank");
+                   column.FieldName = "NumberRank";
+
+                   column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                   var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   textProperties.DataSource = ViewData["NUMBER_LIST"];
+
+                   textProperties.ValueField = "NumberObject";
+                   textProperties.TextField = "Description";
+                   textProperties.ValueType = typeof(string);
+                   textProperties.Width = Unit.Percentage(100);
+                   column.Width = 200;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReturnDoc");
+                   column.Width = 120;
+                   column.FieldName = "ReturnDoc";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsDebitNote");
+                   column.Width = 120;
+                   column.FieldName = "IsDebitNote";
+                   column.ColumnType = MVCxGridViewColumnType.CheckBox;
+               });
+               settings.SettingsSearchPanel.Visible = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.SettingsPager.PageSize = 20;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.CustomJSProperties = (sender, e) =>
+               {
+                   e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+               };
+
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.Dynamic;
+                   if (e.KeyValue != null)
+                   {
+                       if (e.Column.FieldName == "JournalType")
+                       {
+                           e.Editor.ReadOnly = true;
+                       }
+                   }
+               };
+
+
+           });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

@@ -1,0 +1,171 @@
+@{
+    ViewBag.Title = "Humica-Login";
+}
+
+
+@{ Layout = "~/Views/Shared/_loginLayout.cshtml"; }
+
+<div class="login_logo">
+    <img src="~/Content/Images/logo.svg" />
+</div>
+
+@model Humica.EF.Models.SY.LoginModel
+
+@using(Html.BeginForm()) {
+        @Html.AntiForgeryToken()    
+    
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "registrationForm";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Width = Unit.Percentage(100);
+        settings.Items.AddGroupItem(m => Model, g => {
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+            if(ViewData[Humica.EF.Models.SY.SYConstant.AUTHENTICATION_FAIL]!=null)
+            {
+                g.Items
+               .Add(m =>
+               {
+                   m.Caption = "";
+               }).SetNestedContent(() =>
+               {
+                   Html.DevExpress().Label(s=>
+                   {
+                     Humica.EF.MD.SYMessage obj = (Humica.EF.MD.SYMessage)ViewData[Humica.EF.Models.SY.SYConstant.AUTHENTICATION_FAIL];
+                     s.Text = obj.Description;
+                     s.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                   }).Render();
+
+               });
+
+            }
+            
+            g.Items
+                .Add(m => {
+                    m.Caption = "";                    
+                }).SetNestedContent(() => {
+                  
+
+                    Html.DevExpress().TextBox(s => {
+
+                        s.ShowModelErrors = true;
+                        s.Name = "UserName";
+                        if (ViewData["USER_NAME"]!=null)
+                        {
+                            s.Text = ViewData["USER_NAME"].ToString();
+                        }
+                        s.ReadOnly = true;
+                        s.Width = Unit.Percentage(100);
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                        s.Properties.ValidationSettings.Display = Display.Static;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.NullText = "User Name";
+                    }).Render();
+            
+
+                  
+                });
+
+        });
+
+
+        settings.Items.AddGroupItem(m => Model, g =>
+        {
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = "";                    
+                }).SetNestedContent(() =>
+                {
+
+
+                    Html.DevExpress().TextBoxFor(i => i.Password, s =>
+                    {
+
+                        s.Width = Unit.Percentage(100);
+                        s.ShowModelErrors = true;
+                        s.Properties.Password = s.Name.Contains("Password");
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                        s.Properties.ValidationSettings.Display = Display.Static;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.NullText = "Password";
+                    }).Render();
+
+
+
+                });
+
+        });
+
+
+        settings.Items.AddGroupItem(m => Model, g =>
+        {
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = "";
+                }).SetNestedContent(() =>
+                {
+
+
+                    Html.DevExpress().TextBox( s =>
+                    {
+                        s.Name = "RePassword";
+                        s.Width = Unit.Percentage(100);
+                        s.ShowModelErrors = true;
+                        s.Properties.Password = s.Name.Contains("Password");
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                        s.Properties.ValidationSettings.Display = Display.Static;
+                        s.Properties.ValidationSettings.ErrorText = "*";                        
+                        s.Properties.NullText = "Re-Password";
+                    }).Render();
+
+
+
+                });
+
+        });
+    
+       
+
+        settings.Items.AddGroupItem(m => Model, g =>
+        {
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = "";                 
+                }).SetNestedContent(() =>
+                {
+
+
+                    Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "BtnLogin";
+                        s.Text = "Continue";
+                        s.UseSubmitBehavior = true;
+                    }).Render();
+
+
+                });
+
+        });
+
+
+      
+    }).GetHtml()
+    
+    
+    
+    
+    
+}

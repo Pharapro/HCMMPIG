@@ -1,0 +1,32 @@
+﻿@model  Humica.EF.Models.SY.SYMenuObject 
+    
+ 
+@Html.DevExpress().PageControl(
+       settings =>
+       {
+           settings.Name = "pcScrollingMaterial1";
+           settings.Width = Unit.Percentage(100);
+
+           settings.EnableTabScrolling = true;
+           settings.TabAlign = TabAlign.Justify;
+
+           settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_Menu"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Menu")).SetContent(() =>
+                {
+                    Html.RenderPartial("_GridMenu", Model.ListMenu);
+                });
+           }
+
+           if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_MenuItem"))
+           {
+               settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                   ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "MenuItem")).SetContent(() =>
+                   {
+                       Html.RenderPartial("_GridMenuItem", Model.ListMenuItem);
+                   });
+           }
+       }).GetHtml()

@@ -1,0 +1,662 @@
+﻿@{
+    ViewBag.Title = "Org Chart";
+}
+
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/orgchart/3.1.1/css/jquery.orgchart.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Hanuman:wght@100;300;400;700&display=swap" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/orgchart/3.1.1/js/jquery.orgchart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <style>
+      /* Enhanced styles for proper node-to-node connections */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --hover-color: #eff6ff;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+body {
+    font-family: 'Hanuman', 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 30px;
+    color: var(--text-primary);
+    min-height: 100vh;
+    position: relative;
+}
+
+#chart-container {
+    width: 100%;
+    height: auto;
+    min-height: 800px; /* Increased from 600px */
+    max-height: calc(100vh - 200px); /* Dynamic height based on viewport */
+    overflow: auto;
+    text-align: center;
+    background-color: var(--card-background);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    white-space: nowrap;
+    overflow-x: auto;
+    position: relative;
+    transform-origin: top center;
+    zoom: 0.9; /* Slightly zoomed out by default to show more */
+}
+
+.orgchart {
+    background: var(--card-background);
+    position: relative;
+    display: inline-block;
+    min-height: 800px; /* Match container min-height */
+    padding: 20px 0;
+    transform-origin: top center;
+}
+
+/* Hide top connector line for the root node */
+.orgchart table:first-child tr:first-child td .node::before {
+    display: none !important;
+}
+
+/* Zoom controls */
+.zoom-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+}
+
+.zoom-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Connector lines */
+.orgchart .lines {
+    display: block !important;
+    position: relative;
+}
+
+.orgchart .lines .downLine {
+    background-color: var(--primary-color) !important;
+    width: 3px !important;
+    height: 20px !important;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    z-index: 1;
+}
+
+.orgchart .lines .rightLine {
+    border-right: 3px solid var(--primary-color) !important;
+    height: 20px !important;
+    width: 50% !important;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    z-index: 1;
+}
+
+.orgchart .lines .leftLine {
+    border-left: 3px solid var(--primary-color) !important;
+    height: 20px !important;
+    width: 50% !important;
+    position: absolute;
+    right: 50%;
+    top: 0;
+    z-index: 1;
+}
+
+.orgchart .lines .topLine {
+    border-top: 3px solid var(--primary-color) !important;
+    width: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Vertical connectors between nodes */
+.orgchart .node::before {
+    content: '';
+    position: absolute;
+    top: -20px; /* Adjusted to connect directly to node */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 20px; /* Matches downLine height */
+    background-color: var(--primary-color);
+    display: block !important;
+    z-index: 1;
+}
+
+.orgchart .node::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; /* Adjusted to connect directly to child */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 20px; /* Matches downLine height */
+    background-color: var(--primary-color);
+    display: block !important;
+    z-index: 1;
+}
+
+/* Hide top line for root node */
+.orgchart > table > tr:first-child .node::before {
+    display: none !important;
+}
+
+/* Hide bottom line for leaf nodes */
+.orgchart .node:not(:has(.hierarchy))::after {
+    display: none !important;
+}
+
+/* Remaining styles unchanged */
+.orgchart .node .title {
+    background-color: transparent;
+}
+
+.orgchart .node.focused {
+    background-color: var(--hover-color);
+}
+
+.orgchart .node:hover {
+    transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    background-color: var(--hover-color);
+}
+
+.orgchart .node .node-content {
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 8px 4px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.orgchart .node img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-bottom: 4px;
+    border: 2px solid var(--primary-color);
+    padding: 1px;
+    background-color: white;
+    transition: transform 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+
+.orgchart .node .name {
+    font-family: 'Hanuman', 'Roboto', sans-serif;
+    font-weight: 700;
+    margin: 2px 0;
+    font-size: 12px;
+    color: var(--text-primary);
+    text-align: center;
+    padding: 0 3px;
+}
+
+.orgchart .node .designation {
+    font-family: 'Hanuman', 'Roboto', sans-serif;
+    font-size: 10px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 3px;
+    margin-bottom: 2px;
+}
+
+.orgchart .node .emp-code {
+    font-size: 9px;
+    color: var(--text-secondary);
+    margin-bottom: 1px;
+}
+
+.orgchart .node .email {
+    font-size: 9px;
+}
+
+.orgchart .node .email a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.orgchart .node .email a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Filter Section Styling */
+.filter-doc {
+    background-color: var(--card-background);
+    margin: 0 0 30px 0;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.filter-doc h3 {
+    margin: 0 0 20px 0;
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.filter-doc label {
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-right: 15px;
+}
+
+.filter-doc select {
+    margin-right: 25px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    min-width: 200px;
+    color: var(--text-primary);
+}
+
+.filter-doc button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.filter-doc button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: var(--shadow);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 25px;
+    background-color: var(--card-background);
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-body img {
+    border-radius: 12px;
+    width: 100%;
+    height: auto;
+}
+
+/* Select2 Customization */
+.select2-container--default .select2-selection--single {
+    border-radius: 8px;
+    height: 38px;
+    border-color: var(--border-color);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 38px;
+    padding-left: 12px;
+    color: var(--text-primary);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px;
+}
+
+.select2-dropdown {
+    border-color: var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--primary-color);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.export-button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background-color: #16a34a;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.export-button:hover {
+    background-color: #15803d;
+    transform: translateY(-1px);
+}
+    </style>
+</head>
+<body>
+
+
+    <!-- Modal for displaying images -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Employee Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Employee Image" class="img-fluid" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-doc">
+        <h3>Filter Options</h3>
+        <div>
+            <label for="txtBranch">Branch:</label>
+            <select id="txtBranch" name="Branch">
+                @foreach (var branch in ViewData["BRANCHES_SELECT"] as List<Humica.EF.MD.HRBranch>)
+                {
+                    <option value="@branch.Code" @(branch.Code == Model.Filter.Branch ? "selected" : "")>@branch.Description</option>
+                }
+            </select>
+
+            <label for="txtDepartment">Department:</label>
+            <select id="txtDepartment" name="Department">
+                @foreach (var department in ViewData["DEPARTMENT_SELECT"] as List<Humica.Core.DB.HRDepartment>)
+                {
+                    <option value="@department.Code" @(department.Code == Model.Filter.Department ? "selected" : "")>@department.Description</option>
+                }
+            </select>
+        </div>
+        <div class="action-buttons">
+            <button id="filterButton" type="button">Filter</button>
+            <button id="exportButton" class="export-button" type="button">Export to PDF</button>
+        </div>
+    </div>
+
+    <div id="chart-container"></div>
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2 for Branch and Department dropdowns
+            $('#txtBranch').select2({
+                placeholder: "Select a Branch",
+                allowClear: true
+            });
+
+            $('#txtDepartment').select2({
+                placeholder: "Select a Department",
+                allowClear: true
+            });
+
+            function initializeOrgChart(chartData) {
+                // Clear existing chart
+                $('#chart-container').empty();
+                
+                // Initialize new chart
+                $('#chart-container').orgchart({
+                    'data': chartData,
+                    'hideRootNode': true,
+                    'nodeID': 'empCode',
+                    'parentNodeSymbol': '',
+                    'createNode': function ($node, data) {
+                        $node.append(`
+                            <div class="node-content">
+                                <img src="${data.image}" class="img-thumbnail" data-toggle="modal" data-target="#imageModal" data-img="${data.image}">
+                                <center><div class="name">${data.name}</div></center>
+                                <div class="designation">${data.designation}</div>
+                                <div class="emp-code">${data.empCode}</div>
+                                <div class="email">
+                                    <a href="mailto:${data.email || ''}">${data.email || ''}</a>
+                                </div>
+                            </div>
+                        `).attr('title', `Email: ${data.email || ''}`);
+                    }
+                });
+            }
+
+            $('#filterButton').click(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                var selectedBranch = $('#txtBranch').val();
+                var selectedDepartment = $('#txtDepartment').val();
+
+                console.log("Selected Branch:", selectedBranch);
+                console.log("Selected Department:", selectedDepartment);
+
+                $.ajax({
+                    url: '@Url.Action("GetData", "RPTOrgChart")',
+                    type: 'POST',
+                    data: { Branch: selectedBranch, Department: selectedDepartment },
+                    success: function (response) {
+                        console.log("Server response:", response);
+                        if (response.MS === "OK") {
+                            const data = response.DT;
+                            console.log("Chart data:", data);
+                            if (!data || data.length === 0) {
+                                $('#chart-container').html('<div style="padding: 20px; text-align: center; color: #666;">No organizational data available for the selected criteria.</div>');
+                                return;
+                            }
+                            const chartData = buildHierarchy(data);
+                            console.log("Built hierarchy:", chartData);
+                            initializeOrgChart(chartData);
+                        } else {
+                            $('#chart-container').html('<div style="padding: 20px; text-align: center; color: #666;">Error loading organizational data. Please try again.</div>');
+                            console.error("Error in response:", response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#chart-container').html('<div style="padding: 20px; text-align: center; color: #666;">Error loading organizational data. Please try again.</div>');
+                        console.error("AJAX error:", error);
+                        console.log("Status:", status);
+                        console.log("Response:", xhr.responseText);
+                    }
+                });
+            });
+
+            // Click event to open modal
+            $(document).on('click', 'img[data-toggle="modal"]', function () {
+                const imgSrc = $(this).data('img');
+                $('#modalImage').attr('src', imgSrc);
+            });
+
+            function buildHierarchy(data) {
+                console.log("Starting to build hierarchy with data:", data);
+                const map = {};
+                const roots = [];
+
+                // First pass: Create all nodes
+                data.forEach(function (item, index) {
+                    console.log(`Processing item ${index}:`, item);
+                    if (!item.EmpCode) {
+                        console.warn("Found item without EmpCode:", item);
+                        return;
+                    }
+                    
+                    map[item.EmpCode] = {
+                        'name': item.Name || 'Unknown',
+                        'designation': item.Designation || 'N/A',
+                        'empCode': item.EmpCode,
+                        'image': item.Images || 'https://ehr.tela.com.kh/Content/Images/logo.png',
+                        'email': item.Email || '',
+                        'children': []
+                    };
+                });
+
+                console.log("Created node map:", map);
+
+                // Second pass: Build relationships
+                data.forEach(function (item) {
+                    if (!item.EmpCode) return;
+                    
+                    var node = map[item.EmpCode];
+                    if (item.ReportingID && map[item.ReportingID]) {
+                        console.log(`Adding ${item.EmpCode} as child of ${item.ReportingID}`);
+                        map[item.ReportingID].children.push(node);
+                    } else {
+                        console.log(`Adding ${item.EmpCode} as root node (ReportingID: ${item.ReportingID})`);
+                        roots.push(node);
+                    }
+                });
+
+                console.log("Final roots array:", roots);
+
+                if (roots.length > 1) {
+                    console.log("Multiple roots found, creating organization root node");
+                    return {
+                        'name': 'Organization',
+                        'designation': 'Root',
+                        'empCode': 'ORG',
+                        'image': 'https://ehr.tela.com.kh/Content/Images/logo.png',
+                        'children': roots
+                    };
+                } else if (roots.length === 1) {
+                    console.log("Single root found, using as main node");
+                    return roots[0];
+                } else {
+                    console.log("No roots found, returning null");
+                    return null;
+                }
+            }
+
+            // Trigger initial load with default values
+            $('#filterButton').trigger('click');
+
+            // PDF Export functionality
+            $('#exportButton').click(function() {
+                const { jsPDF } = window.jspdf;
+                const container = document.getElementById('chart-container');
+                
+                // Store original styles
+                const originalStyles = {
+                    width: container.style.width,
+                    height: container.style.height,
+                    position: container.style.position,
+                    overflow: container.style.overflow
+                };
+
+                // Temporarily modify container to capture full content
+                container.style.width = container.scrollWidth + 'px';
+                container.style.height = container.scrollHeight + 'px';
+                container.style.position = 'relative';
+                container.style.overflow = 'visible';
+
+                html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: container.scrollWidth,
+                    windowHeight: container.scrollHeight,
+                    width: container.scrollWidth,
+                    height: container.scrollHeight
+                }).then(canvas => {
+                    // Restore original styles
+                    Object.assign(container.style, originalStyles);
+
+                    const pdf = new jsPDF('l', 'pt', [canvas.width, canvas.height]);
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+
+                    // Calculate the number of pages needed
+                    const pagesNeeded = Math.ceil(imgHeight / pageHeight);
+
+                    // Add pages as needed
+                    for (let i = 0; i < pagesNeeded; i++) {
+                        if (i > 0) {
+                            pdf.addPage();
+                        }
+
+                        // Calculate the slice of the image to add to this page
+                        const sourceY = i * pageHeight;
+                        const sliceHeight = Math.min(pageHeight, imgHeight - sourceY);
+
+                        pdf.addImage(
+                            canvas.toDataURL('image/png'),
+                            'PNG',
+                            0,
+                            i === 0 ? 0 : -sourceY,
+                            imgWidth,
+                            imgHeight
+                        );
+                    }
+
+                    pdf.save('OrgChart.pdf');
+                }).catch(error => {
+                    console.error('Error generating PDF:', error);
+                    alert('Error generating PDF. Please try again.');
+                    // Restore original styles in case of error
+                    Object.assign(container.style, originalStyles);
+                });
+            });
+
+            $('#txtBranch').val('@Model.Filter.Branch');
+            $('#txtDepartment').val('@Model.Filter.Department');
+        });
+    </script>
+</body>
+</html>

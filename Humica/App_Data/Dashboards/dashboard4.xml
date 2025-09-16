@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Visible="false" Text="Employee Attendance" />
+  <DataSources>
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="Staff Profile">
+        <Tables>
+          <Table Name="HR_STAFF_VIEW" />
+        </Tables>
+        <Columns>
+          <AllColumns />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_EmployeeAttendace">
+        <Tables>
+          <Table Name="Z_EmployeeAttendace" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmployeeAttendace" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendace">
+      <DataItems>
+        <Dimension DataMember="EmpCode" DefaultId="DataItem0" />
+        <Dimension DataMember="AllName" DefaultId="DataItem1" />
+        <Dimension DataMember="Remark" DefaultId="DataItem2" />
+        <Dimension DataMember="InDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem3" />
+        <Measure DataMember="Qty" DefaultId="DataItem4">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+        <Dimension DataMember="Department" DefaultId="DataItem5" />
+        <Dimension DataMember="Position" DefaultId="DataItem6" />
+        <Measure DataMember="Times" DefaultId="DataItem7" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="ID" Weight="40.278468423669835">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Name" Weight="81.551466931874728">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="97.961213326703174">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="131.77523620089514">
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Type" Weight="62.1581302834411">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="In Date" Weight="71.108901044256612">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Time (s)" Weight="55.1964196916957">
+          <Measure DefaultId="DataItem7" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Minute (s)" Weight="59.970164097463929">
+          <Measure DefaultId="DataItem4" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+    </Grid>
+    <ListBox ComponentName="listBoxDashboardItem1" Name="Tracking Type" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendace">
+      <DataItems>
+        <Dimension DataMember="Type" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ListBox>
+    <ComboBox ComponentName="comboBoxDashboardItem1" Name="Filter Date" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendace">
+      <DataItems>
+        <Dimension DataMember="InDate" DateTimeGroupInterval="DayMonthYear" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <Card ComponentName="cardDashboardItem1" Name="Cards 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendace">
+      <DataItems>
+        <Measure DataMember="EmpCode" SummaryType="Count" DefaultId="DataItem0" />
+        <Dimension DataMember="Type" DefaultId="DataItem1" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem1" />
+      </SeriesDimensions>
+      <Card>
+        <ActualValue DefaultId="DataItem0" />
+        <CardDeltaOptions ResultIndicationMode="NoIndication" />
+        <AbsoluteVariationNumericFormat />
+        <PercentVariationNumericFormat />
+        <PercentOfTargetNumericFormat />
+        <LayoutTemplate MinWidth="125" MaxWidth="270" Type="Compact">
+          <MainValue Visible="true" ValueType="Title" DimensionIndex="0" />
+          <SubValue Visible="true" ValueType="Subtitle" DimensionIndex="0" />
+          <BottomValue Visible="true" ValueType="ActualValue" DimensionIndex="0" />
+          <BottomSubValue1 Visible="true" ValueType="AbsoluteVariation" DimensionIndex="0" />
+          <BottomSubValue2 Visible="true" ValueType="PercentVariation" DimensionIndex="0" />
+          <DeltaIndicator Visible="true" />
+          <Sparkline Visible="true" />
+        </LayoutTemplate>
+      </Card>
+    </Card>
+    <ListBox ComponentName="listBoxDashboardItem2" Name="Department" DataSource="sqlDataSource1" DataMember="Z_EmployeeAttendace">
+      <DataItems>
+        <Dimension DataMember="Department" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ListBox>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup>
+        <LayoutGroup Orientation="Vertical" Weight="0.29571187102724467">
+          <LayoutItem DashboardItem="comboBoxDashboardItem1" Weight="0.21943678479110412" />
+          <LayoutItem DashboardItem="listBoxDashboardItem1" Weight="0.74455013873681442" />
+          <LayoutItem DashboardItem="listBoxDashboardItem2" Weight="1.2707795539143527" />
+        </LayoutGroup>
+        <LayoutGroup Orientation="Vertical" Weight="1.7042881289727552">
+          <LayoutItem DashboardItem="cardDashboardItem1" Weight="0.4167282561545132" />
+          <LayoutItem DashboardItem="gridDashboardItem1" Weight="3.0312014803574061" />
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

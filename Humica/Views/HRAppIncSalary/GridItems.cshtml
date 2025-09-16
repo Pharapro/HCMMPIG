@@ -1,0 +1,94 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Griditem";
+        settings.KeyFieldName = "EmpCode";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CallbackRouteValues = new { Action = "GridItems", Controller = "HRAppIncSalary" };
+
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.Width = 50;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+            column.Width = 150;
+            column.FieldName = "EmpCode";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmployeeName");
+            column.Width = 200;
+            column.FieldName = "EmployeeName";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+        //    column.Width = 150;
+        //    column.FieldName = "Department";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //});
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Increase");
+            column.FieldName = "Increase";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NewSalary");
+            column.FieldName = "NewSalary";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var textpropertiesEdit = column.PropertiesEdit as SpinEditProperties;
+            textpropertiesEdit.DisplayFormatString = "N2";
+            textpropertiesEdit.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+            column.Width = 120;
+        });
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+        settings.PreRender = (s, e) =>
+        {
+
+        };
+
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = false;
+        settings.SettingsPager.PageSize = 50;
+
+
+    });
+}
+
+@gridExtension.Bind(Model).GetHtml()

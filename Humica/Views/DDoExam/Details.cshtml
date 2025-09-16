@@ -1,0 +1,549 @@
+﻿
+<script type="text/javascript">
+
+    var ss;
+    var selectedIDs = "";
+    var g_index = 0;
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID]";
+        });
+        $('#_btnRequestTrain').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "RequestTrain?id=" + "@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID]";
+        });
+
+
+   });
+
+    function Selectstaff(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/Selectstaff',
+            data: { "Actionname": "Create", "StaffID": cboStaff.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+
+                    txtStaffName.SetValue(data.NameEN);
+                    txtGender.SetValue(data.Gender);
+                    txtPosition.SetValue(data.Position);
+                    txtPhoneNo.SetValue(data.Phone);
+                    txtNatID.SetValue(data.NatID);
+                    //txtHireDate.SetValue(data.HireDate);
+                    txtWorkExperience.SetValue(data.WorkExperience);
+
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+
+    var str = "";
+    function notify() {
+        str = "";
+        var els = document.querySelectorAll('input:checked');
+        for (var i = 0; i < els.length; i++) {
+            //console.log(els[i].value)
+            str += els[i].value + ";";
+        }
+        //alert(str)
+        txtSelectedAnswer.SetValue(str);
+    }
+
+    
+
+</script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+    .progress-circle {
+   font-size: 20px;
+   margin: 20px;
+   position: relative; /* so that children can be absolutely positioned */
+   padding: 0;
+   width: 5em;
+   height: 5em;
+   background-color: #F2E9E1; 
+   border-radius: 50%;
+   line-height: 5em;
+}
+
+.progress-circle:after{
+    border: none;
+    position: absolute;
+    top: 0.35em;
+    left: 0.35em;
+    text-align: center;
+    display: block;
+    border-radius: 50%;
+    width: 4.3em;
+    height: 4.3em;
+    background-color: white;
+    content: " ";
+}
+/* Text inside the control */
+.progress-circle span {
+    position: absolute;
+    line-height: 5em;
+    width: 5em;
+    text-align: center;
+    display: block;
+    color: #53777A;
+    z-index: 2;
+}
+.left-half-clipper { 
+   /* a round circle */
+   border-radius: 50%;
+   width: 5em;
+   height: 5em;
+   position: absolute; /* needed for clipping */
+   clip: rect(0, 5em, 5em, 2.5em); /* clips the whole left half*/ 
+}
+/* when p>50, don't clip left half*/
+.progress-circle.over50 .left-half-clipper {
+   clip: rect(auto,auto,auto,auto);
+}
+.value-bar {
+   /*This is an overlayed square, that is made round with the border radius,
+   then it is cut to display only the left half, then rotated clockwise
+   to escape the outer clipping path.*/ 
+   position: absolute; /*needed for clipping*/
+   clip: rect(0, 2.5em, 5em, 0);
+   width: 5em;
+   height: 5em;
+   border-radius: 50%;
+   border: 0.45em solid #f0bb1d; /*The border is 0.35 but making it larger removes visual artifacts */
+   /*background-color: #4D642D;*/ /* for debug */
+   box-sizing: border-box;
+  
+}
+/* Progress bar filling the whole right half for values above 50% */
+.progress-circle.over50 .first50-bar {
+   /*Progress bar for the first 50%, filling the whole right half*/
+   position: absolute; /*needed for clipping*/
+   clip: rect(0, 5em, 5em, 2.5em);
+   background-color: #f0bb1d;
+   border-radius: 50%;
+   width: 5em;
+   height: 5em;
+}
+.progress-circle:not(.over50) .first50-bar{ display: none; }
+
+
+/* Progress bar rotation position */
+.progress-circle.p0 .value-bar { display: none; }
+.progress-circle.p1 .value-bar { transform: rotate(4deg); }
+.progress-circle.p2 .value-bar { transform: rotate(7deg); }
+.progress-circle.p3 .value-bar { transform: rotate(11deg); }
+.progress-circle.p4 .value-bar { transform: rotate(14deg); }
+.progress-circle.p5 .value-bar { transform: rotate(18deg); }
+.progress-circle.p6 .value-bar { transform: rotate(22deg); }
+.progress-circle.p7 .value-bar { transform: rotate(25deg); }
+.progress-circle.p8 .value-bar { transform: rotate(29deg); }
+.progress-circle.p9 .value-bar { transform: rotate(32deg); }
+.progress-circle.p10 .value-bar { transform: rotate(36deg); }
+.progress-circle.p11 .value-bar { transform: rotate(40deg); }
+.progress-circle.p12 .value-bar { transform: rotate(43deg); }
+.progress-circle.p13 .value-bar { transform: rotate(47deg); }
+.progress-circle.p14 .value-bar { transform: rotate(50deg); }
+.progress-circle.p15 .value-bar { transform: rotate(54deg); }
+.progress-circle.p16 .value-bar { transform: rotate(58deg); }
+.progress-circle.p17 .value-bar { transform: rotate(61deg); }
+.progress-circle.p18 .value-bar { transform: rotate(65deg); }
+.progress-circle.p19 .value-bar { transform: rotate(68deg); }
+.progress-circle.p20 .value-bar { transform: rotate(72deg); }
+.progress-circle.p21 .value-bar { transform: rotate(76deg); }
+.progress-circle.p22 .value-bar { transform: rotate(79deg); }
+.progress-circle.p23 .value-bar { transform: rotate(83deg); }
+.progress-circle.p24 .value-bar { transform: rotate(86deg); }
+.progress-circle.p25 .value-bar { transform: rotate(90deg); }
+.progress-circle.p26 .value-bar { transform: rotate(94deg); }
+.progress-circle.p27 .value-bar { transform: rotate(97deg); }
+.progress-circle.p28 .value-bar { transform: rotate(101deg); }
+.progress-circle.p29 .value-bar { transform: rotate(104deg); }
+.progress-circle.p30 .value-bar { transform: rotate(108deg); }
+.progress-circle.p31 .value-bar { transform: rotate(112deg); }
+.progress-circle.p32 .value-bar { transform: rotate(115deg); }
+.progress-circle.p33 .value-bar { transform: rotate(119deg); }
+.progress-circle.p34 .value-bar { transform: rotate(122deg); }
+.progress-circle.p35 .value-bar { transform: rotate(126deg); }
+.progress-circle.p36 .value-bar { transform: rotate(130deg); }
+.progress-circle.p37 .value-bar { transform: rotate(133deg); }
+.progress-circle.p38 .value-bar { transform: rotate(137deg); }
+.progress-circle.p39 .value-bar { transform: rotate(140deg); }
+.progress-circle.p40 .value-bar { transform: rotate(144deg); }
+.progress-circle.p41 .value-bar { transform: rotate(148deg); }
+.progress-circle.p42 .value-bar { transform: rotate(151deg); }
+.progress-circle.p43 .value-bar { transform: rotate(155deg); }
+.progress-circle.p44 .value-bar { transform: rotate(158deg); }
+.progress-circle.p45 .value-bar { transform: rotate(162deg); }
+.progress-circle.p46 .value-bar { transform: rotate(166deg); }
+.progress-circle.p47 .value-bar { transform: rotate(169deg); }
+.progress-circle.p48 .value-bar { transform: rotate(173deg); }
+.progress-circle.p49 .value-bar { transform: rotate(176deg); }
+.progress-circle.p50 .value-bar { transform: rotate(180deg); }
+.progress-circle.p51 .value-bar { transform: rotate(184deg); }
+.progress-circle.p52 .value-bar { transform: rotate(187deg); }
+.progress-circle.p53 .value-bar { transform: rotate(191deg); }
+.progress-circle.p54 .value-bar { transform: rotate(194deg); }
+.progress-circle.p55 .value-bar { transform: rotate(198deg); }
+.progress-circle.p56 .value-bar { transform: rotate(202deg); }
+.progress-circle.p57 .value-bar { transform: rotate(205deg); }
+.progress-circle.p58 .value-bar { transform: rotate(209deg); }
+.progress-circle.p59 .value-bar { transform: rotate(212deg); }
+.progress-circle.p60 .value-bar { transform: rotate(216deg); }
+.progress-circle.p61 .value-bar { transform: rotate(220deg); }
+.progress-circle.p62 .value-bar { transform: rotate(223deg); }
+.progress-circle.p63 .value-bar { transform: rotate(227deg); }
+.progress-circle.p64 .value-bar { transform: rotate(230deg); }
+.progress-circle.p65 .value-bar { transform: rotate(234deg); }
+.progress-circle.p66 .value-bar { transform: rotate(238deg); }
+.progress-circle.p67 .value-bar { transform: rotate(241deg); }
+.progress-circle.p68 .value-bar { transform: rotate(245deg); }
+.progress-circle.p69 .value-bar { transform: rotate(248deg); }
+.progress-circle.p70 .value-bar { transform: rotate(252deg); }
+.progress-circle.p71 .value-bar { transform: rotate(256deg); }
+.progress-circle.p72 .value-bar { transform: rotate(259deg); }
+.progress-circle.p73 .value-bar { transform: rotate(263deg); }
+.progress-circle.p74 .value-bar { transform: rotate(266deg); }
+.progress-circle.p75 .value-bar { transform: rotate(270deg); }
+.progress-circle.p76 .value-bar { transform: rotate(274deg); }
+.progress-circle.p77 .value-bar { transform: rotate(277deg); }
+.progress-circle.p78 .value-bar { transform: rotate(281deg); }
+.progress-circle.p79 .value-bar { transform: rotate(284deg); }
+.progress-circle.p80 .value-bar { transform: rotate(288deg); }
+.progress-circle.p81 .value-bar { transform: rotate(292deg); }
+.progress-circle.p82 .value-bar { transform: rotate(295deg); }
+.progress-circle.p83 .value-bar { transform: rotate(299deg); }
+.progress-circle.p84 .value-bar { transform: rotate(302deg); }
+.progress-circle.p85 .value-bar { transform: rotate(306deg); }
+.progress-circle.p86 .value-bar { transform: rotate(310deg); }
+.progress-circle.p87 .value-bar { transform: rotate(313deg); }
+.progress-circle.p88 .value-bar { transform: rotate(317deg); }
+.progress-circle.p89 .value-bar { transform: rotate(320deg); }
+.progress-circle.p90 .value-bar { transform: rotate(324deg); }
+.progress-circle.p91 .value-bar { transform: rotate(328deg); }
+.progress-circle.p92 .value-bar { transform: rotate(331deg); }
+.progress-circle.p93 .value-bar { transform: rotate(335deg); }
+.progress-circle.p94 .value-bar { transform: rotate(338deg); }
+.progress-circle.p95 .value-bar { transform: rotate(342deg); }
+.progress-circle.p96 .value-bar { transform: rotate(346deg); }
+.progress-circle.p97 .value-bar { transform: rotate(349deg); }
+.progress-circle.p98 .value-bar { transform: rotate(353deg); }
+.progress-circle.p99 .value-bar { transform: rotate(356deg); }
+.progress-circle.p100 .value-bar { transform: rotate(360deg); }
+
+.container {
+    width: 607px;
+    border: solid 1px #acafb5;
+}
+.container h3{
+    margin: 7px;
+    color: red;
+    width: 100%;
+    text-align: center;
+}
+.table{
+    margin: 10px;
+    margin-top: 20px;
+}
+#FooterPane{
+    margin-bottom: 0px;
+    }
+</style>
+
+
+
+@model Humica.Training.TrainningObject
+
+@if (Model.IsFN == false)
+{
+    <div class="container">
+
+
+        @if (Model.ExamHeader.IsFinalTest == true && Model.ExamHeader.IsInitialTest == true)
+        {
+            <h3>
+                @Humica.EF.Models.SY.SYSettings.getLabel("Final Test Result")
+            </h3>
+        }
+        else
+        {
+            <h3>
+                @Humica.EF.Models.SY.SYSettings.getLabel("Initial Test Result")
+            </h3>
+        }
+
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <table class="table">
+                    <tr>
+                        <td>
+                            @Humica.EF.Models.SY.SYSettings.getLabel("Total Score")
+                        </td>
+                        <td>@Convert.ToInt32(Model.ExamHeader.TotalModuleScore)</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Humica.EF.Models.SY.SYSettings.getLabel("Correct Answer")
+                        </td>
+                        <td>@Convert.ToInt32(Model.ExamHeader.CorrectAnswer)</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Humica.EF.Models.SY.SYSettings.getLabel("InCorrect Answer")
+                        </td>
+                        <td>@Convert.ToInt32(Model.ExamHeader.InCorrectAnswer)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                @{
+                    string pg = "progress-circle p";
+                    if (Convert.ToInt32(Model.ExamHeader.TotalAchieve) > 50)
+                    {
+                        pg = "progress-circle over50 p";
+                    }
+                    pg += Convert.ToInt32(Model.ExamHeader.TotalAchieve);
+                }
+                <div class="@pg">
+                    <span>@Convert.ToInt32(Model.ExamHeader.TotalAchieve)%</span>
+                    <div class="left-half-clipper">
+                        <div class="first50-bar"></div>
+                        <div class="value-bar"></div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+}
+
+
+@if (Model.IsFN == true)
+{
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <div style="border:solid 1px">
+                    <h3 style="padding-left: 11px;">
+                        @Humica.EF.Models.SY.SYSettings.getLabel("Summary result Initial test")
+                    </h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Total Modules")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.TotalModuleInitial)</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Pass module")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.PassModuleInitial)</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Fail module")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.FailModuleInitial)</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Result")
+                                    </td>
+                                    <td>@Model.StatusInitial</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            @{
+                                string pg = "progress-circle p";
+                                if (Convert.ToInt32(Model.AcheiveInitial) > 50)
+                                {
+                                    pg = "progress-circle over50 p";
+                                }
+                                pg += Convert.ToInt32(Model.AcheiveInitial);
+                            }
+                            <div class="@pg">
+                                <span>@Convert.ToInt32(Model.AcheiveInitial)%</span>
+                                <div class="left-half-clipper">
+                                    <div class="first50-bar"></div>
+                                    <div class="value-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+                <div style="border:solid 1px">
+                    <h3 style="padding-left: 11px;">
+                        @Humica.EF.Models.SY.SYSettings.getLabel("Summary result Final test")
+                    </h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Total Modules")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.TotalModuleFinal)</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Pass module")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.PassModuleFinal)</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Fail module")
+                                    </td>
+                                    <td>@Convert.ToInt32(Model.FailModuleFinal)</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Humica.EF.Models.SY.SYSettings.getLabel("Result")
+                                    </td>
+                                    <td>@Model.StatusFinal</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+
+                            @{ 
+                                pg = "progress-circle p";
+                                if (Convert.ToInt32(Model.AcheiveFinal) > 50)
+                                {
+                                    pg = "progress-circle over50 p";
+                                }
+                                pg += Convert.ToInt32(Model.AcheiveFinal);
+                            }
+                            <div class="@pg">
+                                <span>@Convert.ToInt32(Model.AcheiveFinal)%</span>
+                                <div class="left-half-clipper">
+                                    <div class="first50-bar"></div>
+                                    <div class="value-bar"></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+@*<div class="container">
+
+    @foreach (var q in Model.ListQuestion.OrderBy(w => w.QuestionCode).ToList())
+    {
+        int number = 1;
+
+        <div style="margin-bottom:15px;">
+
+            <h2 for="@q.QuestionCode" style="padding: 10px 5px;"><span>@q.QuestionCode.</span>@q.Description</h2>
+
+            @foreach (var an in Model.ListAnswer.OrderBy(w => w.AnswerCode).ToList())
+            {
+                if (@q.QuestionCode == @an.QuestionCode && @q.ProgramCode == @an.ProgramCode && @q.CourseCode == @an.Coursecode && @q.ModuleCode == @an.ModuleCode)
+                {
+                    <div style="overflow: hidden;width: 100%;padding-left: 25px;">
+
+                        @for (int i = 1; i <= an.ColumnCheck; i++)
+                        {
+                            int ln = 1;
+                            string value = "";
+                            if (an.ColumnCheck > 1)
+                            {
+                                ln = i;
+
+                            }
+                            value = an.QuestionCode + "," + an.AnswerCode + "," + ln;
+                            if (an.ColumnCheck > 1)
+                            {
+                                string check = "";
+                                var abc = Model.ListExamItem.Where(w=>w.Branch== an.Branch && w.ProgramCode== an.ProgramCode && w.Coursecode== an.Coursecode && w.ModuleCode== an.ModuleCode && w.AnswerCode== an.AnswerCode && w.CheckValue== ln).ToList();
+                                if(abc.Count > 0)
+                                {
+                                    check = "Checked";
+                                }
+                                <label class="con" style="float: left;padding: 7px;">
+                                    <span style="padding: 7px;padding-left: 22px;">(@ln)</span>
+                                    <input type="radio" @check name="@an.AnswerCode" onclick="notify()" value="@value" />
+                                    <span class="checkmark"></span>
+                                </label>
+
+                            }
+                            else
+                            {
+                                string check = "";
+                                var abc = Model.ListExamItem.Where(w => w.Branch == an.Branch && w.ProgramCode == an.ProgramCode && w.Coursecode == an.Coursecode && w.ModuleCode == an.ModuleCode && w.AnswerCode == an.AnswerCode && w.CheckValue == ln).ToList();
+                                if (abc.Count > 0)
+                                {
+                                    check = "checked";
+                                }
+                                <label class="con" style="float: left;padding: 7px;">
+                                    <input type="checkbox" @check  onclick="notify()" value="@value" />
+                                    <span style="padding: 7px;padding-left: 22px;">(@number)</span>
+                                    <span class="checkmark"></span>
+                                </label>
+
+                            }
+
+                            number++;
+                        }
+                        <label style="float: left;padding: 7px; width: 76%;">@an.Description</label>
+
+                    </div>
+
+                }
+
+            }
+            <p>
+                @if (q.Attachement != null)
+                {
+                    <img src="@q.Attachement" class="img-thumbnail" alt="Cinque Terre">
+                }
+
+            </p>
+        </div>
+       
+    }
+
+
+
+</div>*@

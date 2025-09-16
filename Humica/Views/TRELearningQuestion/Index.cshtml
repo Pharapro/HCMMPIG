@@ -1,0 +1,172 @@
+﻿<script type="text/javascript">
+    function completedUploadFileItem(s, e) {
+        if (e.isValid) {
+            $("#file_uploaded").attr("href", e.callbackData);
+            //file_uploaded.SetVisible(true);
+        }
+    }
+    function changeCourse(s, e) {
+        if (s.GetSelectedItem() != null) {
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/FitlerType',
+                data: { 'code': s.GetValue(), "addType": 1 },
+                success: function (data) {
+                    _GridItem.Refresh();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+    function changeTrainingType(s, e) {
+        if (s.GetSelectedItem() != null) {
+            $.ajax({
+                type: 'post',
+                url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/FitlerType',
+                data: { 'code': s.GetValue(), "addType": 2 },
+                success: function (data) {
+                    _GridItem.Refresh();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+    function changeTopic(s, e) {
+        if (s.GetSelectedItem() != null) {
+            txtDescription.SetValue(s.GetSelectedItem().GetColumnText(1));
+        }
+    }
+</script>
+
+@model Humica.Training.Setup.ClsELearningQuestion
+<div class="fitler-doc">
+    @Html.DevExpress().FormLayout(settings =>
+{
+
+    settings.Name = "CreateFitler";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 4;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+           )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => Model.Course, s =>
+            {
+                s.Width = 250;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.TextFormatString = "{0}:{1}";
+                s.Properties.AllowNull = true;
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+                s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 150);
+            }).BindList(ViewData["Course_List"]).Render();
+        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+            )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "TrainingType");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().ComboBoxFor(i => i.TrainingType, s =>
+            {
+                s.Width = 250;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.TextFormatString = "{0}:{1}";
+                s.Properties.ValueField = "Code";
+                s.Properties.TextField = "Description";
+                s.Properties.ClientInstanceName = "cboCoursePos";
+                //s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectCourse";
+                //s.Properties.ValueType = typeof(string);
+                s.Properties.AllowNull = true;
+                s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            }).BindList(ViewData["Training_List"]).Render();
+        });
+        //      g.Items
+        //    .Add(m =>
+        //    {
+        //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "CreatedDate From");
+
+        //    })
+        //        .SetNestedContent(() =>
+        //        {
+        //            Html.DevExpress().DateEditFor(i => i.Filter.FromDate, s =>
+        //            {
+        //                //s.Width = width;
+        //                s.ShowModelErrors = true;
+        //                //s.Properties.ClientInstanceName = "dtpFromDate";
+        //                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //                s.Properties.ValidationSettings.SetFocusOnError = true;
+        //                s.Properties.ValidationSettings.ErrorText = "*";
+        //                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //            }).Render();
+        //        });
+
+        //      g.Items
+        //    .Add(m =>
+        //    {
+        //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "CreatedDate To");
+
+        //    })
+        //        .SetNestedContent(() =>
+        //        {
+        //            Html.DevExpress().DateEditFor(i => i.Filter.ToDate, s =>
+        //            {
+        //                //s.Width = width;
+        //                s.ShowModelErrors = true;
+        //                //s.Properties.ClientInstanceName = "dtpFromDate";
+        //                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //                s.Properties.ValidationSettings.SetFocusOnError = true;
+        //                s.Properties.ValidationSettings.ErrorText = "*";
+        //                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+        //            }).Render();
+        //        });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "_btnRunReport";
+                s.ToolTip = "Go";
+                s.RenderMode = ButtonRenderMode.Button;
+                s.Text = "Go";
+                s.UseSubmitBehavior = true;
+                s.Images.Image.IconID = IconID.ActionsApply16x16;
+            }).GetHtml();
+        });
+    });
+
+}).GetHtml()
+</div>
+@Html.Partial("_GridItem", Model)

@@ -1,0 +1,54 @@
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "GridItems";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "RunScript", Action = "GridItems" };
+    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+    //settings.SettingsBehavior.AllowSort = false;
+    settings.SettingsSearchPanel.Visible = true;
+
+    settings.Settings.ShowGroupPanel = false;
+    settings.Settings.ShowFooter = true;
+    settings.SettingsContextMenu.Enabled = true;
+    settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+    settings.Settings.ShowHeaderFilterButton = true;
+    settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    //settings.DataBound = (sender, e) =>
+    //{
+    //    var gridLookup = (MVCxGridView)sender;
+    //    var demoAreaWidth = 894;
+    //    if (gridLookup.Columns.Count == 0)
+    //    {
+    //    }
+    //    else
+    //    {
+    //        var columnWidth = Math.Max(115, demoAreaWidth / gridLookup.Columns.Count);
+    //        for (var i = 1; i < gridLookup.Columns.Count; i++)
+    //        {
+    //            gridLookup.Columns[i].MinWidth = columnWidth;
+    //        }
+    //        gridLookup.Columns[0].MinWidth = demoAreaWidth - (gridLookup.Columns.Count - 1) * columnWidth;
+    //    }
+    //};
+    settings.SettingsPager.Position = PagerPosition.Bottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+
+    settings.SettingsBehavior.AllowFocusedRow = true;
+
+    settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh - 20;
+
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+
+
+}).Bind(Model).GetHtml()
+

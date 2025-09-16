@@ -1,0 +1,143 @@
+﻿@model Humica.Logic.PR.PRAllowance
+
+@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridCreateAllowance";
+           settings.KeyFieldName = "AllwCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRAllowance", Action = "GridItems" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRAllowance", Action = "CreateItem" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRAllowance", Action = "CreateItemEdit" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRAllowance", Action = "CreateItemDelete" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Allowance");
+               column.Width = 200;
+               column.FieldName = "AllwCode";
+
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["ALLOWANCE_SELECT"];
+               textProperties.ValueField = "Code";
+               textProperties.TextField = "Description";
+
+               textProperties.TextFormatString = "{1}";
+               textProperties.DropDownStyle = DropDownStyle.DropDownList;
+               textProperties.ClientSideEvents.SelectedIndexChanged = "SelectAllownace";
+               textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+               textProperties.Columns.Add("Amount", Humica.EF.Models.SY.SYSettings.getLabel("Amount"));
+               textProperties.Columns.Add("Tax", Humica.EF.Models.SY.SYSettings.getLabel("Tax"));
+
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Amount");
+               column.Width = 90;
+               column.FieldName = "Amount";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N2";
+               spinEditProperties.Width = Unit.Percentage(100);
+               column.PropertiesEdit.ClientInstanceName = "txtAmount";
+               spinEditProperties.MinValue = 0;
+               spinEditProperties.MaxValue = 1000000;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FromDate");
+               column.Width = 120;
+
+               column.FieldName = "FromDate";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ToDate");
+               column.Width = 120;
+
+               column.FieldName = "ToDate";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.FieldName = "Remark";
+
+           });
+
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "AllwCode")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListHeader).GetHtml()
+

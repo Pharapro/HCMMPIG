@@ -1,0 +1,112 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+
+             settings.Name = "gridViewItem3";
+             settings.KeyFieldName = "ID";
+
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "CFixedAssetMaster", Action = "_ListFixAssetClass" };
+             settings.Width = Unit.Percentage(100);
+             settings.CommandColumn.ShowSelectCheckbox = true;
+             settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+             settings.SettingsBehavior.AllowSort = false;
+
+             settings.CommandColumn.Visible = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "ID";
+                 column.Width = 20;
+                 column.Visible = false;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "ID");
+             });
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "AssetClassCode";
+                 column.Width = 150;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetClass");
+             });
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Description";
+                 column.Width = 300;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "Description");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "AssetTypeID";
+                 column.Width = 350;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetType");
+                 column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                 var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                 textProperties.DataSource = ViewData["ASSETTYPE_SELECT"];
+                 textProperties.TextFormatString = "{0}:{1}";
+                 textProperties.ValueField = "AssetTypCode";
+                 textProperties.Columns.Add("AssetTypCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetTypCode"), 200);
+                 textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+                 textProperties.ValueType = typeof(string);
+                 textProperties.Width = Unit.Percentage(100);
+             });
+             //  settings.Columns.Add(column =>
+             //{
+             //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch Name");
+             //    column.Width = 250;
+             //    column.FieldName = "Branch";
+             //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             //    var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             //    textProperties.DataSource = ViewData["BRANCH_SELECT"];
+             //    textProperties.TextFormatString = "{0}";
+             //    textProperties.ValueField = "Code";
+             //    textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+             //    textProperties.ValueType = typeof(string);
+             //    textProperties.Width = Unit.Percentage(100);
+             //});
+             settings.SettingsSearchPanel.Visible = true;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+             //settings.ClientSideEvents.RowDblClick = "DbRowClick";
+
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 if (e.KeyValue != null)
+                 {
+                     if (e.Column.FieldName == "MaterialGroup")
+                     {
+                         e.Editor.ReadOnly = true;
+                     }
+                 }
+             };
+
+
+             settings.CustomJSProperties = (sender, e) =>
+             {
+                 e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+
+@grid.Bind(Model).GetHtml()

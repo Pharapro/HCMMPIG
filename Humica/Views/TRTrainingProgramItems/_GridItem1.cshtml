@@ -1,0 +1,213 @@
+﻿
+
+@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+             Html.EnableClientValidation();
+             Html.EnableUnobtrusiveJavaScript();
+             settings.Name = "_GridItem1";
+             settings.KeyFieldName = "ID";
+
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "TRTrainingProgramItems", Action = "_GridItem1" };
+
+             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TRTrainingProgramItems", Action = "Create1" };
+             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TRTrainingProgramItems", Action = "Edit1" };
+             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TRTrainingProgramItems", Action = "Delete1" };
+
+             settings.SettingsBehavior.AllowSort = true;
+
+             settings.CommandColumn.Visible = true;
+             settings.CommandColumn.ShowDeleteButton = true;
+
+             settings.CommandColumn.ShowNewButtonInHeader = true;
+             settings.CommandColumn.ShowCancelButton = true;
+             settings.CommandColumn.ShowEditButton = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsText.ConfirmDelete = " Do you want to delete? ";
+             //  settings.CommandColumn.ShowDeleteButton = true;
+             //settings.SettingsCommandButton.DeleteButton.Image.Url = Url.Content("~/Content/Images/grid-remove.png");
+             //settings.SettingsCommandButton.EditButton.Image.Url = Url.Content("~/Content/Images/grid-edit.png");
+             //settings.SettingsCommandButton.NewButton.Image.Url = Url.Content("~/Content/Images/grid-add.png");
+
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Program";
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Program*");
+                 column.ColumnType = MVCxGridViewColumnType.ComboBox;
+                 column.Width = 250;
+                 var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+                 cboProperties.DropDownStyle = DropDownStyle.DropDownList;
+                 cboProperties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                 cboProperties.DataSource = ViewData["Program_List"];
+                 cboProperties.TextField = "ProgramName";
+                 cboProperties.ValueField = "ProgramCode";
+                 cboProperties.TextFormatString = "{0}:{1}";
+                 cboProperties.Columns.Add("ProgramCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                 cboProperties.Columns.Add("ProgramName", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+                 //cboProperties.ClientSideEvents.SelectedIndexChanged = "changeProgram";
+                 cboProperties.ValueType = typeof(string);
+                 cboProperties.Width = Unit.Percentage(100);
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Code";
+                 column.Width = 80;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Code*");
+                 column.ColumnType = MVCxGridViewColumnType.TextBox;
+                 var textProperties = column.PropertiesEdit as TextEditProperties;
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Description";
+                 column.Width = 350;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description*");
+                 column.ColumnType = MVCxGridViewColumnType.TextBox;
+                 var textProperties = column.PropertiesEdit as TextEditProperties;
+             });
+
+             settings.Columns.Add(column =>
+        {
+            column.FieldName = "StaffLevel";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Staff Level*");
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.Width = 250;
+            var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+            cboProperties.DropDownStyle = DropDownStyle.DropDownList;
+            cboProperties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+            cboProperties.DataSource = ViewData["StaffLevel_List"];
+            cboProperties.TextField = "Description";
+            cboProperties.ValueField = "Code";
+            cboProperties.TextFormatString = "{1}";
+            cboProperties.AllowNull = true;
+            cboProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 80);
+            cboProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+            //cboProperties.ClientSideEvents.SelectedIndexChanged = "changeProgram";
+            cboProperties.ValueType = typeof(string);
+            cboProperties.Width = Unit.Percentage(100);
+        });
+
+             //settings.Columns.Add(column =>
+             //{
+             //    column.FieldName = "Account";
+             //    column.Width = 300;
+             //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Account");
+             //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             //    var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+             //    cboProperties.DataSource = ViewData["ACCOUNT_LIST"];
+             //    cboProperties.TextField = "ShortDescription";
+             //    cboProperties.ValueField = "AccountCode";
+             //    cboProperties.Columns.Add("ShortDescription", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+             //    cboProperties.Columns.Add("AccountCode", Humica.EF.Models.SY.SYSettings.getLabel("AccountCode"));
+
+             //    cboProperties.DropDownStyle = DropDownStyle.DropDownList;
+             //    cboProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING;
+             //    cboProperties.ValueType = typeof(string);
+             //    cboProperties.Width = Unit.Percentage(100);
+
+             //});
+
+             settings.SettingsSearchPanel.Visible = true;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.Settings.ShowHeaderFilterButton = true;
+             settings.SettingsPopup.HeaderFilter.Height = 200;
+             settings.SettingsBehavior.AllowEllipsisInText = true;
+             settings.SettingsContextMenu.Enabled = true;
+
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 if (e.KeyValue != null)
+                 {
+                     //if (e.Column.FieldName == "Program" || e.Column.FieldName == "Code")
+                     //{
+                     //    e.Editor.ReadOnly = true;
+                     //}
+
+                 }
+
+
+             };
+             //settings.InitNewRow += (s, e) =>
+             //{
+             //    e.NewValues["Property"] = (short)0;
+             //};
+
+
+
+             settings.CustomJSProperties = (s, e) =>
+             {
+                 ASPxGridView grid1 = (ASPxGridView)s;
+                 var result = new System.Collections.Hashtable();
+                 foreach (var col in grid1.AllColumns)
+                 {
+                     var dataCol = col as GridViewDataColumn;
+                     if (dataCol != null)
+                     {
+                         var visible = "T";
+                         if (dataCol.Visible == false)
+                         {
+                             visible = "F";
+                         }
+                         result[dataCol.FieldName] = new Dictionary<string, object>() {
+                                {"fieldName",dataCol.FieldName},
+                                {"caption",dataCol.Caption},
+                                { "sortIndex", dataCol.SortIndex },
+                                { "sortOrder", dataCol.SortOrder },
+                                { "groupIndex", dataCol.GroupIndex },
+                                { "width", dataCol.Width },
+                                { "visibleIndex", dataCol.VisibleIndex },
+                                { "visible", visible },
+                                { "fitler", dataCol.FilterExpression},
+                           };
+                     }
+                 }
+
+                 e.Properties["cpColumnsProp"] = result;
+             };
+
+             settings.PreRender = (s, e) =>
+             {
+
+             };
+
+             settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+             settings.SettingsExport.EnableClientSideExportAPI = true;
+             settings.SettingsExport.FileName = "List";
+             settings.Toolbars.Add(t =>
+             {
+                 //t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+                 t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+             });
+             settings.SettingsExport.RenderBrick = (sender, e) =>
+             {
+                 if (e.RowType == GridViewRowType.Data && e.VisibleIndex % 2 == 0)
+                     e.BrickStyle.BackColor = System.Drawing.Color.Beige;
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

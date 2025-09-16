@@ -1,0 +1,256 @@
+﻿@model Humica.EF.Models.CF.CFAddressObject
+@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "gridViewItem1";
+               settings.KeyFieldName = "PostalCode";
+               
+
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.CallbackRouteValues = new { Controller = "NTRCode", Action = "PartialList" };
+
+               settings.Settings.ShowGroupPanel = true;
+               settings.SettingsSearchPanel.Visible = true;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+
+
+               settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "NTRCode", Action = "CreatePartial1" };
+               settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "NTRCode", Action = "EditPartial1" };
+               settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "NTRCode", Action = "DeletePartial1" };
+
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.ShowDeleteButton = true;
+
+               settings.CommandColumn.ShowNewButtonInHeader = true;
+               settings.CommandColumn.ShowCancelButton = true;
+               settings.CommandColumn.ShowEditButton = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+
+
+
+               
+               settings.Columns.Add(column =>
+               {
+                   column.Caption= Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "PostalCode");
+                   
+                   column.Width = 150;
+                   column.FieldName = "PostalCode";                   
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+
+
+               });
+
+            
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Province");
+                   column.Width = 100;
+                   
+                   column.FieldName = "Province";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+                   //var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   //textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("City_SELECT");
+                   //textProperties.TextField = "SelectText";
+                   //textProperties.ValueField = "SelectValue";
+                   //textProperties.ValueType = typeof(string);
+                   //textProperties.Width = Unit.Percentage(100);
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ProvinceDesc2");
+                   column.Width = 150;
+                   
+                   column.FieldName = "ProvinceDesc2";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ProvinceDesc1");
+                   column.Width = 150;
+                   
+                   column.FieldName = "ProvinceDesc1";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+               
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "District");
+                   column.Width = 100;
+                   
+                   column.FieldName = "District";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+                   //var textProperties = column.PropertiesEdit as ComboBoxProperties;
+                   //textProperties.DataSource = Humica.EF.Models.SY.SYDataList.getDataList("District_SELECT");
+                   //textProperties.TextField = "SelectText";
+                   //textProperties.ValueField = "SelectValue";
+                   //textProperties.ValueType = typeof(string);
+                   //textProperties.Width = Unit.Percentage(100);
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "DistrictDesc2");
+                   column.Width = 150;
+                   
+                   column.FieldName = "DistrictDesc2";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "DistrictDesc1");
+                   column.Width = 150;
+                   
+                   column.FieldName = "DistrictDesc1";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Commune");
+                   column.Width = 150;
+                   
+                   column.FieldName = "Commune";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+                   column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "CommuneDesc2");
+                   column.Width = 150;
+                   
+                   column.FieldName = "CommuneDesc2";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "CommuneDesc1");
+                   column.Width = 150;
+                   
+                   column.FieldName = "CommuneDesc1";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "VillageDesc2");
+                   column.Width = 150;
+                   
+                   column.FieldName = "VillageDesc2";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "VillageDesc1");
+                   column.Width = 150;
+                   
+                   column.FieldName = "VillageDesc1";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+               });
+
+     
+               
+
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+               settings.PreRender = (s, e) =>
+               {
+                   var grid = s as MVCxGridView;
+                   //if (grid != null)
+                       //grid.ExpandRow(1);
+               };
+
+
+
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.Dynamic;
+                   if (e.KeyValue != null)
+                   {
+                       if (e.Column.FieldName == "PostalCode" || e.Column.FieldName == "Province"
+                           || e.Column.FieldName == "District"
+                           || e.Column.FieldName == "Commune"
+                           )
+                       {
+                           e.Editor.ReadOnly = true;
+                       }
+                   }
+               };
+
+
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid = (ASPxGridView)s;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.AllColumns;
+                   Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid.DataSource;
+
+                   e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+
+               };
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.Columns[0].FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+               settings.SettingsPager.PageSize = 20;
+                    
+           });
+           
+           
+
+           if (ViewData["EditError"] != null)
+           {
+               gridExtension.SetEditErrorText((string)ViewData["EditError"]);
+           }    
+}
+
+@gridExtension.BindToLINQ(string.Empty, string.Empty, (s, e) =>
+{
+    e.QueryableSource = Model.PostalCodes;
+    e.KeyExpression = "PostalCode";
+}).GetHtml()

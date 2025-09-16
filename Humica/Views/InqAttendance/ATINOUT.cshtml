@@ -1,0 +1,40 @@
+﻿<script type="text/javascript">
+
+    var ss;
+
+    $(document).ready(function () {
+
+        $('#_btnBackAction').click(function () {
+             window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" ;
+        });
+
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportReport(ViewData[Humica.EF.Models.SY.SYConstant.REPORT_SCREEN_ID].ToString())" + "&ReportId=@Model.Filter.STReportType" + "&ReportType=@Model.Filter.STReportType";
+        });
+
+    });
+
+</script>
+
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+
+@model Humica.Logic.Inquiry.ClsInqAttendance
+
+<div class="fitler-doc">
+    @Html.Partial("_Filter", Model)
+</div>
+@{ 
+    Html.RenderPartial("PivotATINOUT", Model.List_EmpSchedule);
+}
+@*@{
+        if (Model.Filter.STReportType == Humica.EF.SYReportType.PIVOT.ToString())
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListPivotSelectView, Model.List_EmpSchedule);
+        }
+        else
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListRowSelectView, Model.List_EmpSchedule);
+        }
+    }*@

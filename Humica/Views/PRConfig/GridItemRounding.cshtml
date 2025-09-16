@@ -1,0 +1,169 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "RoundingRule";
+           settings.KeyFieldName = "ID";
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "PRConfig", Action = "GridItemRounding" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PRConfig", Action = "CreateRounding" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PRConfig", Action = "EditRounding" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PRConfig", Action = "DeleteRounding" };
+
+           settings.SettingsBehavior.AllowSort = false;
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Currency") + "*";
+               column.Width = 100;
+               column.FieldName = "Currency";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.RequiredField.IsRequired = true;
+               textProperties.AllowNull = false;
+               textProperties.DataSource = ViewData["SELECT_CURRENCY"];
+               textProperties.TextFormatString = "{0}";
+               textProperties.ValueField = "CurrencyCode";
+               textProperties.Columns.Add("CurrencyCode", Humica.EF.Models.SY.SYSettings.getLabel("CurrencyCode"));
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Type") + "*";
+               column.Width = 100;
+               column.FieldName = "Type";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.RequiredField.IsRequired = true;
+               textProperties.AllowNull = false;
+               textProperties.DataSource = ViewData["SELECT_INCOME_TYPE"];
+               textProperties.TextFormatString = "{0}";
+               textProperties.ValueField = "Code";
+               textProperties.Columns.Add("IncomeType", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+               textProperties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("RoundMethod") + "*";
+               column.Width = 100;
+               column.FieldName = "RoundMethod";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+               comboBoxProperties.AllowNull = false;
+               comboBoxProperties.DataSource = new List<object>()
+               {
+                   new { code = "N", description = "Round Normal" },
+                   new { code = "U", description = "Round Up" },
+                   new { code = "L", description = "Round Down" }
+               };
+               comboBoxProperties.TextField = "description";
+               comboBoxProperties.ValueField = "code";
+               comboBoxProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "RoundPlaces";
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Roud Places") + "*";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.DisplayFormatInEditMode = true;
+               spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+               spinEditProperties.AllowNull = false;
+               spinEditProperties.DisplayFormatString = "N0";
+               spinEditProperties.MinValue = 0;
+               spinEditProperties.MaxValue = 99999999;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Include is Daily");
+               column.FieldName = "IncludeIsDaily";
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+               column.Width = 130;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Effective Date") + "*";
+               column.Width = 130;
+               column.FieldName = "EffectiveDate";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               var textProperties = column.PropertiesEdit as DateEditProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.AllowNull = false;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Date") + "*";
+               column.Width = 130;
+               column.FieldName = "EndDate";
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               var textProperties = column.PropertiesEdit as DateEditProperties;
+               textProperties.AllowNull = false;
+               textProperties.ValidationSettings.Display = Display.None;
+               column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+               column.FieldName = "Remark";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               column.Width = 230;
+           });
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

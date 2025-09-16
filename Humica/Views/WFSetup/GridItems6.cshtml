@@ -1,0 +1,166 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "gridViewItem6";
+          settings.KeyFieldName = "ID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "WFSetup", Action = "GridItems6" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "WFSetup", Action = "CreatePartialDPApprover" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "WFSetup", Action = "EditPartialDPApprover" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "WFSetup", Action = "DeletePartialDPApprover" };
+
+
+          settings.CommandColumn.Visible = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "ID");
+              column.FieldName = "ID";
+              column.Visible = false;
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+              column.ToolTip = "Key 1";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WFObject");
+              column.FieldName = "WFObject";
+
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+
+
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["WF_LIST"];
+
+              textProperties.ValueField = "WFObject";
+              textProperties.TextField = "Description";
+
+
+
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+              column.Width = 200;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee");
+              column.FieldName = "Employee";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["STAFF_LIST"];
+              column.Width = 200;
+              textProperties.ValueField = "StaffID";
+              textProperties.TextField = "NameInENG";
+              textProperties.Columns.Add("StaffID", Humica.EF.Models.SY.SYSettings.getLabel("StaffID"));
+              textProperties.Columns.Add("NameInENG", Humica.EF.Models.SY.SYSettings.getLabel("Name"));
+              textProperties.Columns.Add("Position", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+              textProperties.Columns.Add("Department", Humica.EF.Models.SY.SYSettings.getLabel("Department"));
+              textProperties.ClientSideEvents.SelectedIndexChanged = "departmentSelect";
+              textProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING;
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+              column.FieldName = "Department";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["DEPARTMENT_LIST"];
+              textProperties.ClientInstanceName = "cboDepartment";
+              column.Width = 200;
+              textProperties.ValueField = "Department";
+              textProperties.TextField = "DepartmentName";
+              textProperties.Columns.Add("Department", "Department");
+              textProperties.Columns.Add("DepartmentName", "DepartmentName");
+              textProperties.TextFormatString = "{0}:{1}";
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+
+          });
+
+
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApproveLevel");
+              column.FieldName = "ApproveLevel";
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IsAutoSelected");
+              column.FieldName = "IsSelected";
+              column.ColumnType = MVCxGridViewColumnType.CheckBox;
+
+          });
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.Settings.ShowGroupPanel = false;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.Models.SY.SYSession.PageHieigh;
+          settings.SettingsPager.PageSize = 20;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue != null)
+              {
+                  if (e.Column.FieldName == "PRType" || e.Column.FieldName == "PRType")
+                  {
+                      e.Editor.ReadOnly = true;
+                  }
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

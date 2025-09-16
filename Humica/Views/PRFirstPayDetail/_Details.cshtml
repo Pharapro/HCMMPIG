@@ -1,0 +1,155 @@
+﻿@model Humica.Logic.PR.PRFirstPaySalaryGeneration
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValues);
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?EmpCode=" + cboEmployee.GetValue() + "&INMonth=" + convert(dtInMonth.GetDate());
+            }
+        }
+    }
+
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details/" + values[0];
+        }
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit/" + values[0];
+        }
+
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("EmpCode", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function OnClientValueChanged(s, e) {
+        ShowData();
+    }
+   function ShowData() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/PR/PRM/PRFirstPayDetail/ShowData',
+            data: {
+                'id': 'TOTAL', 'EmpCode': selectedIDs, 'InMonth': convert(dtInMonth.GetDate()) },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    var StartDate = data.StartDate;
+                    nowDate = new Date(parseInt(StartDate.substr(6)));
+                    txtAllName.SetValue(data.AllName);
+                    txtEmpType.SetValue(data.EmpType);
+                    txtDivision.SetValue(data.Division);
+                    txtDepartment.SetValue(data.DEPT);
+                    txtSection.SetValue(data.SECT);
+                    txtLevel.SetValue(data.LevelCode);
+                    txtPosition.SetValue(data.Position);
+                    txtStartDate.SetValue(nowDate);
+
+                    txtSalary.SetValue(data.Salary);
+                    txtGrossPay.SetValue(data.GrossPay);
+                    txtNetPay.SetValue(data.NetPay);
+                    txtFirstPay.SetValue(data.FirstPay);
+
+                    _BasicSalary.Refresh();
+                    _OverTime.Refresh();
+                    _Deduction.Refresh();
+                    _LeaveDed.Refresh();
+                    _PaySlip.Refresh();
+                }
+                else {
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+
+    function EmpDbRowClick(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+
+    function rowSelected(s, e) {
+        EmployeeGridListSelector.GetRowValues(EmployeeGridListSelector.GetFocusedRowIndex(), 'EmpCode;', OnGetRowValuesEmp);
+        cboEmployee.HideDropDown();
+    }
+    function OnGetRowValuesEmp(values) {
+        cboEmployee.SetValue(values[0]);
+        selectedIDs = values[0];
+        ShowData();
+    }
+
+</script>
+
+
+
+<div class="fitler-doc">
+    @Html.Partial("Details", Model)
+
+</div>
+
+@Html.DevExpress().PageControl(
+settings =>
+{
+    settings.Name = "pcScrollingMaterial1";
+    settings.Width = Unit.Percentage(100);
+
+    settings.EnableTabScrolling = true;
+    settings.TabAlign = TabAlign.Justify;
+
+    settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("BasicSalary")).SetContent(() =>
+    {
+        @Html.RenderPartial("_BasicSalary", Model.ListBasicSalary);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("OT")).SetContent(() =>
+    {
+        @Html.RenderPartial("_OverTime", Model.ListHisGenOTFirstPay);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Leave Deduction")).SetContent(() =>
+    {
+        Html.RenderPartial("_LeaveDed", Model.ListLeaveDed);
+    });
+    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Detail")).SetContent(() =>
+    {
+        Html.RenderPartial("_PaySlip", Model.ListPaySlip);
+    });
+}).GetHtml()
+
+
+
+

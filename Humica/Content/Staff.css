@@ -1,0 +1,211 @@
+﻿body {
+}
+#PersonalForms_0_1 .dxflGroupBox_Moderno {
+        margin-left: 18px;
+}
+.dropZoneExternal  div,
+.dropZoneExternal  img
+{
+    width: 350px;
+    height: 350px;
+}
+.dropZoneExternal
+{
+    position: relative;
+    border: 1px dashed #f17f21!important;
+    cursor: pointer;
+}
+.dropZoneExternal,
+.dragZoneText
+{
+    width: 350px;
+    height: 350px;
+}
+.dropZoneText
+{
+    width: 300px;
+    height: 150px;
+    color: #fff;
+    background-color: #888;
+}
+#dropZone
+{
+    top: 0;
+    padding: 100px 25px; 
+}
+.uploadControlDropZone
+{
+    display: none;
+}
+.dropZoneText,
+.dragZoneText
+{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20pt;
+}
+.dragZoneText
+{
+    color: #808080;
+}
+.dxucInlineDropZoneSys span
+{
+    color: #fff!important;
+    font-size: 10pt;
+    font-weight: normal!important;
+}
+.uploadControlProgressBar
+{
+    width: 350px!important;
+}
+.validationMessage
+{
+    padding: 0 20px;
+    text-align: center;
+}
+#ucDragAndDrop
+{
+    margin-top: 10px;
+}
+.Note
+{
+    width: 500px;
+}
+
+.dropZoneExternal1 > div,
+.dropZoneExternal1 > img
+{
+    position: absolute;
+}
+.dropZoneExternal1
+{
+    position: relative;
+    border: 1px dashed #f17f21!important;
+    cursor: pointer;
+}
+.dropZoneExternal1,
+.dragZoneText1
+{
+    width: 350px;
+    height: 350px;
+}
+.dropZoneText1
+{
+    width: 300px;
+    height: 150px;
+    color: #fff;
+    background-color: #888;
+}
+#dropZone1
+{
+    top: 0;
+    padding: 100px 25px; 
+}
+.uploadControlDropZone1
+{
+    display: none;
+}
+.dropZoneText1,
+.dragZoneText1
+{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20pt;
+}
+.dragZoneText1
+{
+    color: #808080;
+}
+.dxucInlineDropZoneSys span
+{
+    color: #fff!important;
+    font-size: 10pt;
+    font-weight: normal!important;
+}
+.uploadControlProgressBar1
+{
+    width: 350px!important;
+}
+.validationMessage1
+{
+    padding: 0 20px;
+    text-align: center;
+}
+#ucDragAndDrop
+{
+    margin-top: 10px;
+}
+.Note
+{
+    width: 500px;
+}
+
+.dropZoneExternalQr > div,
+.dropZoneExternalQr > img {
+    position: absolute;
+}
+
+.dropZoneExternalQr {
+    position: relative;
+    border: 1px dashed #f17f21 !important;
+    cursor: pointer;
+}
+
+.dropZoneExternalQr,
+.dragZoneTextQr {
+    width: 350px;
+    height: 350px;
+}
+
+.dragZoneTextQr {
+    width: 300px;
+    height: 150px;
+    color: #fff;
+    background-color: #888;
+}
+
+#dropZoneQr {
+    top: 0;
+    padding: 100px 25px;
+}
+
+.uploadControlDropZoneQr {
+    display: none;
+}
+
+.dragZoneTextQr,
+.dragZoneTextQr {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20pt;
+}
+
+.dragZoneTextQr {
+    color: #808080;
+}
+
+.dxucInlineDropZoneSys span {
+    color: #fff !important;
+    font-size: 10pt;
+    font-weight: normal !important;
+}
+
+.uploadControlProgressBar1 {
+    width: 350px !important;
+}
+
+.validationMessage1 {
+    padding: 0 20px;
+    text-align: center;
+}
+
+#ucDragAndDrop {
+    margin-top: 10px;
+}
+
+.Note {
+    width: 500px;
+}

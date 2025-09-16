@@ -1,0 +1,15 @@
+@{    
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section LeftPanelContent {
+    @Html.Partial("_LeftPanelPartial")
+}
+
+@section RightPanelContent {
+    <div  id="_loading_right">
+           @Html.Partial("_RightPanelPartial")       
+    </div>
+}
+
+@RenderBody()

@@ -1,0 +1,182 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "GridItemsAuditLog";
+          settings.KeyFieldName = "id";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "SYAuditClearLog", Action = "GridItemsAuditLog" };
+
+          settings.SettingsBehavior.AllowSort = true;
+
+
+          settings.CommandColumn.Visible = false;
+
+
+          settings.CommandColumn.ShowNewButtonInHeader = false;
+          settings.CommandColumn.ShowCancelButton = false;
+          settings.CommandColumn.ShowEditButton = false;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScreenID");
+              column.FieldName = "ScreenID";
+              column.Width = 150;
+              column.ReadOnly = true;
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DateChange");
+              column.FieldName = "DateChange";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.DateEdit;
+              column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+              var textProperties = column.PropertiesEdit as DateEditProperties;
+              textProperties.EditFormat = EditFormat.Custom;
+              textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              textProperties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              textProperties.Width = Unit.Percentage(100);
+
+          });
+
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocumentNumber");
+              column.FieldName = "KeyValue";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("UserName");
+              column.FieldName = "UserName";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ObjectName");
+              column.FieldName = "ObjectName";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FieldName");
+              column.FieldName = "FieldName";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OldValue");
+              column.FieldName = "OldValue";
+              column.ReadOnly = true;
+              column.Width = 250;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NewValue");
+              column.FieldName = "NewValue";
+              column.ReadOnly = true;
+              column.Width = 250;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Action");
+              column.FieldName = "Action";
+              column.ReadOnly = true;
+              column.Width = 150;
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+
+          });
+
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+          settings.SettingsPager.PageSize = 200;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+          settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+          settings.Styles.AlternatingRow.BackColor = System.Drawing.ColorTranslator.FromHtml("#EFEFF2");
+
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+          settings.SettingsExport.EnableClientSideExportAPI = true;
+          settings.SettingsExport.FileName = "ExportAuditLog";
+          settings.Toolbars.Add(t =>
+          {
+              t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+          });
+          settings.SettingsExport.RenderBrick = (sender, e) =>
+          {
+              if (e.RowType == GridViewRowType.Data && e.VisibleIndex % 2 == 0)
+                  e.BrickStyle.BackColor = System.Drawing.Color.Beige;
+          };
+
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

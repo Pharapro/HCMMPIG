@@ -1,0 +1,124 @@
+﻿
+@{var grid = Html.DevExpress().GridView(settings =>
+      {
+          settings.Name = "_Edu";
+          settings.KeyFieldName = "LineItem";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+          settings.CallbackRouteValues = new { Controller = "RCMApplicant", Action = "_Edu" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "RCMApplicant", Action = "CreateEdu" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "RCMApplicant", Action = "EditEdu" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "RCMApplicant", Action = "DeleteEdu" };
+
+          settings.SettingsBehavior.AllowSort = false;
+
+          settings.CommandColumn.Visible = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+          settings.SettingsPager.PageSizeItemSettings.Visible = true;
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "LineItem";
+              column.Visible = false;
+              column.Width = 120;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LineItem");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "EduType";
+              column.Width = 160;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Education Type");
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.ValidationSettings.Display = Display.None;
+              textProperties.DataSource = ViewData["HREmpEduType_LIST"];
+              textProperties.TextField = "Description";
+              textProperties.ValueField = "Description";
+              textProperties.ValueType = typeof(string);
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "EduCenter";
+              column.Width = 120;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Education Center");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Major";
+              column.Width = 120;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Major");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Result";
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Result");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "StartDate";
+              column.Width = 110;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Date");
+              column.ColumnType = MVCxGridViewColumnType.DateEdit;
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "EndDate";
+              column.Width = 110;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Date");
+              column.ColumnType = MVCxGridViewColumnType.DateEdit;
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+              (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.FieldName = "Remark";
+              column.Width = 160;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.SettingsSearchPanel.Visible = false;
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsPager.PageSize = 10;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+          settings.CustomJSProperties = (sender, e) =>
+          {
+              e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+          };
+
+      });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

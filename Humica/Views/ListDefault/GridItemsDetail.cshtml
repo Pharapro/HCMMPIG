@@ -1,0 +1,167 @@
+﻿@*@model humica.Models.QT.QTMonthlyQuotaObject*@
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "gridViewItem";
+        settings.KeyFieldName = ViewData[Humica.EF.SYSConstant.LIST_CONF_KEYNAME_ITEM].ToString();
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+
+        settings.CallbackRouteValues = new { Controller = "NMMonthly", Action = "GridItemsDetail" };
+        
+        settings.SettingsBehavior.AllowSort = true;
+        
+        settings.CommandColumn.Visible = false;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "LineItem");
+            
+            column.Width = 100;
+            column.FieldName = "LineItem";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "MaterialCode");
+            column.Width = 250;
+            column.FieldName = "MaterialCode";
+            
+
+
+        });
+        settings.Columns.Add(column =>
+        {
+
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "MaterialDescription");
+            column.Width = 250;
+            column.FieldName = "MaterialDescription1";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            textProperties.Width = Unit.Percentage(100);
+        });
+
+        
+  
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Color");            
+            column.FieldName = "Color";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            textProperties.Width = Unit.Percentage(100);
+
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "IsSAPMaterial");            
+            column.FieldName = "IsSAPMaterial";
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+        });
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Unit");
+            column.FieldName = "Unit";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            textProperties.Width = Unit.Percentage(100);
+
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+          ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "SaleOrderQty");
+            column.FieldName = "SaleOrderQty";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            //column.CellStyle.BackColor = System.Drawing.Color.White;
+            
+
+
+        });
+
+        
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Quantity");
+                        
+            column.FieldName = "Quantity";
+            
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+
+         
+
+        });
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 330;
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+        settings.CellEditorInitialize = (sender, e) =>
+        {
+            if (
+                e.Column.FieldName == "Color" ||
+                e.Column.FieldName == "MaterialDescription" ||
+                e.Column.FieldName == "LineItem" ||
+                e.Column.FieldName == "IsSAPMaterial"
+                )
+            {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.None;
+                editor.Visible = false;
+            }
+        };
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+    }).Bind(Model.ListItem).GetHtml()
+
+
+
+

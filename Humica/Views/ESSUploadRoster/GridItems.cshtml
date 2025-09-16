@@ -1,0 +1,466 @@
+﻿
+@model Humica.Logic.Att.ATEmpSchObject
+
+@{
+    var grid = Html.DevExpress().GridView(
+     settings =>
+     {
+         settings.Name = "gridItemEmpInfor";
+         settings.KeyFieldName = "EmpCode";
+         settings.EnableTheming = true;
+         settings.EnableRowsCache = true;
+         settings.Width = Unit.Percentage(100);
+         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+         settings.SettingsBehavior.AllowSort = false;
+         settings.CallbackRouteValues = new { Controller = "ESSUploadRoster", Action = "GridItems" };
+
+         settings.CommandColumn.ShowDeleteButton = true;
+         settings.CommandColumn.ShowNewButtonInHeader = true;
+         settings.CommandColumn.ShowCancelButton = true;
+         settings.CommandColumn.ShowEditButton = true;
+         settings.CommandColumn.ShowUpdateButton = true;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+         settings.CommandColumn.Width = 80;
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Code");
+             column.FieldName = "EmpCode";
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+             column.FieldName = "AllName";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+             column.FieldName = "Position";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("1");
+             column.FieldName = "D_1";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+            settings.FormatConditions.AddHighlight("D_1", "[Er_D_1] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("2");
+             column.FieldName = "D_2";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_2", "[Er_D_2] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("3");
+             column.FieldName = "D_3";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_3", "[Er_D_3] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("4");
+             column.FieldName = "D_4";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_4", "[Er_D_4] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("5");
+             column.FieldName = "D_5";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_5", "[Er_D_5] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("6");
+             column.FieldName = "D_6";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_6", "[Er_D_6] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("7");
+             column.FieldName = "D_7";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_7", "[Er_D_7] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("8");
+             column.FieldName = "D_8";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_8", "[Er_D_8] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("9");
+             column.FieldName = "D_9";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_9", "[Er_D_9] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("10");
+             column.FieldName = "D_10";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_10", "[Er_D_10] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("11");
+             column.FieldName = "D_11";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_11", "[Er_D_11] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("12");
+             column.FieldName = "D_12";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_12", "[Er_D_12] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("13");
+             column.FieldName = "D_13";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_13", "[Er_D_13] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("14");
+             column.FieldName = "D_14";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_14", "[Er_D_14] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("15");
+             column.FieldName = "D_15";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_15", "[Er_D_15] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("16");
+             column.FieldName = "D_16";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_16", "[Er_D_16] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("17");
+             column.FieldName = "D_17";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_17", "[Er_D_17] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("18");
+             column.FieldName = "D_18";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_18", "[Er_D_18] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("19");
+             column.FieldName = "D_19";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_19", "[Er_D_19] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("20");
+             column.FieldName = "D_20";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_20", "[Er_D_20] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("21");
+             column.FieldName = "D_21";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_21", "[Er_D_21] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("22");
+             column.FieldName = "D_22";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_22", "[Er_D_22] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("23");
+             column.FieldName = "D_23";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_23", "[Er_D_23] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("24");
+             column.FieldName = "D_24";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_24", "[Er_D_24] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("25");
+             column.FieldName = "D_25";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_25", "[Er_D_25] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("26");
+             column.FieldName = "D_26";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_26", "[Er_D_26] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("27");
+             column.FieldName = "D_27";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_27", "[Er_D_27] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("28");
+             column.FieldName = "D_28";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_28", "[Er_D_28] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("29");
+             column.FieldName = "D_29";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_29", "[Er_D_29] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("30");
+             column.FieldName = "D_30";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_30", "[Er_D_30] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 50;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("31");
+             column.FieldName = "D_31";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+             settings.FormatConditions.AddHighlight("D_31", "[Er_D_31] = 'Error'", GridConditionHighlightFormat.LightRedFillWithDarkRedText);
+
+         });
+         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.Settings.ShowHeaderFilterButton = true;
+
+         settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+         settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+
+         settings.SettingsPager.PageSize = 200;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+         settings.CellEditorInitialize = (s, e) =>
+         {
+             if (e.Column.FieldName == "EmpCode")
+             {
+
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.None;
+                 editor.ReadOnly = false;
+             }
+         };
+     });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.LIstEmplSch).GetHtml()
+
+
+

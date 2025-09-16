@@ -1,0 +1,194 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    var isvisible = true;
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+
+    function SelectEmp(s, e) {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowDataEmp();
+    }
+    function RemoveFile(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/Config/Setup/HRSetting/DeleteFile',
+            data: {
+                'FileName': txtSignature.GetValue()
+            },
+            success: function (data) {
+                if (data == "OK") {
+                    $("#uploadedImage1").attr("src", "");
+                    txtImage.SetValue("");
+                    setElementVisible("uploadedImage1", false);
+                }
+                else {
+                    AlertMessage(data);
+                }
+            }
+
+        });
+    }
+    function onUploadControlFileUploadCompleteSignature(s, e) {
+        if (e.isValid) {
+            txtSignature.SetText(e.callbackData);
+            $("#uploadedImage1").attr("src", e.callbackData);
+            setElementVisible("uploadedImage1", e.isValid);
+        }
+    }
+    function setElementVisible(elementId, visible) {
+        var el = $("#" + elementId);
+        if (visible)
+            el.show();
+        else
+            el.hide();
+    }
+    function onImageLoad1() {
+        var externalDropZone1 = $("#externalDropZone1");
+        var uploadedImage1 = $("#uploadedImage1");
+        uploadedImage1.css({
+            left: (externalDropZone1.width() - uploadedImage1.width()) / 2,
+            top: (externalDropZone1.height() - uploadedImage1.height()) / 2
+        });
+        setElementVisible("dragZone1", false);
+    }
+    function ShowDataEmp() {
+        var total = 0;
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" +'/ShowDataEmp',
+            data: {'EmpCode': selectedIDs },
+            success: function (data) {
+                if (data.MS == "OK") {
+                    txtAllName.SetValue(data.AllName);
+                    txtPosition.SetValue(data.Position);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    //function chkIsTax_CheckedChanged(s, e) {
+    //    var _bool = false;
+    //    _bool = s.GetChecked();
+    //    txtSeniorityException.SetEnabled(_bool);
+    //}
+    //function Init()
+    //{
+    //    txtSeniorityException.SetEnabled(chkIsTax.GetChecked());
+    //}
+</script>
+
+@model Humica.Logic.MD.MDSetting
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "GCreate";
+        settings.Width = Unit.Percentage(90);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        //settings.ClientSideEvents.Init = "Init";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Attendance Deduction")).SetContent(() =>
+        {
+            @Html.RenderPartial("AttDeduct", Model.ListHRSetting);
+        });
+        //General
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "SETTING")).SetContent(() =>
+        {
+            @Html.RenderPartial("General", Model.ListHRSetting);
+        });
+
+    }).GetHtml()
+
+
+@*@{
+    Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "MaterialCreate";
+        settings.AlignItemCaptionsInAllGroups = true;
+
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+            g.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HR Manager");
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HR Manager");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().ComboBoxFor(i => i.Header.Hr_manager, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ClientInstanceName = "txtHrManager";
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextField = "AllName";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "EmpCode";
+                    s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"));
+                    s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"));
+                    s.Properties.Columns.Add("OthAllName", Humica.EF.Models.SY.SYSettings.getLabel("OthAllName"));
+                    s.Properties.Columns.Add("SecPostion", Humica.EF.Models.SY.SYSettings.getLabel("Position"));
+                    s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectEmp";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["STAFF_SELECT"]).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+            })
+            .SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.staff.AllName, s =>
+                {
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.ClientInstanceName = "txtAllName";
+                    //s.ReadOnly = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+            })
+              .SetNestedContent(() =>
+              {
+                  Html.DevExpress().TextBoxFor(i => i.staff.Position, s =>
+                  {
+                      s.Width = Unit.Percentage(100);
+                      s.Properties.ClientInstanceName = "txtPosition";
+                      //s.ReadOnly = true;
+                      s.ShowModelErrors = true;
+                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                      s.Properties.ValidationSettings.SetFocusOnError = true;
+                      s.Properties.ValidationSettings.ErrorText = "*";
+                  }).Render();
+              });
+        });
+
+    }).GetHtml();
+}*@
+
+
+

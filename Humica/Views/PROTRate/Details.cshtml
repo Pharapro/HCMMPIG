@@ -1,0 +1,142 @@
+﻿@model Humica.Logic.PR.PRSOTRate
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+        $('#_bthEditAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+        });
+
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        });
+    });
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Delete?id=@ViewData[Humica.EF.Models.SY.SYConstant.PARAM_ID].ToString()";
+            }
+        }
+    }
+</script>
+
+@{
+
+    Html.DevExpress().FormLayout(settings =>
+    {
+
+        settings.Name = "OTRATE";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 1;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OTCode, s =>
+                {
+                    s.ReadOnly = true;
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OTType, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Width = Unit.Percentage(90);
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Second Description");
+            }).SetNestedContent(() =>
+            {
+                Html.DevExpress().TextBoxFor(i => i.Header.OTHDESC, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Width = Unit.Percentage(90);
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                }).Render();
+            });
+
+            g.Items.Add(m =>
+            {
+                m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OTRate");
+            }).SetNestedContent(() =>
+            {
+
+                ViewContext.Writer.Write("<div class='row'>");
+                ViewContext.Writer.Write("<div class='col-sm-7'>");
+
+                Html.DevExpress().ComboBoxFor(i => i.Header.Foperand, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtFoperand";
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Pixel(220);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "SelectValue";
+                    s.Properties.TextField = "SelectText";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["LEAVETYPE_SELECT"]).Render();
+                ViewContext.Writer.Write("</div>");
+
+                ViewContext.Writer.Write("<div class='col-sm-1' style='padding-right:50px;padding-left:2px;'>");
+                Html.DevExpress().ComboBoxFor(i => i.Header.Soperator, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtOperator";
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Pixel(50);
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "SelectValue";
+                    s.Properties.TextField = "SelectText";
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                }).BindList(ViewData["Operator_SELECT"]).Render();
+                ViewContext.Writer.Write("</div>");
+
+                ViewContext.Writer.Write("<div class='col-sm-3'>");
+                Html.DevExpress().TextBoxFor(i => i.Header.Toperand, s =>
+                {
+                    s.ReadOnly = true;
+                    s.Properties.ClientInstanceName = "txtSoperand";
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Width = Unit.Pixel(50);
+                }).Render();
+                ViewContext.Writer.Write("</div>");
+
+                ViewContext.Writer.Write("</div>");
+            });
+        });
+
+    }).GetHtml();
+
+}

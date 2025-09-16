@@ -1,0 +1,52 @@
+﻿@model Humica.Employee.IClsEmpCareerMovement
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+    s1.Name = "CreateSubord";
+    s1.AlignItemCaptionsInAllGroups = true;
+    s1.SettingsItems.VerticalAlign = FormLayoutVerticalAlign.Top;
+    var isReadOnly = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY] != null)
+    {
+        isReadOnly = true;
+    }
+    s1.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EffectDate");
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().DateEditFor(i => i.Header.SubordEffectDate, s =>
+            {
+                s.ReadOnly = isReadOnly;
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        if (!isReadOnly)
+        {
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "lblUnderManager";
+                s.Width = Unit.Percentage(10);
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Add");
+            }).Render();
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "lblTransfer";
+                s.Width = Unit.Percentage(10);
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Transfer");
+            }).Render();
+        }
+    });
+}).GetHtml()

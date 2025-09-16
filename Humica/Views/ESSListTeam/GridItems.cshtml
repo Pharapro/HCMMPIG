@@ -1,0 +1,163 @@
+﻿@model Humica.Logic.HR.HRStaffProfileObject
+
+@{
+    var grid = Html.DevExpress().GridView(
+     settings =>
+     {
+         settings.Name = "gridItemEmpInfor";
+         settings.KeyFieldName = "EmpCode";
+         settings.EnableTheming = true;
+         settings.EnableRowsCache = true;
+         settings.Width = Unit.Percentage(100);
+         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+         settings.SettingsBehavior.AllowSort = false;
+         settings.CallbackRouteValues = new { Controller = "StaffProfile", Action = "GridItems" };
+
+
+         //settings.CommandColumn.Visible = true;
+         settings.CommandColumn.ShowDeleteButton = true;
+
+
+
+         settings.CommandColumn.ShowNewButtonInHeader = true;
+         settings.CommandColumn.ShowCancelButton = true;
+         settings.CommandColumn.ShowEditButton = true;
+         settings.CommandColumn.ShowUpdateButton = true;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+
+
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.CommandColumn.Width = 80;
+
+         //settings.Columns.Add(column =>
+         //{
+         //    column.Width = 30;
+         //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No");
+         //    column.FieldName = "LineItem";
+         //});
+
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 100;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+             column.FieldName = "EmpCode";
+
+         });
+
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+             column.FieldName = "AllName";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Other Name");
+             column.FieldName = "OthAllName";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 100;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gender");
+             column.FieldName = "Sex";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+
+         });
+
+
+
+         //settings.DataBinding = (sender, e) =>
+         //{
+
+         //    MVCxGridView grid = (MVCxGridView)sender;
+
+         //    grid.ExpandAll();
+
+
+         //};
+
+
+
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Quantity").DisplayFormat = "N0";
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Discount").DisplayFormat = "C";
+         //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "C";
+
+
+         //settings.ClientSideEvents.Init = "OnInit";
+         //settings.ClientSideEvents.BatchEditStartEditing = "BatchEditStartEditing";
+         //settings.ClientSideEvents.BatchEditEndEditing = "BatchEditEndEditing";
+         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+
+         //settings.CommandColumn.Visible = true;
+
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.Settings.ShowHeaderFilterButton = true;
+
+         settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+
+         settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+         //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+
+         settings.SettingsPager.PageSize = 200;
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+         //settings.ClientSideEvents.EndCallback = "EndCallBackReceipt";
+
+         settings.CellEditorInitialize = (s, e) =>
+         {
+             if (e.Column.FieldName == "EmpCode")
+             {
+
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.None;
+                 editor.ReadOnly = false;
+                 //if (e.Column.FieldName == "LineItem")
+                 //{
+                 //    if (e.KeyValue == null)
+                 //    {
+                 //        editor.Value = -1;
+                 //    }
+
+                 //}
+
+
+             }
+
+         };
+
+     });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model.ListEmp).GetHtml()
+
+
+

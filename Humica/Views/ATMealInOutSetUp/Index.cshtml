@@ -1,0 +1,18 @@
+﻿
+<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnSave').click(function () {
+            $("form").submit();
+        });
+    });
+
+</script>
+
+@model Humica.Logic.Atts.ATMealInOutSetupObject
+
+@Html.Partial("MealSetting", Model)
+
+@Html.Partial("Gridview", Model.ListItem)

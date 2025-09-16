@@ -1,0 +1,129 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "gridViewItem2";
+          settings.KeyFieldName = "LineItem";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "HRKPIConfiguration", Action = "GridItemsCategory" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "CategoryCreate" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "CategoryEdit" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRKPIConfiguration", Action = "CategoryDelete" };
+
+          settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+          settings.CommandColumn.Visible = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "LineItem");
+              column.FieldName = "LineItem";
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+              var textProperties = column.PropertiesEdit as SpinEditProperties;
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Code");
+              column.Width = 120;
+              column.FieldName = "CategoryCode";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var TextPropertiesEdit = column.PropertiesEdit as ComboBoxProperties;
+              TextPropertiesEdit.DataSource = ViewData["KPI_CATEGORY"];
+              TextPropertiesEdit.NullDisplayText = "*";
+              TextPropertiesEdit.ValueField = "SelectValue";
+              TextPropertiesEdit.TextField = "SelectText";
+              TextPropertiesEdit.TextFormatString = "{0}";
+              TextPropertiesEdit.Columns.Add("SelectValue", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+              TextPropertiesEdit.Columns.Add("SelectText", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+              TextPropertiesEdit.ClientInstanceName = "txtCode";
+              TextPropertiesEdit.ClientSideEvents.SelectedIndexChanged = "SelectCategory";
+          });
+
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+              column.Width = 180;
+              column.FieldName = "CatgoryDescription";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              var textPropertiesEdit = column.PropertiesEdit as TextBoxProperties;
+              textPropertiesEdit.ClientInstanceName = "txtDescription";
+
+
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Width = 100;
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "IsActive");
+              column.FieldName = "IsActive";
+              column.ColumnType = MVCxGridViewColumnType.CheckBox;
+              var textProperties = column.PropertiesEdit as TextBoxProperties;
+          });
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = 450;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsPager.PageSize = 450;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.Column.FieldName == "LineItem")
+              {
+                  if (e.KeyValue == null)
+                  {
+                      editor.Value = -1;
+                  }
+              }
+          };
+
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+          settings.CustomJSProperties = (s, e) =>
+          {
+              ASPxGridView grid1 = (ASPxGridView)s;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+              e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+          };
+
+      });
+
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

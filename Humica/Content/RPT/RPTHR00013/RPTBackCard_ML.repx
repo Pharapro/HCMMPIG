@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="19.2.6.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="RPTBackCard_ML" Margins="0, 0, 0, 0" PaperKind="Custom" PageWidth="214" PageHeight="335" Version="19.2">
+  <Bands>
+    <Item1 Ref="1" ControlType="DetailBand" Name="Detail" PageBreak="AfterBand" HeightF="335" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+      <Controls>
+        <Item1 Ref="2" ControlType="XRPanel" Name="xrPanel1" SizeF="213,335" LocationFloat="0, 0" Borders="None">
+          <Controls>
+            <Item1 Ref="3" ControlType="XRLabel" Name="xrLabel7" Multiline="true" CanGrow="false" Text="Issued Date:" TextAlignment="MiddleRight" SizeF="79.6346,15" LocationFloat="0.6900335, 295" Font="Arial, 6.75pt, style=Bold, charSet=0" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="4" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item1>
+            <Item2 Ref="5" ControlType="XRLabel" Name="xrLabel8" Multiline="true" CanGrow="false" Text="HR/A Manager's Signature" TextAlignment="MiddleCenter" SizeF="212.31,15" LocationFloat="0, 232.1923" Font="Arial, 6.75pt, style=Bold, charSet=0" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="6" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item2>
+            <Item3 Ref="7" ControlType="XRLabel" Name="xrLabel10" Multiline="true" CanGrow="false" Text="This card property of&#xD;&#xA;Mekong Land Development Co.,Ltd.&#xD;&#xA;if found, please return to&#xD;&#xA;Address: Kean Klang village, Sangkat Prek Leab,&#xD;&#xA;Khan Chroy Changvar, Phnom Penh.&#xD;&#xA;Tel: 061 871 888" TextAlignment="TopCenter" SizeF="212.31,105.5" LocationFloat="0.6900024, 126.6923" Font="Khmer OS Battambang, 6.75pt, charSet=0" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="8" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item3>
+            <Item4 Ref="9" ControlType="XRLabel" Name="xrLabel6" Multiline="true" CanGrow="false" Text="ប្រសិនបើរកឃើញ&#xD;&#xA;សូមយកមកប្រគល់ជូនក្រុមហ៊ុនយើងខ្ញុំវិញ&#xD;&#xA;អាស័យដ្ឋាន៖ ភូមិគៀនឃ្លាំង សង្កាត់ព្រែកលៀប &#xD;&#xA;ខណ្ឌជ្រោយចង្វារ រាជធានីភ្នំពេញ" TextAlignment="TopCenter" SizeF="212.31,73.69229" LocationFloat="0.6900078, 53" Font="Khmer OS Battambang, 7pt" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="10" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item4>
+            <Item5 Ref="11" ControlType="XRLabel" Name="xrLabel5" Multiline="true" CanGrow="false" Text="មេគង្គ លែន ឌីវេឡុបម៉ិន  ឯ.ក" TextAlignment="BottomCenter" SizeF="212.31,17" LocationFloat="0, 36" Font="Khmer OS Muol, 6.75pt, style=Bold, charSet=0" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="12" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item5>
+            <Item6 Ref="13" ControlType="XRLabel" Name="xrLabel4" Multiline="true" CanGrow="false" Text="កាតនេះជាកម្មសិទ្ធរបស់ក្រុមហ៊ុន" TextAlignment="MiddleCenter" SizeF="212.31,16" LocationFloat="0, 20" Font="Khmer OS Battambang, 7pt" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="14" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item6>
+            <Item7 Ref="15" ControlType="XRLabel" Name="xrLabel3" Multiline="true" CanGrow="false" Text="កំណត់សម្គាល់" TextAlignment="MiddleCenter" SizeF="212.31,16" LocationFloat="0, 4" Font="Khmer OS Muol, 6.75pt, style=Bold, charSet=0" ForeColor="255,74,93,129" Padding="2,2,0,0,100">
+              <StylePriority Ref="16" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
+            </Item7>
+            <Item8 Ref="17" ControlType="XRLabel" Name="xrLabel2" Multiline="true" CanGrow="false" SizeF="213,25" LocationFloat="0, 310" BackColor="255,15,35,60" Padding="2,2,0,0,100">
+              <StylePriority Ref="18" UseBackColor="false" />
+            </Item8>
+            <Item9 Ref="19" ControlType="XRLabel" Name="xrLabel1" Multiline="true" CanGrow="false" SizeF="193,2" LocationFloat="9.999994, 0" BackColor="Silver" Padding="2,2,0,0,100">
+              <StylePriority Ref="20" UseBackColor="false" />
+            </Item9>
+          </Controls>
+          <StylePriority Ref="21" UseBorders="false" />
+        </Item1>
+      </Controls>
+    </Item1>
+    <Item2 Ref="22" ControlType="TopMarginBand" Name="TopMargin" HeightF="0" TextAlignment="TopLeft" Padding="0,0,0,0,100" />
+    <Item3 Ref="23" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="0.2083143" TextAlignment="TopLeft" Padding="0,0,0,0,100" />
+  </Bands>
+</XtraReportsLayoutSerializer>

@@ -1,0 +1,14 @@
+﻿@model Humica.Core.FT.FTFilerPayroll
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function () {
+            $('form').submit();
+        });
+    });
+  
+</script>
+<script type="text/javascript" src="~/Content/ReportJS2.js">
+
+</script>
+@Html.Partial("FREmpoyeeReport", Model)

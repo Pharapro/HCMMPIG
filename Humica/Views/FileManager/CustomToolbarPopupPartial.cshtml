@@ -1,0 +1,92 @@
+﻿@model  Humica.Models.FL.FileManagerItemInfo
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupControl";
+    settings.CallbackRouteValues = new { Controller = "FileManager", Action = "CustomToolbarPopupPartial" };
+    settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+    settings.ShowFooter = false;
+    settings.ShowHeader = true;
+    settings.AllowDragging = true;
+    settings.DragElement = DragElement.Header;
+    settings.Width = Unit.Pixel(430);
+    settings.ControlStyle.CssClass = "DetailsPopup";
+
+    settings.ClientSideEvents.EndCallback = "OnPopupEndCallback";
+
+    settings.SetContent(() =>
+    {
+        Html.DevExpress().FormLayout(formLayoutSettings =>
+        {
+            formLayoutSettings.Name = "formLayout";
+            formLayoutSettings.AlignItemCaptionsInAllGroups = true;
+            formLayoutSettings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+            var group = formLayoutSettings.Items.AddGroupItem(groupItemSettings =>
+            {
+                groupItemSettings.Caption = " ";
+                groupItemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+            });
+            group.Items.Add(m => m.Name, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+                ((LabelSettings)itemSettings.NestedExtensionSettings).Properties.EnableClientSideAPI = true;
+            });
+            group.Items.Add(m => m.Type, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+            });
+
+            group = formLayoutSettings.Items.AddGroupItem(groupItemSettings =>
+            {
+                groupItemSettings.Caption = " ";
+                groupItemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+            });
+            group.Items.Add(m => m.Location, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+            });
+            group.Items.Add(m => m.RelativeLocation, itemSettings =>
+            {
+                itemSettings.Caption = "Relative Location";
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+            });
+            group.Items.Add(m => m.Size, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+            });
+            if (!Model.IsFile)
+            {
+                group.Items.Add(m => m.Details, itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+                });
+            }
+
+            group = formLayoutSettings.Items.AddGroupItem(groupItemSettings =>
+            {
+                groupItemSettings.Caption = " ";
+                groupItemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+            });
+            group.Items.Add(m => m.Created, itemSettings =>
+            {
+                itemSettings.Caption = "Created";
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+            });
+            if (Model.IsFile)
+            {
+                group.Items.Add(m => m.Modified, itemSettings =>
+                {
+                    itemSettings.Caption = "Modified";
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+                });
+                group.Items.Add(m => m.Accessed, itemSettings =>
+                {
+                    itemSettings.Caption = "Accessed";
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+                });
+            }
+        }).Render();
+    });
+}).GetHtml()

@@ -1,0 +1,227 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gridItemKPISetup";
+        settings.KeyFieldName = "ItemCode";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.SettingsBehavior.AllowSort = false;
+        settings.CallbackRouteValues = new { Controller = "HRKPIPlan", Action = "GridItemsDetails" };
+
+        settings.CommandColumn.Visible = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowUpdateButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Indicator");
+            column.Width = 250;
+            column.FieldName = "Indicator";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.AllowNull = true;
+            textProperties.DataSource = ViewData["LIST_Indicator"];
+            textProperties.TextFormatString = "{0}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Measure");
+            column.FieldName = "Measure";
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+            cboProperties.DataSource = ViewData["KPI_Measure"];
+            cboProperties.ValueField = "Code";
+            cboProperties.TextField = "Description";
+            cboProperties.TextFormatString = "{0}";
+            cboProperties.Width = Unit.Percentage(100);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Symbol");
+            column.FieldName = "Symbol";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ItemCode");
+            column.FieldName = "ItemCode";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 250;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KPI");
+            column.FieldName = "KPI";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Target");
+            column.FieldName = "Target";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            column.PropertiesEdit.ClientInstanceName = "Target";
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "N2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Weight(%)");
+            column.FieldName = "Weight";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            column.PropertiesEdit.ClientInstanceName = "txtWeigh";
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.DisplayFormatString = "P2";
+            spinEditProperties.Width = Unit.Percentage(100);
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 1;
+            spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartDate");
+            column.FieldName = "StartDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndDate");
+            column.FieldName = "EndDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 300;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ActionPlan");
+            column.FieldName = "ActionPlan";
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            var textProperties = column.PropertiesEdit as MemoProperties;
+            textProperties.Width = 310;
+            textProperties.Height = 100;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 200;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.FieldName = "Remark";
+
+            column.ColumnType = MVCxGridViewColumnType.Memo;
+            var textProperties = column.PropertiesEdit as MemoProperties;
+            textProperties.Width = 310;
+            textProperties.Height = 100;
+            column.ReadOnly = true;
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 100;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Acheivement(%)");
+        //    column.FieldName = "Acheivement";
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.Width = Unit.Percentage(100);
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 99999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        //});
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Width = 150;
+        //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ArcheivedByKPI(%)");
+        //    column.FieldName = "AcheivementByEachKPI";
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.DisplayFormatString = "N2";
+        //    spinEditProperties.Width = Unit.Percentage(100);
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.MaxValue = 99999999999;
+        //    spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+        //});
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.SettingsEditing.EditFormColumnCount = 2;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+
+        settings.SettingsPager.PageSize = 200;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            editor.ReadOnly = false;
+            if (e.Column.FieldName == "ItemCode")
+            {
+                if (e.KeyValue != null)
+                {
+                    editor.ReadOnly = true;
+                }
+            }
+            if (e.Column.FieldName == "Weight" || e.Column.FieldName == "Target")
+            {
+                if (e.KeyValue == null)
+                {
+                    editor.Value = 0;
+                }
+            }
+            if (e.Column.FieldName == "Remark")
+            {
+                editor.ReadOnly = true;
+            }
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

@@ -1,0 +1,77 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "EmployeeGridListSelector";
+               settings.KeyFieldName = "EmpCode";
+
+               settings.Width = Unit.Percentage(100);
+
+               settings.CallbackRouteValues = new { Action = "EmployeeSearch", Controller = "LoadingList", ScreenId = ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString() };
+               settings.SettingsSearchPanel.Visible = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+
+
+               settings.CommandColumn.Width = 50;
+
+               settings.Columns.Add(col =>
+               {
+                   col.FieldName = "EmpCode";
+                   col.Width = 200;
+                   col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EmpCode");
+               });
+
+               settings.Columns.Add(col =>
+               {
+                   col.Width = 200;
+                   col.FieldName = "AllName";
+                   col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AllName");
+               });
+
+               settings.Columns.Add(col =>
+               {
+                   col.Width = 200;
+                   col.FieldName = "OthAllName";
+                   col.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OthAllName");
+               });
+
+               settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+
+               settings.ClientSideEvents.RowDblClick = "EmpDbRowClick";
+
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+
+               settings.SettingsPager.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.SettingsPager.PageSize = 7;
+
+
+           });
+
+
+}
+
+@gridExtension.Bind(ViewData["STAFF_SELECT"]).GetHtml()
+@*@gridExtension.BindToLINQ(string.Empty, string.Empty, (s, e) =>
+    {
+      //  e.QueryableSource = CLOUDVIEW.Models.MD.ClsExItemMaster.MaterialsStock;
+        e.KeyExpression = "MaterialCode";
+    }).GetHtml()*@

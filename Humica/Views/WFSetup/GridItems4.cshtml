@@ -1,0 +1,181 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "gridViewItem4";
+          settings.KeyFieldName = "ScreenID;DocType";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+          settings.CallbackRouteValues = new { Controller = "WFSetup", Action = "GridItems4" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "WFSetup", Action = "CreatePartial4" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "WFSetup", Action = "EditPartial4" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "WFSetup", Action = "DeletePartial4" };
+
+
+          settings.CommandColumn.Visible = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+              column.FieldName = "ID";
+              column.Visible = false;
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+              column.ToolTip = "Key 1";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ScreenID");
+              column.FieldName = "ScreenID";
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 150;
+          });
+          settings.Columns.Add(column =>
+          {
+
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("DocType");
+              column.FieldName = "DocType";
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+              column.ToolTip = "Key 1";
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 150;
+
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+              column.FieldName = "Description";
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 200;
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("NumberRank");
+              column.FieldName = "NumberRank";
+
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["NUMBER_LIST"];
+
+              textProperties.ValueField = "NumberObject";
+              textProperties.TextField = "Description";
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+              column.Width = 200;
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ApprovalWorkflow");
+              column.FieldName = "ApprovalFlow";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              column.Width = 150;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["WF_LIST"];
+
+              textProperties.ValueField = "WFObject";
+              textProperties.TextField = "Description";
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Telegram");
+              column.FieldName = "Telegram";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              column.Width = 250;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["TELEGRAM_SELECT"];
+
+              textProperties.ValueField = "ChatID";
+              textProperties.TextField = "Description";
+              textProperties.ValueType = typeof(string);
+              textProperties.Width = Unit.Percentage(100);
+          });
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Email");
+              column.FieldName = "Email";
+              column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+
+              column.ColumnType = MVCxGridViewColumnType.TextBox;
+              column.Width = 200;
+          });
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.Settings.ShowGroupPanel = false;
+          settings.Settings.ShowFooter = true;
+          settings.SettingsContextMenu.Enabled = true;
+          settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+          settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.SettingsPopup.HeaderFilter.Height = 200;
+
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+          settings.SettingsPager.PageSize = 20;
+
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+          settings.Settings.ShowHeaderFilterButton = true;
+
+          settings.SettingsPager.EnableAdaptivity = true;
+          settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+          settings.SettingsExport.EnableClientSideExportAPI = true;
+          settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+          settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+          settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+          settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+              //((MVCxGridView)sender).StartEdit(1);
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue!=null)
+              {
+                  if (e.Column.FieldName == "ScreenID" || e.Column.FieldName == "DocType")
+                  {
+                      e.Editor.ReadOnly = true;
+                  }
+              }
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

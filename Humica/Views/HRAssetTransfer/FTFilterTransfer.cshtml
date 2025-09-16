@@ -1,0 +1,63 @@
+﻿@model Humica.Logic.Asset.AssetTransferObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTFilterEmployee";
+    settings.AlignItemCaptionsInAllGroups = true;
+    int width = 150;
+    settings.Items.AddGroupItem(m => Model.Filter, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Filter");
+        })
+            .SetNestedContent(() =>
+            {
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "0", Text = "All" },
+                    new SelectListItem { Value = "1", Text = "By Staff" },
+                    new SelectListItem { Value = "2", Text = "By Department" },
+                    new SelectListItem { Value = "3", Text = "By None Staff" }
+                };
+                Html.DevExpress().ComboBoxFor(i => Model.Filter, s =>
+                {
+                    s.ShowModelErrors = true;
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.Properties.ValidationSettings.SetFocusOnError = true;
+                    s.Properties.ValidationSettings.ErrorText = "*";
+                    s.Properties.TextFormatString = "{0}";
+                    s.Properties.ValueField = "Value"; 
+                    s.Properties.TextField = "Text"; 
+                    s.Properties.NullText = Humica.EF.Models.SY.SYSettings.getLabel("_SELECT");
+                    s.Properties.AllowNull = true;
+                }).BindList(items).Render(); 
+            });
+
+        g.Items.Add(m =>
+        {
+            m.Caption = "";
+        })
+          .SetNestedContent(() =>
+          {
+              Html.DevExpress().Button(
+                  s =>
+                  {
+                      s.Name = "_btnRunReport";
+                      s.ToolTip = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                      s.RenderMode = ButtonRenderMode.Button;
+                      s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Go");
+                      s.UseSubmitBehavior = true;
+                      s.Images.Image.IconID = IconID.ActionsApply16x16;
+                  }).GetHtml();
+          });
+    });
+
+
+}).Bind(Model).GetHtml()

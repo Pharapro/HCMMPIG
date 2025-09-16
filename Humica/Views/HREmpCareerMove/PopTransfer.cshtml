@@ -1,0 +1,65 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopTransfer";
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(200);
+    settings.Width = Unit.Pixel(450);
+    settings.PopupElementID = "ShowButton1";
+    settings.HeaderText = Humica.EF.Models.SY.SYSettings.getLabel("Transfer");
+    settings.CloseAction = CloseAction.CloseButton;
+
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div style=\"display: flex; flex-direction: row; gap: 20px; height: 50%;\">");
+
+        Html.DevExpress().Label(labelSettings =>
+        {
+            labelSettings.ControlStyle.CssClass = "label";
+            labelSettings.Text = Humica.EF.Models.SY.SYSettings.getLabel("Transfer To");
+            labelSettings.AssociatedControlName = "ActionName";
+        }).Render();
+
+        Html.DevExpress().ComboBox(s =>
+        {
+            s.Name = "cboPopStaff";
+            s.Properties.ClientInstanceName = "cboPopStaff";
+            s.Width = 250;
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.ValidationSettings.SetFocusOnError = true;
+            s.Properties.ValidationSettings.ErrorText = "*";
+            s.Properties.TextFormatString = "{0}:{1}";
+            s.Properties.ValueField = "EmpCode";
+            s.Properties.TextField = "AllName";
+            s.Properties.NullText = "-------Select-------";
+            s.Properties.Columns.Add("EmpCode", Humica.EF.Models.SY.SYSettings.getLabel("EmpCode"), 100);
+            s.Properties.Columns.Add("AllName", Humica.EF.Models.SY.SYSettings.getLabel("AllName"), 250);
+
+        }).BindList(ViewData["STAFF_SELECT"]).GetHtml();
+
+        ViewContext.Writer.Write("</div>");
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div class='question_btn'>");
+
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTCANCEL_T";
+            s.Text = "Cancel";
+            s.ClientSideEvents.Click = "function(s, e){ PopTransfer.Hide(); }";
+        }).Render();
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_ConfirmTransfer";
+            s.Text = "Confirm";
+        }).Render();
+
+        ViewContext.Writer.Write("</div></div>");
+    });
+}).GetHtml()

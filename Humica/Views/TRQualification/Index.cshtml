@@ -1,0 +1,40 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model   Humica.Training.Setup.ClsQualification
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Qualification Class")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemClass", Model.ListQualiClass);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Qualification Name")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemName", Model.ListQualiName);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Qualification Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemType", Model.ListQualiType);
+
+        });
+    }).GetHtml()

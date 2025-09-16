@@ -1,0 +1,34 @@
+﻿@model CLoudViewLogistic.Models.SY.ClsEmail
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FTGernalAccounting";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model, g =>
+    {
+        g.ColCount = 6;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items
+        .Add(m =>
+        {
+            m.Caption = "";
+        })
+        .SetNestedContent(() =>
+        {
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "_btnRunReport";
+                s.ToolTip = "Go";
+                s.RenderMode = ButtonRenderMode.Button;
+                s.Text = "Reset";
+                s.UseSubmitBehavior = true;
+                s.Images.Image.IconID = IconID.ActionsApply16x16;
+            }).GetHtml();
+        });
+
+    });
+
+}).Bind(Model).GetHtml()

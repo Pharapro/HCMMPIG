@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="KPI" />
+  <DataSources>
+    <SqlDataSource Name="Humica Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DashboardConnectionString" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="View_SummaryAppraisal">
+        <Tables>
+          <Table Name="View_SummaryAppraisal" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="View_SummaryAppraisal" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="HR_VIEW_KPI_Plan">
+        <Tables>
+          <Table Name="HR_VIEW_KPI_Plan" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="HR_VIEW_KPI_Plan" />
+        </Columns>
+      </Query>
+      <Query Type="SelectQuery" Name="Z_EmpAppraisal">
+        <Tables>
+          <Table Name="Z_EmpAppraisal" />
+        </Tables>
+        <Columns>
+          <AllColumns Table="Z_EmpAppraisal" />
+        </Columns>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Card ComponentName="cardDashboardItem1" Name="Cards 1" ShowCaption="false" ParentContainer="dashboardTabPage1" DataSource="sqlDataSource1" DataMember="Z_EmpAppraisal">
+      <InteractivityOptions MasterFilterMode="Single" />
+      <DataItems>
+        <Measure DataMember="KPIStatus" SummaryType="Count" DefaultId="DataItem0">
+          <NumericFormat FormatType="General" Precision="0" />
+        </Measure>
+        <Dimension DataMember="KPIStatus" DefaultId="DataItem1" />
+      </DataItems>
+      <FormatRules>
+        <CardItemDeltaFormatRule Name="Format Rule 1" DeltaValueType="ActualValue" CardId="DataItem0">
+          <FormatConditionExpression Expression="[DataItem1] = 'PENDING'">
+            <AppearanceSettings AppearanceType="Yellow" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemDeltaFormatRule>
+        <CardItemDeltaFormatRule Name="Format Rule 2" DeltaValueType="ActualValue" CardId="DataItem0">
+          <FormatConditionExpression Expression="[DataItem1] = 'COMPLETED'">
+            <AppearanceSettings AppearanceType="Green" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemDeltaFormatRule>
+        <CardItemDeltaFormatRule Name="Format Rule 3" DeltaValueType="ActualValue" CardId="DataItem0">
+          <FormatConditionExpression Expression="[DataItem1] = 'OPEN'">
+            <AppearanceSettings AppearanceType="Blue" />
+          </FormatConditionExpression>
+          <CardFormatRuleLayoutElement />
+        </CardItemDeltaFormatRule>
+      </FormatRules>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem1" />
+      </SeriesDimensions>
+      <Card>
+        <ActualValue DefaultId="DataItem0" />
+        <AbsoluteVariationNumericFormat />
+        <PercentVariationNumericFormat />
+        <PercentOfTargetNumericFormat />
+        <LayoutTemplate MinWidth="125" MaxWidth="270" Type="Compact">
+          <MainValue Visible="true" ValueType="Title" DimensionIndex="0" />
+          <SubValue Visible="true" ValueType="Subtitle" DimensionIndex="0" />
+          <BottomValue Visible="true" ValueType="ActualValue" DimensionIndex="0" />
+          <BottomSubValue1 Visible="true" ValueType="AbsoluteVariation" DimensionIndex="0" />
+          <BottomSubValue2 Visible="true" ValueType="PercentVariation" DimensionIndex="0" />
+          <DeltaIndicator Visible="true" />
+          <Sparkline Visible="true" />
+        </LayoutTemplate>
+      </Card>
+    </Card>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" ShowCaption="false" ParentContainer="dashboardTabPage1" DataSource="sqlDataSource1" DataMember="Z_EmpAppraisal">
+      <DataItems>
+        <Dimension DataMember="KPIStatus" DefaultId="DataItem0" />
+        <Dimension DataMember="EmpCode" DefaultId="DataItem1" />
+        <Dimension DataMember="EmpName" DefaultId="DataItem2" />
+        <Dimension DataMember="Department" DefaultId="DataItem3" />
+        <Dimension DataMember="Position" DefaultId="DataItem4" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Status">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+      <ColumnFilterOptions />
+    </Grid>
+    <ListBox ComponentName="listBoxDashboardItem1" Name="List Box 1" ShowCaption="false" ParentContainer="dashboardTabPage1" DataSource="sqlDataSource1" DataMember="Z_EmpAppraisal">
+      <DataItems>
+        <Dimension DataMember="Department" DefaultId="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension DefaultId="DataItem0" />
+      </FilterDimensions>
+    </ListBox>
+    <TabContainer ComponentName="tabContainerDashboardItem1" Name="Tab Container 1">
+      <Pages>
+        <Page ComponentName="dashboardTabPage1" Name="List Detail" />
+        <Page ComponentName="dashboardTabPage2" Name="KPI Summary" />
+      </Pages>
+    </TabContainer>
+    <Grid ComponentName="gridDashboardItem2" Name="KPI Department" ShowCaption="false" ParentContainer="dashboardTabPage2" DataSource="sqlDataSource1" DataMember="HR_VIEW_KPI_Plan">
+      <DataItems>
+        <Dimension DataMember="Category" DefaultId="DataItem0" />
+        <Dimension DataMember="CriteriaName" DefaultId="DataItem1" />
+        <Measure DataMember="SubTotalEmp" DefaultId="DataItem2" />
+        <Measure DataMember="Actual" DefaultId="DataItem3">
+          <NumericFormat FormatType="Percent" />
+        </Measure>
+        <Measure DataMember="Achievement" DefaultId="DataItem4">
+          <NumericFormat FormatType="Percent" />
+        </Measure>
+        <Dimension DataMember="IndicatorName" DefaultId="DataItem6" />
+        <Dimension DataMember="Indicator" DefaultId="DataItem5" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension DefaultId="DataItem6" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Total Emp">
+          <Measure DefaultId="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Actual">
+          <Measure DefaultId="DataItem3" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Achievement">
+          <Measure DefaultId="DataItem4" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+      <ColumnFilterOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutTabContainer DashboardItem="tabContainerDashboardItem1">
+        <LayoutTabPage DashboardItem="dashboardTabPage1">
+          <LayoutItem DashboardItem="listBoxDashboardItem1" Weight="0.21388437678320196" />
+          <LayoutGroup Orientation="Vertical" Weight="0.88443604756686145">
+            <LayoutItem DashboardItem="cardDashboardItem1" Weight="0.35501128051686992" />
+            <LayoutItem DashboardItem="gridDashboardItem1" Weight="2.6339560950465426" />
+          </LayoutGroup>
+        </LayoutTabPage>
+        <LayoutTabPage DashboardItem="dashboardTabPage2">
+          <LayoutItem DashboardItem="gridDashboardItem2" />
+        </LayoutTabPage>
+      </LayoutTabContainer>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

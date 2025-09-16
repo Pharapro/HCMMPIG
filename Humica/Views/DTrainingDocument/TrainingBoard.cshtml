@@ -1,0 +1,351 @@
+﻿
+
+@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "TrainingBoard";
+        settings.KeyFieldName = "ID";
+        settings.EnableTheming = true;
+        settings.EnableRowsCache = true;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsSearchPanel.Visible = true;
+        settings.CallbackRouteValues = new { Controller = "DTrainingDocument", Action = "TrainingBoard" };
+
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowUpdateButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("វគ្គសិក្សា");
+            column.Width = 350;
+            //column.PropertiesEdit.ClientInstanceName = "txtPhoneNo";
+            column.FieldName = "Coursename";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+            //txtEditProperties.ClientInstanceName = "txtPhoneNo";
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ថ្ងៃ");
+            column.Width = 100;
+            column.FieldName = "DayTerm";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["Dayterm_List"];
+            textProperties.ValueField = "ID";
+            textProperties.TextField = "Description";
+            textProperties.TextFormatString = "{1}";
+            //column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            //textProperties.Columns.Add("ID", DMSPRO.Models.SY.SYSettings.getLabel("Code"),50);
+            //textProperties.Columns.Add("Description", DMSPRO.Models.SY.SYSettings.getLabel("Description"),250);
+            //textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel("Module Code");
+        //    column.Width = 150;
+        //    column.FieldName = "ModuleCode";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //    var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+        //    //txtEditProperties.ClientInstanceName = "txtStaffName";
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel("Description");
+        //    column.Width = 250;
+        //    column.FieldName = "Description";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var txtEditProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    txtEditProperties.DataSource = ViewData["Program_List"];
+        //    txtEditProperties.TextFormatString = "{0}:{1}";
+        //    txtEditProperties.ValueField = "ProgramCode";
+        //    txtEditProperties.ValueType = typeof(string);
+        //    txtEditProperties.Columns.Add("ProgramCode", "Code", 80);
+        //    txtEditProperties.Columns.Add("ProgramName", "Name", 120);
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel("Course");
+        //    column.Width = 250;
+        //    column.FieldName = "Course";
+        //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //    var txtEditProperties = column.PropertiesEdit as ComboBoxProperties;
+        //    txtEditProperties.DataSource = ViewData["Course_List"];
+        //    txtEditProperties.TextFormatString = "{0}:{1}";
+        //    txtEditProperties.ValueField = "Coursecode";
+        //    txtEditProperties.ValueType = typeof(string);
+        //    txtEditProperties.Columns.Add("Coursecode", "Code", 80);
+        //    txtEditProperties.Columns.Add("Coursename", "Name", 120);
+        //});
+
+
+        //    settings.Columns.Add(column =>
+        //    {
+        //        column.Width = 150;
+        //        column.FieldName = "RequestDate";
+        //        column.Caption = DMSPRO.Models.SY.SYSettings.getLabel((List<SystemAdmin.CF.CFForm>)
+        //ViewData[SystemAdmin.SYSConstant.LIST_CONF_FORM_ITEM], "RequestDate");
+        //        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //        column.PropertiesEdit.DisplayFormatString = ViewData[SystemAdmin.SYSConstant.DATE_FORMAT].ToString();
+        //        var txtEditProperties = column.PropertiesEdit as DateEditProperties;
+
+
+        //    });
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("មេរៀន");
+            column.Width = 350;
+            //column.PropertiesEdit.ClientInstanceName = "txtPhoneNo";
+            column.FieldName = "Description";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+            //txtEditProperties.ClientInstanceName = "txtPhoneNo";
+
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[DMSPRO.Models.SY.SYConstant.SCREEN_ID].ToString(), "Start Date");
+        //    column.FieldName = "Startdate";
+        //    column.Width = 110;
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    var textProperties = column.PropertiesEdit as DateEditProperties;
+        //    textProperties.EditFormatString = ViewData[SystemAdmin.SYSConstant.DATE_FORMAT].ToString();
+        //    textProperties.DisplayFormatString = ViewData[SystemAdmin.SYSConstant.DATE_FORMAT].ToString();
+        //});
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[DMSPRO.Models.SY.SYConstant.SCREEN_ID].ToString(), "End Date");
+        //    column.FieldName = "Enddate";
+        //    column.Width = 110;
+        //    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //    var textProperties = column.PropertiesEdit as DateEditProperties;
+        //    textProperties.EditFormatString = ViewData[SystemAdmin.SYSConstant.DATE_FORMAT].ToString();
+        //    textProperties.DisplayFormatString = ViewData[SystemAdmin.SYSConstant.DATE_FORMAT].ToString();
+        //});
+        settings.Columns.AddBand(Col =>
+        {
+            Col.FixedStyle = GridViewColumnFixedStyle.None;
+            Col.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "រយះពេលធ្វើសំណួរ");
+            Col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            Col.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "លើកទី១(នាទី)");
+                column.FieldName = "Timer1";
+                column.Width = 110;
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+                spinEditProperties.Width = Unit.Percentage(100);
+                spinEditProperties.DisplayFormatString = "N0";
+                spinEditProperties.DisplayFormatInEditMode = true;
+                spinEditProperties.MinValue = 0;
+                spinEditProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+                spinEditProperties.MaxValue = 1000000;
+            });
+            Col.Columns.Add(column =>
+            {
+                column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "លើកទី២(នាទី)");
+                column.FieldName = "Timer2";
+                column.Width = 110;
+                column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+                spinEditProperties.Width = Unit.Percentage(100);
+                spinEditProperties.DisplayFormatString = "N0";
+                spinEditProperties.DisplayFormatInEditMode = true;
+                spinEditProperties.MinValue = 0;
+                spinEditProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+                spinEditProperties.MaxValue = 1000000;
+            });
+
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[DMSPRO.Models.SY.SYConstant.SCREEN_ID].ToString(), "Target (%)");
+        //    column.FieldName = "Target";
+        //    column.Width = 110;
+        //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //    var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+        //    spinEditProperties.Width = Unit.Percentage(100);
+        //    spinEditProperties.DisplayFormatString = "N0";
+        //    spinEditProperties.DisplayFormatInEditMode = true;
+        //    spinEditProperties.MinValue = 0;
+        //    spinEditProperties.Style.HorizontalAlign = HorizontalAlign.Right;
+        //    spinEditProperties.MaxValue = 1000000;
+        //});
+
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[SystemAdmin.SYSConstant.SCREEN_ID].ToString(), "Document");
+        //    column.FieldName = "UrlDocument";
+        //    column.Width = 150;
+        //    column.SetDataItemTemplateContent(container =>
+        //    {
+        //        //var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "UrlDocument"));
+        //        var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "UrlDocument"));
+        //        var document = Convert.ToString(DataBinder.Eval(container.DataItem, "Document"));
+
+        //        if (!(attachment == null || attachment == ""))
+        //        {
+        //            string[] doc = attachment.Split(';');
+        //            string[] docum = document.Split(';');
+
+        //            {
+        //                int i = 1;
+        //                foreach (var r in docum)
+        //                {
+        //                    if (r != "")
+        //                    {
+        //                        int j = 1;
+        //                        foreach (var r1 in doc)
+        //                        {
+        //                            if (r1 != "" && i == j)
+        //                            {
+        //                                Html.DevExpress().HyperLink(hyperlink =>
+        //                                {
+        //                                    hyperlink.Name = "file_" + i + container.VisibleIndex;
+        //                                    hyperlink.Properties.Text = r + " | ";
+        //                                    hyperlink.Properties.Target = "_BLANK";
+        //                                    hyperlink.NavigateUrl = r1;
+        //                                }).Render();
+        //                            }
+        //                            j++;
+        //                        }
+
+        //                        //item.UrlOtherDocument += SYUrl.getBaseUrl() + "/Content/UPLOAD/TRAINING/VIDEO/" + item.ProgramCode + "/" + item.Coursecode + "/" + item.ModuleCode + "/" + r + ";";
+        //                    }
+        //                    i++;
+        //                }
+        //            }
+
+        //        }
+
+        //    });
+
+        //});
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[SystemAdmin.SYSConstant.SCREEN_ID].ToString(), "Video Document");
+        //    column.FieldName = "UrlOtherDocument";
+        //    column.Width = 150;
+        //    column.SetDataItemTemplateContent(container =>
+        //    {
+        //        var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "UrlOtherDocument"));
+        //        if (!(attachment == null || attachment == ""))
+        //        {
+        //            string[] doc = attachment.Split(';');
+        //            {
+        //                int i = 1;
+        //                foreach (var r in doc)
+        //                {
+        //                    if (r != "")
+        //                    {
+
+        //                        Html.DevExpress().HyperLink(hyperlink =>
+        //                        {
+        //                            hyperlink.Name = "hlll"+i + container.VisibleIndex;
+        //                            //hyperlink.Properties.Text = DMSPRO.Models.SY.SYSettings.getLabel(ViewData[SystemAdmin.SYSConstant.SCREEN_ID].ToString(), Convert.ToString(DataBinder.Eval(container.DataItem, "Document")));
+        //                            hyperlink.Properties.Text = DMSPRO.Models.SY.SYSettings.getLabel("View | ");
+        //                            hyperlink.Properties.Target = "_BLANK";
+        //                            hyperlink.NavigateUrl = r;
+
+        //                            //hyperlink.Properties.ClientSideEvents.Click = "ShowSlip";
+        //                        }).Render();
+        //                        //item.UrlOtherDocument += SYUrl.getBaseUrl() + "/Content/UPLOAD/TRAINING/VIDEO/" + item.ProgramCode + "/" + item.Coursecode + "/" + item.ModuleCode + "/" + r + ";";
+        //                    }
+        //                    i++;
+        //                }
+        //            }
+
+        //        }
+
+        //    });
+
+        //});
+
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        //settings.ClientSideEvents.BatchEditStartEditing = "gridView_BatchEditStartEditing";
+        //settings.ClientSideEvents.BatchEditEndEditing = "gridView_BatchEditEndEditing";
+        //settings.ClientSideEvents.BatchEditRowValidating = "gridView_BatchEditRowValidating";
+
+        //settings.ClientSideEvents.RowDblClick = "DbRowClick";
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 450;
+        settings.SettingsPager.PageSize = 450;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName != "LeadTime")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+        };
+
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+
+
+
+
+
+
+

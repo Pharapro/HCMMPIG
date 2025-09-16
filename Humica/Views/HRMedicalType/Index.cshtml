@@ -1,0 +1,42 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model  Humica.Logic.HRS.MDMedicalType
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Hospital")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewHospital", Model.ListHopital);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Medical Type")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewMedicalType", Model.ListMedicalType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Medical Check Result")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewChkResult", Model.ListPHChkResult);
+        });
+
+}).GetHtml()
+
+

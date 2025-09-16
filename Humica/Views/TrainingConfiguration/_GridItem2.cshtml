@@ -1,0 +1,147 @@
+﻿
+
+@{
+    var grid = Html.DevExpress().GridView(
+         settings =>
+         {
+             Html.EnableClientValidation();
+             Html.EnableUnobtrusiveJavaScript();
+             settings.Name = "_GridItem2";
+             settings.KeyFieldName = "ID";
+
+             settings.Width = Unit.Percentage(100);
+             settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+             settings.CallbackRouteValues = new { Controller = "TrainingConfiguration", Action = "_GridItem2" };
+
+             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TrainingConfiguration", Action = "CreateG" };
+             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TrainingConfiguration", Action = "EditG" };
+             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TrainingConfiguration", Action = "DeleteG" };
+
+             settings.SettingsBehavior.AllowSort = true;
+
+             settings.CommandColumn.Visible = true;
+             settings.CommandColumn.ShowDeleteButton = true;
+
+             settings.CommandColumn.ShowNewButtonInHeader = true;
+             settings.CommandColumn.ShowCancelButton = true;
+             settings.CommandColumn.ShowEditButton = true;
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsText.ConfirmDelete = " Do you want to delete? ";
+             //  settings.CommandColumn.ShowDeleteButton = true;
+             //settings.SettingsCommandButton.DeleteButton.Image.Url = Url.Content("~/Content/Images/grid-remove.png");
+             //settings.SettingsCommandButton.EditButton.Image.Url = Url.Content("~/Content/Images/grid-edit.png");
+             //settings.SettingsCommandButton.NewButton.Image.Url = Url.Content("~/Content/Images/grid-add.png");
+
+
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "ID";
+                 column.Width = 80;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "ID");
+             });
+             settings.Columns.Add(column =>
+             {
+                 column.FieldName = "Description";
+                 column.Width = 350;
+                 column.Caption = Humica.EF.Models.SY.SYSettings.getLabel(ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString(), "Description");
+                 column.ColumnType = MVCxGridViewColumnType.TextBox;
+                 var textProperties = column.PropertiesEdit as TextEditProperties;
+             });
+
+             settings.SettingsSearchPanel.Visible = true;
+             settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+             settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+             settings.SettingsBehavior.ConfirmDelete = true;
+             settings.SettingsPager.PageSize = 520;
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+
+             settings.Settings.ShowHeaderFilterButton = true;
+             settings.SettingsPopup.HeaderFilter.Height = 200;
+             settings.SettingsBehavior.AllowEllipsisInText = true;
+             settings.PreRender = (sender, e) =>
+             {
+                 //((MVCxGridView)sender).StartEdit(1);
+             };
+
+             settings.CellEditorInitialize = (s, e) =>
+             {
+                 ASPxEdit editor = (ASPxEdit)e.Editor;
+                 editor.ValidationSettings.Display = Display.Dynamic;
+                 if (e.KeyValue == null)
+                 {
+                     if (e.Column.FieldName == "ID")
+                     {
+                         e.Editor.Value = -1;
+                     }
+
+                 }
+                 if (e.Column.FieldName == "ID")
+                 {
+                     e.Editor.ReadOnly = true;
+                 }
+
+
+             };
+             //settings.InitNewRow += (s, e) =>
+             //{
+             //    e.NewValues["Property"] = (short)0;
+             //};
+
+
+
+             settings.SettingsBehavior.AllowFocusedRow = true;
+             settings.Settings.ShowHeaderFilterButton = true;
+             settings.SettingsPopup.HeaderFilter.Height = 200;
+             settings.SettingsBehavior.AllowEllipsisInText = true;
+             settings.SettingsContextMenu.Enabled = true;
+             settings.SettingsBehavior.EnableCustomizationWindow = true;
+             settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+             settings.CustomJSProperties = (s, e) =>
+             {
+                 ASPxGridView grid1 = (ASPxGridView)s;
+                 var result = new System.Collections.Hashtable();
+                 foreach (var col in grid1.AllColumns)
+                 {
+                     var dataCol = col as GridViewDataColumn;
+                     if (dataCol != null)
+                     {
+                         var visible = "T";
+                         if (dataCol.Visible == false)
+                         {
+                             visible = "F";
+                         }
+                         result[dataCol.FieldName] = new Dictionary<string, object>() {
+                                {"fieldName",dataCol.FieldName},
+                                {"caption",dataCol.Caption},
+                                { "sortIndex", dataCol.SortIndex },
+                                { "sortOrder", dataCol.SortOrder },
+                                { "groupIndex", dataCol.GroupIndex },
+                                { "width", dataCol.Width },
+                                { "visibleIndex", dataCol.VisibleIndex },
+                                { "visible", visible },
+                                { "fitler", dataCol.FilterExpression},
+                             };
+                     }
+                 }
+
+                 e.Properties["cpColumnsProp"] = result;
+             };
+
+             settings.PreRender = (s, e) =>
+             {
+
+             };
+
+         });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

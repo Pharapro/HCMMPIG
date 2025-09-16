@@ -1,0 +1,118 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridD";
+        settings.KeyFieldName = "RequestNo";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "RCMERecruitment", Action = "GridPosit" };
+
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsContextMenu.Enabled = false;
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowCancelButton = false;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = false;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 300;
+            column.FieldName = "Position";
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Hiring Position");
+
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.DataSource = ViewData["POSITION_SELECT"];
+            textProperties.ValueField = "POST";
+            textProperties.TextField = "Description";
+
+            textProperties.TextFormatString = "{0}:{1}";
+            textProperties.DropDownStyle = DropDownStyle.DropDownList;
+            textProperties.Columns.Add("POST", Humica.EF.Models.SY.SYSettings.getLabel("POST"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            textProperties.Columns.Add("NoOfRecruit", Humica.EF.Models.SY.SYSettings.getLabel("NoOfRecruit"), 200);
+            textProperties.Columns.Add("RequestNo", Humica.EF.Models.SY.SYSettings.getLabel("RequestNo"), 200);
+            textProperties.ClientInstanceName = "cboPosition";
+            textProperties.ValueType = typeof(string);
+            textProperties.Width = Unit.Percentage(100);
+            textProperties.ClientSideEvents.SelectedIndexChanged = "SelectPosition";
+
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("No of Recruit");
+            column.Width = 110;
+            column.FieldName = "NoOfRecruit";
+            column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+            var txtEditProperties = column.PropertiesEdit as SpinEditProperties;
+            txtEditProperties.ClientInstanceName = "txtNoOfRecruit";
+            txtEditProperties.DisplayFormatString = "N0";
+            txtEditProperties.MinValue = 1;
+            txtEditProperties.MaxValue = 100;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("RequestNo");
+            column.Width = 150;
+            column.FieldName = "RequestNo";
+            var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+            txtEditProperties.ClientInstanceName = "txtRequestNo";
+        });
+
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        //settings.ClientSideEvents.EndCallback = "EndCallBackM";
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+        settings.CellEditorInitialize = (sender, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            e.Editor.ReadOnly = false;
+            if (e.KeyValue != null)
+            {
+                if (e.Column.FieldName == "Position")
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+            if (e.Column.FieldName== "RequestNo")
+            {
+                e.Editor.ReadOnly = true;
+            }
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

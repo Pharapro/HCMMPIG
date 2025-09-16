@@ -1,0 +1,168 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridItems2";
+        settings.KeyFieldName = "IntegrationType";
+        settings.Width = Unit.Percentage(100);
+        int width = 150;
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "Integration", Action = "GridItems2" };
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width / 2;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("...");
+            column.SetDataItemTemplateContent(container =>
+            {
+                Html.DevExpress().HyperLink(hyperlink =>
+                {
+                    hyperlink.Name = "hl" + container.VisibleIndex;
+                    hyperlink.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("Resend");
+                    //hyperlink.NavigateUrl= Humica.EF.Models.SY.SYUrl.getBaseUrl() + "/Configuration/MasterData/COA/Edit/" + Convert.ToString(DataBinder.Eval(container.DataItem, "KeyCode"));
+                    hyperlink.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, "KeyCode"))
+                                        + "|" + Convert.ToString(DataBinder.Eval(container.DataItem, "IntegrationType"))
+                                        + "|" + Convert.ToString(DataBinder.Eval(container.DataItem, "PathFileStore"))
+                                        + "|" + Convert.ToString(DataBinder.Eval(container.DataItem, "FileName"));
+                    //hyperlink.NavigateUrl = Humica.EF.Models.SY.SYUrl.getBaseUrl() + ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL] + "Resend?id=" + Convert.ToString(DataBinder.Eval(container.DataItem, "KeyCode")) + ":" + Convert.ToString(DataBinder.Eval(container.DataItem, "IntegrationType"));
+                    hyperlink.Properties.ClientSideEvents.Click = "btnResend";
+                }).Render();
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("KeyCode");
+            column.FieldName = "KeyCode";
+            //column.Visible = true;
+            column.CellStyle.BackColor = System.Drawing.Color.DarkGray;
+            column.ToolTip = "Key Code";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("IntegrationType");
+            column.FieldName = "IntegrationType";
+            column.Visible = true;
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            column.ToolTip = "Integration Type";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width * 2;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+            column.FieldName = "Description";
+            column.Visible = true;
+            column.ToolTip = "Description";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Module");
+            column.FieldName = "IntegrationModuleName";
+            column.Visible = true;
+            column.ToolTip = "Integration Module Name";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var cboProperties = column.PropertiesEdit as ComboBoxProperties;
+            cboProperties.DataSource = ViewData["LIST_INTEGRATION_MODULE"];
+            cboProperties.ValueField = "SelectValue";
+            cboProperties.TextField = "SelectText";
+            cboProperties.ValueType = typeof(string);
+            cboProperties.TextFormatString = CLOUDVIEW.Models.ClsConstant.TEXT_COMBOBOX_STRING_SINGLE;
+            cboProperties.DropDownStyle = DropDownStyle.DropDownList;
+            cboProperties.NullText = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "_SELECT");
+            cboProperties.Columns.Add("SelectValue", Humica.EF.Models.SY.SYSettings.getLabel("Value"), 100);
+            cboProperties.Columns.Add("SelectText", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("FileName");
+            column.FieldName = "FileName";
+            column.Visible = true;
+            column.CellStyle.BackColor = System.Drawing.Color.DeepSkyBlue;
+            column.ToolTip = "File Name";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = width * 2;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PathFileStore");
+            column.FieldName = "PathFileStore";
+            column.Visible = true;
+            column.ToolTip = "Path File Store";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = Convert.ToInt16(width * 1.3);
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("CreatedOn");
+            column.FieldName = "CreatedOn";
+            column.Visible = true;
+            column.ReadOnly = true;
+            column.ToolTip = "Created On";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.PropertiesEdit.DisplayFormatString = "dd.MM.yyyy hh:mm tt";
+        });
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFooter = true;
+        settings.SettingsContextMenu.Enabled = true;
+        settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+        settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.VerticalScrollableHeight = Humica.EF.Models.SY.SYSession.PageHieigh;
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue != null)
+            {
+                //if (e.Column.FieldName == "IntegrationType"/* || e.Column.FieldName == "CreatedOn" || e.Column.FieldName == "CreatedBy"*/)
+                //{
+                //    e.Editor.ReadOnly = true;
+                //}
+            }
+        };
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

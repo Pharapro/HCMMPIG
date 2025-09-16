@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>
+        @{ var pageTitleParts = new string[] { ViewBag.Title, "HUMICA" }; }
+        @string.Join(" - ", @pageTitleParts.Where(s => !string.IsNullOrEmpty(s)))
+    </title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+
+
+    new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+    @Html.DevExpress().GetScripts(
+//new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+
+//new Script { ExtensionSuite = ExtensionSuite.GridView },
+//new Script { ExtensionSuite = ExtensionSuite.TreeList },
+//new Script { ExtensionSuite = ExtensionSuite.Editors }
+//new Script { ExtensionSuite = ExtensionSuite.Report }
+//new Script { ExtensionSuite = ExtensionSuite.SpellChecker }
+)
+
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Content.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Layout.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Sites.css")" />
+    @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootmetro.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/metro-ui-light.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/icomoon.css")" />*@
+    <link rel="stylesheet" type="text/css" href="@Url.Content(Humica.Models.SY.ClsConstant.GetDefaultThemeFile())" />
+
+    @RenderSection("Head", false)
+    <script type="text/javascript" src="@Url.Content("~/Content/Script.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/CustomJs.js")"></script>
+
+
+    <script>
+
+        var _formSubmitting = false;
+        var _actionName = '@ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME]';
+        //$(document).ready(function () {
+        //    $('div.dxflFormLayout_Office365').on('keydown', 'input, select', function (e) {
+        //        if (e.key === "Enter") {
+        //            var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+        //            focusable = form.find('input,a,select,button,textarea').filter(':visible');
+        //            next = focusable.eq(focusable.index(this) + 1);
+        //            if (next.length) {
+        //                next.focus();
+        //            }
+        //            return false;
+        //        }
+        //    });
+
+            //$(document).ready(function () {
+
+            //    $('#_btnSaveActionGrid').click(function () { this.remove(); _formSubmitting = true;});
+            //});
+
+        //});
+
+        window.addEventListener("beforeunload", function (e) {
+
+            if (_actionName == "Create" || _actionName == "Edit") {
+                if (_formSubmitting == false) {
+                    var confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+                    if (CheckUnSavedChanges(document.forms[0])) {
+                        if (e) {
+                            (e || window.event).returnValue = confirmationMessage;
+                        }
+                        return confirmationMessage;
+                    }
+                }
+            }
+
+        });
+
+
+
+    </script>
+</head>
+<body>
+
+
+            @using (Html.BeginForm())
+            {
+
+                //--------
+
+                @Html.AntiForgeryToken();
+                @RenderBody();
+            }
+       
+
+
+    <script type="text/javascript">
+        MVCxClientGlobalEvents.AddControlsInitializedEventHandler(onControlsInitialized);
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(onBrowserWindowResized);
+
+        var _baseUrl = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()";
+
+    </script>
+</body>
+</html>

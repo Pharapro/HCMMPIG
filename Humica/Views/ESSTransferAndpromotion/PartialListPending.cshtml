@@ -1,0 +1,188 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "GridViewListPending";
+               settings.KeyFieldName = "DocNo";
+               settings.EnableTheming = true;
+               settings.EnableRowsCache = true;
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+               settings.SettingsBehavior.AllowSort = true;
+               settings.SettingsSearchPanel.Visible = true;
+               settings.CallbackRouteValues = new { Controller = "ESSTransferAndpromotion", Action = "PartialListPending" };
+
+               settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+               settings.CommandColumn.ShowSelectCheckbox = true;
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.ShowDeleteButton = false;
+
+               settings.CommandColumn.ShowNewButtonInHeader = false;
+               settings.CommandColumn.ShowCancelButton = false;
+               settings.CommandColumn.ShowEditButton = false;
+               settings.CommandColumn.ShowUpdateButton = false;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.AllowSort = true;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.Settings.ShowHeaderFilterButton = true;
+
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsSearchPanel.Visible = true;
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+               // Define columns for each field you want to display
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = "DocNo";
+                   column.Width = 80;
+                   column.FieldName = "DocNo";
+                   column.Visible = true;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = "Emp Code";
+                   column.Width = 100;
+                   column.FieldName = "EmpCode";
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = "Employee Name";
+                   column.Width = 150;
+                   column.FieldName = "AllName";
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = "EffectDate";
+                   column.Width = 100;
+                   column.FieldName = "EffectDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   var textProperties = column.PropertiesEdit as DateEditProperties;
+                   textProperties.EditFormatString = "dd.MMM.yyyy";
+                   textProperties.DisplayFormatString = "dd.MMM.yyyy";
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.FieldName = "Status";
+                   column.Width = 250;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.None;
+               };
+
+
+               settings.ClientSideEvents.RowDblClick = "DbRowClick";
+               settings.ClientSideEvents.SelectionChanged = "OnSelectionChangedCourse";
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = 450;
+               settings.SettingsPager.PageSize = 450;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+               settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'OPEN'", GridConditionHighlightFormat.BoldText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'COMPLETED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'APPROVED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+               settings.FormatConditions.AddHighlight("Status", "[Status] = 'PENDING'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.Dynamic;
+                   if (e.KeyValue != null)
+                   {
+                       if (e.Column.FieldName != "LeadTime")
+                       {
+                           e.Editor.ReadOnly = true;
+                       }
+                   }
+               };
+               settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+               settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+               settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+               settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+               settings.CustomJSProperties = (s, e) =>
+               {
+                   ASPxGridView grid1 = (ASPxGridView)s;
+                   var result = new System.Collections.Hashtable();
+                   foreach (var col in grid1.AllColumns)
+                   {
+                       var dataCol = col as GridViewDataColumn;
+                       if (dataCol != null)
+                       {
+                           var visible = "T";
+                           if (dataCol.Visible == false)
+                           {
+                               visible = "F";
+                           }
+                           result[dataCol.FieldName] = new Dictionary<string, object>() {
+                                {"fieldName",dataCol.FieldName},
+                                {"caption",dataCol.Caption},
+                                { "sortIndex", dataCol.SortIndex },
+                                { "sortOrder", dataCol.SortOrder },
+                                { "groupIndex", dataCol.GroupIndex },
+                                { "width", dataCol.Width },
+                                { "visibleIndex", dataCol.VisibleIndex },
+                                { "visible", visible },
+                                { "fitler", dataCol.FilterExpression},
+                                   };
+                       }
+                   }
+
+                   e.Properties["cpColumnsProp"] = result;
+               };
+
+               settings.PreRender = (s, e) =>
+               {
+
+               };
+
+               //settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+               //settings.SettingsExport.EnableClientSideExportAPI = true;
+               //settings.SettingsExport.FileName = "List";
+               //settings.Toolbars.Add(t =>
+               //{
+               //    t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+               //    t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+               //});
+               //settings.SettingsExport.RenderBrick = (sender, e) =>
+               //{
+               //    if (e.RowType == GridViewRowType.Data && e.VisibleIndex % 2 == 0)
+               //        e.BrickStyle.BackColor = System.Drawing.Color.Beige;
+               //};
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+           });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

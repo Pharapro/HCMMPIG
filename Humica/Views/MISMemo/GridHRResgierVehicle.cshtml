@@ -1,0 +1,168 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridHRResgierVehicle";
+           settings.KeyFieldName = "AssetClass";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "MISMemo", Action = "GridHRResgierVehicle" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "MISMemo", Action = "CreateResgierVehicle" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MISMemo", Action = "EditResgierVehicle" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MISMemo", Action = "DeleteResgierVehicle" };
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowDeleteButton = false;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.FieldName = "AssetClass";
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetClass");
+
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["CARNO_SELECT"];
+               textProperties.ValueField = "ID";
+               textProperties.TextField = "AssetClass";
+
+               textProperties.TextFormatString = "{0}";
+               textProperties.DropDownStyle = DropDownStyle.DropDownList;
+               textProperties.Columns.Add("AssetClass", Humica.EF.Models.SY.SYSettings.getLabel("AssetClass"));
+               textProperties.Columns.Add("AssetCode", Humica.EF.Models.SY.SYSettings.getLabel("AssetCode"));
+               textProperties.Columns.Add("Model", Humica.EF.Models.SY.SYSettings.getLabel("Model"));
+               textProperties.Columns.Add("VehicleType", Humica.EF.Models.SY.SYSettings.getLabel("VehicleType"));
+               textProperties.Columns.Add("PlateNumber", Humica.EF.Models.SY.SYSettings.getLabel("PlateNumber"));
+               textProperties.Columns.Add("Year", Humica.EF.Models.SY.SYSettings.getLabel("Year"));
+               textProperties.Columns.Add("Color", Humica.EF.Models.SY.SYSettings.getLabel("Color"));
+               textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+               textProperties.ClientInstanceName = "cboStaff";
+               textProperties.ValueType = typeof(string);
+               textProperties.Width = Unit.Percentage(100);
+               textProperties.ClientSideEvents.SelectedIndexChanged = "Selectstaff";
+
+           });
+
+           settings.Columns.Add(column =>
+           {​
+               
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AssetCode");
+               column.Width = 250;
+               column.FieldName = "AssetCode";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtAssetCode";
+
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Model");
+               column.Width = 80;
+               column.FieldName = "Model";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtModel";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("VehicleType");
+               column.Width = 150;
+               column.FieldName = "VehicleType";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtVehicleType";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Year");
+               column.Width = 80;
+               column.FieldName = "Year";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtYear";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PlateNumber");
+               column.Width = 150;
+               column.FieldName = "PlateNumber";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtPlateNumber";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("(Color");
+               column.Width = 100;
+               column.FieldName = "Color";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtColor";
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Description");
+               column.Width = 150;
+               column.FieldName = "Description";
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+               var txtEditProperties = column.PropertiesEdit as TextEditProperties;
+               txtEditProperties.ClientInstanceName = "txtDescription";
+           });
+
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "ID")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+               //if(e.KeyValue==null)
+               //{
+               //    if(e.Column.FieldName=="IsCompany")
+               //    {
+               //        e.Editor.Value = true;
+               //    }
+               //}
+           };
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

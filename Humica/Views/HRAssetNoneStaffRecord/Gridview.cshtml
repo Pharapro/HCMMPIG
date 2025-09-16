@@ -1,0 +1,144 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+           settings.Name = "Gridview";
+           settings.KeyFieldName = "HandlerCode";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+
+           settings.CallbackRouteValues = new { Controller = "HRAssetNoneStaffRecord", Action = "Gridview" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAssetNoneStaffRecord", Action = "Create" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAssetNoneStaffRecord", Action = "Edit" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAssetNoneStaffRecord", Action = "Delete" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           //settings.Columns.Add(column =>
+           //{
+           //    column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+           //    column.FieldName = "ID";
+           //    column.Visible = false;
+           //});
+           settings.Columns.Add(column =>
+           {
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HandlerCode") + '*';
+               column.FieldName = "HandlerCode";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 170;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("HandlerName");
+               column.FieldName = "HandlerName";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 400;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Company");
+               column.FieldName = "Company";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+               column.FieldName = "Position";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("PhoneNumber");
+               column.FieldName = "PhoneNumber";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Commune");
+               column.FieldName = "Commune";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("District");
+               column.FieldName = "District";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 130;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Province");
+               column.FieldName = "Province";
+               column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+           });
+           settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+           settings.SettingsEditing.EditFormColumnCount = 2;
+           settings.Settings.VerticalScrollableHeight = 300;
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 10;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.FileName = "NoneStaff Record";
+           settings.Toolbars.Add(t =>
+           {
+               t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+           });
+
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+           settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+
+
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "HandlerCode")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

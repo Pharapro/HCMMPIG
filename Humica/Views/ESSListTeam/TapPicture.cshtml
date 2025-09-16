@@ -1,0 +1,43 @@
+﻿@model Humica.Logic.HR.HRStaffProfileObject
+
+@Html.DevExpress().FormLayout(gg =>
+{
+    gg.Name = "ProfileImage";
+    gg.AlignItemCaptionsInAllGroups = true;
+    gg.Items.AddGroupItem(m => m.Header, g =>
+    {
+        g.Caption = "";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        g.ColCount = 3;
+        g.Items.AddGroupItem(m => m.Header, g1 =>
+        {
+            g1.ColCount = 2;
+            g1.GroupBoxDecoration = GroupBoxDecoration.None;
+            g1.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            g1.Caption = "Place of Birth Information";
+            g1.Items.Add(mm =>
+            {
+                mm.Caption = "";
+            })
+            .SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+                ViewContext.Writer.Write("<img id='uploadedImage' src='" + Model.Header.Images + "' alt=''   />");
+                ViewContext.Writer.Write("</div>");
+            });
+            g1.Items.Add(mm =>
+            {
+                mm.Caption = "";
+            })
+             .SetNestedContent(() =>
+             {
+                 ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+                 ViewContext.Writer.Write("<img id='uploadedImage' src='" + Model.Header.Signature + "' alt=''   />");
+                 ViewContext.Writer.Write("</div>");
+             });
+        });
+
+    });
+
+}).GetHtml()

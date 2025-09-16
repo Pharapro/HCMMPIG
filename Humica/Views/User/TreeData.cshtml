@@ -1,0 +1,102 @@
+﻿@model Humica.EF.Models.SY.SYUserObject
+
+@{
+    var treeList = Html.DevExpress().TreeList(
+        settings =>
+        {
+            settings.Name = "treeListData";
+            settings.CallbackRouteValues = new { Controller = "User", Action = "TreeData" };
+
+            settings.AutoGenerateColumns = false;
+            settings.Width = Unit.Percentage(50);
+
+            settings.KeyFieldName = "DealerCode";
+            settings.ParentFieldName = "TRCode";
+
+            settings.Columns.Add(column =>
+            {
+                column.Width = 100;
+                column.FieldName = "TRCode";
+                column.PropertiesEdit.EncodeHtml = false;
+            });
+
+            //settings.Columns.Add(column =>
+            //{
+            //    column.FieldName = "DealerCode";
+            //    column.PropertiesEdit.EncodeHtml = false;
+            //});
+
+            //settings.Columns.Add(column =>
+            //{
+            //    column.FieldName = "DealerName";
+            //    column.PropertiesEdit.EncodeHtml = false;
+            //});
+
+            settings.SettingsCookies.Enabled = true;
+            settings.SettingsCookies.StoreExpandedNodes = true;
+
+            settings.CommandColumn.Visible = false;
+
+            settings.SettingsEditing.ConfirmDelete = true;
+
+            settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+            settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            settings.SettingsSelection.AllowSelectAll = false;
+            settings.SettingsSelection.Enabled = true;
+            settings.SettingsSelection.Recursive = true;
+
+            settings.ClientSideEvents.SelectionChanged = "OnSelectionDataChanged";
+            settings.ClientSideEvents.BeginCallback = "OnBeginDataCallback";   
+            
+            //Module
+            var i = 0;
+            foreach (var group in Model.ListTRCode.OrderBy(w=>w.TRCode).GroupBy(w => w.TRCode))
+            {
+
+                settings.Nodes.Add(node =>
+                    {
+                        i++;
+                        node.KeyObject = group.Key;
+                        node["TRCode"] = group.Key;
+                        node.Expanded = true;
+                        node.AllowSelect = true;
+
+                        if (Model.ListDataAccessAssigned != null)
+                        {
+                            if (Model.ListDataAccessAssigned.Where(w => w.CompanyCode == group.Key).ToList().Count > 0)
+                            {
+                                node.Selected = true;
+                            }
+                        }             
+                        
+                        //foreach (var read in Model.ListDealers)
+                        //{
+                        //    if(read.TRCode==group.Key)
+                        //    {
+                        //        node.ChildNodes.Add(child =>
+                        //        {
+                        //            child.KeyObject =  read.DealerCode;
+                        //            child["TRCode"] = read.TRCode;
+                        //            child["DealerCode"] = read.DealerCode;
+                        //            child["DealerName"] = read.DealerName;
+                        //            child.Expanded = true;
+                        //            child.AllowSelect = true;
+                        //        });
+                        //    }
+                           
+                        //}
+                    });
+
+            }
+
+            settings.Settings.ShowColumnHeaders = true;
+        }
+    );
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.GetHtml()

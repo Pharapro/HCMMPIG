@@ -1,0 +1,278 @@
+﻿@model Humica.Logic.MD.ClsAlertSetting
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "General";
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.Width = Unit.Percentage(100);
+    settings.ColCount = 2;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+
+    {
+        g.ColCount = 2;
+        g.ColSpan = 1;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        //BDCHK Birthday
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+            //m.Width = Unit.Percentage(70);
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.BDCHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Birthday");
+                s.Properties.ClientInstanceName = "chkBDCHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //BDValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.BDValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SBDValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //PBCHK End Probation Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.PBCHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("End Probation Date");
+                s.Properties.ClientInstanceName = "chkPBCHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //PBValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.PBValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SPBValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //CECHK Contract Expire Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel( "");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.CECHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Contract Expire Date");
+                s.Properties.ClientInstanceName = "chkCECHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //CEValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.CEValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SCEValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //TMCHK Separate Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.TMCHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Separate Date");
+                s.Properties.ClientInstanceName = "chkTMCHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //TMValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.TMValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "STMValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+
+    {
+        g.ColCount = 2;
+        g.ColSpan = 1;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        //PPCHK Passport Expire Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.PPCHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Passport Expire Date");
+                s.Properties.ClientInstanceName = "chkPPCHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //PPValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.PPValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SPPValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //WBCHK Work Permit/Book Expire Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.WBCHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Work Permit/Book Expire Date");
+                s.Properties.ClientInstanceName = "chkWBCHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //WBValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.WBValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SWBValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //VISACHK Visa Expire Date
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("");
+            m.ColSpan = 1;
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().CheckBoxFor(i => i.Header.VISACHK, s =>
+            {
+                s.Text = Humica.EF.Models.SY.SYSettings.getLabel("Visa Expire Date");
+                s.Properties.ClientInstanceName = "chkVISACHK";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+        //VISAValue
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Before(Days)");
+            m.ColSpan = 1;
+
+        }).SetNestedContent(() =>
+        {
+            Html.DevExpress().SpinEditFor(i => i.Header.VISAValue, s =>
+            {
+                s.Width = 70;
+                s.Properties.ClientInstanceName = "SVISAValue";
+                s.ShowModelErrors = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.Properties.ValidationSettings.SetFocusOnError = true;
+                s.Properties.ValidationSettings.ErrorText = "*";
+            }).Render();
+        });
+    });
+
+
+}).GetHtml()
+

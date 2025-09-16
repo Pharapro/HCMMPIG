@@ -1,0 +1,113 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemSettings";
+           settings.KeyFieldName = "OTTYPE";
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "ATOTPolicy", Action = "GridItemOTSettings" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ATOTPolicy", Action = "CreateOTSetting" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ATOTPolicy", Action = "EditOTSetting" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ATOTPolicy", Action = "DeleteOTSetting" };
+
+           settings.SettingsBehavior.AllowSort = false;
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+
+           settings.SettingsContextMenu.Enabled = true;
+           settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+           settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+           settings.Settings.ShowHeaderFilterButton = true;
+           settings.SettingsPopup.HeaderFilter.Height = 200;
+
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "OTTYPE";
+               column.Width = 250;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OT Type");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.DataSource = ViewData["OTTYPE_SELECT"];
+               textProperties.TextFormatString = "{0}:{1}";
+               textProperties.ValueField = "OTCode";
+               textProperties.Columns.Add("OTCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+               textProperties.Columns.Add("OTType", Humica.EF.Models.SY.SYSettings.getLabel("Description"),200);
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartTime");
+               column.Width = 120;
+               column.FieldName = "StartTime";
+               column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndTime");
+               column.Width = 120;
+               column.FieldName = "EndTime";
+               column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Is DayOFF");
+               column.FieldName = "IsDayOFF";
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Is PH");
+               column.FieldName = "IsPH";
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Is Sunday");
+               column.FieldName = "IsSunday";
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("OverNight");
+               column.FieldName = "OverNight";
+               column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           });
+
+           settings.SettingsSearchPanel.Visible = true;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

@@ -1,0 +1,1337 @@
+﻿/*#A9D08E*/
+
+.menu-container .dxmLite_Office365 .dxm-horizontal .dxm-image-l .dxm-content {
+    padding: 0.6em .81em 0.671em;
+}
+
+#pageContent{
+    
+}
+
+table.dxeReadOnly_DevEx, table.dxeReadOnly_Office365 {
+    border: none !important;
+    border-bottom: 1px solid RGBA(0,0,0,0.12) !important;
+    background-color: transparent !important;
+}
+
+
+table.dxeReadOnly_DevEx div,table.dxeReadOnly_Office365 div
+{
+    display:none!important;
+}
+
+table.dxeReadOnly_DevEx div,table.dxeReadOnly_Office365 div
+{
+    display:none!important;
+}
+
+table.dxeReadOnly_DevEx input
+,table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx
+,table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx
+,table.dxeReadOnly_DevEx dxeButtonEditButton_DevEx
+  {
+     background-color:transparent!important;
+}
+table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx
+,table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx
+,table.dxeReadOnly_DevEx .dxeButtonEditButton_DevEx
+{
+    display:none!important;
+}
+table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx img,
+table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx img,
+table.dxeReadOnly_DevEx .dxeButtonEditButton_DevEx img
+{
+     visibility:hidden;
+}
+
+table.dxeReadOnly_Office365 .dxeSpinIncButton_Office365 img,
+table.dxeReadOnly_Office365 .dxeSpinDecButton_Office365 img,
+table.dxeReadOnly_Office365 .dxeButtonEditButton_Office365 img
+{
+     visibility:hidden;
+}
+
+table.dxeReadOnly_DevEx input{
+}
+.ContentSearch{    
+    padding:5px;
+    border-bottom:1px solid #888;
+    height:61px;
+    background-color:#eee;
+}
+
+.page-toolbar .dxm-item{
+     padding:0px 5px;
+}
+.login_logo img {
+    width: 340px;
+}
+.question_btn{
+    padding:1px;
+}
+.question_btn div{
+    float:right;
+    margin-right:10px;    
+}
+.msg_confirm{
+    text-align:center;
+    margin-top:25px;
+}
+.msg_confirm img{
+    float:left;
+    margin-left:5px;
+    margin-top:-15px;
+}
+.msg_confirm .msg{
+     float:left;
+    margin-left:10px;      
+    margin-top:-10px;
+}
+
+
+/*Color #43abf7*/
+html, body {
+    margin: 0;
+    padding: 0;
+}
+.fitler-doc{
+    padding:10px;
+}
+.contentbtnClick
+{
+    float:left;
+}
+#file_uploaded{
+    float:right;
+    margin-top:-22px;
+    padding-right:10px;
+}
+
+.topPanel
+{
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+.label{
+    padding:5px;
+}
+.titleContainer,
+.dataView
+{
+    margin: 0 auto;
+    width: 100%;
+    max-width: 960px;
+}
+.notification1 .dxm-popOut{
+    visibility:hidden;
+}
+.notification1 .dxmLite_DevEx div:hover  {
+    
+}
+.dxmLite_DevEx, .dxmLite_DevEx .dxm-item a.dx
+{
+    font-size:12px;
+}
+.contentAction
+{
+    padding-top:5px;
+    min-width:450px;
+}
+.contentAction a,.TitleHeader a{
+    text-decoration:none!important;
+    padding:5px 7px!important;
+}
+.dxICheckBox_DevEx{
+    margin-top:9px!important;
+}
+.contentmenuClick{
+    margin-top:3px;
+}
+.img_logo
+{
+    
+    width: 115px;
+    height: 30px;
+    padding-top: 6px;
+    padding-left: 5px;
+    background-color: #fff;
+    padding-bottom: 15px;
+    padding-right: 5px;
+    z-index:9999;
+    position:relative;
+}
+table.dxflGroupSys 
+{
+    padding:0px;
+}
+table.dxflGroupSys tr td{
+    padding:1px 2px;
+}
+.dxflGroupBox_Office365 {
+    border: 1px Solid #00a94f;
+    border-radius:5px;
+}
+#mTemplatesNotify_DXI0_Img{
+    margin-right:-20px;
+}
+#mTemplatesNotify_DXI0_T span{
+    background-color: white;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    color: red;
+    line-height: 100%;
+    margin-left: 6px;
+    margin-top: -30px;
+    padding: 3px 7px;
+    text-decoration: inherit;
+}
+.notification1 img
+{
+    height:32px;
+    width:32px;
+}
+.notification1
+{
+float: right; 
+
+margin-right:25px;
+
+}
+.logout .dxm-popOut
+{
+    visibility:hidden;
+}
+.notification1 a{
+    text-decoration:none;
+}
+/* Header */
+.dxpnl-edge.t.headerPane 
+{
+    background-color: #EDEDED;
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+.dxpnl-edge.t.headerPane.panel 
+{
+    padding: 0;
+}
+.logout{
+    padding-top:8px;
+    float:right;
+}
+.dxm-separator{
+    visibility:hidden;
+}
+#LblSearch{
+    font-size:12pt;
+}
+#TxtSearch_I
+{
+    padding:2px;
+}
+
+.contentAction .dxm-ltr{
+    float:left;
+}
+
+.headerMenu 
+{
+    border-width: 0!important;
+    border-top-width: 1px!important;
+    background-color: #43abf7;/*#CA992C;/*#ea1f30;*/
+}
+#HeaderMenu{
+    background-color:#fff;
+    margin-top:-13px;
+}
+#choSearchDataAll{
+    margin-top:7px;
+}
+.expandedPanel 
+{
+    padding: 2px!important;
+}
+
+
+.expandedPanel .headerMenu 
+{
+    border-top-width: 0!important;
+}
+.expandedPanel .headerTop 
+{
+    display: none;
+}
+tr.dxgv{
+    visibility:hidden;
+}
+.templateTitle 
+{
+    height:63px;   
+}
+#LeftPane{
+    padding:0px;
+    /*background-color:#F7F7F7;*/
+    
+}
+.dxpnl-edge.t.headerPane.bar .templateTitle 
+{
+    margin: 0;
+}
+.templateTitle a 
+{
+    text-decoration: none;
+    font-size: x-large;
+    color: black;
+}
+.loginControl 
+{
+    min-width:260px;
+    float: right;
+    padding-right:5px;
+    font-size: 12px;
+    position: relative;
+    z-index: 999;
+    margin-top:-58px;
+}
+.loginControl a 
+{
+    color: black;
+    text-decoration: none;    
+    display: inline-block;
+}
+.MenuLeft{
+    overflow:auto;
+    min-height:430px;
+    background-color:#eee;
+}
+#pcScrolling_TC scrolling_Tab{
+    border-bottom:3px solid #FFF;
+}
+/* Footer */
+.dxpnl-edge.b.footerPane 
+{
+    background-color: #EDEDED;
+}
+.dxpnl-edge.b.footerPane.panel 
+{
+    padding: 0;
+}
+.footerMenu 
+{
+    float: left;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+.copyright 
+{
+    float: right;
+    margin: 1px 15px 11px;
+}
+.content 
+{
+    padding:5px;
+}
+
+/* Left Panel */
+.leftPane.panel
+{
+    padding: 1px;
+    width: 250px;
+}
+
+/* Right Panel */
+.rightPane.panel
+{
+    padding: 0;
+    width: 250px;
+}
+
+/* Account */
+.accountHeader h2 
+{
+    margin: 10px 0 7px 0;
+    font-size: 16px;
+}
+.accountHeader p 
+{
+    margin: 0;
+    padding: 0;
+}
+.accountHeader 
+{
+    margin-bottom: 20px;
+}
+.form-field
+{
+    margin-bottom: 8px;
+}
+
+
+/* iOS */
+.dxpnlControl_iOS.leftPane,
+.dxpnlControl_iOS.rightPane,
+.dxpnlControl_iOS.contentPane
+{
+    border-width: 1px !important;
+}
+.dxpnlControl_iOS.leftPane.panel
+{
+    width: 300px;
+}
+.dxpnlControl_iOS.rightPane
+{
+    width: 450px;
+}
+.dxpnlControl_iOS .templateTitle
+{
+    margin: 17px 25px;
+}
+.dxpnlControl_iOS .templateTitle a
+{
+    color: #303030;
+    font-size: 26px;
+    line-height: 1em;
+    font-weight: bold;
+}
+.dxpnlControl_iOS .loginControl a
+{
+    color: #0160E7;
+    text-decoration: underline;
+    font-size: 20px;
+    font-weight: bold;
+}
+.dxpnlControl_iOS.mainContentPane
+{
+    border-width: 0px !important;
+    box-shadow: initial;
+    -webkit-box-shadow: initial;
+    -moz-box-shadow: initial;
+}
+.dxpnlControl_iOS.dxpnl-edge.b.footerPane
+{
+    border-width: 1px !important;
+}
+.dxpnlControl_iOS .accountHeader p
+{
+    color: #303030;
+}
+.dxpnlControl_iOS .accountHeader h2
+{
+    color: #303030;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+
+/* Aqua */
+.dxpnlControl_Aqua.dxpnl-edge.t.headerPane,
+.dxpnlControl_Aqua.dxpnl-edge.b.footerPane,
+.dxpnlControl_Aqua .footerMenu li
+{
+    background-color: #BFDBFF;
+}
+.dxpnlControl_Aqua.dxpnl-edge.t.headerPane
+{
+    background-image: url('images/AquaHeader.jpg');
+}
+.dxpnlControl_Aqua .accountHeader h2
+{
+    color: #5689C5;
+}
+.dxpnlControl_Aqua .loginControl a,
+.dxpnlControl_Aqua .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+/* DevEx */
+.dxpnlControl_DevEx.dxpnl-edge.t.headerPane,
+.dxpnlControl_DevEx.dxpnl-edge.b.footerPane,
+.dxpnlControl_DevEx .footerMenu li
+{
+    background-color: #F2F3F4;
+}
+.dxpnlControl_DevEx .templateTitle a,
+.dxpnlControl_DevEx .loginControl,
+.dxpnlControl_DevEx .loginControl a
+{
+    color: #4B4B57;
+}
+.dxpnlControl_DevEx .loginControl a 
+{
+    border-bottom-color: #4B4B57;
+}
+
+
+/* BlackGlass */
+.dxpnlControl_BlackGlass.dxpnl-edge.t.headerPane,
+.dxpnlControl_BlackGlass.dxpnl-edge.b.footerPane,
+.dxpnlControl_BlackGlass .footerMenu li
+{
+    background-color: #2A2A2A;
+    color: white;
+}
+.dxpnlControl_BlackGlass.dxpnl-edge.t.headerPane
+{
+    background-image: url('images/BlackGlassHeader.jpg');
+}
+.dxpnlControl_BlackGlass .leftPanel li[class$="dxnb-last"] ul
+{
+    border-bottom: 1px solid black;
+}
+.dxpnlControl_BlackGlass .accountHeader p
+{
+    color: #585858;
+}
+.dxpnlControl_BlackGlass .loginControl a,
+.dxpnlControl_BlackGlass .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+/* Glass */
+.dxpnlControl_Glass.dxpnl-edge.t.headerPane,
+.dxpnlControl_Glass.dxpnl-edge.b.footerPane,
+.dxpnlControl_Glass .footerMenu li
+{
+    background-color: #CFE0E7;
+}
+.dxpnlControl_Glass.dxpnl-edge.t.headerPane
+{
+    background-image: url('images/GlassHeader.jpg');
+}
+.dxpnlControl_Glass .footerMenu *
+{
+    background-image: none !important;
+}
+.dxpnlControl_Glass .templateTitle a,
+.dxpnlControl_Glass .loginControl,
+.dxpnlControl_Glass .loginControl a
+{
+    color: #4B4B57;
+}
+.dxpnlControl_Glass .loginControl a 
+{
+    border-bottom-color: #4B4B57;
+}
+.dxpnlControl_Glass .accountHeader h2
+{
+    color: #387FA4;
+}
+.dxpnlControl_Glass .accountHeader p
+{
+    color: #575757;
+}
+
+
+
+/* Office2003Blue */
+.dxpnlControl_Office2003Blue.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2003Blue.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2003Blue .footerMenu li
+{
+    background-color: #BCD4F6;
+}
+.dxpnlControl_Office2003Blue .footerMenu div
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Blue .leftPanel > ul
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Blue .templateTitle a,
+.dxpnlControl_Office2003Blue .loginControl,
+.dxpnlControl_Office2003Blue .loginControl a
+{
+    color: #4B4B57;
+}
+.dxpnlControl_Office2003Blue .loginControl a 
+{
+    border-bottom-color: #4B4B57;
+}
+.dxpnlControl_Office2003Blue .accountHeader p
+{
+    color: #424242;
+}
+
+
+/* Office2003Olive */
+.dxpnlControl_Office2003Olive.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2003Olive.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2003Olive .footerMenu li
+{
+    background-color: #D6DCBB;
+}
+.dxpnlControl_Office2003Olive .footerMenu div
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Olive .leftPanel > ul
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Olive .templateTitle a,
+.dxpnlControl_Office2003Olive .loginControl,
+.dxpnlControl_Office2003Olive .loginControl a
+{
+    color: #4B4B57;
+}
+.dxpnlControl_Office2003Olive .loginControl a 
+{
+    border-bottom-color: #4B4B57;
+}
+.dxpnlControl_Office2003Olive .accountHeader p
+{
+    color: #424242;
+}
+
+/* Office2003Silver */
+.dxpnlControl_Office2003Silver.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2003Silver.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2003Silver .footerMenu li
+{
+    background-color: #D0D0DE;
+}
+.dxpnlControl_Office2003Silver .footerMenu div
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Silver .leftPanel > ul
+{
+    background: transparent none;
+}
+.dxpnlControl_Office2003Silver .templateTitle a,
+.dxpnlControl_Office2003Silver .loginControl,
+.dxpnlControl_Office2003Silver .loginControl a
+{
+    color: #4B4B57;
+}
+.dxpnlControl_Office2003Silver .loginControl a
+{
+    border-bottom-color: #4B4B57;
+}
+.dxpnlControl_Office2003Silver .accountHeader p
+{
+    color: #424242;
+}
+
+/* Office2010Black */
+.dxpnlControl_Office2010Black.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2010Black.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2010Black .footerMenu li
+{
+    background-color: #393939;
+    color: white;
+}
+.dxpnlControl_Office2010Black .footerMenu a
+{
+    color: white !important;
+}
+.dxpnlControl_Office2010Black .accountHeader h2
+{
+    color: #3C3C3C;
+}
+.dxpnlControl_Office2010Black .loginControl a,
+.dxpnlControl_Office2010Black .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+/* Office2010Blue */
+.dxpnlControl_Office2010Blue.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2010Blue.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2010Blue .footerMenu li
+{
+    background-color: #D3E4F6;
+}
+.dxpnlControl_Office2010Blue .templateTitle a,
+.dxpnlControl_Office2010Blue .loginControl,
+.dxpnlControl_Office2010Blue .loginControl a
+{
+    color: Black;
+}
+.dxpnlControl_Office2010Blue .loginControl a 
+{
+    border-bottom-color: Black;
+}
+.dxpnlControl_Office2010Blue .accountHeader h2
+{
+    color: #498BC2;
+}
+
+
+/* Office2010Silver */
+.dxpnlControl_Office2010Silver.dxpnl-edge.t.headerPane,
+.dxpnlControl_Office2010Silver.dxpnl-edge.b.footerPane,
+.dxpnlControl_Office2010Silver .footerMenu li
+{
+    background-color: #A9ACB4;
+    color: white;
+}
+.dxpnlControl_Office2010Silver .accountHeader h2
+{
+    color: #3B3B3B;
+}
+.dxpnlControl_Office2010Silver .loginControl a,
+.dxpnlControl_Office2010Silver .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+
+/* PlasticBlue */
+.dxpnlControl_PlasticBlue.dxpnl-edge.t.headerPane,
+.dxpnlControl_PlasticBlue.dxpnl-edge.b.footerPane,
+.dxpnlControl_PlasticBlue .footerMenu li
+{
+    background-color :#3C4F8F;
+    color: white;
+}
+.dxpnlControl_PlasticBlue.dxpnl-edge.t.headerPane
+{
+    background-image: url('images/PlasticBlueHeader.jpg');
+}
+.dxpnlControl_PlasticBlue .accountHeader h2
+{
+    color: #5A83D0;
+}
+.dxpnlControl_PlasticBlue .accountHeader p
+{
+    color: #575757;
+}
+.dxpnlControl_PlasticBlue .loginControl a,
+.dxpnlControl_PlasticBlue .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+/* RedWine */
+.dxpnlControl_RedWine.dxpnl-edge.t.headerPane,
+.dxpnlControl_RedWine.dxpnl-edge.b.footerPane,
+.dxpnlControl_RedWine .footerMenu li
+{
+    background-color: #78002B;
+    color: white;
+}
+.dxpnlControl_RedWine.dxpnl-edge.t.headerPane
+{
+    background-image: url('images/RedWineHeader.jpg');
+    background-position: top right;
+}
+.dxpnlControl_RedWine .footerMenu div 
+{
+    background: transparent none;
+}
+.dxpnlControl_RedWine .accountHeader h2
+{
+    color: #8A0A37;
+}
+.dxpnlControl_RedWine .loginControl a,
+.dxpnlControl_RedWine .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+
+/* SoftOrange */
+.dxpnlControl_SoftOrange.dxpnl-edge.t.headerPane,
+.dxpnlControl_SoftOrange.dxpnl-edge.b.footerPane,
+.dxpnlControl_SoftOrange .footerMenu li
+{
+    background-color: #F9F9F9 !important;
+    background-image: none !important;
+}
+.dxpnlControl_SoftOrange .templateTitle a,
+.dxpnlControl_SoftOrange .loginControl,
+.dxpnlControl_SoftOrange .loginControl a
+{
+    color: Black;
+}
+.dxpnlControl_SoftOrange .loginControl a 
+{
+    border-bottom-color: Black;
+}
+.dxpnlControl_SoftOrange .accountHeader h2
+{
+    color: Black;
+}
+.dxpnlControl_SoftOrange .accountHeader p
+{
+    color: #707070;
+}
+
+
+/* Youthful */
+.dxpnlControl_Youthful.dxpnl-edge.t.headerPane,
+.dxpnlControl_Youthful.dxpnl-edge.b.footerPane,
+.dxpnlControl_Youthful .footerMenu li
+{
+    background-color: #8AA150;
+    color: white !important;
+}
+.dxpnlControl_Youthful .accountHeader h2
+{
+    color: #80A70E;
+}
+.dxpnlControl_Youthful .loginControl a,
+.dxpnlControl_Youthful .templateTitle a
+{
+    color: White;
+    border-color: White;
+}
+
+/* Metropolis */
+.dxpnlControl_Metropolis.dxpnl-edge.t.headerPane,
+.dxpnlControl_Metropolis .footerMenu li
+{
+    background-color: White;
+    color: Black;
+}
+.dxpnlControl_Metropolis.rightPane
+{
+    width: 400px;
+}
+.dxpnlControl_Metropolis .accountHeader h2
+{
+    color: #3B3B3B;
+}
+.dxpnlControl_Metropolis .loginControl a,
+.dxpnlControl_Metropolis .templateTitle a
+{
+    color: Black;
+    border-color: Black;
+}
+.dxpnlControl_Metropolis .templateTitle a 
+{
+    font-size: 28px;
+}
+
+/* MetropolisBlue */
+.dxpnlControl_MetropolisBlue.dxpnl-edge.t.headerPane,
+.dxpnlControl_MetropolisBlue .footerMenu li
+{
+    background-color: White;
+    color: Black;
+}
+.dxpnlControl_MetropolisBlue.rightPane
+{
+    width: 400px;
+}
+.dxpnlControl_MetropolisBlue .accountHeader h2
+{
+    color: #3B3B3B;
+}
+.dxpnlControl_MetropolisBlue .loginControl a,
+.dxpnlControl_MetropolisBlue .templateTitle a
+{
+    color: Black;
+    border-color: Black;
+}
+.dxpnlControl_MetropolisBlue .templateTitle a 
+{
+    font-size: 28px;
+}
+
+.MenuLeft ul li:hover span,.MenuTop ul li:hover span{
+    /*color:#FFF!important;*/
+}
+
+/* Moderno */
+.dxpnlControl_Moderno.dxpnl-edge.t.headerPane,
+.dxpnlControl_Moderno .footerMenu li
+{
+    background-color: #43abf7;/*#ea1f30;*/
+    color: Black;
+}
+.dxpnlControl_Moderno.headerPane .headerMenu .dxm-main
+{
+    
+}
+.dxpnlControl_Moderno.leftPane
+{
+    padding: 0px!important;
+}
+.dxpnlControl_Moderno.leftPane .dxnbLite_Moderno .dxnb-gr:first-child .dxnb-header,
+.dxpnlControl_Moderno.leftPane .dxnbLite_Moderno .dxnb-gr:first-child .dxnb-headerCollapsed
+{
+    border-top: 0px;    
+}
+.dxpnlControl_Moderno.rightPane
+{
+    width: 350px;
+}
+.dxpnlControl_Moderno .accountHeader h2
+{
+    color: #3B3B3B;
+}
+.dxpnlControl_Moderno .loginControl a,
+.dxpnlControl_Moderno .templateTitle a
+{
+    font-size: 14px;
+    color: #FFF;
+    border-color: #0072c6;
+}
+.dxpnlControl_Moderno .templateTitle a 
+{
+    font-size: 25px;
+}
+.dxpnlControl_Moderno .contentPane .dxgvControl_Moderno .dxgvTable_Moderno
+{
+    /*border: 0!important;*/
+}
+.dxpnlControl_Moderno .contentPane .dxgvControl_Moderno .dxgvHeader_Moderno
+{
+    /*border-top: 0!important;*/
+}
+.dxpnlControl_Moderno.dxpnl-edge.b.footerPane 
+{
+    background: #EDEDED;
+}
+
+/* Mulberry */
+.dxpnlControl_Mulberry .footerMenu li
+{
+    background-color: White;
+    color: Black;
+}
+.dxpnlControl_Mulberry .accountHeader h2
+{
+    color: #3B3B3B;
+}
+.dxpnlControl_Mulberry .loginControl a,
+.dxpnlControl_Mulberry .templateTitle a
+{
+    color: #BF4E6A;
+    border-color: #BF4E6A;
+    font-size: 14px;
+}
+.dxpnlControl_Mulberry .templateTitle a 
+{
+    font-size: 28px;
+}
+.dxpnlControl_Mulberry.dxpnl-edge.t.headerPane,
+.dxpnlControl_Mulberry.dxpnl-edge.b.footerPane
+{
+    background: #F1F2F5;
+}
+.dxpnlControl_Mulberry .contentPane .dxgvControl_Mulberry .dxgvTable_Mulberry
+{
+    border: 0!important;
+}
+.dxpnlControl_Mulberry .contentPane .dxgvControl_Mulberry .dxgvHeader_Mulberry
+{
+    border-top: 0!important;
+}
+.clear{
+    clear:both;
+}
+#pcScrolling_CC{
+    padding:0px;
+    border-top:0px;
+    border-bottom:0px;
+}
+#pcScrolling_TC .dxtc-spacer, #pcScrolling_WC .dxtc-sbIndent, #pcScrolling_WC .dxtc-leftIndent , #pcScrolling_WC .dxtc-rightIndent
+{    
+    background-color:#43abf7;/*#ea1f30;*/
+    border:none;
+    border-bottom:0px solid #FFF!important;
+    height:1px!important;
+}
+#pcScrolling_TC .dxtc-sbSpacer, #pcScrolling_WC .dxtc-sbIndent, #pcScrolling_WC .dxtc-leftIndent, #pcScrolling_WC .dxtc-rightIndent
+{
+    border-bottom:0px solid #FFF!important;
+}
+
+#pcScrolling_TC .scrolling_Tab, #pcScrolling_WC .dxtc-sbIndent, #pcScrolling_WC .dxtc-leftIndent, #pcScrolling_WC .dxtc-rightIndent
+{
+    border-bottom:0px solid #FFF!important;    
+}
+#pcScrolling_TC .scrolling_Tab a.dxtc-link
+{
+    background-color:#43abf7;/*#ea1f30;*/
+    color: #FFF;
+    border:0px solid #43abf7;/*#ea1f30;*/
+}
+.MenuLeft li.dxm-item{
+    background-color:#eeeeee!important;
+}
+.TitleHeader span{
+    font-size:15px!important;
+    text-transform:uppercase;
+}
+.contentbtnClick a{
+    text-transform:uppercase;
+}
+#pcScrolling_TC .dxtc-activeTab a.dxtc-link
+{
+    background-color:rgb(238, 238, 238);
+    color: #000;
+    background:#f1f2f6 url('./Images/DXR.png') repeat-x left top;
+}
+.notification{
+
+}
+.contentActionTitle{
+    background-color: #fff;
+    padding: 5px;
+    /*position: fixed;*/
+    /*width: 100%;*/
+    min-width:700px;
+    border-bottom:1px solid #eee;
+    z-index:9999;
+    height:61px;
+}
+#LblFormTitle{
+    font-size:11pt;
+}
+.contentActionTitle .dxbButton_Moderno{
+    padding:5px 5px;    
+    margin-left:15px;
+    text-decoration:none;
+}
+.TitleHeader{
+    padding-bottom: 0px;
+    padding-left: 10px;
+    width: 75%;
+}
+
+.TitleHeader .dxeBase_Moderno
+{
+    font-size:14pt;
+}
+.LabelSearch{
+    padding:0px;
+    padding-left:5px;
+    padding-top:5px;
+}
+.LabelSearch .dxeBase_Moderno
+{
+     font-size:14pt;
+}
+a.dxbButton_DevEx:hover{
+    background-color:#edeff7;
+}
+.contentPane{    
+    padding-top:5px;
+    padding-left:5px;
+    padding-right:5px;
+    background-color:#eeeeee;
+    border: 1px solid #bdbdbd;
+    border-left: none;
+    border-bottom:none;
+    /*min-width:900px;*/
+}
+table.dxeReadOnly_DevEx{
+    border:none!important;
+    border-bottom:1px solid RGBA(0,0,0,0.12)!important;
+    background-color:transparent!important;
+}
+
+
+table.dxeReadOnly_DevEx div
+{
+    display:none!important;
+}
+
+table.dxeReadOnly_DevEx div
+{
+    display:none!important;
+}
+
+table.dxeReadOnly_DevEx input
+,table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx
+,table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx
+,table.dxeReadOnly_DevEx dxeButtonEditButton_DevEx
+  {
+     background-color:transparent!important;
+}
+table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx
+,table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx
+,table.dxeReadOnly_DevEx .dxeButtonEditButton_DevEx
+{
+    display:none!important;
+}
+table.dxeReadOnly_DevEx .dxeSpinIncButton_DevEx img,
+table.dxeReadOnly_DevEx .dxeSpinDecButton_DevEx img,
+table.dxeReadOnly_DevEx .dxeButtonEditButton_DevEx img
+{
+     visibility:hidden;
+}
+table.dxeReadOnly_DevEx input{
+}
+.ContentSearch{    
+    padding:5px;
+    border-bottom:1px solid #888;
+    height:61px;
+    background-color:#eee;
+}
+#choSearchDataAll_I
+{
+    padding:0px;
+}
+.btSearchLeft{
+    float:right;
+    margin-top:-35px
+}
+.btSearchLeft .dxbButton_Moderno {
+    padding:5px 8px;
+}
+.ActionFormByID  {
+    float:right;    
+}
+.dxeButtonEdit_Moderno td.dxic
+{
+    padding:0px!important;
+}
+/*-------------------Login--------------*/
+
+.login_bg{
+   
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    transition: opacity 1s ease 0s;
+    width: 100%;
+    z-index: 0;
+    background-size: cover; 
+    background-repeat:no-repeat;
+    background-position: center;     
+}
+
+.login_panel
+{
+    background: #ffffff none repeat scroll 0 0; 
+    height: 100%;
+    min-height: 700px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0px 10px;
+    position: absolute;
+    right: 0;        
+    z-index: 1;
+}
+.LogInUserName input{
+    width:100%;
+}
+#Password_I,#UserName_I,#Password_I_CLND,#RePassword_I{
+ 
+    
+}
+.usrLogin,.pwdLogin{
+    font-size:12pt;    
+}
+#BtnLogin {
+    float: left;
+    color: white;
+    padding: 5px;
+    width: 334px;
+    background-color: #00a94f;
+    border: solid 1px #00a94f;
+    border-radius: 5px;
+    background-image: none;
+    font-size: 16px;
+    /*margin-right:16px;*/
+    margin-left: 1px;
+}
+#BtnLogin:hover{
+      background-color: #5A83D0;
+}
+.azure-button {
+    background-color: transparent !important; /* Remove background color */
+    border: none; /* Remove border */
+    padding: 0; /* Remove padding */
+    width: 32px !important;
+    height: 32px !important;
+}
+#registrationForm .dxflGroupCell_Moderno{
+    padding:0px;
+}
+.login_logo {
+    overflow: hidden;
+    padding-bottom: 9vh;
+    padding-left: 2px;
+    padding-top: 13vh;
+}
+
+.login_copyright{
+    bottom: 0;
+    padding-bottom: 80px;
+    padding-right: 40px;
+    position: absolute;
+}
+.login_links {
+    padding: 5px 0;
+}
+table tr td.dxgvHeader_Moderno{
+    border-top:1px solid #bdbdbd!important;
+}
+.dxgvTable_Moderno caption{
+    text-align:left!important;
+    color:#808080;
+    border:1px solid #d1d1d1;
+    border-bottom:none;
+
+}
+.dxflGroupCell_Moderno{
+    padding:0px!important;
+}
+.dxflGroup_Moderno
+{
+    padding:0px!important;
+}
+.dxgvDetailRow_Moderno td.dxgv, .dxgvPreviewRow_Moderno td.dxgv, .dxgvEmptyDataRow_Moderno td.dxgv
+{
+    border-bottom:1px solid #d1d1d1!important;
+}
+.MenuTop{
+    margin-top:-5px;    
+}
+#pcScrolling{
+    margin-top: -58px;
+    padding-left: 15px;  
+}
+#pcScrolling_WC{
+     padding-left:100px;
+     margin-top:-1px;
+     height:39px!important;
+}
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.col-md-12 {
+    width: 100%;
+}
+.alert {
+  padding: 15px;
+  margin-bottom: 17px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+.alert span{  
+  font-size:12pt;
+  font-weight:bold;
+  color:#fff!important
+}
+.alert a{  
+  font-size:12pt;
+  color:#fff!important
+}
+.alert h4 {
+  margin-top: 0;
+  color: inherit;
+}
+.alert .alert-link {
+  font-weight: bold;
+}
+.alert > p,
+.alert > ul {
+  margin-bottom: 0;
+}
+.alert > p + p {
+  margin-top: 5px;
+}
+.alert-dismissable,
+.alert-dismissible {
+  padding-right: 35px;
+}
+.alert-dismissable .close,
+.alert-dismissible .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  color: inherit;
+}
+.alert-success {
+  background-color: #bdedbc;
+  border-color: #b4e8a8;
+  color: #045702;
+}
+.alert-success hr {
+  border-top-color: #a2e294;
+}
+.alert-success .alert-link {
+  color: #022501;
+}
+.alert-info {
+  background-color: #c5e8f7;
+  border-color: #a6e8f3;
+  color: #2c7ea1;
+}
+.alert-info hr {
+  border-top-color: #8fe3f0;
+}
+.alert-info .alert-link {
+  color: #215f79;
+}
+.alert-warning {
+  background-color: #ffefa4;
+  border-color: #ffd78a;
+  color: #574802;
+}
+.alert-warning hr {
+  border-top-color: #ffce71;
+}
+.alert-warning .alert-link {
+  color: #251f01;
+}
+.alert-danger {
+  background-color: #ffc9c9;
+  border-color: #ffafbd;
+  color: #ac1818;
+}
+.alert-danger hr {
+  border-top-color: #ff96a7;
+}
+.alert-danger .alert-link {
+  color: #7f1212;
+}
+table tr td.dxgvInlineEditCell_Office365
+{
+    padding:0px!important;
+}
+
+
+.form .dxm-horizontal.dxm-autoWidth > ul, 
+.form .dxm-horizontal.dxm-autoWidth > ul > li, 
+.form .dxm-horizontal.dxm-noWrap > ul > li
+{
+    background-color: #E5E5E5;
+    color:#494949;
+    font-weight: bold;
+    
+}
+.image-item a{
+    line-height:0px!important;
+}
+.dxflCLLSys .dxflCaptionCell_Office365, *[dir="rtl"].dxflFormLayout_Office365 .dxflCLRSys .dxflCaptionCell_Office365
+{
+    padding-left:0px!important;
+    padding-right:0px!important;
+}
+.dxpc-shadow .dxbButton_Office365.dxbTSys
+{
+    width:66px!important;
+}
+.dxflItem_Office365{
+    padding:0px;
+}
+.dxeEditArea_Office365.dxeDisabled_Office365 {
+    color: #666;
+}

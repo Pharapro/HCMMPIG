@@ -1,0 +1,51 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+@model   Humica.Logic.HRS.IClsRCMSetting
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("AdvertiserType")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemAdvType", Model.ListAdvType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Job Description")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemJD", Model.ListJD);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Advertisement")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemAds", Model.ListAds);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Languages")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemLanguage", Model.ListLanguage);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Questionnaire")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemQuest", Model.ListQuestionnaire);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Reference Questionnaire")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemRefQuest", Model.ListSRefQues);
+        });
+
+    }).GetHtml()
+
+

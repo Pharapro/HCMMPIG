@@ -1,0 +1,191 @@
+﻿@model Humica.Training.TrainingProcessObject
+<script type="text/javascript">
+    var selectedID = "";
+    var selectedIDs = "";
+    var selectedID_ = "";
+    var selectedIDs_ = "";
+    var ss;
+    $(document).ready(function (s, e) {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);
+        });
+        $('#_btnImport').click(function () {
+           window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        })
+
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);
+        });
+        $('#_btnNewAction').hide();
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);
+        })
+        $('#pageToolbar_DXI1_').css({
+            "transform": "translateX(40px)"
+        });
+        $('#pageToolbar_DXI2_').css({
+            "transform": "translateX(50px)"
+        });
+        $('#pageToolbar_DXI3_').css({
+            "transform": "translateX(60px)"
+        });
+        $('#pageToolbar_DXI4_').css({
+            "transform":"translateX(-318px)"
+        });
+    });
+    function _clickMenuAction(s, e)
+    {
+        if (e.item.name == "_btnAtt") {
+            ss = 7;
+            PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'ID;TrainNo;CalendarID;LineItem', OnGetRowValues);
+        };
+        if (e.item.name == "_btnABS") {
+            ss = 8;
+            PopUpreason.Show();
+            //PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);
+        };
+    }
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ID;TrainNo;CalendarID;LineItem", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedID = "";
+        selectedIDs = "";
+        selectedIDs_="";
+        selectedID_ ="";
+        for (var index = 0; index < values.length; index++) {
+            selectedID += values[index][0] + ";";
+            selectedIDs += values[index][1] + ";";
+            selectedIDs_ += values[index][2] + ";";
+            selectedID_ += values[index][3] + ";";
+        }
+    }
+    function OnGetRowValues(values) {
+        if (ss != 7)
+        {
+            selectedID += values[0];
+            selectedIDs = values[1];
+            selectedIDs_ = values[2];
+            selectedID_ = values[3];
+        }
+        if (ss == 1) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?TrainNo=" + selectedIDs + "&&CalendarID=" + selectedIDs_ + "&&LineItem=" + selectedID_;
+        }
+        if (ss == 2) {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?TrainNo=" + selectedIDs + "&&CalendarID=" + selectedIDs_ + "&&LineItem=" + selectedID_;
+        }
+        if (ss == 4) {
+
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 7) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REL_ATT", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        if (ss == 6) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("INVITE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+
+    }
+    function tabClickCommand1(s, e) {
+        index = s.GetActiveTab().index;
+        if (index == 0) {
+            ID = 0;
+            $('#_btnDeleteAction').show();
+            $('#_bthEditAction').show();
+            $('#_btnImageView').show();
+            $('#_btnDeleteAction').show();
+            $('#pageToolbar_DXI4_').hide();
+            $('#pageToolbar_DXI5_').hide();
+            $('#_btnDeleteAction').css({
+                "transform": "translateX(-50px)"
+            });
+            $('#_bthEditAction').css({
+                "transform": "translateX(-50px)"
+            });
+            $('#_btnImageView').css({
+                "transform": "translateX(-50px)"
+            });
+        }
+        else {
+            ID = 1;
+            $('#_btnDeleteAction').hide();
+            $('#_bthEditAction').hide();
+            $('#_btnImageView').hide();
+            $('#_btnDeleteAction').hide();
+            $('#pageToolbar_DXI4_').show();
+            $('#pageToolbar_DXI5_').hide();
+            $('#pageToolbar_DXI4_').css({
+                "transform": "translateX(-320px)"
+            });
+        }
+    }
+
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+
+            if (ss == 4) {
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?TrainNo=" + selectedIDs + "&&CalendarID=" + selectedIDs_ + "&&LineItem=" + selectedID_;
+            }
+            if (ss == 7) {
+                /*PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);*/
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Attendence?ID=" + selectedID + "&&TrainNo=" + selectedIDs + "&&CalendarID=" + selectedIDs_ + "&&LineItem=" + selectedID_;
+            }
+            if (ss == 8) {
+                /*PartialTrainee.GetRowValues(PartialTrainee.GetFocusedRowIndex(), 'TrainNo;CalendarID;LineItem', OnGetRowValues);*/
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Attendence?ID=" + selectedID + "&&TrainNo=" + selectedIDs + "&&CalendarID=" + selectedIDs_ + "&&LineItem=" + selectedID_ + "&Remark=" + txtRemark.GetValue();
+                PopUpreason.hide();
+            }
+        }
+    }
+
+</script>
+@*@Html.Partial("GridTrainingAttendance", Model.TrainingAttendanceModels)*@
+@{
+    if (Model.ListTrainee != null)
+    {
+        if (Model.ListTrainee.Count > 0)
+        {
+            Html.DevExpress().PageControl(
+            settings =>
+            {
+                settings.Name = "pcScrollingMaterial1";
+                settings.Width = Unit.Percentage(100);
+                settings.ClientSideEvents.ActiveTabChanged = "tabClickCommand1";
+                settings.ClientSideEvents.Init = "tabClickCommand1";
+
+                settings.EnableTabScrolling = true;
+                settings.TabAlign = TabAlign.Justify;
+
+                settings.Styles.Tab.CssClass = "scrolling_Tab";
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "List")).SetContent(() =>
+                   {
+                       //Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultView, Model.ListHeader);
+                       Html.RenderPartial("PartialList", Model.ListHeader);
+
+                   });
+                settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "WaitingList")).SetContent(() =>
+                   {
+                       Html.RenderPartial("PartialTrainee", Model.ListTrainee);
+
+                   });
+            }).Render();
+        }
+        else
+        {
+            Html.RenderPartial("PartialList", Model.ListHeader);
+        }
+    }
+    else
+    {
+        Html.RenderPartial("PartialList", Model.ListHeader);
+    }
+}@Html.Partial("PopUpreason")

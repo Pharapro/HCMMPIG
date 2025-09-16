@@ -1,0 +1,14 @@
+<h3 class="section-caption contents-caption"><span id="titleModule"></span></h3>
+
+<div id="menuLeftId">
+    @{
+        int mn_select = 7051;
+        string screenID = "";
+        var objSelect = new Humica.EF.Models.MenuIDAction(mn_select, screenID);
+        if (Session[Humica.EF.Models.SY.SYConstant.MENU_HEADER_SELECTED] != null)
+        {
+            objSelect = (Humica.EF.Models.MenuIDAction)Session[Humica.EF.Models.SY.SYConstant.MENU_HEADER_SELECTED];
+        }
+        Html.RenderPartial("LeftPanelPartial", objSelect);
+    }    
+</div>

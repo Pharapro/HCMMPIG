@@ -1,0 +1,29 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#_btnCopy').click(function () {
+            ss = 2;
+            PopYear.Show();
+            var FYear = new Date().getFullYear();
+            var TYear = new Date().getFullYear();
+            txtFromYear.SetValue(FYear);
+            txtToYear.SetValue(TYear);
+        });
+    });
+        function _clickConfirm(s, e) {
+            if (s.GetText() == "Save") {
+                if (ss == 2) {
+                          window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "/HRM/EmployeeInfo/HRHeadCount/Copy?FromYear=" + txtFromYear.GetValue() + "&ToYear=" + txtToYear.GetValue();
+                }
+            }
+        }
+</script>
+
+@model Humica.Logic.HR.HRHeadCountObject
+
+@Html.Partial("Filter", Model)
+
+@Html.Partial("GridItems", Model)
+
+@Html.Partial("PopYear", Model)
+

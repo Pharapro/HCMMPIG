@@ -1,0 +1,27 @@
+﻿@model Humica.Core.FT.FTFilterReport
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function (e) {
+            e.preventDefault(); // Prevent default form submission
+            if (validateBranchSelection(checkComboBoxBranch)) {
+                $('form').submit(); // Submit the form if validation passes
+            } else {
+                // Show alert and redirect after user clicks OK
+                window.location.href = '@Url.Action("Index", "RPTDeclareIn")'; // Replace ControllerName with your actual controller
+            }
+        });
+    });
+    function validateBranchSelection(comboBox) {
+        var value = comboBox.GetValue();
+        if (value === null || value === "") {
+            alert("Please select a branch. The selection cannot be empty.");
+            return false;
+        }
+        return true;
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js"></script>
+@Html.Partial("FREmpoyeeReport", Model)
+
+

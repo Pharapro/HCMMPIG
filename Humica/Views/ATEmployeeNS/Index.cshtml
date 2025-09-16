@@ -1,0 +1,63 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+    });
+    function _clickMenuAction(s, e) {
+        if (e.item.name == "_btnTransferOT") {
+            ss = 4;
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "TransferOT?TranNo=" + selectedIDs;
+        }
+    }
+
+    function SelectEmp(s,e)
+    {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+    }
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2),
+            Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("TranNo", GetSelectedFieldValuesCallback);
+
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = "";
+        ssFrom = "";
+        for (var index = 0; index < values.length; index++) {
+            selectedIDs += values[index] + ";";
+            ssFrom = selectedIDs;
+        }
+        if (selectedIDs.length > 0) {
+            selectedIDs = selectedIDs.substring(0, selectedIDs.length - 1);
+        }
+    }
+</script>
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+
+@model Humica.Attendance.IClsAtEmpOT
+
+
+<div class="fitler-doc">
+    @Html.Partial("FTFilterEmployeeGen", Model)
+</div>
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Summary")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems", Model.ListEmpOTNS);
+        });
+    }).GetHtml()

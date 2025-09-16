@@ -1,0 +1,40 @@
+﻿
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PopTheTRMessage";
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = Unit.Pixel(150);
+    settings.Width = Unit.Pixel(420);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton2";
+    settings.HeaderText = ViewBag.Title;
+    settings.Modal = true;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='align:center'><img src='~/Content/Images/question-mark.png'/> </div>");
+
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div class='question_btn'>");
+
+        Html.DevExpress().Button(s =>
+        {
+            s.Name = "_BTOK12";
+            s.Text = "OK";
+
+            s.ClientSideEvents.Click = "function(s, e){ PopTheTRMessage.Hide();  }";
+
+        }).Render();
+
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='clear'></div>");
+    });
+}).GetHtml()

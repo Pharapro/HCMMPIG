@@ -1,0 +1,114 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+
+        settings.Name = "gridViewStructure";
+        settings.KeyFieldName = "ID";
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+        settings.CallbackRouteValues = new { Controller = "HRPositionStructure", Action = "GridviewPositionStructure" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRPositionStructure", Action = "CreatePositionStructure" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRPositionStructure", Action = "EditPositionStructure" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRPositionStructure", Action = "DeletePositionStructure" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+            column.FieldName = "ID";
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 400;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Code");
+            column.FieldName = "Code";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["POSITION_SELECT"];
+            textProperties.TextFormatString = "{1}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 100);
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+            textProperties.ValueType = typeof(string);
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 400;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ReportingID");
+            column.FieldName = "ReportingID";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            column.EditorProperties().ComboBox(cboProperties =>
+            {
+                cboProperties.Width = Unit.Percentage(100);
+                cboProperties.CallbackRouteValues = new { Controller = "HRPositionStructure", Action = "ParentItem" };
+                cboProperties.ValueField = "ID";
+                cboProperties.TextField = "Description";
+                cboProperties.TextFormatString = "{0}:{2}";
+                cboProperties.Columns.Add("ID", Humica.EF.Models.SY.SYSettings.getLabel("ID"), 80);
+                cboProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 150);
+                cboProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 250);
+                cboProperties.BindList(Humica.Logic.HRS.MDCompanyTree.GetParentPosition());
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 100;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BaseHOD");
+            column.FieldName = "BaseHOD";
+            column.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var textProperties = column.PropertiesEdit as TextBoxProperties;
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.CustomJSProperties = (sender, e) =>
+        {
+            e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+        };
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+
+            if (e.Column.FieldName == "ID")
+            {
+                e.Editor.ReadOnly = true;
+                e.Editor.Value = 0;
+            }
+        };
+
+
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

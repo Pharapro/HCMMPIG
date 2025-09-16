@@ -1,0 +1,246 @@
+<div style="position: fixed;top: 0px;width: 100%; z-index: 1900;">
+    @{
+        Humica.Models.SY.SYActionObject src = new Humica.Models.SY.SYActionObject();
+        Humica.EF.MD.SYScreenAction objSrc = new Humica.EF.MD.SYScreenAction();
+
+        var isHasAction = false;
+
+        if (!(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID] == null || ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME] == null))
+        {
+            var ListAction = new Humica.Models.SY.SYActionObject();
+            string title = ListAction.getTitle(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME].ToString());
+            ViewBag.Title = title;
+            ViewBag.Header = title;
+        }
+        else
+        {
+            ViewBag.Title = "Home Page";
+            ViewBag.Header = "Home Page";
+        }
+    }
+
+    @Html.DevExpress().Menu(menuSettings =>
+{
+    menuSettings.Name = "pageToolbar";
+
+    menuSettings.ItemAutoWidth = false;
+    menuSettings.AllowSelectItem = false;
+    menuSettings.ApplyItemStyleToTemplates = true;
+
+    menuSettings.SettingsAdaptivity.Enabled = true;
+    menuSettings.SettingsAdaptivity.EnableAutoHideRootItems = true;
+    menuSettings.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+    menuSettings.SettingsAdaptivity.CollapseRootItemsToIconsAtWindowInnerWidth = 600;
+
+    menuSettings.Width = Unit.Percentage(100);
+    menuSettings.ControlStyle.SeparatorWidth = Unit.Pixel(0);
+    menuSettings.ControlStyle.CssClass = "page-toolbar";
+
+    menuSettings.Styles.Item.CssClass = "item";
+    menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+
+    menuSettings.Images.Item.Width = Unit.Pixel(16);
+    menuSettings.Images.Item.Height = Unit.Pixel(16);
+
+    menuSettings.Items.Add(item =>
+    {
+        item.Enabled = false;
+        item.Alignment = MenuItemAlignment.Right;
+        item.SetTemplateContent(template => ViewContext.Writer.Write("<h1 id='_header_title'>" + ViewBag.Title + "</h1>"));
+    });
+
+    var ListAction = new Humica.Models.SY.SYActionObject();
+
+
+    string templateID = "";
+
+    if (!(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID] == null || ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME] == null))
+    {
+
+        var listDisplay = ListAction.getListActionTemplate(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString()
+                                                          , ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME].ToString());
+        if (listDisplay.Count > 0)
+        {
+            int cc = 0;
+            foreach (var read in listDisplay)
+            {
+                var ListTemplate = ListAction.getObjectTemplateByTemplateIdWithoutGroup(read.ActionTemplateID,
+                    ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString());
+                templateID = read.ActionTemplateID;
+                if (ListTemplate.Count > 0)
+                {
+                    templateID = read.ActionTemplateID;
+                    var condition = true;
+                    foreach (var objTemplate in ListTemplate)
+                    {
+                        if (ViewData[Humica.EF.Models.SY.SYConstant.ACTION_CONDITION] != null)
+                        {
+                            if (objTemplate.ConditionValue != ViewData[Humica.EF.Models.SY.SYConstant.ACTION_CONDITION].ToString())
+                            {
+                                condition = false;
+                            }
+                        }
+                        if (condition == true)
+                        {
+                            menuSettings.ClientSideEvents.ItemClick = "ActionItemClick";
+
+                            menuSettings.Items.Add(item =>
+                            {
+                                item.ClientEnabled = true;
+
+                                item.Alignment = MenuItemAlignment.Left;
+                                item.AdaptivePriority = 2;
+
+                                item.SetTemplateContent(template =>
+
+
+                                       Html.DevExpress().Button(
+                                         settings =>
+                                         {
+                                             settings.Name = objTemplate.ActionId;
+                                             settings.ToolTip = objTemplate.ToolTip;
+                                             settings.RenderMode = ListAction.getButtonMode(objTemplate.LinkMode);
+                                             settings.Text = Humica.EF.Models.SY.SYSettings.getLabelAction(objTemplate.Text.ToUpper());
+                                             settings.ControlStyle.Font.Size = 12;
+                                             settings.ControlStyle.Font.Bold = true;
+                                             settings.Images.Image.Url = Humica.EF.Models.SY.SYUrl.getBaseUrl() + ListAction.getIconObjectIconURL(objTemplate.IconID);
+                                             settings.Images.Image.Width = Unit.Pixel(16);
+                                             settings.Images.Image.Height = Unit.Pixel(16);
+                                             settings.ControlStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml("#494949");
+                                             if (objTemplate.UseSubmitBehavior.HasValue)
+                                             {
+                                                 if (objTemplate.UseSubmitBehavior == true)
+                                                 {
+                                                     settings.UseSubmitBehavior = objTemplate.UseSubmitBehavior.Value;
+                                                 }
+                                             }
+                                         }).GetHtml()
+                                  );
+                            });
+
+                        }
+                    }
+
+                }
+            }
+        }
+        //action menu
+        //action menu
+
+
+        if (!(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID] == null || ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME] == null))
+        {
+            var objTemplate = ListAction.getObjectTemplateByTemplateIdWithGroup(templateID, ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString());
+
+            if (objTemplate.Count > 0)
+            {
+                foreach (var read in objTemplate.GroupBy(w => w.GroupAction))
+                {
+                    menuSettings.ClientSideEvents.ItemClick = "ActionItemClick";
+                    menuSettings.Items.Add(settings =>
+                    {
+                        settings.Text = Humica.EF.Models.SY.SYSettings.getLabelAction(read.Key);
+                        settings.ItemStyle.Font.Size = 12;
+                        settings.ItemStyle.Font.Bold = true;
+                        settings.Image.Url = Humica.EF.Models.SY.SYUrl.getBaseUrl() + "/Content/Images/menu.svg";
+                        settings.Image.Width = Unit.Pixel(16);
+                        settings.Image.Height = Unit.Pixel(16);
+                        foreach (var subitem in objTemplate)
+                        {
+                            if (subitem.GroupAction == read.Key)
+                            {
+
+                                settings.Items.Add(si =>
+                                {
+                                    si.Name = subitem.ActionId;
+                                    si.Text = Humica.EF.Models.SY.SYSettings.getLabelAction(subitem.Text.ToUpper());
+                                    si.ItemStyle.Border.BorderWidth = 0;
+                                    si.ItemStyle.Font.Size = 12;
+                                    si.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+
+                                });
+
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        //View detail navigation page
+        if (ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME].ToString() == "Details")
+        {
+            //Html.RenderPartial("ActionDetails");
+        }
+
+        //favorite
+        if (ViewData[Humica.EF.Models.SY.SYConstant.ACTION_NAME].ToString() == "Index")
+        {
+            menuSettings.Items.Add(item =>
+            {
+                item.ClientEnabled = true;
+
+                item.Alignment = MenuItemAlignment.Left;
+                item.AdaptivePriority = 2;
+
+                item.SetTemplateContent(template =>
+
+                    Html.DevExpress().HyperLink(setting =>
+                    {
+                        setting.Name = "linkFavoriteList";
+                        setting.NavigateUrl = "javascript:void();";
+                        var isListF = Humica.EF.Models.SY.SYMenuObject.IsListFavorite(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString());
+                        if (isListF == true)
+                        {
+                            setting.Properties.ImageUrl = "~/Content/images/star_list_f.png";
+                        }
+                        else
+                        {
+                            setting.Properties.ImageUrl = "~/Content/images/star_list_p.png";
+                        }
+
+
+
+                        setting.Properties.ClientSideEvents.Click = "checkingFavoriteList";
+                        setting.ToolTip = "Favorite List";
+                        setting.Attributes.Add("screenid", ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString());
+                        setting.Attributes.Add("id", "linkFavoriteList");
+                    }).GetHtml()
+                        );
+
+            });
+        }
+    }
+
+
+}).GetHtml()
+
+    @Html.DevExpress().Panel(panelSettings =>
+    {
+        panelSettings.Name = "filterPanel";
+        panelSettings.Collapsible = true;
+        panelSettings.ControlStyle.CssClass = "filter-panel";
+
+        panelSettings.SettingsCollapsing.ExpandEffect = PanelExpandEffect.Slide;
+        panelSettings.SettingsCollapsing.AnimationType = AnimationType.None;
+        panelSettings.SettingsCollapsing.ExpandButton.Visible = false;
+
+        panelSettings.SetContent(() =>
+        {
+            Html.DevExpress().ButtonEdit(buttonEditSettings =>
+            {
+                buttonEditSettings.Name = "searchButtonEdit";
+                buttonEditSettings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
+                buttonEditSettings.Properties.Caption = "Search";
+                buttonEditSettings.Width = Unit.Percentage(100);
+            }).GetHtml();
+        });
+
+        //panelSettings.ClientSideEvents.Expanded = "onFilterPanelExpanded";
+        panelSettings.ClientSideEvents.Collapsed = "adjustPageControls";
+    }).GetHtml()
+
+</div>
+
+@Html.Partial("PopTheQuestion")
+@Html.Partial("PopTheMessage")
+@Html.Partial("PopTheLoading")

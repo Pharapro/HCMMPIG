@@ -1,0 +1,24 @@
+﻿﻿@model Humica.Core.FT.FTFilerPerformance
+<script type="text/javascript">
+    var checkDept;
+    $(document).ready(function () {
+        $("#_btnActionRun").click(function (e) {
+            e.preventDefault();
+            if (checkDept==true) {
+                $('form').submit();
+            } else {
+                alert("Please select a depertment. The selection cannot be empty.");
+                window.location.href = '@Url.Action("Index", "RPTKPIIndicator")';
+            }
+        });
+    });
+
+    function validateBranchSelection(comboBox) {
+        checkDept = true;
+    }
+</script>
+
+<script type="text/javascript" src="~/Content/ReportJS1.js">
+
+</script>
+@Html.Partial("EmpoyeeReport", Model)

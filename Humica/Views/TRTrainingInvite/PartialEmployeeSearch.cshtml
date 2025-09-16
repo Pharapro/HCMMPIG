@@ -1,0 +1,57 @@
+﻿@model Humica.Training.TrainingInvitationObject
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "PartialEmployeeSearch";
+    settings.CallbackRouteValues = new { Controller = "TRTrainingInvite", Action = "PartialEmployeeSearch" };
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.EnableHotTrack = true;
+    settings.Height = System.Web.UI.WebControls.Unit.Pixel(500);
+    settings.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "btnShow";
+    settings.HeaderText = "Employee Selection";
+    settings.EnableClientSideAPI = true;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.CloseOnEscape = true;
+    settings.PopupAnimationType = AnimationType.Slide;
+    settings.Modal = true;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("gvemployeeselector");
+    });
+    settings.SetFooterTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"overflow: hidden\"><div style=\"margin: 10px; float: right;\">");
+        ButtonSettings btnLocationsSave = new ButtonSettings()
+        {
+            Name = "btnSelect",
+            Text = "Ok"
+        };
+        //btnLocationsSave.ClientSideEvents.Click = "function(s, e) { alert('save'); }";
+        //btnLocationsSave.ClientSideEvents.Click = "Save_Click";
+        new ButtonExtension(btnLocationsSave).Render();
+        ButtonSettings btnLocationsCancel = new ButtonSettings()
+        {
+            Name = "btnClear",
+            Text = "Clear"
+        };
+        //btnLocationsCancel.ClientSideEvents.Click = "function(s, e) { alert('Cancel');; }";
+        //btnLocationsCancel.ClientSideEvents.Click = "clearSelectedPosition";
+        new ButtonExtension(btnLocationsCancel).Render();
+
+        ViewContext.Writer.Write("</div></div>");
+    });
+
+}).GetHtml()
+<script>
+    $(document).ready(function () {
+        $('#btnSelect').css({ "transform":"translateX(-5px)"});
+    })
+</script>
+
+
+
+

@@ -1,0 +1,136 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridEducationDetail";
+        settings.KeyFieldName = "TranNo";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.CallbackRouteValues = new { Controller = "HRStaffProfile", Action = "GridEducationDetail" };
+
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Education Type");
+            column.Width = 150;
+            column.FieldName = "EduType";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var textProperties = column.PropertiesEdit as ComboBoxProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            textProperties.DataSource = ViewData["Education_LIST"];
+            textProperties.TextField = "Description";
+            textProperties.TextFormatString = "{1}";
+            textProperties.ValueField = "Code";
+            textProperties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+            textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"), 200);
+            textProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 110;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Date");
+            column.FieldName = "StartDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 110;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("End Date");
+            column.FieldName = "EndDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            var textProperties = column.PropertiesEdit as DateEditProperties;
+            textProperties.ValidationSettings.Display = Display.None;
+            column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Education Institution");
+            column.Width = 250;
+            column.FieldName = "EdcCenter";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Major");
+            column.Width = 200;
+            column.FieldName = "Major";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Status");
+            column.Width = 200;
+            column.FieldName = "Result";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Remark");
+            column.Width = 200;
+            column.FieldName = "Remark";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 400;
+            column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("AttachFile");
+            column.FieldName = "AttachFile";
+            column.SetDataItemTemplateContent(container =>
+            {
+                var attachment = Convert.ToString(DataBinder.Eval(container.DataItem, "AttachFile"));
+                if (!string.IsNullOrEmpty(attachment))
+                {
+                    string[] doc = attachment.Split(';');
+                    int i = 1;
+                    foreach (var r1 in doc)
+                    {
+                        if (!string.IsNullOrEmpty(r1))
+                        {
+                            Html.DevExpress().HyperLink(hyperlink =>
+                            {
+                                //hyperlink.Name = $"file_{key}_{i}";
+                                hyperlink.Properties.Text = System.IO.Path.GetFileName(r1);
+                                hyperlink.Properties.Target = "_BLANK";
+                                hyperlink.NavigateUrl = r1;
+                            }).Render();
+                            ViewContext.Writer.Write("<br />");
+                        }
+                        i++;
+                    }
+                }
+            });
+        });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.ShowHeaderFilterButton = true;
+
+        settings.SettingsPager.PageSize = 15;
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExportSelectedRowsOnly = true;
+
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.MaxWidth = 800;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.Always;
+        settings.SettingsPopup.EditForm.SettingsAdaptivity.VerticalAlign = PopupAdaptiveVerticalAlign.WindowCenter;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+    });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

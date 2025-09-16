@@ -1,0 +1,17 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+    $(document).ready(function () {
+
+        $('#_btnChange').click(function () {
+            ss = 1;
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Change?EmpCodeFrom=" + txtEmpCodeFrom.GetValue() + "&EmpCodeTo=" + txtEmpCodeTo.GetValue();
+        });
+    });
+
+</script>
+
+@model Humica.Logic.MD.MDChangeEmpCode
+
+@Html.Partial("ChangeCode", Model)
+

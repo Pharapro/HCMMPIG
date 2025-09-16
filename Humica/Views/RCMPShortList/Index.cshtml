@@ -1,0 +1,101 @@
+﻿<script type="text/javascript">
+    var ss;
+    var selectedIDs = "";
+
+    $(document).ready(function () {
+        console.log("Page loaded.");
+    });
+    function _clickMenuAction(s, e) {
+        if (!selectedIDs) {
+            alert("No applicants selected.");
+            return;
+        }
+        if (e.item.name == "_mnPass") {
+            ss = 1;
+            Gridview.GetRowValues(Gridview.GetFocusedRowIndex(), 'ApplicantID;ShortList', OnGetRowValues);
+        } else if (e.item.name == "_mnKeep") {
+            ss = 2;
+            Gridview.GetRowValues(Gridview.GetFocusedRowIndex(), 'ApplicantID;ShortList', OnGetRowValues);
+        } else if (e.item.name == "_mnFail") {
+            ss = 3;
+            Gridview.GetRowValues(Gridview.GetFocusedRowIndex(), 'ApplicantID;ShortList', OnGetRowValues);
+        } else if (e.item.name == "_mnReject") {
+            ss = 4;
+            Gridview.GetRowValues(Gridview.GetFocusedRowIndex(), 'ApplicantID;ShortList', OnGetRowValues);
+        }
+    }
+    function OnGetRowValues(values) {
+        selectedIDs = values[0];
+        status = values[1];
+        if (ss == 1) {
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()" || status === "KEEP") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("PASS_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 2) {
+           if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("KEEP_C",Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 3) {
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()" || status === "KEEP") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("FAIL_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+        if (ss == 4) {
+            if (status == "@Humica.EF.SYDocumentStatus.OPEN.ToString()" || status === "KEEP") {
+                ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("REJECT_A", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+            else {
+                AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DOC_INV", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+            }
+        }
+
+    }
+    function _clickConfirm(s, e) {
+        var baseUrl = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 1) {
+                window.location = baseUrl + "Pass?ApplicantIDs=" + selectedIDs;
+                PopTheLoading.Show();
+            }
+            if (ss == 2) {
+                 window.location = baseUrl + "Keep?ApplicantIDs=" + selectedIDs;
+                PopTheLoading.Show();
+            }
+            if (ss == 3) {
+                window.location = baseUrl + "Fail?ApplicantIDs=" + selectedIDs;
+                PopTheLoading.Show();
+            }
+            if (ss == 4) {
+                window.location = baseUrl + "Reject?ApplicantIDs=" + selectedIDs;
+                PopTheLoading.Show();
+            }
+        }
+    }
+    function Selected(s, e) {
+        cboApplyPosition.SetValue(s.GetSelectedItem().GetColumnText(1));
+    }
+    function chk_SelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ApplicantID", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(';');
+    }
+</script>
+
+
+@model Humica.Logic.RCM.IClsRCMPShortList
+
+@Html.Partial("Filter", Model)
+
+@Html.Partial("GridItems", Model.ListHeader)

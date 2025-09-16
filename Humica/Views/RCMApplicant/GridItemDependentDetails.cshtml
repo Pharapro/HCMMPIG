@@ -1,0 +1,128 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "GridItemDependentDetails";
+           settings.KeyFieldName = "LineItem";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "RCMApplicant", Action = "GridItemDependentDetails" };
+
+           settings.SettingsBehavior.AllowSort = false;
+
+           settings.CommandColumn.Visible = false;
+           settings.CommandColumn.ShowNewButtonInHeader = false;
+           settings.CommandColumn.ShowCancelButton = false;
+           settings.CommandColumn.ShowEditButton = false;
+           settings.SettingsBehavior.AllowFocusedRow = false;
+           settings.SettingsBehavior.ConfirmDelete = false;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "DependentName";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Name");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Relationship";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Relationship");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["RelationshipType_LIST"];
+               textProperties.TextField = "Description";
+               textProperties.ValueField = "Description";
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Gender";
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Gender");
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["GENDER_SELECT"];
+               textProperties.TextField = "SelectText";
+               textProperties.ValueField = "SelectValue";
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "DOB";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Date of Birth");
+               column.ColumnType = MVCxGridViewColumnType.DateEdit;
+               column.PropertiesEdit.DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";
+               (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "NationalId";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("National ID");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "PhoneNo";
+               column.Width = 110;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Phone");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.Columns.Add(column =>
+           {
+               column.FieldName = "Occupation";
+               column.Width = 150;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Occupation");
+               column.ColumnType = MVCxGridViewColumnType.TextBox;
+           });
+           settings.SettingsSearchPanel.Visible = false;
+           settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+           settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+           settings.SettingsBehavior.ConfirmDelete = true;
+           settings.SettingsPager.PageSize = 50;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.None;
+
+               if (e.KeyValue == null)
+               {
+                   if (e.Column.FieldName == "DependentName" || e.Column.FieldName == "Relationship")
+                   {
+                       editor.ReadOnly = true;
+                   }
+               }
+           };
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model.ListDependent).GetHtml()
+
+

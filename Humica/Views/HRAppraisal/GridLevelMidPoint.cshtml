@@ -1,0 +1,113 @@
+﻿
+@{
+    var grid = Html.DevExpress().GridView(
+      settings =>
+      {
+
+          settings.Name = "GridMidPoint_";
+          settings.KeyFieldName = "ID";
+
+          settings.Width = Unit.Percentage(100);
+          settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+          settings.CallbackRouteValues = new { Controller = "HRAppraisal", Action = "GridMidPoint" };
+
+          settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRAppraisal", Action = "CreateMidPoint" };
+          settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRAppraisal", Action = "EditMidPoint" };
+          settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRAppraisal", Action = "DeleteMidPoint" };
+
+          settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+          settings.CommandColumn.Visible = true;
+          settings.Settings.ShowHeaderFilterButton = true;
+          settings.CommandColumn.ShowCancelButton = true;
+          settings.CommandColumn.ShowNewButtonInHeader = true;
+          settings.CommandColumn.ShowEditButton = true;
+          settings.CommandColumn.ShowDeleteButton = true;
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+          settings.SettingsSearchPanel.Visible = true;
+          settings.SettingsBehavior.ConfirmDelete = true;
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Level");
+              column.Width = 250;
+              column.FieldName = "JobLevel";
+              column.ColumnType = MVCxGridViewColumnType.ComboBox;
+              var textProperties = column.PropertiesEdit as ComboBoxProperties;
+              textProperties.DataSource = ViewData["Level_SELECT"];
+              textProperties.ValueField = "Code";
+              textProperties.TextField = "Description";
+              textProperties.ValueType = typeof(string);
+          });
+
+          settings.Columns.Add(column =>
+          {
+              column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Level MidPoint");
+              column.Width = 180;
+              column.FieldName = "JobLevelMidPoint";
+              column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+              var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+              spinEditProperties.DisplayFormatString = "N2";
+              spinEditProperties.Width = Unit.Percentage(100);
+              spinEditProperties.MinValue = 0;
+              spinEditProperties.MaxValue = 100000000000;
+              spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+          });
+
+          settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+          settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+          settings.Settings.VerticalScrollableHeight = 450;
+          settings.SettingsBehavior.ConfirmDelete = true;
+          settings.SettingsPager.PageSize = 450;
+
+          settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+          settings.PreRender = (sender, e) =>
+          {
+          };
+
+          settings.CellEditorInitialize = (s, e) =>
+          {
+              ASPxEdit editor = (ASPxEdit)e.Editor;
+              editor.ValidationSettings.Display = Display.Dynamic;
+              if (e.KeyValue != null)
+              {
+                  if (e.Column.FieldName == "JobLevel")
+                  {
+                      e.Editor.ReadOnly = true;
+                  }
+              }
+              if (e.KeyValue == null)
+              {
+                  if(e.Column.FieldName== "JobLevelMidPoint")
+                  {
+                      e.Editor.Value = 0;
+                  }
+              }
+          };
+
+          settings.SettingsBehavior.AllowEllipsisInText = true;
+
+          settings.CustomJSProperties = (s, e) =>
+          {
+              ASPxGridView grid1 = (ASPxGridView)s;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_LAYOUT_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.AllColumns;
+              Session[Humica.EF.SYSConstant.GRID_VIEW_SOURCE_DETAIL + ViewData[Humica.EF.SYSConstant.SCREEN_ID].ToString()] = grid1.DataSource;
+
+              e.Properties["cpVisibleRowCount"] = (s as MVCxGridView).VisibleRowCount;
+          };
+
+      });
+
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

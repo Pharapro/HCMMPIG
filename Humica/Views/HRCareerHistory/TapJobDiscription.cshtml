@@ -1,0 +1,142 @@
+﻿@model Humica.Employee.IClsEmployee
+
+@Html.DevExpress().FormLayout(s1 =>
+{
+
+    s1.Name = "CreateStaff3";
+    s1.AlignItemCaptionsInAllGroups = true;
+    var isReadOnly1 = false;
+    if (ViewData[Humica.Models.SY.ClsConstant.IS_READ_ONLY1] != null)
+    {
+        isReadOnly1 = true;
+    }
+    s1.Items.AddGroupItem(m => Model.HeaderCareer, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Responsibilities");
+        })
+      .SetNestedContent(() =>
+      {
+          Html.DevExpress().MemoFor(i => i.HeaderCareer.JobResponsive, s =>
+          {
+              s.Height = 150;
+              s.Width = Unit.Percentage(500);
+              s.ReadOnly = isReadOnly1;
+              s.ShowModelErrors = true;
+              s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+              s.Properties.ValidationSettings.SetFocusOnError = true;
+              s.Properties.ValidationSettings.ErrorText = "*";
+          }).Render();
+      });
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Job Requirements");
+            m.ColSpan = 2;
+        })
+     .SetNestedContent(() =>
+     {
+         Html.DevExpress().MemoFor(i => i.HeaderCareer.JobDiscription, s =>
+         {
+             s.Height = 150;
+             s.Width = Unit.Percentage(500);
+             s.ReadOnly = isReadOnly1;
+             s.ShowModelErrors = true;
+             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+             s.Properties.ValidationSettings.SetFocusOnError = true;
+             s.Properties.ValidationSettings.ErrorText = "*";
+         }).Render();
+     });
+        //g.Items.Add(m =>
+        //{
+        //    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attach File");
+        //})
+        //.SetNestedContent(() =>
+        //{
+        //    Html.DevExpress().UploadControl(ss =>
+        //    {
+        //        ss.ShowProgressPanel = true;
+        //        ss.CallbackRouteValues = new { Controller = "StaffProfile", Action = "UploadControlCallbackActionJobDis" };
+        //        ss.Name = "UploadControl2";
+        //        ss.UploadMode = UploadControlUploadMode.Auto;
+        //        ss.AutoStartUpload = true;
+        //        ss.DialogTriggerID = "externalDropZone";
+        //        ss.AdvancedModeSettings.EnableDragAndDrop = false;
+        //        ss.AdvancedModeSettings.EnableMultiSelect = false;
+        //        ss.ShowTextBox = false;
+        //        ss.ShowUploadButton = false;
+        //        ss.ShowAddRemoveButtons = true;
+        //        ss.ShowProgressPanel = true;
+        //        ss.ShowClearFileSelectionButton = true;
+        //        ss.AdvancedModeSettings.EnableFileList = true;
+        //        ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+        //        ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+        //        ss.AdvancedModeSettings.DropZoneText = "";
+        //        ss.ValidationSettings.MaxFileSize = 4194304;
+        //        ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+        //        ss.UploadButton.Text = String.Empty;
+        //        ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".jpe", ".gif", ".bmp", ".png", ".pdf" };
+        //        ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+        //        ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+        //        ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+        //    }).Render();
+        //    Html.DevExpress().HyperLink(s =>
+        //    {
+        //        s.Name = "file_upload";
+        //        s.ToolTip = "File";
+        //        s.ClientVisible = false;
+        //        s.Properties.Target = "_BLANK";
+        //        s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+        //    }).GetHtml();
+        //});
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Attach File");
+        })
+        .SetNestedContent(() =>
+        {
+            if (isReadOnly1 != true)
+            {
+                Html.DevExpress().UploadControl(ss =>
+                {
+                    ss.ShowProgressPanel = true;
+                    ss.CallbackRouteValues = new { Controller = "CareerHistory", Action = "UploadControlCallbackActionJobDis" };
+                    ss.Name = "Uploadjobdisc";
+                    ss.UploadMode = UploadControlUploadMode.Auto;
+                    ss.AutoStartUpload = true;
+                    ss.Width = 120;
+                    ss.DialogTriggerID = "externalDropZone";
+                    ss.AdvancedModeSettings.EnableDragAndDrop = false;
+                    ss.AdvancedModeSettings.EnableMultiSelect = false;
+                    ss.ShowTextBox = false;
+                    ss.ShowUploadButton = false;
+                    ss.ShowAddRemoveButtons = true;
+                    ss.ShowProgressPanel = true;
+                    ss.ShowClearFileSelectionButton = true;
+                    ss.AdvancedModeSettings.EnableFileList = true;
+                    ss.AdvancedModeSettings.FileListPosition = UploadControlFileListPosition.Top;
+                    ss.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                    ss.AdvancedModeSettings.DropZoneText = "";
+                    ss.ValidationSettings.MaxFileSize = 104857600;
+                    ss.BrowseButton.Image.IconID = IconID.ActionsNew16x16;
+                    ss.UploadButton.Text = String.Empty;
+                    ss.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".jpe", ".gif", ".bmp", ".png", ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+                    ss.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                    ss.BrowseButton.Text = Humica.EF.Models.SY.SYSettings.getLabel("");
+                    ss.ClientSideEvents.FileUploadComplete = "completedUploadFileItem";
+                }).Render();
+            }
+            Html.DevExpress().HyperLinkFor(i => i.HeaderCareer.AttachJD, s =>
+            {
+                s.Name = "file_uploadeds";
+                s.ToolTip = "File";
+                s.Properties.Target = "_BLANK";
+                s.ClientVisible = true;
+                s.Properties.Text = Humica.EF.Models.SY.SYSettings.getLabel("View");
+            }).GetHtml();
+        });
+    });
+}).GetHtml()

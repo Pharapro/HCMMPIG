@@ -1,0 +1,87 @@
+﻿@{
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+               settings.Name = "GridViewList";
+               settings.KeyFieldName = ViewData[Humica.EF.SYSConstant.LIST_CONF_KEYNAME].ToString();
+
+               settings.Width = Unit.Percentage(70);
+               settings.SettingsSearchPanel.Visible = false;
+               settings.CallbackRouteValues = new { Action = "PartialList", Controller = ViewData[Humica.EF.SYSConstant.LIST_CONF_CONTROLLER].ToString() };
+
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.Settings.ShowGroupPanel = false;
+               settings.Settings.ShowFooter = true;
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+
+               settings.Columns.Add(column =>
+               {
+
+                   column.FieldName = "InOrder";
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "#");
+                   column.Width = 50;
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+
+                   column.FieldName = "Description";
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Description");
+               });
+
+
+               settings.Columns.Add(column =>
+               {
+
+                   column.FieldName = "ReportingType";
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM_ITEM], "Type");
+                   column.Width = 150;
+               });
+
+
+               settings.SettingsBehavior.EnableCustomizationWindow = true;
+
+               settings.PreRender = (s, e) =>
+               {
+                   var grid = s as MVCxGridView;
+                   if (grid != null)
+                       grid.ExpandRow(1);
+               };
+
+               settings.ClientSideEvents.RowDblClick = "DbRowClick";
+               settings.SettingsPager.Position = PagerPosition.Bottom;
+               settings.SettingsPager.FirstPageButton.Visible = true;
+               settings.SettingsPager.LastPageButton.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Visible = true;
+               settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+               //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               //settings.Settings.VerticalScrollableHeight = 350;
+
+               settings.SettingsBehavior.AllowEllipsisInText = true;
+
+               settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "20", "50", "100" };
+
+               settings.SettingsPager.PageSize = 20;
+           });
+
+
+}
+
+@gridExtension.Bind(Model).GetHtml()
+

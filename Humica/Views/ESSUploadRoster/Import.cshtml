@@ -1,0 +1,205 @@
+﻿
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+
+        $('#Download_TP').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()"+"@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "DownloadTemplate";
+        });
+
+        $('#_btnGenerateAction').click(function () {
+            GridViewListUpload.GetRowValues(GridViewListUpload.GetFocusedRowIndex(), 'ID;UploadName', OnGetRowValues);
+        });
+    });
+
+    function OnGetRowValues(values) {
+        if (values[0] == null)
+        {
+            AlertMessage("@Humica.EF.Models.SY.SYMessages.getMessage("GRID_US", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        } else {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "GenerateUpload?id=" + values[0];
+        }
+    }
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    function SelectChangeCbo(s, e) {
+       // var date = convert(txtPeriod.GetDate())
+       // var date = new Date(txtPeriod.GetValue());
+      //  alert(date);
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/SelfService/MyTeam/ESSUploadRoster/getPeriod',
+            data: { 'Date': convert(txtPeriod.GetDate()), 'Action': 'Import' },
+            success: function (data) {
+                if (data == "OK") {
+
+
+                }
+                else {
+                    AlertMessage(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+
+</script>
+
+@Html.DevExpress().FormLayout(settings =>
+   {
+       settings.Name = "NMasterQuota";
+       settings.AlignItemCaptionsInAllGroups = true;
+       settings.Items.AddGroupItem(g =>
+       {
+           g.ColCount = 2;
+           g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+           g.Caption = "Template Information";
+           g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+           g.Items
+                  .Add(m =>
+                  {
+                      m.Caption = "Upload Template";
+
+                  })
+                  .SetNestedContent(() =>
+                  {
+                      Html.DevExpress().Button(
+                          ss =>
+                          {
+                              ss.Name = "Download_TP";
+                              ss.RenderMode = ButtonRenderMode.Link;
+                              ss.ToolTip = "Download";
+                              ss.Text = "Download";
+
+                              ss.Images.Image.IconID = IconID.SupportTemplate16x16;
+                          }).GetHtml();
+                  });
+
+           g.Items
+               .Add(m =>
+               {
+                   m.Caption = "Select file to upload";
+
+               })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().UploadControl(ss =>
+                   {
+                       ss.ShowProgressPanel = true;
+                       ss.Name = "FileUploadOPB";
+                       ss.UploadMode = UploadControlUploadMode.Standard;
+                       ss.AutoStartUpload = true;
+                       ss.Width = 350;
+                       ss.CallbackRouteValues = new { Controller = "ESSUploadRoster", Action = "UploadControlCallbackAction" };
+                       ss.AdvancedModeSettings.EnableDragAndDrop = true;
+                       ss.AdvancedModeSettings.EnableFileList = true;
+                       ss.AdvancedModeSettings.EnableMultiSelect = false;
+                       ss.ValidationSettings.MaxFileSize = 4194304;
+                       ss.ValidationSettings.AllowedFileExtensions = new string[] { ".xlsx" };
+                       ss.BrowseButton.Text = "Browse";
+                       ss.ClientSideEvents.FileUploadComplete = "completedUploadFile";
+
+                   }).Render();
+               });
+
+
+       });
+
+
+   }).GetHtml()
+
+
+@model Humica.Logic.Att.ATEmpSchObject
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "PeriodForm";
+    settings.AlignItemCaptionsInAllGroups = true;
+
+    settings.Items.AddGroupItem(m => Model.Header, g =>
+    {
+        g.ColCount = 2;
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Caption = "Period";
+        g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+        g.Items.Add(m =>
+        {
+            m.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Period");
+        })
+           .SetNestedContent(() =>
+           {
+               Html.DevExpress().DateEditFor(i => i.Period, s =>
+               {
+                   s.Properties.ClientInstanceName = "txtPeriod";
+                   s.ShowModelErrors = true;
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                   s.Properties.ValidationSettings.SetFocusOnError = true;
+                      //s.Properties.NullText = DateTime.Now;
+                      s.Properties.AllowNull = false;
+                   s.Properties.EditFormatString = "MM.yyyy";
+                   s.Properties.DisplayFormatString = "MM.yyyy";
+                   s.Properties.ValidationSettings.ErrorText = "*";
+                   s.Properties.ClientSideEvents.ValueChanged = "SelectChangeCbo";
+               }).Render();
+           });
+
+
+    });
+
+
+}).GetHtml()
+
+
+@Html.DevExpress().PageControl(settings =>
+   {
+       settings.Name = "pcScrollingMaterial1";
+       settings.Width = Unit.Percentage(100);
+
+       settings.EnableTabScrolling = true;
+       settings.TabAlign = TabAlign.Justify;
+
+       settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+
+       settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )
+        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "General")).SetContent(() =>
+        {
+            Html.RenderPartial(Humica.Models.SY.SYListConfuration.ListDefaultUpload, Model.ListTemplate);
+
+        });
+       settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+       )
+       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Employee Infor")).SetContent(() =>
+       {
+           Html.RenderPartial("GridItems", Model);
+
+       });
+
+   }).GetHtml()
+
+
+
+
+
+
+
+
+
+

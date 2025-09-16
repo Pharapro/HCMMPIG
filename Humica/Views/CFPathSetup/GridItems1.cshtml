@@ -1,0 +1,92 @@
+﻿@{
+  var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+
+        settings.Name = "gridViewItem1";
+        settings.KeyFieldName = "PathCode";
+      
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.CallbackRouteValues = new { Controller = "CFPathSetup", Action = "GridItems1" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "CFPathSetup", Action = "CreatePartial1" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "CFPathSetup", Action = "EditPartial1" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "CFPathSetup", Action = "DeletePartial1" };
+        
+            
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowCancelButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+    
+        settings.Columns.Add(column =>
+        {
+
+            column.Width = 150;
+            column.FieldName = "PathCode";
+            column.ToolTip = "Key 1";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.CellStyle.BackColor = System.Drawing.Color.LightGray;
+            var textProperties = column.PropertiesEdit as TextEditProperties;
+            textProperties.Width = Unit.Percentage(100);
+
+        });
+        settings.Columns.Add(column =>
+        {
+
+            column.Width = 250;
+            column.FieldName = "Description";
+
+
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PathDirectory";
+            column.Width = 350;
+
+        });
+
+             
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 430;
+        settings.SettingsPager.PageSize = 20;
+        
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+
+        settings.PreRender = (sender, e) =>
+        {
+            //((MVCxGridView)sender).StartEdit(1);
+        };
+        
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;            
+            editor.ValidationSettings.Display = Display.Dynamic;
+            if (e.KeyValue!=null)
+            {
+                if (e.Column.FieldName == "MaterialType")
+                {
+                    e.Editor.ReadOnly=true;
+                }
+            }
+        };
+
+    });
+ 
+
+        if (ViewData["EditError"] != null)
+        {
+            grid.SetEditErrorText((string)ViewData["EditError"]);
+        }
+}
+@grid.Bind(Model).GetHtml()
+

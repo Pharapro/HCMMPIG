@@ -1,0 +1,115 @@
+﻿@Html.DevExpress().PopupControl(
+    settings =>
+    {
+        settings.Name = "PopSelectStaff";
+        settings.Width = 400;
+        settings.AllowDragging = true;
+        settings.CloseAction = CloseAction.CloseButton;
+        settings.CloseOnEscape = true;
+        settings.PopupAnimationType = AnimationType.None;
+        settings.HeaderText = "Pop Select Leave Type";
+        settings.Modal = true;
+        settings.AutoUpdatePosition = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.SetContent(() =>
+        {
+
+            @Html.DevExpress().FormLayout(s =>
+            {
+                s.Name = "ModalModeFormLayout";
+                s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                s.Width = Unit.Percentage(100);
+                s.Height = Unit.Percentage(100);
+                s.ColumnCount = 2;
+                s.NestedExtensionWidth = Unit.Percentage(100);
+                s.Items.Add(i =>
+                {
+                    i.Name = "IsDeductSalary";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Is Deduct Salary");
+                    i.ColumnSpan = 2;
+                    i.NestedExtension().CheckBox(tbox =>
+                    {
+                        tbox.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                        tbox.Properties.ClientSideEvents.CheckedChanged = "OnClientChanged";
+                    });
+                    i.ClientVisible = true;
+                });
+                s.Items.Add(i =>
+                {
+                    i.Name = "PayrollMonth";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Payroll Month");
+                    i.NestedExtension().DateEdit(tbox =>
+                    {
+                        tbox.ControlStyle.HorizontalAlign = HorizontalAlign.Left;
+                        tbox.Properties.PickerType = DatePickerType.Months;
+                        tbox.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                        tbox.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                        tbox.Properties.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT_PERIOD].ToString();
+                        tbox.Properties.AllowNull = true;
+                        tbox.Date = DateTime.Now;
+                        tbox.Width = Unit.Percentage(50);
+                    });
+                    i.ClientVisible = true;
+                });
+                s.Items.Add(i =>
+                {
+                    i.Name = "Code";
+                    i.Caption = Humica.EF.Models.SY.SYSettings.getLabel("LeaveType");
+                    i.ColumnSpan = 2;
+                    i.NestedExtension().ComboBox(tbox =>
+                    {
+                        tbox.Properties.ClientInstanceName = "cboLeaveType";
+                        tbox.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        tbox.Properties.TextField = "Description";
+                        tbox.Properties.ValueField = "Code";
+                        tbox.Properties.DisplayFormatString ="{1}";
+                        tbox.Properties.DataSource = ViewData["LEAVETYPE_SELECT"];
+                        tbox.Properties.Columns.Add("Code", "Code", 120);
+                        tbox.Properties.Columns.Add("Description", "Description", 120);
+                        tbox.Properties.ValueType = typeof(string);
+                        // tbox.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeEmp";
+                    });
+                });
+
+
+                s.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.SetNestedContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div  style=\"margin-left:110px;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "OK";
+                                buttonSettings.ControlStyle.CssClass = "button";
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "OK";
+                                buttonSettings.UseSubmitBehavior = false;
+                                //buttonSettings.ImagePosition=ImagePosition.Bottom;
+                                buttonSettings.ClientSideEvents.Click = "_clickConfirm";
+                            }
+                        ).Render();
+                        ViewContext.Writer.Write("<div  style=\"float:right; display:block;\">");
+                        Html.DevExpress().Button(
+                            buttonSettings =>
+                            {
+                                buttonSettings.Name = "btnCancel";
+                                buttonSettings.ControlStyle.BackColor = System.Drawing.Color.Red;
+                                buttonSettings.Width = 80;
+                                buttonSettings.Text = "Cancel";
+                                buttonSettings.ClientSideEvents.Click = "function(s, e){ PopSelectStaff.Hide(); }";
+                            }
+                        ).Render();
+                    });
+                });
+            }).Render();
+
+        });
+
+        // settings.ClientSideEvents.CloseUp = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(null, '', true); }";
+    }).GetHtml()
+
+
+

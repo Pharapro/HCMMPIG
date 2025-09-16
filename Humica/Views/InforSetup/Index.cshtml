@@ -1,0 +1,110 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model   Humica.Logic.HRS.MDInforSetup
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Group Company")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewCompanyGroup", Model.ListCompanyGroup);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Company")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewCompany", Model.ListCompany);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Branch")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewBranch", Model.ListBranch);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Division")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewDivision", Model.ListDivision);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("BusinessUnit")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewGroupDepartment", Model.ListGroupDepartment);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Department")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewDepartment", Model.ListDepartment);
+
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Office")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewOffice", Model.ListOffice);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Section")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemSections", Model.ListSection);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Groups")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewGroup", Model.ListGroup);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Position")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewPosition", Model.ListPosition);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("LevelCode")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewLevel", Model.ListLevel);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Job Grade")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewJobGrade", Model.ListJobGrade);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Line")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewLine", Model.ListLine);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Category")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewCategory", Model.ListCategory);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Location")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewLocation", Model.ListLocation);
+        });
+        //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Function")).SetContent(() =>
+        //{
+        //    @Html.RenderPartial("GridviewFunction", Model.ListFunction);
+        //});
+        //settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Reporting Line")).SetContent(() =>
+        //{
+        //    @Html.RenderPartial("GridviewPositionFamily", Model.ListOrgChart);
+        //});
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("EmployeeType")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemEmpTypes", Model.ListEmpType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Probation Period")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewProType", Model.ListProType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Dress")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewUniform", Model.ListUniform);
+        });
+    }).GetHtml()

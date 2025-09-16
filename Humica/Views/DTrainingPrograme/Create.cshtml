@@ -1,0 +1,691 @@
+﻿@model Humica.Training.Setup.ClsELearningCourse
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#_btnBackAction').click(function () {
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]";
+        });
+          $('#_btnSaveActionGrid').click(function () {
+            $('form').submit();
+          });
+    });
+
+    function Selectstaff(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/Selectstaff',
+            data: { "Actionname": "Create", "StaffID": cboStaff.GetValue() },
+            success: function (data) {
+                if (data.MS == "OK") {
+
+                    txtStaffName.SetValue(data.NameEN);
+                    txtGender.SetValue(data.Gender);
+                    txtPosition.SetValue(data.Position);
+                    txtPhoneNo.SetValue(data.Phone);
+                    txtNatID.SetValue(data.NatID);
+                    txtStaffLevel.SetValue(data.StaffLevel);
+                    txtWorkExperience.SetValue(data.WorkExperience);
+                    txtHireDate.SetValue(null);
+                    txtDealerCode.SetValue(data.DLR);
+                    txtDealerName.SetValue(data.DLRName);
+                    txtTR.SetValue(data.TR);
+
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function SelectLevel(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectLevel',
+            data: { "Actionname": "Create", "Level": cboStaffLevel.GetValue(), "Req": cboReq.GetValue(), "pg": txtpg.GetValue(), "cs": txtcs.GetValue(), "cp": txtcp.GetValue(), "pos": cboPos.GetValue(), 'invcode': txtinvcode.GetValue(), 'announcmentcode': cboAnnouncement.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+            success: function (data) {
+                GridItems.Refresh();
+                //else {
+                //    AlertMessage(data.MS);
+                //}
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+    function selectProgram(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+
+            txtcs.ClearItems();
+
+            $.ajax({
+                type: 'post',
+                url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/selectProgram',
+                data: { 'Program': s.GetValue()},
+                success: function (data) {
+
+                    if (data.MS == "OK") {
+                        for (var key in data.DATA) {
+                            if (data.DATA.hasOwnProperty(key)) {
+                                //console.log(key + " -> " + data.Data[key].Dimension);
+                                txtcs.AddItem([data.DATA[key].Code, data.DATA[key].Description]);
+                            }
+                        }
+
+                    }
+                    else {
+                        //AlertMessage(data.MS);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+            $.ajax({
+                type: 'post',
+                url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectLevel',
+                data: { "Actionname": "Create", "Level": cboStaffLevel.GetValue(), "Req": cboReq.GetValue(), "pg": txtpg.GetValue(), "cs": txtcs.GetValue(), "cp": txtcp.GetValue(), "pos": cboPos.GetValue(), 'invcode': txtinvcode.GetValue(), 'announcmentcode': cboAnnouncement.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+                success: function (data) {
+                    GridItems.Refresh();
+                    //else {
+                    //    AlertMessage(data.MS);
+                    //}
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+        }
+
+    }
+    function SelectCourse(s, e) {
+
+        if (s.GetSelectedItem() != null) {
+
+            txtCoursename.SetValue(s.GetSelectedItem().GetColumnText(1));
+
+            $.ajax({
+                type: 'post',
+                url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectLevel',
+                data: { "Actionname": "Create", "Level": cboStaffLevel.GetValue(), "Req": cboReq.GetValue(), "pg": txtpg.GetValue(), "cs": txtcs.GetValue(), "cp": txtcp.GetValue(), "pos": cboPos.GetValue(), 'invcode': txtinvcode.GetValue(), 'announcmentcode': cboAnnouncement.GetValue(),'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+                success: function (data) {
+                    GridItems.Refresh();
+                    for (var key in data.DATA) {
+                        if (data.DATA.hasOwnProperty(key)) {
+                            //console.log(key + " -> " + data.Data[key].Dimension);
+                            txtcs.AddItem([data.DATA[key].Code, data.DATA[key].Description]);
+                        }
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+            cboGroup.ClearItems();
+
+            $.ajax({
+                type: 'post',
+                url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/selectCourse',
+                data: { "Program": txtpg.GetValue(), "Course": txtcs.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+                success: function (data) {
+                    if (data.MS == "OK") {
+
+
+
+                        for (var key in data.DATA) {
+                            if (data.DATA.hasOwnProperty(key)) {
+                                //console.log(key + " -> " + data.Data[key].Dimension);
+                                cboGroup.AddItem([data.DATA[key].ID, data.DATA[key].Description]);
+                            }
+                        }
+                        txtscore.SetValue(data.SCORE);
+                        txtscorepr.SetValue(data.SCOREPR);
+
+                    }
+                    else {
+                        //AlertMessage(data.MS);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    AlertMessage(XMLHttpRequest.responseText);
+
+                }
+            });
+
+        }
+
+    }
+    function selectAnnouncement(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectLevel',
+            data: { "Actionname": "Create", "Level": cboStaffLevel.GetValue(), "Req": cboReq.GetValue(), "pg": txtpg.GetValue(), "cs": txtcs.GetValue(), "cp": txtcp.GetValue(), "pos": cboPos.GetValue(), 'invcode': txtinvcode.GetValue(), 'announcmentcode': cboAnnouncement.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+            success: function (data) {
+                GridItems.Refresh();
+                //else {
+                //    AlertMessage(data.MS);
+                //}
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+    }
+
+    function SelectStartEndDate(s, e) {
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/SelectLevel',
+            data: { "Actionname": "Create", "Level": cboStaffLevel.GetValue(), "Req": cboReq.GetValue(), "pg": txtpg.GetValue(), "cs": txtcs.GetValue(), "cp": txtcp.GetValue(), "pos": cboPos.GetValue(), 'invcode': txtinvcode.GetValue(), 'announcmentcode': cboAnnouncement.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+            success: function (data) {
+                GridItems.Refresh();
+                for (var key in data.DATA) {
+                    if (data.DATA.hasOwnProperty(key)) {
+                        //console.log(key + " -> " + data.Data[key].Dimension);
+                        txtcs.AddItem([data.DATA[key].Code, data.DATA[key].Description]);
+                    }
+                }
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+        cboGroup.ClearItems();
+
+        $.ajax({
+            type: 'post',
+            url: "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + '/selectCourse',
+            data: { "Program": txtpg.GetValue(), "Course": txtcs.GetValue(), 'StartDate': convert(dtpStartDate.GetDate()), 'EndDate': convert(dtpEndDate.GetDate()), },
+            success: function (data) {
+                if (data.MS == "OK") {
+
+
+
+                    for (var key in data.DATA) {
+                        if (data.DATA.hasOwnProperty(key)) {
+                            //console.log(key + " -> " + data.Data[key].Dimension);
+                            cboGroup.AddItem([data.DATA[key].ID, data.DATA[key].Description]);
+                        }
+                    }
+                    txtscore.SetValue(data.SCORE);
+                    txtscorepr.SetValue(data.SCOREPR);
+
+                }
+                else {
+                    //AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+
+            }
+        });
+
+    }
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2),
+          Minutes = ("0" + date.getMinutes()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+    //'DocDate': convert(dtpDocumentDate.GetDate())
+</script>
+<div class="general_form">
+    @Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "CreateCourse";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.Items.AddGroupItem(m => Model.Header, g =>
+        {
+            g.ColCount = 3;
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.Caption = "Header Informaion";
+            g.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+
+            //g.Items
+            //    .Add(m =>
+            //    {
+            //        m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+            //        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Invite Type");
+            //    })
+            //    .SetNestedContent(() =>
+            //    {
+            //        Html.DevExpress().ComboBoxFor(i => i.Header.Type, s =>
+            //        {
+            //            s.Properties.CallbackPageSize = 30;
+            //            s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+            //            s.Properties.TextFormatString = "{1}";
+            //            s.Properties.ValueField = "ID";
+            //            s.Properties.TextField = "Description";
+            //            s.Properties.ClientInstanceName = "txtpg";
+            //            //s.Properties.ClientSideEvents.SelectedIndexChanged = "selectProgram";
+            //            //s.Properties.ValueType = typeof(string);
+            //            //s.Properties.Columns.Add("ProgramCode", "Program Code", 80);
+            //            //s.Properties.Columns.Add("ProgramName", "Program Name", 120);
+            //        }).BindList(ViewData["ExamType_List"]).Render();
+            //    });
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Program Code");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.ProgramCode, s =>
+                    {
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{0:1}";
+                        s.Properties.ValueField = "ProgramCode";
+                        s.Properties.ClientInstanceName = "txtpg";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "selectProgram";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.Columns.Add("ProgramCode", "Program Code", 80);
+                        s.Properties.Columns.Add("ProgramName", "Program Name", 120);
+                    }).BindList(ViewData["Program_List"]).Render();
+                });
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Staff Level");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.StaffLevel, s =>
+                    {
+                        s.Properties.AllowNull = true;
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.TextField = "Description";
+                        s.Properties.ClientInstanceName = "cboStaffLevel";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectLevel";
+                    }).BindList(ViewData["StaffLevel_List"]).Render();
+                });
+
+
+            g.Items
+               .Add(m =>
+               {
+                   m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                   )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Course Code");
+               })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().ComboBoxFor(i => i.Header.Coursecode, s =>
+                   {
+                       s.Properties.CallbackPageSize = 30;
+                       s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                       s.Properties.TextFormatString = "{0}:{1}";
+                       s.Properties.ValueField = "Code";
+                       s.Properties.TextField = "Description";
+                       s.Properties.ClientInstanceName = "txtcs";
+                       s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectCourse";
+                       s.Properties.ValueType = typeof(string);
+                       s.Properties.Columns.Add("Code", Humica.EF.Models.SY.SYSettings.getLabel("Code"), 80);
+                       s.Properties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Course Name"), 120);
+                   }).BindList(ViewData["Course_List"]).Render();
+               });
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Requirement");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.RequirementCode, s =>
+                    {
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.TextField = "Description";
+                        s.Properties.ClientInstanceName = "cboReq";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectLevel";
+                    }).BindList(ViewData["Requirement_List"]).Render();
+                });
+
+            g.Items
+                          .Add(m =>
+                          {
+                              m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Position");
+                          })
+                          .SetNestedContent(() =>
+                          {
+                              Html.DevExpress().ComboBoxFor(i => i.Header.Position, s =>
+                              {
+                                  s.Properties.ClientInstanceName = "cboPos";
+                                  s.Properties.ClientSideEvents.SelectedIndexChanged = "SelectLevel";
+                                  s.ShowModelErrors = true;
+                                  s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                                  s.Properties.ValidationSettings.SetFocusOnError = true;
+                                  s.Properties.ValidationSettings.ErrorText = "*";
+                                  s.Properties.TextField = "SelectText";
+                                  s.Properties.ValueField = "SelectValue";
+                              }).BindList(ViewData["STAFF_POSITION"]).Render();
+
+                          });
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Venue");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.Venue, s =>
+                    {
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.TextField = "Description";
+                    }).BindList(ViewData["Venue_List"]).Render();
+                });
+
+
+
+
+
+            g.Items
+             .Add(m =>
+             {
+                 m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+            )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Start Date");
+
+             })
+             .SetNestedContent(() =>
+             {
+                 Html.DevExpress().DateEditFor(i => i.Header.Startdate, s =>
+                 {
+                     s.ShowModelErrors = true;
+                     //  s.ReadOnly = true;
+                     s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                     s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Properties.ValidationSettings.SetFocusOnError = true;
+                     s.Properties.ValidationSettings.ErrorText = "*";
+                     s.Properties.ClientSideEvents.DateChanged = "SelectStartEndDate";
+                     s.Properties.ClientInstanceName = "dtpStartDate";
+                     s.Date = DateTime.Now;
+                 }).Render();
+             });
+
+            g.Items
+             .Add(m =>
+             {
+                 m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+            )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "End Date");
+
+             })
+             .SetNestedContent(() =>
+             {
+                 Html.DevExpress().DateEditFor(i => i.Header.Enddate, s =>
+                 {
+                     s.ShowModelErrors = true;
+                     // s.ReadOnly = true;
+                     s.Properties.NullText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                     s.Properties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Properties.ValidationSettings.SetFocusOnError = true;
+                     s.Properties.ValidationSettings.ErrorText = "*";
+                     s.Date = DateTime.Now;
+                     s.Properties.ClientSideEvents.DateChanged = "SelectStartEndDate";
+                     s.Properties.ClientInstanceName = "dtpEndDate";
+                 }).Render();
+             });
+
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Group");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.TrainingGroup, s =>
+                    {
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.TextField = "Description";
+                        s.Properties.ClientInstanceName = "cboGroup";
+                        s.Properties.Columns.Add("ID", "ID", 80);
+                        s.Properties.Columns.Add("Description", "Description", 120);
+                    }).BindList(ViewData["Group_List"]).Render();
+                });
+
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Capacity");
+
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().SpinEditFor(i => i.Header.Capacity, s =>
+                    {
+                        s.Properties.ClientInstanceName = "txtcp";
+                        s.Properties.ClientSideEvents.ValueChanged = "SelectLevel";
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.DisplayFormatString = "N0";
+                        s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                    }).Render();
+                });
+
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                        ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Target (%)");
+
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().SpinEditFor(i => i.Header.Target, s =>
+                    {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.SetFocusOnError = true;
+                        s.Properties.ValidationSettings.ErrorText = "*";
+                        s.Properties.DisplayFormatString = "N0";
+                        s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                    }).Render();
+                });
+
+            g.Items
+               .Add(m =>
+               {
+                   m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Score");
+
+               })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().SpinEditFor(i => i.Header.Score, s =>
+                   {
+                       s.Properties.ClientInstanceName = "txtscore";
+                       s.ShowModelErrors = true;
+                       s.ReadOnly = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.Properties.DisplayFormatString = "N0";
+                       s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                   }).Render();
+               });
+
+            g.Items
+               .Add(m =>
+               {
+                   m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>)
+                       ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Score Practice");
+
+               })
+               .SetNestedContent(() =>
+               {
+                   Html.DevExpress().SpinEditFor(i => i.Header.ScorePR, s =>
+                   {
+                       s.Properties.ClientInstanceName = "txtscorepr";
+                       s.ShowModelErrors = true;
+                       s.ReadOnly = true;
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                       s.Properties.DisplayFormatString = "N0";
+                       s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                   }).Render();
+               });
+
+            g.Items
+               .Add(m =>
+               {
+                   m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                  )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Invited Code");
+                   //m.ColumnSpan = 2;
+               })
+               .SetNestedContent(() =>
+
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.InvCode, s =>
+                   {
+                       s.Properties.ClientInstanceName = "txtinvcode";
+                       s.ReadOnly = true;
+                       s.AutoCompleteType = AutoCompleteType.Disabled;
+                       s.ShowModelErrors = true;
+                       s.Width = Unit.Percentage(100);
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+            g.Items
+                .Add(m =>
+                {
+                    m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                    )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Annoucement");
+                })
+                .SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBoxFor(i => i.Header.AnnounceCode, s =>
+                    {
+                        s.Properties.CallbackPageSize = 30;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.TextFormatString = "{1}";
+                        s.Properties.ValueField = "Code";
+                        s.Properties.TextField = "Description";
+                        s.Properties.ClientInstanceName = "cboAnnouncement";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "selectAnnouncement";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.AllowNull = true;
+                        s.Properties.Columns.Add("Code", "Code", 120);
+                        s.Properties.Columns.Add("Description", "Description", 220);
+                    }).BindList(ViewData["Announcement_List"]).Render();
+                });
+
+            g.Items
+               .Add(m =>
+               {
+                   m.Caption = Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+                  )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Description");
+                   m.ColumnSpan = 3;
+               })
+               .SetNestedContent(() =>
+
+               {
+                   Html.DevExpress().TextBoxFor(i => i.Header.Coursename, s =>
+                   {
+                       s.Properties.ClientInstanceName = "txtCoursename";
+                       //s.ReadOnly = true;
+                       s.AutoCompleteType = AutoCompleteType.Disabled;
+                       s.ShowModelErrors = true;
+                       s.Width = Unit.Percentage(100);
+                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                       s.Properties.ValidationSettings.SetFocusOnError = true;
+                       s.Properties.ValidationSettings.ErrorText = "*";
+                   }).Render();
+               });
+
+        });
+    }).GetHtml()
+</div>
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        )ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "Staff")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItems", Model);
+
+        });
+
+        //    settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel((List<Humica.EF.MD.CFForm>
+        //)ViewData[Humica.EF.SYSConstant.LIST_CONF_FORM], "SerialItemDetail")).SetContent(() =>
+        //{
+        //    @Html.RenderPartial("GridItemsSerialEdit", Model);
+
+        //});
+
+    }).GetHtml()
+
+
+
+
+
+
+
+
+
+

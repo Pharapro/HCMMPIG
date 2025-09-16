@@ -1,0 +1,39 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+  
+</script>
+
+
+@model   Humica.Core.CF.CFSystem
+
+
+@*@Html.Partial("GridItems", Model)*@
+
+
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+                if (Humica.EF.MD.SYSession.isAllowedTab(ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString(), "TAB_ServerPath"))
+                {
+                    settings.TabPages.Add("Server Path").SetContent(() =>
+                    {
+                        @Html.RenderPartial("GridItems1", Model.ListUplaodPath);
+
+                    });
+
+                }
+
+
+    }).GetHtml()
+
+

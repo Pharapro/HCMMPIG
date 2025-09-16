@@ -1,0 +1,47 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model   Humica.Logic.HR.HREmpEvaluateObject
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Evaluation Types")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewEvalType", Model.ListEvalType);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Evaluation Region")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewEvalRegion", Model.ListRegion);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Evaluation Factor")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewEvalFactor", Model.ListFactor);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Evaluation Rating")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemEvalRating", Model.ListEvaluateRating);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Self Evaluation")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridItemEvalSelf", Model.ListSelfEvaluateSetup);
+        });
+    }).GetHtml()

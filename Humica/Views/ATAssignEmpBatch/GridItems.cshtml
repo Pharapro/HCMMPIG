@@ -1,0 +1,173 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+     settings =>
+     {
+         settings.Name = "gridItemEmpInfor";
+         settings.KeyFieldName = "EmpCode";
+         settings.EnableTheming = true;
+         settings.EnableRowsCache = true;
+         settings.Width = Unit.Percentage(100);
+         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+         settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+         settings.SettingsBehavior.AllowSort = false;
+         settings.CallbackRouteValues = new { Controller = "ATAssignEmpBatch", Action = "GridItems" };
+
+         settings.CommandColumn.Visible = true;
+         settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+         settings.Settings.ShowGroupPanel = false;
+         settings.Settings.ShowFooter = true;
+         settings.SettingsContextMenu.Enabled = true;
+         settings.Settings.ShowHeaderFilterButton = true;
+         settings.SettingsPopup.HeaderFilter.Height = 200;
+         settings.CommandColumn.ShowSelectCheckbox = true;
+         settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+         settings.CommandColumn.Width = 50;
+
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.Columns.Add(column =>
+         {
+             column.Width = 120;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Code");
+             column.FieldName = "EmpCode";
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Width = 150;
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Employee Name");
+             column.FieldName = "AllName";
+             column.ReadOnly = true;
+             var textProperties = column.PropertiesEdit as TextBoxProperties;
+             textProperties.ValidationSettings.Display = Display.None;
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Branch");
+             column.Width = 120;
+             column.FieldName = "Branch";
+
+             column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             textProperties.DataSource = ViewData["BRANCHES_SELECT"];
+             textProperties.ValueField = "Code";
+             textProperties.TextField = "Description";
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Division");
+             column.Width = 150;
+             column.FieldName = "Division";
+
+             column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             textProperties.DataSource = ViewData["DIVISION_SELECT"];
+             textProperties.ValueField = "Code";
+             textProperties.TextField = "Description";
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Department");
+             column.Width = 150;
+             column.FieldName = "DEPT";
+
+             column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             textProperties.DataSource = ViewData["DEPARTMENT_SELECT"];
+             textProperties.ValueField = "Code";
+             textProperties.TextField = "Description";
+         });
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Position");
+             column.Width = 200;
+             column.FieldName = "JobCode";
+
+             column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             textProperties.DataSource = ViewData["POSITION_SELECT"];
+             textProperties.ValueField = "Code";
+             textProperties.TextField = "Description";
+         });
+
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Start Date");
+             column.Width = 120;
+
+             column.FieldName = "StartDate";
+             column.ColumnType = MVCxGridViewColumnType.DateEdit;
+             column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+         });
+
+
+         settings.Columns.Add(column =>
+         {
+             column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Batch");
+             column.Width = 120;
+             column.FieldName = "ROSTER";
+
+             column.ColumnType = MVCxGridViewColumnType.ComboBox;
+             var textProperties = column.PropertiesEdit as ComboBoxProperties;
+             textProperties.DataSource = ViewData["BATCH_SELECT"];
+             textProperties.ValueField = "Code";
+             textProperties.TextField = "Description";
+
+             //    textProperties.TextFormatString = "{1}";
+             //    textProperties.DropDownStyle = DropDownStyle.DropDownList;
+             //    textProperties.Columns.Add("GLMCode", Humica.EF.Models.SY.SYSettings.getLabel("Code"));
+             //    textProperties.Columns.Add("Description", Humica.EF.Models.SY.SYSettings.getLabel("Description"));
+
+             //    textProperties.ValueType = typeof(string);
+             //    textProperties.Width = Unit.Percentage(100);
+
+         });
+
+
+         settings.SettingsBehavior.EnableCustomizationWindow = false;
+
+         //settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.BoldText);
+         //settings.FormatConditions.AddHighlight("Status", "[Status] = 'RELEASED'", GridConditionHighlightFormat.YellowFillWithDarkYellowText);
+
+
+         settings.PreRender = (s, e) =>
+         {
+
+         };
+
+
+
+         settings.SettingsPager.Position = PagerPosition.Bottom;
+         settings.SettingsPager.FirstPageButton.Visible = true;
+         settings.SettingsPager.LastPageButton.Visible = true;
+
+
+
+         settings.SettingsBehavior.AllowFocusedRow = true;
+
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+
+         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+         //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+         settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.DealerPageHeigh;
+
+         settings.SettingsBehavior.AllowFocusedRow = true;
+         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+         settings.SettingsBehavior.AllowEllipsisInText = true;
+         settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+         settings.SettingsPager.Visible = true;
+         settings.SettingsPager.PageSizeItemSettings.Visible = false;
+         settings.SettingsPager.PageSize = 20;
+
+     });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+
+

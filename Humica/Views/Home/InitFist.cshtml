@@ -1,0 +1,11 @@
+@{
+    Layout = "~/Views/Shared/_LoadingLayout.cshtml";
+    @Html.Partial("PopTheLoading")
+}
+@{
+    var hostList = @Humica.EF.Models.SY.SYUrl.getBaseUrl() + "/DashboardRender/Render";
+}
+    <iframe id="_main_loading" src=@hostList style="width: 100%; height: 93vh; border: none">
+</iframe>
+    @*<iframe id="_main_loading" src="@Humica.EF.Models.SY.SYSettings.getSetting("DASHBOARD").SettinValue" style="width: 100%; height: 93vh; border: none">
+    </iframe>*@

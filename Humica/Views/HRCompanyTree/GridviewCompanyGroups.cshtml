@@ -1,0 +1,126 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(
+       settings =>
+       {
+
+           settings.Name = "gridViewItemCompany";
+           settings.KeyFieldName = "WorkGroup";
+
+           settings.Width = Unit.Percentage(100);
+           settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+           settings.CallbackRouteValues = new { Controller = "HRCompanyTree", Action = "GridviewCompanyGroups" };
+
+           settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "HRCompanyTree", Action = "CreateCompanyGroup" };
+           settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "HRCompanyTree", Action = "EditCompanyGroup" };
+           settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "HRCompanyTree", Action = "DeleteCompanyGroup" };
+
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowDeleteButton = true;
+           settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+           settings.CommandColumn.ShowNewButtonInHeader = true;
+           settings.CommandColumn.ShowCancelButton = true;
+           settings.CommandColumn.ShowEditButton = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+           settings.SettingsBehavior.ConfirmDelete = true;
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkGroup");
+               column.FieldName = "WorkGroup";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["WorkGroup_SELECT"];
+               textProperties.TextFormatString = "{0}";
+               textProperties.ValueField = "WorkGroup";
+               textProperties.Columns.Add("WorkGroup", Humica.EF.Models.SY.SYSettings.getLabel("WorkGroup"), 200);
+               textProperties.ValueType = typeof(string);
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("WorkGroupDescription");
+               column.FieldName = "WorkGroupDescription";
+           });
+
+           settings.Columns.Add(column =>
+           {
+               column.Width = 200;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ParentWorkGroupID");
+               column.FieldName = "ParentWorkGroupID";
+               column.ColumnType = MVCxGridViewColumnType.ComboBox;
+               var textProperties = column.PropertiesEdit as ComboBoxProperties;
+               textProperties.ValidationSettings.Display = Display.None;
+               textProperties.DataSource = ViewData["WorkGroup_SELECT"];
+               textProperties.TextFormatString = "{0}";
+               textProperties.ValueField = "WorkGroup";
+               textProperties.Columns.Add("WorkGroup", Humica.EF.Models.SY.SYSettings.getLabel("WorkGroup"), 200);
+               textProperties.ValueType = typeof(string);
+           });
+           settings.Columns.Add(column =>
+           {
+               column.Width = 100;
+               column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Level");
+               column.FieldName = "Level";
+               column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+               var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+               spinEditProperties.DisplayFormatString = "N0";
+               spinEditProperties.Width = Unit.Percentage(100);
+               spinEditProperties.MinValue = 0;
+               spinEditProperties.MaxValue = 99999999999;
+               spinEditProperties.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+           });
+           settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+           settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+           settings.Settings.ShowHeaderFilterButton = true;
+
+           settings.SettingsPager.PageSize = 15;
+           settings.SettingsPager.EnableAdaptivity = true;
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+           settings.SettingsExport.EnableClientSideExportAPI = true;
+           settings.SettingsExport.ExportSelectedRowsOnly = true;
+           settings.SettingsBehavior.AllowFocusedRow = true;
+
+           settings.CustomJSProperties = (sender, e) =>
+           {
+               e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+           };
+
+           settings.CellEditorInitialize = (s, e) =>
+           {
+               ASPxEdit editor = (ASPxEdit)e.Editor;
+               editor.ValidationSettings.Display = Display.Dynamic;
+               if (e.KeyValue != null)
+               {
+                   if (e.Column.FieldName == "WorkGroup")
+                   {
+                       e.Editor.ReadOnly = true;
+                   }
+               }
+               if (e.KeyValue == null)
+               {
+                   if (e.Column.FieldName == "Level")
+                   {
+                       e.Editor.Value = 1;
+                   }
+
+               }
+           };
+
+
+       });
+
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()
+
+

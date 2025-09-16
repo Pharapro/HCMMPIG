@@ -1,0 +1,54 @@
+﻿
+<script type="text/javascript">
+    $('#linkFavoriteList').hide();
+
+    $(document).ready(function () {
+        $('#_btnExportAction').click(function () {            
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "ExportTo?id=" + pcScrollingMaterial1.GetActiveTab().index;
+        });
+    });
+</script>
+
+
+@model  Humica.Performance.IClsAppraisalMaster
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcScrollingMaterial1";
+        settings.Width = Unit.Percentage(100);
+
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Appraisal Rating")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewApprRating", Model.ListApprRating);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Appraisal Grade")).SetContent(() =>
+        {
+            @Html.RenderPartial("GridviewResult", Model.ListApprResult);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Level MidPoint")).SetContent(() =>
+        {
+            Html.RenderPartial("GridLevelMidPoint", Model.ListLeveMidPoint);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Performance Rate")).SetContent(() =>
+        {
+            Html.RenderPartial("GridPerfRate", Model.ListPerformanceRate);
+        });
+
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Compare Ratio")).SetContent(() =>
+        {
+            Html.RenderPartial("GridCompareRatio", Model.ListCompareRatio);
+        });
+        settings.TabPages.Add(Humica.EF.Models.SY.SYSettings.getLabel("Salary Budget")).SetContent(() =>
+        {
+            Html.RenderPartial("GridSalaryBudget", Model.ListSalaryBudget);
+        });
+
+
+    }).GetHtml()

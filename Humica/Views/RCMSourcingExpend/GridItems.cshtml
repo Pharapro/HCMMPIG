@@ -1,0 +1,120 @@
+﻿@{
+
+    var gridExtension = Html.DevExpress().GridView(
+           settings =>
+           {
+
+               settings.Name = "PDIWaitngGrid";
+               settings.KeyFieldName = "LineItem";
+               settings.Width = Unit.Percentage(100);
+               settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               settings.CallbackRouteValues = new { Action = "GridItems", Controller = "ESSCarBooking" };
+               settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ESSCarBooking", Action = "Create" };
+               settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ESSCarBooking", Action = "EditItem" };
+               settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ESSCarBooking", Action = "DeleteBookingCar" };
+               settings.SettingsBehavior.AllowSort = false;
+               //settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+               settings.CommandColumn.Visible = true;
+               settings.CommandColumn.ShowDeleteButton = true;
+
+               settings.SettingsContextMenu.Enabled = true;
+               settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+               settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+               settings.Settings.ShowHeaderFilterButton = true;
+               settings.SettingsPopup.HeaderFilter.Height = 200;
+
+               settings.CommandColumn.ShowNewButtonInHeader = true;
+               settings.CommandColumn.ShowCancelButton = true;
+               settings.CommandColumn.ShowEditButton = true;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+
+
+               settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+               settings.SettingsPager.PageSizeItemSettings.Visible = false;
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("ID");
+                   column.Width = 60;
+                   column.FieldName = "LineItem";
+                   column.ColumnType = MVCxGridViewColumnType.TextBox;
+               });
+
+               settings.Columns.Add(column =>
+               {
+                   column.Width = 150;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("Plate Number");
+                   column.FieldName = "PlateNumber";
+
+               });
+
+               settings.Columns.Add(column =>
+               {
+
+                   column.Width = 130;
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("BookingDate");
+                   column.FieldName = "BookingDate";
+                   column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                   column.PropertiesEdit.DisplayFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                   var textProperties = column.PropertiesEdit as DateEditProperties;
+                   textProperties.NullDisplayText = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+                   textProperties.EditFormat = EditFormat.Date;
+                   textProperties.EditFormatString = ViewData[Humica.EF.SYSConstant.DATE_FORMAT].ToString();
+
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("StartTime");
+                   column.FieldName = "StartTime";
+                   column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+               });
+               settings.Columns.Add(column =>
+               {
+                   column.Caption = Humica.EF.Models.SY.SYSettings.getLabel("EndTime");
+                   column.FieldName = "EndTime";
+                   column.ColumnType = MVCxGridViewColumnType.TimeEdit;
+               });
+
+               settings.SettingsSearchPanel.Visible = true;
+               settings.ClientSideEvents.EndCallback = "EndCallBack";
+               settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+               settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+               // settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+               settings.Settings.VerticalScrollableHeight = Humica.EF.MD.SYSession.PageHieigh;
+               settings.SettingsBehavior.ConfirmDelete = true;
+               settings.SettingsPager.PageSize = 50;
+               settings.SettingsBehavior.AllowFocusedRow = true;
+
+               settings.CustomJSProperties = (sender, e) =>
+               {
+                   e.Properties["cpVisibleRowCount"] = (sender as MVCxGridView).VisibleRowCount;
+               };
+
+               settings.CellEditorInitialize = (s, e) =>
+               {
+                   ASPxEdit editor = (ASPxEdit)e.Editor;
+                   editor.ValidationSettings.Display = Display.Dynamic;
+
+                   if (e.Column.FieldName == "LineItem")
+                   {
+                       editor.ValidationSettings.Display = Display.None;
+                       editor.ReadOnly = true;
+                       editor.Value = -1;
+                   }
+               };
+
+
+           });
+
+    if (ViewData["EditError"] != null)
+    {
+        gridExtension.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@gridExtension.Bind(Model).GetHtml()
+
+

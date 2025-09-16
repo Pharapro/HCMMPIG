@@ -1,0 +1,108 @@
+﻿<script type="text/javascript">
+        var ss;
+        var selectedIDs = "";
+        var selectedIDs = "";
+    $(document).ready(function () {
+        $('#_btnImageView').click(function () {
+            ss = 1;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'ApplicantID;', OnGetRowValues);
+        });
+        $('#_bthEditAction').click(function () {
+            ss = 2;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'ApplicantID;', OnGetRowValues);
+        });
+        $('#_btnNewAction').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Create";
+        });
+        $('#_btnExportActionList').click(function () {
+            window.location = "@Humica.EF.MD.SYSession.UrlExportList(@ViewData[Humica.EF.Models.SY.SYConstant.SCREEN_ID].ToString())";
+        });
+        $('#_btnDeleteAction').click(function () {
+            ss = 4;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'ApplicantID;', OnGetRowValues);
+        });
+        $('#_btnSendCV').click(function () {
+            ss = 5;
+            GridViewList.GetRowValues(GridViewList.GetFocusedRowIndex(), 'ApplicantID;', OnGetRowValues);
+        });
+        $('#_btnImport').click(function () {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Import";
+        });
+    });
+    function DbRowClick(s, e) {
+        ss = 1;
+        s.GetRowValues(s.GetFocusedRowIndex(), 'ApplicantID;', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        if (ss == 1) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Details?ApplicantID=" + values[0];
+        }
+        if (ss == 2) {
+            PopTheLoading.Show();
+            window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL]" + "Edit?ApplicantID=" + values[0];
+        }
+        //Delete
+        if (ss == 4) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("DELETE_C", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+        //Send CV
+        if (ss == 5) {
+            ConfirmMessage("@Humica.EF.Models.SY.SYMessages.getMessage("SEND_CV_Q", Humica.EF.MD.SYSession.getSessionUser().Lang)");
+        }
+    }
+    function _clickConfirm(s, e) {
+        if (s.GetText() == "@Humica.EF.Models.SY.SYConstant.OK") {
+            if (ss == 4) {
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "Delete?ApplicantID=" + selectedIDs;
+            }
+            if (ss == 5) {
+                PopTheLoading.Show();
+                window.location = "@Humica.EF.Models.SY.SYUrl.getBaseUrl()" + "@ViewData[Humica.EF.Models.SY.SYConstant.CURRENT_URL].ToString()" + "SendCV?ApplicantID=" + selectedIDs;
+            }
+        }
+    }
+    function SelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ApplicantID", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(';');
+    }
+    function SelectVac(s, e) {
+        selectedIDs = s.GetSelectedItem().GetColumnText(0);
+        ShowData();
+    }
+    function ShowData() {
+        $.ajax({
+            type: 'post',
+            url: _baseUrl + '/HRM/RCM/RCMApplicant/ShowData',
+            data: { 'Code': selectedIDs, 'Action': 'Index' },
+            success: function (data) {
+                if (data.MS == "@Humica.EF.SYSConstant.OK") {
+
+                    txtBranch.SetValue(data.Branch);
+                    txtPosition.SetValue(data.Post);
+                    txtDept.SetValue(data.Dept);
+                }
+                else {
+                    AlertMessage(data.MS);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                AlertMessage(XMLHttpRequest.responseText);
+            }
+        });
+    }
+</script>
+
+@model Humica.Logic.RCM.IClsRCMApplicant
+
+<div class="fitler-doc">
+    @Html.Partial("FTInYear")
+</div>
+
+@Html.Partial("GridItem", Model.ListHeader)
+
